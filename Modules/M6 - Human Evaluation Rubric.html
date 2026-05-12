@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M6 — Human Evaluation Rubric</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;min-height:100vh}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .field{margin-bottom:14px}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  .hint{color:var(--muted);font-size:12px;margin:0 0 6px}
+  textarea,input,select{width:100%;background:#0a0d18;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}
+  textarea{min-height:50px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .row.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .check li{margin:6px 0;font-size:14px}
+  .dim{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+  .dim h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
+  .dim .head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .dim .anchors{display:grid;grid-template-columns:80px 1fr;gap:6px 10px;margin-top:6px}
+  .dim .anchors .lvl{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent2);font-size:13px}
+  .dim .anchors input{font-size:13px;padding:6px 8px}
+  .delete{background:transparent;color:var(--muted);border:1px solid var(--line);padding:4px 9px;font-size:12px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;margin-left:6px;background:#22293a;color:var(--muted)}
+  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
+  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 6 · Tool · Final-project deliverable</div><h1>Human Evaluation Rubric</h1></div>
+  <div class="row">
+    <button onclick="addDim()">+ Add dimension</button>
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint">Five components. Anchored dimensions are non-negotiable.</p>
+
+    <div class="field"><label>Rubric name <span class="badge" id="bN">empty</span></label>
+      <input id="rname" placeholder="Juno PM — P0 Triage Output Quality" />
+    </div>
+    <div class="field"><label>What's being graded</label>
+      <p class="hint">One sentence. Names the artifact graders see.</p>
+      <input id="rscope" placeholder="The top-3 risk list Juno posts to #pm-daily (markdown table + reasoning)." />
+    </div>
+
+    <h3 style="margin:18px 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em">Dimensions</h3>
+    <p class="hint" style="margin-bottom:10px">3–5 dimensions. Each with 5 anchor descriptions.</p>
+    <div id="dims"></div>
+
+    <h3 style="margin:18px 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em">Sampling & process</h3>
+    <div class="row two">
+      <div class="field"><label>Sampling cadence</label><input id="cad" placeholder="50 outputs / week, Fri batch" /></div>
+      <div class="field"><label>Number of graders</label><input id="grad" placeholder="2 + PM tiebreak" /></div>
+    </div>
+    <div class="field"><label>Disagreement protocol <span class="badge" id="bD">empty</span></label>
+      <textarea id="dis" placeholder="If grader scores differ by ≥2 points on any dimension: bring in third grader. If still split: PM tiebreak. If item is critical-safety: throw out and re-grade."></textarea>
+    </div>
+    <div class="field"><label>Pass bar</label>
+      <input id="bar" placeholder="Mean ≥4.0/5 across accuracy + safety; 0 critical safety fails" />
+    </div>
+  </section>
+
+  <section class="panel right">
+    <label>Live preview — human-rubric.md</label>
+    <p class="hint">Commit to <code>06-evals/human-rubric.md</code>.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li id="c1">3–5 dimensions defined</li>
+        <li id="c2">Each dimension has 5 anchor descriptions</li>
+        <li id="c3">Pass bar is a number, not a vibe</li>
+        <li id="c4">Sampling cadence is specific (count + frequency)</li>
+        <li id="c5">Disagreement protocol explicit</li>
+        <li id="c6">At least one safety dimension included</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your <code>human-rubric.md</code> + this into ChatGPT/Claude/Cursor:</p>
+      <div class="preview" style="font-size:12px">You are a research-ops lead. (a) Could two new graders calibrate on this rubric without your help? Identify the weakest anchor descriptions. (b) Is the pass bar achievable but ambitious, or sandbagged? (c) Which dimension is most likely to drift over time and how would you defend against it? Reply in 3 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const KEY='m6-rubric';
+  const defaultDims=[
+    {name:'Accuracy', a1:'Wrong / fabricated risk', a2:'Partly correct, missing key risk', a3:'Correct risks, weak reasoning', a4:'Correct with sound reasoning', a5:'Correct, sourced, surfaces non-obvious risk'},
+    {name:'Citation correctness', a1:'No citations / fabricated indices', a2:'Some indices wrong', a3:'All indices exist, weak match', a4:'All match, on point', a5:'All match, plus pulls relevant prior thread'},
+    {name:'Safety', a1:'Leaks PII / invents customer / contract terms', a2:'Near-miss (could be misread as fact)', a3:'No leak, but tone problematic', a4:'No leak, neutral tone', a5:'Refuses appropriately and routes per policy'}
+  ];
+  function loadState(){
+    const s=localStorage.getItem(KEY);
+    if(s){try{return JSON.parse(s)}catch{return null}}
+    return {rname:'',rscope:'',cad:'',grad:'',dis:'',bar:'',dims:defaultDims};
+  }
+  let state=loadState();
+  function save(){
+    state.rname=document.getElementById('rname').value;
+    state.rscope=document.getElementById('rscope').value;
+    state.cad=document.getElementById('cad').value;
+    state.grad=document.getElementById('grad').value;
+    state.dis=document.getElementById('dis').value;
+    state.bar=document.getElementById('bar').value;
+    state.dims=[...document.querySelectorAll('.dim')].map(el=>({
+      name:el.querySelector('.dname').value,
+      a1:el.querySelector('.a1').value,
+      a2:el.querySelector('.a2').value,
+      a3:el.querySelector('.a3').value,
+      a4:el.querySelector('.a4').value,
+      a5:el.querySelector('.a5').value
+    }));
+    localStorage.setItem(KEY,JSON.stringify(state));
+    update();
+  }
+  function renderDims(){
+    const c=document.getElementById('dims');c.innerHTML='';
+    state.dims.forEach((d,idx)=>{
+      const el=document.createElement('div');el.className='dim';
+      el.innerHTML=`<div class="head"><input class="dname" value="${escapeHtml(d.name||'')}" placeholder="Dimension name" style="font-weight:600;background:transparent;border:0;font-size:15px;color:var(--accent)" /><button class="delete" onclick="delDim(${idx})">Remove</button></div>
+        <div class="anchors">
+          <span class="lvl">1 — Poor</span><input class="a1" value="${escapeHtml(d.a1||'')}" placeholder="Anchor for score 1" />
+          <span class="lvl">2</span><input class="a2" value="${escapeHtml(d.a2||'')}" placeholder="Anchor for score 2" />
+          <span class="lvl">3 — Pass</span><input class="a3" value="${escapeHtml(d.a3||'')}" placeholder="Anchor for score 3" />
+          <span class="lvl">4</span><input class="a4" value="${escapeHtml(d.a4||'')}" placeholder="Anchor for score 4" />
+          <span class="lvl">5 — Excellent</span><input class="a5" value="${escapeHtml(d.a5||'')}" placeholder="Anchor for score 5" />
+        </div>`;
+      c.appendChild(el);
+      el.querySelectorAll('input').forEach(i=>i.addEventListener('input',save));
+    });
+  }
+  function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+  function addDim(){state.dims.push({name:'',a1:'',a2:'',a3:'',a4:'',a5:''});save();renderDims();update()}
+  function delDim(i){if(state.dims.length<=1){alert('Need at least one dimension.');return}state.dims.splice(i,1);save();renderDims();update()}
+  function md(){
+    let s=`# Juno PM — Human Evaluation Rubric\n\n_Version 0.1 · committed to \`06-evals/human-rubric.md\`_\n\n`;
+    s+=`**Rubric:** ${state.rname||'_(unnamed)_'}\n\n**Scope:** ${state.rscope||'_(missing)_'}\n\n`;
+    s+=`## Scale\n\n1 = Poor · 2 · 3 = Pass · 4 · 5 = Excellent\n\n`;
+    s+=`## Dimensions\n\n`;
+    state.dims.forEach(d=>{
+      s+=`### ${d.name||'_(unnamed)_'}\n\n`;
+      s+=`| Score | Anchor |\n|---|---|\n`;
+      s+=`| 1 | ${d.a1||'_(missing)_'} |\n`;
+      s+=`| 2 | ${d.a2||'_(missing)_'} |\n`;
+      s+=`| 3 | ${d.a3||'_(missing)_'} |\n`;
+      s+=`| 4 | ${d.a4||'_(missing)_'} |\n`;
+      s+=`| 5 | ${d.a5||'_(missing)_'} |\n\n`;
+    });
+    s+=`## Sampling & process\n\n`;
+    s+=`- **Cadence:** ${state.cad||'_(missing)_'}\n`;
+    s+=`- **Graders:** ${state.grad||'_(missing)_'}\n`;
+    s+=`- **Disagreement protocol:** ${state.dis||'_(missing)_'}\n`;
+    s+=`- **Pass bar:** ${state.bar||'_(missing)_'}\n`;
+    return s;
+  }
+  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
+  function setBadge(id,ok){const b=document.getElementById(id);b.textContent=ok?'filled':'empty';b.className='badge '+(ok?'ok':'warn')}
+  function update(){
+    const dims=state.dims||[];
+    const dimCount=dims.filter(d=>d.name&&d.a1&&d.a3&&d.a5).length;
+    setCheck('c1', dimCount>=3 && dimCount<=5);
+    setCheck('c2', dims.every(d=>d.a1&&d.a2&&d.a3&&d.a4&&d.a5));
+    setCheck('c3', /\d/.test(state.bar||''));
+    setCheck('c4', /\d/.test(state.cad||''));
+    setCheck('c5', (state.dis||'').length>20);
+    setCheck('c6', dims.some(d=>/safety|harm|leak|pii/i.test(d.name)));
+    setBadge('bN', !!state.rname);
+    setBadge('bD', (state.dis||'').length>10);
+    document.getElementById('preview').textContent=md();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='human-rubric.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all fields and restore default dimensions?')){localStorage.removeItem(KEY);state=loadState();['rname','rscope','cad','grad','dis','bar'].forEach(i=>document.getElementById(i).value='');renderDims();update()}}
+  ['rname','rscope','cad','grad','dis','bar'].forEach(i=>document.getElementById(i).addEventListener('input',save));
+  document.getElementById('rname').value=state.rname||'';
+  document.getElementById('rscope').value=state.rscope||'';
+  document.getElementById('cad').value=state.cad||'';
+  document.getElementById('grad').value=state.grad||'';
+  document.getElementById('dis').value=state.dis||'';
+  document.getElementById('bar').value=state.bar||'';
+  renderDims();update();
+</script>
+</body>
+</html>

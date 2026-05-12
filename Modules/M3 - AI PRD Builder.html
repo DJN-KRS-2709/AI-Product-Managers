@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M3 — AI PRD Builder</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;min-height:100vh}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .field{margin-bottom:18px}
+  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  .section-h{font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .hint{color:var(--muted);font-size:13px;margin:0 0 8px}
+  textarea,input{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px}
+  textarea{min-height:64px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .check li{margin:6px 0;font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;margin-left:8px;background:#22293a;color:var(--muted)}
+  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
+  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 3 · Tool · Final-project deliverable</div><h1>AI PRD Builder</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint">Traditional PRD sections + 3 new AI sections. Carry over Bet / Mechanic / Autonomy from your M2 one-pager.</p>
+
+    <div class="section-h">Traditional PRD</div>
+
+    <div class="field"><label>Title <span class="badge" id="bTitle">empty</span></label>
+      <input id="title" placeholder="Juno PM — AI Associate PM for RocketShip" />
+    </div>
+    <div class="field"><label>Problem <span class="badge" id="bProb">empty</span></label>
+      <textarea id="problem" placeholder="RocketShip's AI PM team is in Signal Collapse: P0 escalations pile up faster than they can be triaged..."></textarea>
+    </div>
+    <div class="field"><label>Goal (carry from M2 one-pager — quantified) <span class="badge" id="bGoal">empty</span></label>
+      <textarea id="goal" placeholder="Cut median P0 triage time from 90 to 20 minutes by Sprint 3."></textarea>
+    </div>
+    <div class="field"><label>Users <span class="badge" id="bUser">empty</span></label>
+      <textarea id="users" placeholder="RocketShip Senior AI PMs (primary). Engineering tech leads (secondary, read-only)."></textarea>
+    </div>
+    <div class="field"><label>Mechanic (what the product does)</label>
+      <textarea id="mech" placeholder="Juno reads P0 threads in Slack, retrieves the RocketShip corpus, and outputs a daily prioritised risk list with source IDs. On request, drafts a v0.1 PRD."></textarea>
+    </div>
+    <div class="field"><label>Autonomy</label>
+      <input id="auto" placeholder="Mixed: Synthesize=Execute, Draft=Draft, Prioritize=Suggest" />
+    </div>
+    <div class="field"><label>Scope (in)</label>
+      <textarea id="in" placeholder="- P0/P1 Slack escalations in #escalations\n- Notion product wiki\n- Jira ROCKET project"></textarea>
+    </div>
+    <div class="field"><label>Out of scope</label>
+      <textarea id="out" placeholder="- External customer comms (Intercom, email)\n- Contracts / legal documents\n- Public marketing surfaces"></textarea>
+    </div>
+    <div class="field"><label>Open questions</label>
+      <textarea id="open" placeholder="- Does Juno query Notion read-only, or can it create stub pages?\n- Do we redact ARR before retrieval, or post-retrieval?"></textarea>
+    </div>
+
+    <div class="section-h">AI-Specific Section 1 — Data corpus + retrieval strategy</div>
+    <p class="hint">Paste from <code>M3 - RAG Architecture Decider.html</code> or write directly. <span class="badge" id="bCorpus">empty</span></p>
+    <textarea id="corpus" style="min-height:140px" placeholder="**Sources**\n- Slack #escalations (last 90 days, indexed daily)\n- Notion RocketShip Product workspace (full, refreshed daily)\n- Jira ROCKET tickets (last 6 months)\n\n**Architecture**\n- Embedding: text-embedding-3-large\n- Chunk: ~800 tokens, semantic split\n- Retrieval: top-k=10, hybrid (BM25 + vector)\n- Reranker: Cohere Rerank-v3\n- Refresh: daily batch + streaming for Slack\n- Tenancy: single namespace, metadata filter by team"></textarea>
+
+    <div class="section-h">AI-Specific Section 2 — Eval plan (stub, completed in M6)</div>
+    <p class="hint">A 3-line stub is fine. M6's tool builds it out.</p>
+    <textarea id="eval" placeholder="- Golden set: 30 P0 threads with hand-graded risk lists.\n- Pass bar: ≥4/5 on rubric for accuracy + citation correctness.\n- Cadence: weekly automated eval; human review on regressions."></textarea>
+
+    <div class="section-h">AI-Specific Section 3 — Failure modes + guardrails <span class="badge" id="bFail">empty</span></div>
+    <p class="hint">At least 3 failure modes. Each paired with a guardrail (refusal, citation, escalation).</p>
+    <textarea id="fail" style="min-height:160px" placeholder="| Failure mode | Likely trigger | Guardrail |\n|---|---|---|\n| Hallucinated ARR | Asked to assess churn risk without ARR sheet | Refuse to assert ARR without the ARR sheet; ask for it |\n| Wrong ticket ID cited | Multiple similar tickets | Cite both, mark NEEDS CLARIFICATION |\n| Confident but wrong P0 ranking | Sparse data on novel issue | Hand off to PM if confidence <70% |"></textarea>
+  </section>
+
+  <section class="panel right">
+    <label>Live preview — ai-prd.md</label>
+    <p class="hint">Commit to <code>03-rag-prd/ai-prd.md</code>.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li id="c1">Goal is quantified and measurable</li>
+        <li id="c2">Corpus names specific sources (not "internal docs")</li>
+        <li id="c3">Retrieval strategy specifies chunk, top-k, rerank</li>
+        <li id="c4">≥3 failure modes, each paired with a guardrail</li>
+        <li id="c5">Eval plan stub names a golden set + pass bar</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your PRD + this into ChatGPT/Claude/Cursor:</p>
+      <div class="preview" style="font-size:12px">You are a staff engineer reviewing an AI PRD. (a) Is the data corpus specific enough to scope an indexing job from? (b) Is the retrieval strategy a defensible choice given the architecture decision factors? (c) Of the failure modes listed, which one is most likely to bite Juno first in production, and is its guardrail strong enough? Reply in 4 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const ids=['title','problem','goal','users','mech','auto','in','out','open','corpus','eval','fail'];
+  const KEY='m3-ai-prd';
+  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);ids.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
+  function save(){const o={};ids.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
+  function v(id){return document.getElementById(id).value.trim()}
+  function setBadge(id,ok){const b=document.getElementById(id);b.textContent=ok?'filled':'empty';b.className='badge '+(ok?'ok':'warn')}
+  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
+  function md(){
+    const title=v('title')||'Juno PM — AI PRD';
+    let s=`# ${title}\n\n## Problem\n\n${v('problem')||'_(missing)_'}\n\n## Goal\n\n${v('goal')||'_(missing)_'}\n\n## Users\n\n${v('users')||'_(missing)_'}\n\n## Mechanic\n\n${v('mech')||'_(missing)_'}\n\n## Autonomy\n\n${v('auto')||'_(missing)_'}\n\n## Scope (in)\n\n${v('in')||'_(missing)_'}\n\n## Out of scope\n\n${v('out')||'_(missing)_'}\n\n## Open questions\n\n${v('open')||'_(missing)_'}\n\n---\n\n## Data corpus + retrieval strategy\n\n${v('corpus')||'_(missing)_'}\n\n## Eval plan (stub — filled in M6)\n\n${v('eval')||'_(missing)_'}\n\n## Failure modes + guardrails\n\n${v('fail')||'_(missing)_'}\n`;
+    return s;
+  }
+  function update(){
+    setBadge('bTitle',!!v('title'));
+    setBadge('bProb',!!v('problem'));
+    setBadge('bGoal',!!v('goal'));
+    setBadge('bUser',!!v('users'));
+    setBadge('bCorpus',!!v('corpus'));
+    setBadge('bFail',!!v('fail'));
+    setCheck('c1',v('goal').length>10 && /\d/.test(v('goal')));
+    setCheck('c2',v('corpus').length>40 && !/internal docs/i.test(v('corpus')));
+    setCheck('c3',/(chunk|top-?k|rerank)/i.test(v('corpus')));
+    const failCount=(v('fail').match(/^\s*\|/gm)||[]).length;
+    setCheck('c4',failCount>=4 || (v('fail').match(/^\s*[-*]/gm)||[]).length>=3);
+    setCheck('c5',v('eval').length>10 && /(golden|pass|bar|rubric|score)/i.test(v('eval')));
+    document.getElementById('preview').textContent=md();save();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='ai-prd.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all fields?')){ids.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
+  ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
+  load();update();
+</script>
+</body>
+</html>

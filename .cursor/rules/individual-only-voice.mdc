@@ -1,0 +1,63 @@
+---
+description: Individual-only voice — banned group phrasing and required solo framing across all course content.
+globs:
+  - "Modules/**/*.md"
+  - "Modules/**/*.html"
+  - "juno-project-template/**/*.md"
+  - "*.md"
+  - "*.html"
+alwaysApply: false
+---
+
+# Individual-only voice (course-wide)
+
+This course is **individual format**. Every exercise, prompt, instruction, and rubric must be solo.
+
+## Banned phrases — never use
+
+- "your group" / "as a group"
+- "your team" / "as a team"
+- "appoint a notetaker"
+- "round-robin"
+- "pair up" / "with a partner"
+- "partner challenges your…"
+- "peer red-team"
+- "breakout" / "breakout session"
+- "report back to the room"
+- "rotate roles"
+- "the group's deliverable"
+- "group insights"
+
+## Required substitutions
+
+| Old (group) | New (solo) |
+|---|---|
+| "Breakout group exercise" | "Individual exercise" |
+| "Discuss with your group" | "Write your answer" |
+| "Group deliverable" | "Your deliverable" |
+| "Present to the room" | "Post in `#ai-pm-cohort`" |
+| "Volunteer groups present" | "Optional async showcase — Loom + repo URL" |
+| "Group insights" | "Build Insights — 1 friction, 1 learning, 1 aha" |
+
+## Required structure for every exercise
+
+Every individual exercise must include, in order:
+
+1. **Time-box** — e.g., "20m solo"
+2. **Open-the-tool step** — name the specific HTML tool
+3. **Self-review checklist** — 3–6 verifiable bullets
+4. **AI-review prompt** — a verbatim prompt the learner pastes into ChatGPT/Claude/Cursor with their artifact
+5. **Async share** — commit to the named folder in `juno-project-template/`, optionally post link in `#ai-pm-cohort`
+
+## Final showcase voice
+
+The original 30-minute live group showcase is rewritten as:
+- **Async, individual, optional.** 3-minute Loom + repo URL posted in `#ai-pm-cohort`.
+- Instructor responds in-thread within ~5 days.
+- Not required for certification.
+
+## Submission voice
+
+- Submission = the URL of the learner's `juno-pm/` fork.
+- Window = 7 days post-cohort.
+- Each learner submits individually. No "the group submits."

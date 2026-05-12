@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 1 — Drive AI-First Execution with Prompting (Instructor)</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;font-feature-settings:"ss01","ss02"}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line);position:relative}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em;letter-spacing:-.01em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent);letter-spacing:-.01em}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;color:var(--fg);max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em}
+  li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px}
+  .grid.two{grid-template-columns:1fr 1fr}
+  .grid.three{grid-template-columns:1fr 1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px;font-size:.92em}
+  .pill{display:inline-block;background:#161b25;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px;margin-right:6px;color:var(--accent2)}
+  .notes{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .notes h4{margin:0 0 6px;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.15em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer;transition:transform .12s}
+  .dot.on{background:var(--accent);transform:scale(1.4)}
+  .footer{position:fixed;bottom:14px;left:18px;font-size:12px;color:var(--muted);z-index:50}
+  .footer kbd{background:#161b25;border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:11px;color:#cdd5e3}
+  .quote{font-size:clamp(22px,2.4vw,34px);font-style:italic;color:var(--fg);max-width:1100px;border-left:4px solid var(--accent);padding-left:18px}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<div class="footer"><kbd>↓</kbd> / <kbd>Space</kbd> next · <kbd>↑</kbd> prev · click dots</div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 1 · ~2 hours · Individual format</div>
+  <h1>Drive AI-First Execution with Prompting</h1>
+  <p class="muted">Stop chatting with AI. Start configuring it.</p>
+  <p>By the end of this module you will have prototyped <strong>Juno PM</strong> in Lovable, configured its system prompt, and committed both artifacts to your <code>juno-pm/</code> repo fork.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Open hard. The course thesis lives or dies on the opening five minutes. Read the M1 provocation aloud, then jump to the AI-First Mindset slide. Do not soften.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Course Introduction</div>
+  <h2>Welcome to AI Product Management</h2>
+  <ul>
+    <li>6 modules, ~2 hours each. 100% individual format.</li>
+    <li>One scenario: <strong>RocketShip</strong> is in Signal Collapse. You build <strong>Juno PM</strong>.</li>
+    <li>One throughline artifact: your <code>juno-pm/</code> GitHub repo fork.</li>
+    <li>No groups. No team deliverables. Every exercise = self-review + AI-review + async share in <code>#ai-pm-cohort</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Set expectations clearly. This is execution-focused, not foundational. Cert is based on individual repo submission within 7 days of cohort end. Encourage them to fork the template now.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The scenario · in 60 seconds</div>
+  <h2>RocketShip is in Signal Collapse</h2>
+  <p>You are the AI PM at <strong>RocketShip</strong>, a B2B SaaS platform for Enterprise Data Teams.</p>
+  <div class="grid two">
+    <div class="card"><h3>Reality</h3><ul><li>Wall of P0 escalation threads</li><li>Thousands of stalled support tickets</li><li>Sales deals stalling — you can't vet blockers</li><li>Every stakeholder piling on</li></ul></div>
+    <div class="card"><h3>Budget</h3><ul><li>Innovation experiments: yes</li><li>Headcount: zero</li><li>Time to think strategically: none</li></ul></div>
+  </div>
+  <p style="margin-top:20px"><strong>You cannot scale yourself. You must scale your judgment.</strong></p>
+  <div class="notes"><h4>Speaker Notes</h4>This is the moment the course earns trust. Every learner has felt some version of this. Pause and let it land.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The throughline</div>
+  <h2>You will build Juno PM</h2>
+  <p>An AI Associate PM that lives <em>inside</em> Slack, Notion, and Jira — not as a standalone chat tab.</p>
+  <div class="grid three">
+    <div class="card"><h3>Synthesize</h3><p>Transform the roar of transcripts, tickets, and calls into structured, evidence-backed clarity.</p></div>
+    <div class="card"><h3>Draft</h3><p>Transform raw findings into "Version 0.1" PRDs so you start with a draft, not a blank page.</p></div>
+    <div class="card"><h3>Prioritize</h3><p>Act as a risk watchdog — flag unclear edge cases, technical debt, and risky assumptions.</p></div>
+  </div>
+  <div class="notes"><h4>Speaker Notes</h4>Show the curriculum map briefly. Each module produces one committable artifact in a numbered folder. M6 finalises the README.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The AI-First Product Mindset</div>
+  <h2>Every PM is now an AI PM</h2>
+  <p>The PM role is bending around one technical fact.</p>
+  <table>
+    <tr><th>Traditional PM assumption</th><th>What AI broke</th></tr>
+    <tr><td>Outputs are deterministic</td><td>Outputs are probabilistic — drift, hallucination, variance</td></tr>
+    <tr><td>Spec is a doc</td><td>Spec is a doc + prompt + data corpus + eval set</td></tr>
+    <tr><td>UI is command-driven</td><td>UI is intent-driven and often invisible</td></tr>
+    <tr><td>Workflows are sequential</td><td>Workflows are agentic — branched, conditional, handed off</td></tr>
+    <tr><td>Ship + monitor with analytics</td><td>Ship + eval harness + human rubric + guardrails</td></tr>
+  </table>
+  <div class="notes"><h4>Speaker Notes</h4>This table is the spine of the entire course. Pin it. Each module reinforces one row.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Deterministic vs. non-deterministic</div>
+  <h2>Why this is hard</h2>
+  <div class="grid two">
+    <div class="card"><h3>Deterministic</h3><p>Same input → same output. SQL, regex, every API you've ever shipped.</p><p class="muted">Specs assume the system behaves.</p></div>
+    <div class="card"><h3>Non-deterministic</h3><p>Same input → variable output. Every modern LLM, every agent.</p><p class="muted">Specs must <em>shape</em> behaviour and <em>measure</em> it.</p></div>
+  </div>
+  <p style="margin-top:18px">Your job: <strong>narrow the variance</strong>. Configuration (prompts, RAG, fine-tune), guardrails, and evals are the levers.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Use a quick anecdote — same prompt, two different responses live in ChatGPT. Sells the variance point in 30 seconds.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The PM's dual role</div>
+  <h2>Navigating uncertainty</h2>
+  <ul>
+    <li><strong>Inward</strong> — translate non-determinism into product specs your team can build against (prompt, RAG, eval, guardrail).</li>
+    <li><strong>Outward</strong> — translate non-determinism into user expectations the product can honour (trust UX, confidence cues, escape hatches).</li>
+  </ul>
+  <p>You are the broker between probabilistic behaviour and human trust.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Both directions are PM work. Engineers will not own the user-trust side. Designers will not own the eval side. You do.</div>
+</section>
+
+<section>
+  <div class="eyebrow">A PM's AI toolkit</div>
+  <h2>The five tools you need bookmarked</h2>
+  <table>
+    <tr><th>Category</th><th>Pick one</th><th>Use for</th></tr>
+    <tr><td>Prompt-to-prototype</td><td>Lovable, v0, Cursor</td><td>Build a working UI in minutes</td></tr>
+    <tr><td>LLM playground</td><td>OpenAI Playground, Anthropic Console</td><td>Tune prompts + hyperparameters</td></tr>
+    <tr><td>No-code agent builder</td><td>Langflow, n8n</td><td>Wire agents and tool calls</td></tr>
+    <tr><td>Eval / observability</td><td>LangSmith, Phoenix, Braintrust</td><td>Score, trace, regress</td></tr>
+    <tr><td>Repo + version control</td><td>GitHub</td><td>Your <code>juno-pm/</code> lives here</td></tr>
+  </table>
+  <p>Tool: <strong>M1 - PM Toolkit Picker.html</strong> (pick + commit your stack to <code>01-prompting/toolkit.md</code>)</p>
+  <div class="notes"><h4>Speaker Notes</h4>Don't let the list become a debate. The point is the categories, not the brand. Encourage anyone without a GitHub account to make one before M1 ends.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Anatomy of a High-Quality Prompt</div>
+  <h2>Five elements every production prompt declares</h2>
+  <ol>
+    <li><strong>Context</strong> — who the AI is, what system it lives in, what it knows.</li>
+    <li><strong>Task</strong> — the explicit instruction (verb-first).</li>
+    <li><strong>Constraints</strong> — must-not-do, format requirements, scope.</li>
+    <li><strong>Output format</strong> — schema, length, structure.</li>
+    <li><strong>Examples</strong> (few-shot, when useful) — 1–3 ideal pairs.</li>
+  </ol>
+  <p>If any element is missing, your output will drift.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Run the demo: ask ChatGPT a vague question, then ask the same question with all 5 elements. The diff sells itself.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Tool · M1</div>
+  <h2>Prompt Anatomy Builder</h2>
+  <p>Open <code>M1 - Prompt Anatomy Builder.html</code> in the Modules folder.</p>
+  <ul>
+    <li>Fill in Context / Task / Constraints / Output Format / Examples.</li>
+    <li>Watch the assembled prompt update live.</li>
+    <li>Click <strong>Copy as markdown</strong> → paste into <code>01-prompting/anatomy-prompt.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>5 min hands-on. Walk the room. Most common miss: people skip constraints. Push them to write at least 3.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Hands-On Lab · 25 minutes · Individual</div>
+  <h2>Prompt-to-Prototype Your Copilot with Lovable</h2>
+  <ol>
+    <li>Open Lovable, sign in.</li>
+    <li>Paste the seed prompt (next slide).</li>
+    <li>Iterate <em>once</em>: change the UI shape, the colors, or the homepage copy.</li>
+    <li>Copy the shareable URL.</li>
+    <li>Commit the URL to <code>01-prompting/README.md</code> in your <code>juno-pm/</code> fork.</li>
+  </ol>
+  <p class="muted">Goal: a functional URL by the time we move on. Not a polished product.</p>
+  <div class="notes"><h4>Speaker Notes</h4>High-energy moment. Time-box hard. If anyone's Lovable is misbehaving, give them a fallback (v0 or Cursor). The tangible URL is what matters.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Seed prompt</div>
+  <h2>The Juno PM seed prompt</h2>
+  <pre style="background:#0f1320;border:1px solid var(--line);border-radius:10px;padding:14px;overflow:auto;font-size:14px;line-height:1.5">Build a web app called "Juno PM". It is the homepage for an AI Associate PM that lives inside Slack, Notion, and Jira. The homepage has:
+- A hero strip with the tagline "Scale your judgment, not yourself"
+- A three-column section explaining the pillars: Synthesize Insights, Draft Specs, Prioritize Risks
+- A chat-style input at the bottom with placeholder text "Paste a wall of escalations..."
+- A side panel showing the last 3 risks Juno flagged
+
+Use a calm professional palette — deep navy, off-white, one accent color. No emojis.</pre>
+  <div class="notes"><h4>Speaker Notes</h4>This is the seed. Encourage them to keep iterating after class. The point is feeling the speed.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Prompting as Product Configuration</div>
+  <h2>You are not chatting. You are configuring.</h2>
+  <p>Once you treat the prompt as configuration, every framework becomes obvious.</p>
+  <table>
+    <tr><th>Technique</th><th>Use when</th></tr>
+    <tr><td>Zero-shot</td><td>Simple instruction, model already knows the domain</td></tr>
+    <tr><td>Few-shot</td><td>You need a specific format or style — show 1–3 examples</td></tr>
+    <tr><td>Chain-of-thought</td><td>Multi-step reasoning required</td></tr>
+    <tr><td>System prompt + role</td><td>Persona, persistent guardrails, organisation context</td></tr>
+  </table>
+  <div class="notes"><h4>Speaker Notes</h4>Tie each row to a Juno scenario. Few-shot for "draft a P0 spec." Chain-of-thought for "prioritize these 15 risks." System prompt for "be a risk watchdog, never the executor."</div>
+</section>
+
+<section>
+  <div class="eyebrow">Hyperparameters</div>
+  <h2>The two dials PMs should know</h2>
+  <div class="grid two">
+    <div class="card"><h3>Temperature</h3><p>0 = deterministic-ish (same prompt, same answer). 1+ = creative. Spec it for your job. Juno's risk watchdog persona = low. Juno's brainstorming mode = high.</p></div>
+    <div class="card"><h3>Max tokens / response length</h3><p>Cap it. Long outputs hide failures. Short outputs force prioritisation.</p></div>
+  </div>
+  <p class="muted">Top-p, frequency penalty, presence penalty — nice-to-have, not must-have for PM-side decisions.</p>
+  <div class="notes"><h4>Speaker Notes</h4>The point is awareness, not mastery. PMs should know temperature exists and that it's a product decision.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 minutes</div>
+  <h2>Configure Juno's System Prompt</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Open <code>M1 - System Prompt Configurator.html</code>.</li>
+    <li>Fill in: persona, scope, guardrails, output format, refusal rules.</li>
+    <li>Click <strong>Copy as markdown</strong> → save to <code>01-prompting/system-prompt.md</code>.</li>
+    <li><strong>Self-review</strong> against the checklist on the tool.</li>
+    <li><strong>AI-review</strong>: paste the system prompt into ChatGPT with the prompt: <em>"You are a senior AI PM reviewer. Critique this Juno PM system prompt against the 5-element anatomy. Where would it drift in production? What's missing?"</em></li>
+    <li><strong>Async share</strong>: commit, push, post the file link in <code>#ai-pm-cohort</code> with a 1-paragraph reflection.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>This is the M1 deliverable for the final project. Walk the room. Most common miss: people forget refusal rules ("don't make up data," "always cite the ticket ID"). Push them.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the system prompt</h2>
+  <ul>
+    <li>Does the persona name the role and the operating context?</li>
+    <li>Are scope boundaries explicit ("only act on Slack escalations tagged P0")?</li>
+    <li>At least 3 guardrails, including 1 refusal rule?</li>
+    <li>Output format declared (markdown, schema, length cap)?</li>
+    <li>An example included for the trickiest case?</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Read this aloud. Make it the closing question for the exercise.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Strategic limits of prompting</div>
+  <h2>The Optimization Decision Framework</h2>
+  <p>Three levers. Cheapest first.</p>
+  <table>
+    <tr><th>Lever</th><th>Try when</th><th>Cost / time</th></tr>
+    <tr><td><strong>Prompt</strong></td><td>The model already knows the domain. Behaviour needs tuning, not knowledge.</td><td>Minutes. Almost free.</td></tr>
+    <tr><td><strong>RAG</strong></td><td>You need to ground the model in <em>your</em> data. (M3 lives here.)</td><td>Days. Real infra cost.</td></tr>
+    <tr><td><strong>Fine-tune</strong></td><td>Style/format/behaviour matters more than retrieval. Last resort.</td><td>Weeks. Real infra + training cost.</td></tr>
+  </table>
+  <p><em>If you can fix it with the prompt, do not build infra.</em></p>
+  <div class="notes"><h4>Speaker Notes</h4>This sets up M3 (RAG) and previews fine-tuning, which we touch but don't deep-dive. PMs need to know the framework, not implement fine-tunes.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Role of Fine-Tuning</div>
+  <h2>Mostly: don't</h2>
+  <ul>
+    <li>Fine-tuning bakes behaviour into weights. Powerful, but inflexible.</li>
+    <li>Fine-tunes <em>drift</em>: base models update, your fine-tune doesn't.</li>
+    <li>Use when: format/tone/persistent behaviour at scale, and you have a thousand+ high-quality examples.</li>
+    <li>Do not use when: facts change weekly, you don't have an eval harness yet, or a system prompt + few-shot would work.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Most learners will never own a fine-tune. Make sure they know the decision criteria so they can push back when an engineer suggests it prematurely.</div>
+</section>
+
+<section>
+  <div class="eyebrow">From PRDs to Prompts</div>
+  <h2>The PM artifact is changing</h2>
+  <p>In an AI-native team, the PRD is no longer the source of truth. The source of truth is:</p>
+  <ul>
+    <li>The PRD (what & why)</li>
+    <li><strong>The system prompt</strong> (how the AI behaves)</li>
+    <li><strong>The data corpus + retrieval rules</strong> (what it knows) — M3</li>
+    <li><strong>The eval set</strong> (how we know it's working) — M6</li>
+  </ul>
+  <p>You will commit all four to your <code>juno-pm/</code> repo by M6.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Preview the arc. Each artifact gets built in its own module. The repo is the throughline.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M2</h2>
+  <ol>
+    <li>Prompting is configuration, not chat.</li>
+    <li>Every prompt declares context, task, constraints, output, examples.</li>
+    <li>Optimization order: prompt → RAG → fine-tune. Cheapest first.</li>
+    <li>You have a working Lovable URL for Juno + a committed system prompt.</li>
+    <li>You know what's missing: the strategic justification (M2), the data (M3), the UX (M4), the agent (M5), the evals (M6).</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Wrap on time. Remind them about the async share in #ai-pm-cohort.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Before M2</div>
+  <h2>Homework (~20 min)</h2>
+  <ul>
+    <li>Skim <strong>Module 2 - Pre-Read.md</strong> (Three-Layer Model + AI Strategy).</li>
+    <li>Make sure your <code>juno-pm/</code> fork exists and contains the M1 artifacts.</li>
+    <li>Post your M1 reflection in <code>#ai-pm-cohort</code> if you haven't.</li>
+    <li>Bring one real AI bet from your day job to M2. We will pressure-test it.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>The "real bet from your day job" line is important — M2 lands harder when learners have a stake.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Q&amp;A · 5 min</div>
+  <h2>Questions before we close</h2>
+  <p class="muted">Park anything we can't answer live in <code>#ai-pm-cohort</code>; instructor responds within ~5 days.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Hold the line on 5 minutes. Anything beyond that goes to Slack.</div>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

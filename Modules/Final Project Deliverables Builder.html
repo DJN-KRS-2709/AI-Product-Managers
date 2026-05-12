@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M6 — Final Project Deliverables Builder</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;min-height:100vh}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .group{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .group h3{margin:0 0 6px;font-size:15px;color:var(--accent)}
+  .group .sub{color:var(--muted);font-size:13px;margin:0 0 10px}
+  .field{margin-bottom:10px}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  .hint{color:var(--muted);font-size:12px;margin:0 0 6px}
+  textarea,input{width:100%;background:#0a0d18;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}
+  textarea{min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .check li{margin:6px 0;font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;margin-left:6px;background:#22293a;color:var(--muted)}
+  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
+  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 6 · Final · Replaces Final Deliverables.pptx</div><h1>Final Project Deliverables Builder</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download README.md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint">This produces the top-level <code>README.md</code> of your <code>juno-pm/</code> fork — the certification submission.</p>
+
+    <div class="group">
+      <h3>Title & framing <span class="badge" id="b0">empty</span></h3>
+      <p class="sub">Cover page of the README.</p>
+      <div class="field"><label>Working title</label><input id="title" placeholder="Juno PM — AI Copilot for RocketShip's Product Org" /></div>
+      <div class="field"><label>One-line pitch</label><input id="pitch" placeholder="An AI Associate PM that turns Slack/Notion/Jira chaos into a prioritised top-3 risk list every morning." /></div>
+      <div class="field"><label>Your name + cohort</label><input id="who" placeholder="Jane Doe · AI PM Cohort · May 2026" /></div>
+    </div>
+
+    <div class="group">
+      <h3>M1 · Prompt & toolkit</h3>
+      <p class="sub">Path to system-prompt.md + Lovable prototype link.</p>
+      <div class="field"><label>System prompt path</label><input id="m1a" placeholder="01-prompting/system-prompt.md" /></div>
+      <div class="field"><label>Lovable prototype URL</label><input id="m1b" placeholder="https://lovable.app/share/..." /></div>
+    </div>
+
+    <div class="group">
+      <h3>M2 · Strategy</h3>
+      <p class="sub">Two paths.</p>
+      <div class="field"><label>Decision matrix path</label><input id="m2a" placeholder="02-strategy/decision-matrix.md" /></div>
+      <div class="field"><label>Strategy one-pager path</label><input id="m2b" placeholder="02-strategy/strategy-one-pager.md" /></div>
+    </div>
+
+    <div class="group">
+      <h3>M3 · RAG / AI PRD</h3>
+      <div class="field"><label>AI PRD path</label><input id="m3" placeholder="03-rag-prd/prd.md" /></div>
+    </div>
+
+    <div class="group">
+      <h3>M4 · UX</h3>
+      <div class="field"><label>AI user flow path</label><input id="m4a" placeholder="04-ai-ux/user-flow.md" /></div>
+      <div class="field"><label>Trust-gap mitigations path</label><input id="m4b" placeholder="04-ai-ux/trust-gaps.md" /></div>
+    </div>
+
+    <div class="group">
+      <h3>M5 · Agentic</h3>
+      <div class="field"><label>AWSpec path</label><input id="m5a" placeholder="05-agentic-workflows/awspec.md" /></div>
+      <div class="field"><label>Agent Control Panel path</label><input id="m5b" placeholder="05-agentic-workflows/control-panel.md" /></div>
+    </div>
+
+    <div class="group">
+      <h3>M6 · Evals</h3>
+      <div class="field"><label>Eval stack path</label><input id="m6a" placeholder="06-evals/eval-stack.md" /></div>
+      <div class="field"><label>Human rubric path</label><input id="m6b" placeholder="06-evals/human-rubric.md" /></div>
+    </div>
+
+    <div class="group">
+      <h3>PM Execution Plan <span class="badge" id="bP">empty</span></h3>
+      <p class="sub">The closing surface. Where you are. What ships next. What you watch. What blocks shipping.</p>
+      <div class="field"><label>Where Juno is today</label>
+        <textarea id="now" placeholder="- M1–M5 specced and committed.\n- Lovable prototype validates the M1 flow.\n- Automated evals not yet wired (cron stub only). Human rubric drafted, not staffed."></textarea>
+      </div>
+      <div class="field"><label>What ships next (next 2 sprints)</label>
+        <textarea id="next" placeholder="- Sprint 1: ship the eval harness; staff 2 graders; wire Slack tool.\n- Sprint 2: open beta with 3 PMs; weekly review of rubric scores."></textarea>
+      </div>
+      <div class="field"><label>What you watch (dashboards)</label>
+        <textarea id="watch" placeholder="- Daily: thumbs-down rate, regen rate, hand-off rate.\n- Weekly: human-rubric mean per dimension; refusal hit-rate; cost per run.\n- Per release: golden-set accuracy."></textarea>
+      </div>
+      <div class="field"><label>Red lines (what blocks shipping)</label>
+        <textarea id="red" placeholder="- Any critical-safety fail in human eval.\n- &lt;90% golden-set accuracy.\n- Customer-name fabrication in last 30 days.\n- Cost &gt;$0.50 / run."></textarea>
+      </div>
+      <div class="field"><label>Governance (compliance / safety / reliability / reputation)</label>
+        <textarea id="gov" placeholder="- Compliance: PII scrubber pre-LLM; GDPR DSR handler.\n- Safety: prompt-injection eval row; refusal on legal/contract content.\n- Reliability: 99.5% SLO; cached top-3 fallback if model is down.\n- Reputation: 2-hour incident-response playbook in /docs."></textarea>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Build Insights <span class="badge" id="bI">empty</span></h3>
+      <p class="sub">Required. Three reflections.</p>
+      <div class="field"><label>One friction point</label>
+        <input id="fric" placeholder="Retrieval quality was the bottleneck — chunking strategy mattered more than the model." />
+      </div>
+      <div class="field"><label>One key learning</label>
+        <input id="learn" placeholder="Eval rubrics force product decisions that PRDs hide." />
+      </div>
+      <div class="field"><label>One aha moment</label>
+        <input id="aha" placeholder="The system prompt is the product — the UI is the wrapper." />
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Async showcase (optional) <span class="badge" id="bS">empty</span></h3>
+      <p class="sub">Post your repo URL + Loom to <code>#ai-pm-cohort</code>.</p>
+      <div class="field"><label>Loom URL</label><input id="loom" placeholder="https://loom.com/share/..." /></div>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <label>Live preview — top-level README.md</label>
+    <p class="hint">This is the certification submission. Commit to the root of your <code>juno-pm/</code> fork.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li id="c1">All 6 module artifacts linked</li>
+        <li id="c2">PM Execution Plan has all 4 sections</li>
+        <li id="c3">Build Insights filled in (friction / learning / aha)</li>
+        <li id="c4">Governance row included for each of the 4 buckets</li>
+        <li id="c5">Red lines stated as numbers, not feelings</li>
+        <li id="c6">Loom link added (or noted optional)</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste the rendered README + this into ChatGPT/Claude/Cursor:</p>
+      <div class="preview" style="font-size:12px">You are a VP of Product reading this AI PM's portfolio repo. (a) Could you fund this bet on the strength of this README alone? Cite the strongest paragraph and the weakest paragraph. (b) Where is the AI-PM thinking strongest — strategy, RAG, UX, agentic, or evals? Where is it weakest? (c) What single addition would move it from "good cohort submission" to "VP-fundable bet"? Reply in 3 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const fields=['title','pitch','who','m1a','m1b','m2a','m2b','m3','m4a','m4b','m5a','m5b','m6a','m6b','now','next','watch','red','gov','fric','learn','aha','loom'];
+  const KEY='m6-final-readme';
+  function v(id){return document.getElementById(id).value.trim()}
+  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);fields.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
+  function save(){const o={};fields.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
+  function setBadge(id,filled){const b=document.getElementById(id);if(!b)return;b.textContent=filled?'filled':'empty';b.className='badge '+(filled?'ok':'warn')}
+  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
+  function md(){
+    const link=(label,path)=>path?`- **${label}** — [\`${path}\`](${path})`:`- **${label}** — _(missing)_`;
+    return `# ${v('title')||'Juno PM'}
+
+> ${v('pitch')||'_(one-line pitch goes here)_'}
+
+_${v('who')||'_(your name · cohort · date)_'}_
+
+This repo is my final project for the AI Product Management Certification — Juno PM, an AI copilot for RocketShip's product org. Each module's artifact lives in its own folder; this README is the dashboard and the pitch.
+
+---
+
+## Module artifacts
+
+### M1 · Prompting
+${link('System prompt', v('m1a'))}
+${v('m1b')?`- **Lovable prototype** — ${v('m1b')}`:'- **Lovable prototype** — _(missing)_'}
+
+### M2 · Strategy
+${link('AI Solution Decision Matrix', v('m2a'))}
+${link('AI Strategy One-Pager', v('m2b'))}
+
+### M3 · RAG / AI PRD
+${link('AI PRD', v('m3'))}
+
+### M4 · AI-UX
+${link('AI user flow', v('m4a'))}
+${link('Trust-gap mitigations', v('m4b'))}
+
+### M5 · Agentic
+${link('Agent Workflow Spec (AWSpec)', v('m5a'))}
+${link('Agent Control Panel', v('m5b'))}
+
+### M6 · Evals
+${link('Eval stack', v('m6a'))}
+${link('Human evaluation rubric', v('m6b'))}
+
+---
+
+## PM Execution Plan
+
+### Where Juno is today
+${v('now')||'_(missing)_'}
+
+### What ships next (next 2 sprints)
+${v('next')||'_(missing)_'}
+
+### What I watch (dashboards)
+${v('watch')||'_(missing)_'}
+
+### Red lines (what blocks shipping)
+${v('red')||'_(missing)_'}
+
+### Governance
+${v('gov')||'_(missing)_'}
+
+---
+
+## Build Insights
+
+- **Friction point.** ${v('fric')||'_(missing)_'}
+- **Key learning.** ${v('learn')||'_(missing)_'}
+- **Aha moment.** ${v('aha')||'_(missing)_'}
+
+---
+
+## Async showcase
+
+${v('loom')?`3-minute walkthrough: ${v('loom')}`:'_(optional Loom — post in #ai-pm-cohort)_'}
+
+---
+
+_Certification submission — AI Product Management Certification._
+`;
+  }
+  function update(){
+    setBadge('b0', v('title')&&v('pitch'));
+    setBadge('bP', v('now')&&v('next')&&v('watch')&&v('red'));
+    setBadge('bI', v('fric')&&v('learn')&&v('aha'));
+    setBadge('bS', !!v('loom'));
+    const modulesFilled = v('m1a')&&v('m2a')&&v('m2b')&&v('m3')&&v('m4a')&&v('m5a')&&v('m6a')&&v('m6b');
+    setCheck('c1', modulesFilled);
+    setCheck('c2', v('now')&&v('next')&&v('watch')&&v('red'));
+    setCheck('c3', v('fric')&&v('learn')&&v('aha'));
+    setCheck('c4', /(compl|gdpr|legal)/i.test(v('gov')) && /(safet|injection|misuse)/i.test(v('gov')) && /(reliab|uptime|slo|fallback)/i.test(v('gov')) && /(reput|public|incident|playbook)/i.test(v('gov')));
+    setCheck('c5', /[\d]/.test(v('red')));
+    setCheck('c6', v('loom').length>0);
+    document.getElementById('preview').textContent=md();save();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='README.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all fields?')){fields.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
+  fields.forEach(i=>document.getElementById(i).addEventListener('input',update));
+  load();update();
+</script>
+</body>
+</html>

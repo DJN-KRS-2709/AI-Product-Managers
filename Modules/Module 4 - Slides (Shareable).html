@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 4 — Design AI-Native User Experiences</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .takeaway{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent2);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 4 · Individual format</div>
+  <h1>Design AI-Native User Experiences</h1>
+  <p class="muted">Chat-in-a-tab is the wrong default. AI-native UX is invisible by design.</p>
+  <p>End state: Juno user flow + trust-gap mitigations in <code>04-ai-ux/</code>.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Why AI-Native UX Matters</div>
+  <h2>The 95%-accuracy-with-bad-UX product loses</h2>
+  <ul>
+    <li>Reveal reasoning when it matters</li>
+    <li>Surface confidence visually</li>
+    <li>Let the user steer in one click</li>
+    <li>Get out of the way when the AI is wrong</li>
+  </ul>
+  <p>UX is where trust is built or destroyed.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Invisible by Design</div>
+  <h2>Anticipate, don't wait</h2>
+  <div class="grid two">
+    <div class="card"><h3>Wrong</h3><p>Juno is a chat tab. PM must remember it exists.</p></div>
+    <div class="card"><h3>Right</h3><p>Juno surfaces a risk panel in Slack the moment a P0 thread crosses 5 messages.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Mapping Value to UX Treatment</div>
+  <h2>Pick UX by value frame, not aesthetic</h2>
+  <table>
+    <tr><th>Value frame</th><th>UX treatment</th></tr>
+    <tr><td>Cost</td><td>Background automation with audit trail</td></tr>
+    <tr><td>Revenue</td><td>Inline assist at the moment of decision</td></tr>
+    <tr><td>Risk</td><td>Proactive flag + reason + one-click action</td></tr>
+    <tr><td>Delight</td><td>Anticipatory suggestion, dismissible</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">The AI Iceberg · 7 nodes</div>
+  <h2>What you see vs. what runs</h2>
+  <ol>
+    <li>Trigger</li>
+    <li>Capture</li>
+    <li>Retrieve</li>
+    <li>Reason</li>
+    <li>Act</li>
+    <li>Surface</li>
+    <li>Confirm / Correct</li>
+  </ol>
+  <p class="takeaway"><strong>Tool:</strong> M4 - AI User Flow Architect.html — spec all 7 nodes per Juno pillar; mark tip vs. underwater.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 min</div>
+  <h2>Architect Juno's Core AI User Flow</h2>
+  <ol>
+    <li>Pick one Juno pillar (recommendation: Prioritize Risks).</li>
+    <li>Spec the 7 nodes in <code>M4 - AI User Flow Architect.html</code>.</li>
+    <li>Mark tip vs. underwater per node.</li>
+    <li>Copy → <code>04-ai-ux/user-flow.md</code>.</li>
+    <li>Self-review, AI-review, commit, share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">The Three AI-UX Trust Gaps</div>
+  <h2>Close all three or you don't ship</h2>
+  <table>
+    <tr><th>Gap</th><th>Question</th><th>Mitigation</th></tr>
+    <tr><td>Black-box</td><td>Can the user see <em>why</em>?</td><td>Reasoning, citations, "show your work"</td></tr>
+    <tr><td>Hallucination</td><td>Could this confidently be wrong?</td><td>Confidence cues, source links, escape hatches</td></tr>
+    <tr><td>Control</td><td>Can the user steer or stop?</td><td>Undo, edit, regenerate, "don't suggest this again"</td></tr>
+  </table>
+  <p class="takeaway"><strong>Tool:</strong> M4 - AI-UX Trust Gap Checker.html — score each gap, write mitigations, export to <code>04-ai-ux/trust-gaps.md</code>.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Managing the Intelligence Tax</div>
+  <h2>Cognitive load and latency are product surfaces</h2>
+  <ul>
+    <li>Spec p95 latency</li>
+    <li>Stream output (cheapest perceived-latency win)</li>
+    <li>Decide whether to show "Juno is reasoning…"</li>
+    <li>If the tax exceeds the value frame, kill the feature</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Optional Post-Class · Individual</div>
+  <h2>Reimagine Juno as an AI-Native Copilot</h2>
+  <ul>
+    <li>Move Juno out of a chat tab.</li>
+    <li>Embed it in Slack/Jira/Notion as proactive surfaces.</li>
+    <li>If the user never typed a prompt, how would Juno still deliver value?</li>
+    <li>Update Lovable URL or commit screenshots to <code>04-ai-ux/screenshots/</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M5</h2>
+  <ol>
+    <li>Chat-in-a-tab is the wrong default.</li>
+    <li>Invisible by design — anticipate intent.</li>
+    <li>Map value → UX treatment, not aesthetic.</li>
+    <li>Spec all 7 nodes of the AI Iceberg.</li>
+    <li>Close all three trust gaps before shipping.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Before M5</div>
+  <h2>~20 min homework</h2>
+  <ul>
+    <li>Skim <strong>Module 5 - Pre-Read.md</strong>.</li>
+    <li>Re-read your user-flow's <strong>Act</strong> node — M5 turns it into an AWSpec.</li>
+    <li>Post AI-UX links in <code>#ai-pm-cohort</code>.</li>
+  </ul>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M3 — RAG Architecture Decider</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+  .q h3{margin:0 0 4px;font-size:16px;color:var(--accent2)}
+  .q p.hint{margin:0 0 10px;color:var(--muted);font-size:13px}
+  .options{display:flex;flex-wrap:wrap;gap:8px}
+  .opt{padding:8px 12px;border-radius:99px;background:#0a0d18;border:1px solid var(--line);cursor:pointer;font-size:13px;color:var(--fg)}
+  .opt.on{background:var(--accent);color:#0b0d12;border-color:var(--accent);font-weight:600}
+  .rec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+  .rec h3{margin:0 0 10px;color:var(--accent)}
+  .rec dl{margin:0;font-size:14px}
+  .rec dt{font-weight:600;color:var(--accent2);font-size:12px;text-transform:uppercase;letter-spacing:.14em;margin-top:10px}
+  .rec dd{margin:2px 0 0;padding-left:0;color:var(--fg)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 3 · Tool</div><h1>RAG Architecture Decider</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint" style="color:var(--muted);font-size:13px;margin-top:0">Answer the five Architecture Decision Factors. The tool emits a recommended architecture you paste into your AI PRD's "Data corpus + retrieval strategy" section.</p>
+    <div id="qs"></div>
+  </section>
+  <section class="panel right">
+    <div class="rec" id="rec"></div>
+    <label style="font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);font-weight:600">Markdown export</label>
+    <div class="preview" id="preview"></div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const QS=[
+    {id:'fresh',name:'1. Data freshness',hint:'How stale can context be before the answer goes wrong?',opts:['Real-time (seconds)','Near-real-time (minutes)','Hourly','Daily','Weekly']},
+    {id:'size',name:'2. Corpus size',hint:'How big is the indexed corpus?',opts:['<10MB (fits in context)','10–500MB','500MB–10GB','>10GB']},
+    {id:'lat',name:'3. Query latency budget (p95)',hint:'Maximum acceptable response time.',opts:['<1s','1–3s','3–10s','>10s']},
+    {id:'cad',name:'4. Update cadence',hint:'Read-heavy or write-heavy corpus?',opts:['Read-only / archive','Read-mostly, weekly writes','Mixed, daily writes','Write-heavy / streaming']},
+    {id:'priv',name:'5. Privacy / tenancy',hint:'Who can see which data?',opts:['Single-tenant / shared','Multi-tenant, hard isolation','Per-user permissions','Mixed: corpus public, queries private']},
+  ];
+  const KEY='m3-rag-decider';
+  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):{}}
+  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+  let state=load();
+  function render(){
+    const root=document.getElementById('qs');root.innerHTML='';
+    QS.forEach(q=>{
+      const div=document.createElement('div');div.className='q';
+      div.innerHTML=`<h3>${q.name}</h3><p class="hint">${q.hint}</p>`;
+      const opts=document.createElement('div');opts.className='options';
+      q.opts.forEach(o=>{
+        const b=document.createElement('span');b.className='opt'+(state[q.id]===o?' on':'');b.textContent=o;
+        b.onclick=()=>{state[q.id]=o;save(state);render()};
+        opts.appendChild(b);
+      });
+      div.appendChild(opts);
+      root.appendChild(div);
+    });
+    recommend();
+  }
+
+  function recommend(){
+    const f=state.fresh, s=state.size, l=state.lat, c=state.cad, p=state.priv;
+    let chunk='~1000 tokens', topk='5–8', reranker='off', hybrid='vector-only',
+        refresh='daily batch', store='Pinecone or pgvector',
+        embed='text-embedding-3-large (OpenAI) or Cohere embed-v3';
+    if (l && l.startsWith('<1s')) { topk='3–5'; reranker='off' }
+    if (l && l.startsWith('1–3s')) { topk='5–8'; reranker='off' }
+    if (l && l.startsWith('3–10s')) { topk='10–20'; reranker='on (Cohere Rerank-v3)' }
+    if (l && l.startsWith('>10s')) { topk='20+'; reranker='on with query rewriting' }
+    if (s && s.startsWith('<10MB')) { chunk='not strictly needed — fit whole corpus in context'; store='no vector store required' }
+    if (s && s.startsWith('10–500MB')) { chunk='~1500 tokens'; topk='8–10' }
+    if (s && s.startsWith('500MB–10GB')) { chunk='~800 tokens'; reranker='on' }
+    if (s && s.startsWith('>10GB')) { chunk='~500 tokens'; reranker='on'; hybrid='hybrid (BM25 + vector)' }
+    if (f && f.startsWith('Real-time')) refresh='streaming index updates';
+    if (f && f.startsWith('Near-real-time')) refresh='index every 5 min';
+    if (f && f.startsWith('Hourly')) refresh='hourly batch';
+    if (f && f.startsWith('Daily')) refresh='nightly batch';
+    if (f && f.startsWith('Weekly')) refresh='weekly batch';
+    if (c && c.startsWith('Write-heavy')) refresh='streaming + delta indexing';
+    let tenancy='single namespace';
+    if (p && p.startsWith('Multi-tenant')) tenancy='one namespace per tenant; metadata filter on queries';
+    if (p && p.startsWith('Per-user')) tenancy='per-user namespace OR metadata filter respecting ACLs';
+    if (p && p.startsWith('Mixed')) tenancy='public corpus, query-level redaction of PII';
+
+    const html = `<h3>Recommended RAG architecture for Juno</h3><dl>
+      <dt>Embedding model</dt><dd>${embed}</dd>
+      <dt>Chunk size</dt><dd>${chunk}</dd>
+      <dt>Retrieval</dt><dd>top-k = ${topk}, ${hybrid}</dd>
+      <dt>Reranker</dt><dd>${reranker}</dd>
+      <dt>Vector store</dt><dd>${store}</dd>
+      <dt>Refresh cadence</dt><dd>${refresh}</dd>
+      <dt>Tenancy</dt><dd>${tenancy}</dd>
+    </dl><p class="hint" style="margin-top:12px;color:var(--muted);font-size:13px">Disagree with the recommendation? Override it in the AI PRD. The tool is a starting point, not an oracle.</p>`;
+    document.getElementById('rec').innerHTML = html;
+
+    const md = `## RAG architecture (Juno PM)\n\n| Dimension | Choice |\n|---|---|\n| Embedding model | ${embed} |\n| Chunk size | ${chunk} |\n| Retrieval | top-k = ${topk}, ${hybrid} |\n| Reranker | ${reranker} |\n| Vector store | ${store} |\n| Refresh cadence | ${refresh} |\n| Tenancy | ${tenancy} |\n\n### Drivers\n\n${QS.map(q=>`- **${q.name.replace(/^\d+\.\s*/,'')}**: ${state[q.id]||'_(unset)_'}`).join('\n')}\n`;
+    document.getElementById('preview').textContent = md;
+    save(state);
+  }
+  function copyMd(){navigator.clipboard.writeText(document.getElementById('preview').textContent).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([document.getElementById('preview').textContent],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='rag-architecture.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all picks?')){state={};save(state);render()}}
+  render();
+</script>
+</body>
+</html>

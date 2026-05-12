@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Product Management — Curriculum Map</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:48px 6vw 24px;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:13px;text-transform:uppercase;letter-spacing:.18em;font-weight:600;margin-bottom:10px}
+  h1{font-size:clamp(28px,3.6vw,48px);line-height:1.05;margin:0 0 .25em}
+  .lede{color:var(--muted);max-width:820px;line-height:1.55;margin:0}
+  nav{padding:14px 6vw;border-bottom:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;background:#0b0d12;position:sticky;top:0;z-index:30}
+  nav button{background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:99px;padding:6px 13px;font:inherit;font-size:13px;cursor:pointer}
+  nav button.active{background:var(--accent);color:#0b0d12;border-color:var(--accent);font-weight:600}
+  main{padding:24px 6vw 72px;display:grid;gap:18px}
+  .mod{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .mod-head{padding:18px 22px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;cursor:pointer;border-bottom:1px solid var(--line);background:#11141c}
+  .mod-head:hover{background:#141826}
+  .mod-head h2{margin:0;font-size:20px}
+  .mod-head .meta{color:var(--muted);font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .mod-head .ex-q{color:var(--accent2);font-size:13px;font-weight:600;margin-top:6px;width:100%}
+  .mod-body{padding:20px 22px;display:grid;gap:20px;grid-template-columns:1fr 1fr}
+  @media(max-width:900px){.mod-body{grid-template-columns:1fr}}
+  .block h3{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent)}
+  .block ul,.block ol{margin:0;padding-left:18px}
+  .block li{margin:5px 0;font-size:14px;line-height:1.55}
+  .pill{display:inline-block;padding:1px 8px;border-radius:99px;background:rgba(34,211,238,.12);color:var(--accent2);font-size:11px;font-weight:600;margin-left:6px}
+  .pill.solo{background:rgba(52,211,153,.12);color:var(--ok)}
+  .pill.tool{background:rgba(124,140,255,.14);color:var(--accent)}
+  .filter-hidden{display:none}
+  a.tool-link{color:var(--accent2);text-decoration:none}
+  a.tool-link:hover{text-decoration:underline}
+  code{background:#161b25;padding:1px 6px;border-radius:6px;font-size:12.5px}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">AI Product Management Certification</div>
+  <h1>Curriculum Map</h1>
+  <p class="lede">Every module · learning objectives · individual exercises · interactive tools · per-module artifact in your <code>juno-pm/</code> fork.</p>
+</header>
+<nav>
+  <button class="active" data-f="all">All modules</button>
+  <button data-f="m1">M1 · Bet</button>
+  <button data-f="m2">M2 · Decide</button>
+  <button data-f="m3">M3 · Specify</button>
+  <button data-f="m4">M4 · Trust</button>
+  <button data-f="m5">M5 · Orchestrate</button>
+  <button data-f="m6">M6 · Prove</button>
+</nav>
+<main id="grid"></main>
+<script>
+const data=[
+  { id:'m1', num:'Module 1', arc:'Bet', title:'Drive AI-First Execution with Prompting', mins:'~120m', commit:'01-prompting/',
+    q:'What does an AI-native PM do differently, and how do I configure my first copilot?',
+    los:['Identify and apply the 3 mindset shifts of an AI-native PM','Anatomise a production-grade system prompt','Configure a working copilot using the PM AI toolkit'],
+    exercises:[
+      ['Prompt anatomy walk-through','15m solo'],
+      ['Configure your Juno system prompt','30m solo · final-project deliverable'],
+      ['Build the Lovable prototype','30m solo']
+    ],
+    tools:[
+      ['M1 - Prompt Anatomy Builder.html','Build a 5-element prompt'],
+      ['M1 - PM Toolkit Picker.html','Pick the right tool for the job'],
+      ['M1 - System Prompt Configurator.html','Configure Juno\'s system prompt + export']
+    ],
+    artifact:'system-prompt.md · lovable-prototype.md' },
+  { id:'m2', num:'Module 2', arc:'Decide', title:'Validate AI Opportunities and Technical Feasibility', mins:'~120m', commit:'02-strategy/',
+    q:'Is this bet real, and can we actually ship it?',
+    los:['Distinguish fake-good vs. boring-killer AI features','Pressure-test a bet across 6 lenses','Place a bet on the three-layer model','Write an AI Strategy One-Pager'],
+    exercises:[
+      ['Map Juno\'s strategic bet','25m solo · was group'],
+      ['Build Juno\'s AI Strategy One-Pager','30m solo · was group']
+    ],
+    tools:[
+      ['M2 - AI Solution Decision Matrix.html','Score across 6 lenses'],
+      ['M2 - Three-Layer Model Mapper.html','Place the bet'],
+      ['M2 - AI Strategy One-Pager Builder.html','Produce the one-pager']
+    ],
+    artifact:'decision-matrix.md · strategy-one-pager.md' },
+  { id:'m3', num:'Module 3', arc:'Specify', title:'Improve AI Product Requirements with RAG Architecture', mins:'~120m', commit:'03-rag-prd/',
+    q:'How do I write a spec an AI engineer can build from?',
+    los:['Move from prompt engineering to context engineering','Decide a RAG architecture against cost / speed / accuracy','Write the three AI-specific PRD sections'],
+    exercises:[
+      ['Decide Juno\'s RAG architecture','20m solo'],
+      ['Specify Juno\'s RAG architecture in your AI PRD','30m solo · was group']
+    ],
+    tools:[
+      ['M3 - RAG Architecture Decider.html','Trade-off cost · speed · accuracy'],
+      ['M3 - AI PRD Builder.html','Write the AI PRD']
+    ],
+    artifact:'prd.md' },
+  { id:'m4', num:'Module 4', arc:'Trust', title:'Design AI-Native User Experiences', mins:'~120m', commit:'04-ai-ux/',
+    q:'How do I close the three trust gaps that kill AI products?',
+    los:['Apply "invisible by design"','Architect the AI Iceberg (7 nodes)','Close the three AI-UX trust gaps'],
+    exercises:[
+      ['Architect Juno\'s core AI user flow','30m solo · was group'],
+      ['Identify and mitigate the three trust gaps','20m solo']
+    ],
+    tools:[
+      ['M4 - AI User Flow Architect.html','Spec the 7 iceberg nodes'],
+      ['M4 - AI-UX Trust Gap Checker.html','Close black-box / hallucination / control']
+    ],
+    artifact:'user-flow.md · trust-gaps.md' },
+  { id:'m5', num:'Module 5', arc:'Orchestrate', title:'Deploy Agentic Systems and Workflows', mins:'~120m', commit:'05-agentic-workflows/',
+    q:'When (and how) do I let the system act on its own?',
+    los:['Place a use case on the agent spectrum','Pick an agentic pattern (ReAct / Planner-Executor)','Spec memory + stop conditions + hand-off','Write a complete AWSpec'],
+    exercises:[
+      ['Write Juno\'s Agent Workflow Spec','30m solo · was group'],
+      ['Define the PM\'s Agent Control Panel','20m solo']
+    ],
+    tools:[
+      ['M5 - Agent Workflow Spec Builder.html','Spec the agent in 9 sections'],
+      ['M5 - Agent Control Panel.html','Define the PM-facing dashboard']
+    ],
+    artifact:'awspec.md · control-panel.md · Juno Agent.json (optional)' },
+  { id:'m6', num:'Module 6', arc:'Prove', title:'Measure AI Quality with Evals and Guardrails', mins:'~120m', commit:'06-evals/ + README.md',
+    q:'How do I prove this is shippable and stay shippable?',
+    los:['Critique the limitations of informal testing','Construct a 3-layer evaluation strategy','Build an anchored human rubric','Operationalise AI risks (governance)','Finalise the certification submission'],
+    exercises:[
+      ['Plan Juno\'s eval stack','25m solo · was group'],
+      ['Finalise project deliverables','20m solo · was group'],
+      ['Async showcase — demo Juno','optional · was 30m live group']
+    ],
+    tools:[
+      ['M6 - Eval Stack Designer.html','Plan all 3 eval layers'],
+      ['M6 - Human Evaluation Rubric.html','Build anchored dimensions'],
+      ['Final Project Deliverables Builder.html','Generate the finalised README']
+    ],
+    artifact:'eval-stack.md · human-rubric.md · top-level README.md' }
+];
+function render(filter){
+  const g=document.getElementById('grid');g.innerHTML='';
+  data.forEach(m=>{
+    const card=document.createElement('div');card.className='mod';
+    if(filter!=='all'&&filter!==m.id)card.classList.add('filter-hidden');
+    card.innerHTML=`
+      <div class="mod-head">
+        <div><h2>${m.num} · ${m.title}</h2><div class="ex-q">${m.q}</div></div>
+        <div class="meta">${m.arc} · ${m.mins} · individual · → <code>${m.commit}</code></div>
+      </div>
+      <div class="mod-body">
+        <div class="block">
+          <h3>Learning objectives</h3>
+          <ul>${m.los.map(l=>`<li>${l}</li>`).join('')}</ul>
+          <h3 style="margin-top:14px">Artifact committed</h3>
+          <ul><li><code>${m.artifact}</code></li></ul>
+        </div>
+        <div class="block">
+          <h3>Individual exercises</h3>
+          <ul>${m.exercises.map(([n,meta])=>`<li>${n} <span class="pill solo">${meta}</span></li>`).join('')}</ul>
+          <h3 style="margin-top:14px">Tools</h3>
+          <ul>${m.tools.map(([f,d])=>`<li><a class="tool-link" href="Modules/${f}">${f}</a> — ${d}</li>`).join('')}</ul>
+        </div>
+      </div>`;
+    g.appendChild(card);
+  });
+}
+render('all');
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');render(b.dataset.f);
+}));
+</script>
+</body>
+</html>

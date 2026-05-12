@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 2 — Validate AI Opportunities and Technical Feasibility</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.four{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .takeaway{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent2);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 2 · Individual format</div>
+  <h1>Validate AI Opportunities and Technical Feasibility</h1>
+  <p class="muted">Most AI features are fake-good. Pressure-test before you waste a quarter.</p>
+  <p>End state: a scored AI Solution Decision Matrix + an AI Strategy One-Pager in <code>02-strategy/</code>.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Fake-Good vs. Boring Killer</div>
+  <h2>The two-question filter</h2>
+  <div class="grid two">
+    <div class="card"><h3>Fake-Good</h3><ul><li>Demos brilliantly</li><li>No clear value frame</li><li>Loses to a platform feature in 6 months</li></ul></div>
+    <div class="card"><h3>Boring Killer</h3><ul><li>Looks dull on a slide</li><li>Ladders to a real value frame</li><li>Survives 3x cost stress</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Four AI Value Propositions</div>
+  <h2>Four ways AI creates real value</h2>
+  <div class="grid four">
+    <div class="card"><h3>Cost</h3><p class="muted">Replace human labour.</p></div>
+    <div class="card"><h3>Revenue</h3><p class="muted">New willingness to pay.</p></div>
+    <div class="card"><h3>Risk</h3><p class="muted">Catch what humans miss.</p></div>
+    <div class="card"><h3>Delight</h3><p class="muted">Anticipate intent.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">The Three-Layer Model</div>
+  <h2>Strategy → Mechanic → Implementation</h2>
+  <table>
+    <tr><th>Layer</th><th>Question</th><th>For Juno PM</th></tr>
+    <tr><td><strong>Strategy</strong></td><td>Which bet, why now, value frame?</td><td>Risk — RocketShip is in Signal Collapse</td></tr>
+    <tr><td><strong>Mechanic</strong></td><td>What does the product do?</td><td>Synthesise + draft + prioritise, inside Slack/Notion/Jira</td></tr>
+    <tr><td><strong>Implementation</strong></td><td>Prompt / RAG / fine-tune / agent?</td><td>System prompt + RAG over RocketShip corpus + bounded agent</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">Jobs × Risk × Autonomy</div>
+  <h2>The autonomy lens</h2>
+  <table>
+    <tr><th>Axis</th><th>Question</th></tr>
+    <tr><td>Job</td><td>What task is the AI doing?</td></tr>
+    <tr><td>Risk</td><td>Cost of a wrong output?</td></tr>
+    <tr><td>Autonomy</td><td>Suggest → Draft → Execute → Operate</td></tr>
+  </table>
+  <p><strong>High-risk jobs cap at Draft.</strong></p>
+</section>
+
+<section>
+  <div class="eyebrow">The Autonomy Levels</div>
+  <h2>Suggest → Draft → Execute → Operate</h2>
+  <div class="grid four">
+    <div class="card"><h3>Suggest</h3><p class="muted">AI proposes. Human decides.</p></div>
+    <div class="card"><h3>Draft</h3><p class="muted">AI drafts v0.1. Human edits + approves.</p></div>
+    <div class="card"><h3>Execute</h3><p class="muted">AI acts. Human reviews after.</p></div>
+    <div class="card"><h3>Operate</h3><p class="muted">AI runs long horizons.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 25 min</div>
+  <h2>Map Juno's Strategic Bet</h2>
+  <ol>
+    <li>Open <code>M2 - Three-Layer Model Mapper.html</code>.</li>
+    <li>Score each Juno pillar on Job × Risk × Autonomy.</li>
+    <li>Copy as markdown → <code>02-strategy/decision-matrix.md</code>.</li>
+    <li>Self-review on the tool; AI-review with ChatGPT/Claude/Cursor.</li>
+    <li>Commit + share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">AI Solution Decision Matrix</div>
+  <h2>Five axes. Score 1–5.</h2>
+  <table>
+    <tr><th>Axis</th><th>Question</th></tr>
+    <tr><td>Value clarity</td><td>Does it ladder to a value frame?</td></tr>
+    <tr><td>Technical feasibility</td><td>Can current models do this?</td></tr>
+    <tr><td>Data availability</td><td>Do you have / can you get the corpus?</td></tr>
+    <tr><td>Risk tolerance</td><td>Can you tolerate wrong outputs?</td></tr>
+    <tr><td>Strategic fit</td><td>Does it earn company oxygen?</td></tr>
+  </table>
+  <p><strong>&lt;3 average = don't ship. 4+ on all five = boring killer.</strong></p>
+  <p class="takeaway"><strong>Tool:</strong> M2 - AI Solution Decision Matrix.html — sliders, live verdict, export.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Responsible AI · strategic guardrails</div>
+  <h2>Risk is a strategic lever</h2>
+  <ul>
+    <li>Compliance — regulatory (GDPR, EU AI Act)</li>
+    <li>Safety — content, prompt injection, misuse</li>
+    <li>Reliability — uptime, fallback paths</li>
+    <li>Reputation — public failure response playbook</li>
+  </ul>
+  <p>Each guardrail is a sales asset for enterprise buyers.</p>
+</section>
+
+<section>
+  <div class="eyebrow">The AI Strategy One-Pager</div>
+  <h2>Seven blocks. One page.</h2>
+  <ol>
+    <li>The bet (one sentence + value frame)</li>
+    <li>The user / job</li>
+    <li>The mechanic</li>
+    <li>The autonomy (Suggest / Draft / Execute / Operate)</li>
+    <li>The technical approach (prompt / RAG / fine-tune / agent)</li>
+    <li>The risk + guardrail</li>
+    <li>The success metric</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 min</div>
+  <h2>Build Juno's AI Strategy One-Pager</h2>
+  <ol>
+    <li>Open <code>M2 - AI Strategy One-Pager Builder.html</code>.</li>
+    <li>Fill in the 7 blocks.</li>
+    <li>Copy as markdown → <code>02-strategy/strategy-one-pager.md</code>.</li>
+    <li>Self-review on the tool; AI-review with ChatGPT/Claude/Cursor.</li>
+    <li>Commit + share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the one-pager</h2>
+  <ul>
+    <li>The bet is one sentence with a quantified outcome.</li>
+    <li>The mechanic is understandable by a non-PM.</li>
+    <li>The autonomy level is justified against Job × Risk.</li>
+    <li>The tech approach ladders to the Optimization Framework.</li>
+    <li>The success metric is measurable in 30 days.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M3</h2>
+  <ol>
+    <li>Most AI features are fake-good. Filter with the four value frames.</li>
+    <li>Strategy / Mechanic / Implementation — own all three.</li>
+    <li>Autonomy is a strategic decision: Job × Risk → Autonomy.</li>
+    <li>The AI Solution Decision Matrix is your reusable rubric.</li>
+    <li>The One-Pager fits on a page and survives a board challenge.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Before M3</div>
+  <h2>~20 min homework</h2>
+  <ul>
+    <li>Skim <strong>Module 3 - Pre-Read.md</strong>.</li>
+    <li>Identify the corpus Juno needs (Slack? Notion? Jira? Tickets?).</li>
+    <li>Post your matrix + one-pager links in <code>#ai-pm-cohort</code>.</li>
+  </ul>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

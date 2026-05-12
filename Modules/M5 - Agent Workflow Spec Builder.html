@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M5 — Agent Workflow Spec Builder</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;min-height:100vh}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .field{margin-bottom:16px}
+  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  .hint{color:var(--muted);font-size:13px;margin:0 0 8px}
+  textarea,input,select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px}
+  textarea{min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .check li{margin:6px 0;font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;margin-left:8px;background:#22293a;color:var(--muted)}
+  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
+  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 5 · Tool · Final-project deliverable</div><h1>Agent Workflow Spec Builder</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint">Nine sections. All required. Take the Act node from your M4 user-flow and spec it.</p>
+
+    <div class="field"><label>1. Goal <span class="badge" id="b1">empty</span></label>
+      <p class="hint">One sentence. Names the value frame.</p>
+      <textarea id="f1" placeholder="Triage P0 escalations into a daily prioritised top-3 risk list (Risk mitigation)."></textarea>
+    </div>
+    <div class="field"><label>2. Trigger <span class="badge" id="b2">empty</span></label>
+      <p class="hint">Precise, testable condition.</p>
+      <textarea id="f2" placeholder="New message in #escalations tagged P0 AND thread length ≥5 messages within 10 minutes."></textarea>
+    </div>
+    <div class="field"><label>3. Inputs <span class="badge" id="b3">empty</span></label>
+      <p class="hint">Required context for the run.</p>
+      <textarea id="f3" placeholder="- Slack thread ID + last 50 messages\n- Customer ID (if mentioned)\n- ARR (if accessible)\n- Linked Jira tickets"></textarea>
+    </div>
+    <div class="field"><label>4. Tools available <span class="badge" id="b4">empty</span></label>
+      <p class="hint">List each tool with its scope (read-only / write).</p>
+      <textarea id="f4" placeholder="- slack.read_thread(id) — read-only\n- corpus.retrieve(query, k=10) — read-only\n- jira.create_stub(payload) — write, requires confidence ≥80%\n- slack.post(channel, payload) — write, restricted to #pm-daily"></textarea>
+    </div>
+    <div class="field"><label>5. Memory <span class="badge" id="b5">empty</span></label>
+      <p class="hint">Each of the 4 types — in or out.</p>
+      <textarea id="f5" placeholder="- Short-term: tool results within run (in)\n- Long-term: do NOT persist customer-specific facts (out)\n- Episodic: 'PM previously suppressed risk X' (in, 30-day TTL)\n- Semantic: RocketShip product taxonomy (in, refreshed weekly)"></textarea>
+    </div>
+    <div class="field"><label>6. Pattern <span class="badge" id="b6">empty</span></label>
+      <select id="f6">
+        <option value="">Pick one…</option>
+        <option>ReAct (single-agent, sequential)</option>
+        <option>Planner-Executor (multi-agent, parallel)</option>
+        <option>Hybrid (ReAct inside Planner-Executor)</option>
+      </select>
+      <p class="hint" style="margin-top:6px">Default ReAct unless you have a specific reason.</p>
+    </div>
+    <div class="field"><label>7. Stop conditions <span class="badge" id="b7">empty</span></label>
+      <p class="hint">At least 3: success, failure, escalation, timeout.</p>
+      <textarea id="f7" placeholder="- Success: top-3 risk list posted to #pm-daily.\n- Failure: tool error rate >2 in a run → log and abort.\n- Escalation: confidence <70% on any P0 → hand to PM.\n- Timeout: 90s wall clock → abort with partial output."></textarea>
+    </div>
+    <div class="field"><label>8. Handoff rules <span class="badge" id="b8">empty</span></label>
+      <p class="hint">Name a confidence threshold. What does Juno do when it hands off?</p>
+      <textarea id="f8" placeholder="- If confidence <70%: post draft to #pm-juno-review and tag @on-call-pm.\n- If a tool call is denied by ACL: stop, post error reason, request PM action.\n- If thread contains contracts / legal language: refuse, escalate to legal channel."></textarea>
+    </div>
+    <div class="field"><label>9. Eval hooks <span class="badge" id="b9">empty</span></label>
+      <p class="hint">What gets logged for M6's eval stack.</p>
+      <textarea id="f9" placeholder="- Trace ID, trigger payload, retrieved chunks, tool calls, outputs\n- Confidence score per risk\n- PM accept / edit / suppress action\n- Latency p95\n- Cost per run (tokens × $/M)"></textarea>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <label>Live preview — awspec.md</label>
+    <p class="hint">Commit to <code>05-agentic-workflows/awspec.md</code>.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li id="c1">Goal is one sentence and names the value frame</li>
+        <li id="c2">Trigger is a precise, testable condition</li>
+        <li id="c3">Tools listed with scope (read-only / write)</li>
+        <li id="c4">Memory section names all 4 types (in or out)</li>
+        <li id="c5">≥3 stop conditions, including escalation</li>
+        <li id="c6">Handoff rule names a confidence threshold</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your AWSpec + this into ChatGPT/Claude/Cursor:</p>
+      <div class="preview" style="font-size:12px">You are a staff engineer reviewing an Agent Workflow Spec. (a) Are the stop conditions precise enough to implement? (b) Is the handoff confidence threshold realistic, or is it aspirational? (c) Of the five common failure modes (hallucinated tool calls, memory poisoning, runaway loops, silent handoff failure, drift), which is the least defended in this spec? Reply in 4 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const ids=['f1','f2','f3','f4','f5','f6','f7','f8','f9'];
+  const KEY='m5-awspec';
+  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);ids.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
+  function save(){const o={};ids.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
+  function v(id){return document.getElementById(id).value.trim()}
+  function setBadge(id,ok){const b=document.getElementById(id);b.textContent=ok?'filled':'empty';b.className='badge '+(ok?'ok':'warn')}
+  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
+  const HEAD=['1. Goal','2. Trigger','3. Inputs','4. Tools available','5. Memory','6. Pattern','7. Stop conditions','8. Handoff rules','9. Eval hooks'];
+  function md(){
+    let s='# Juno PM — Agent Workflow Spec (AWSpec)\n\n_Version 0.1 · committed to `05-agentic-workflows/awspec.md`_\n\n';
+    HEAD.forEach((h,i)=>{s+=`## ${h}\n\n${v(ids[i])||'_(missing)_'}\n\n`});
+    return s;
+  }
+  function update(){
+    ids.forEach((id,i)=>setBadge('b'+(i+1),!!v(id)));
+    setCheck('c1',v('f1').length>15 && /(cost|revenue|risk|delight|mitigat|reduce|drive|grow|delight)/i.test(v('f1')));
+    setCheck('c2',v('f2').length>15 && /(when|if|new|trigger|tagged|received|=|≥|>)/i.test(v('f2')));
+    setCheck('c3',v('f4').length>10 && /(read|write|scope|only)/i.test(v('f4')));
+    const mem=v('f5'); setCheck('c4',mem.length>20 && /short|long|episod|semantic/i.test(mem) && /(in|out|yes|no|N\/A|TTL)/i.test(mem));
+    const stop=v('f7'); const sc=(stop.match(/^\s*[-*]/gm)||[]).length; setCheck('c5',sc>=3 && /escalat|hand/i.test(stop));
+    setCheck('c6',/(<\s*\d+%|confidence\s*<|threshold)/i.test(v('f8')));
+    document.getElementById('preview').textContent=md();save();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='awspec.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all fields?')){ids.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
+  ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
+  load();update();
+</script>
+</body>
+</html>

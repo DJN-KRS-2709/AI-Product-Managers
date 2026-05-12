@@ -1,0 +1,63 @@
+---
+description: HTML slide deck pattern — scroll-snap, dark theme, progress bar, nav dots, keyboard controls.
+globs:
+  - "**/*.html"
+alwaysApply: false
+---
+
+# HTML slide deck pattern
+
+All slide decks (`Module {N} - Slides.html`, root deck pages, pitch deck) follow this pattern.
+
+## Visual style
+
+- Dark theme. CSS variables on `:root`:
+  - `--bg: #0b0d12`
+  - `--fg: #f6f7fb`
+  - `--muted: #9aa3b2`
+  - `--accent: #7c8cff` (indigo — section headings, links, focus)
+  - `--accent2: #22d3ee` (cyan — eyebrows, tags, table headers)
+  - `--card: #11141c`
+  - `--line: #1b1f29`
+- Typography: system font stack. Headings are bold, large, tight line-height.
+- Use `clamp()` for responsive font sizes.
+
+## Layout
+
+- `main` element is `scroll-snap-type: y mandatory`, `height: 100vh`, `overflow-y: auto`.
+- Each `section` is `scroll-snap-align: start`, `min-height: 100vh`, padding `7vh 7vw`.
+- Sections are full-viewport, one idea per slide.
+
+## Required UI elements
+
+- **Progress bar.** `.progress` div, fixed top, 3px high, linear-gradient indigo→cyan, width = scroll progress.
+- **Nav dots.** `.dots` div, fixed right-center, 8px circles. Click jumps to section.
+- **Keyboard nav.** Arrow Down / Page Down / Space → next section. Arrow Up / Page Up → previous.
+
+## Per-slide structure
+
+Each `section` should contain:
+
+- `.eyebrow` — small cyan label, uppercase, letter-spaced (e.g., "Module 3 · Individual exercise · 30 min")
+- `h1` or `h2` — the slide headline
+- One core block: paragraph, list, table, or grid of `.card` divs
+
+## Instructor vs. shareable decks
+
+- **Instructor (`Module {N} - Slides.html`):** includes `.notes` blocks per slide with a `<h4>Speaker Notes</h4>` and the speaker's prose.
+- **Shareable (`Module {N} - Slides (Shareable).html`):** instructor notes stripped. Replaced where appropriate with `.takeaway` blocks (lighter, summary phrasing).
+
+## Tone
+
+- Confident. Opinionated. Direct.
+- No corporate softening.
+- Frame everything as **individual** — see `individual-only-voice.mdc`.
+- One concept per slide. Never two.
+
+## Embedded code references
+
+- Use `<code>` for inline file paths and identifiers, e.g., `<code>06-evals/eval-stack.md</code>`.
+
+## Closing slide
+
+Every module deck ends with a "Key takeaways" section — numbered list of 5–7 bullets the learner should carry into Monday.

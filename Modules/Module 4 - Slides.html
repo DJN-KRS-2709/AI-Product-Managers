@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 4 — Design AI-Native User Experiences (Instructor)</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .notes{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .notes h4{margin:0 0 6px;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.15em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 4 · ~2 hours · Individual format</div>
+  <h1>Design AI-Native User Experiences</h1>
+  <p class="muted">Chat-in-a-tab is the wrong default. AI-native UX is invisible by design.</p>
+  <p>By the end: Juno's AI user flow + AI-UX trust-gap mitigations committed to <code>04-ai-ux/</code>.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This module breaks the "UI is command-driven" assumption. Today: intent-driven, often invisible.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Intent-Driven AI Design Systems</div>
+  <h2>The UX we accepted but shouldn't have</h2>
+  <p>Open question: what's the worst AI UX you've used this week? (Screenshot from pre-read.)</p>
+  <ul>
+    <li>Chat boxes everywhere → cognitive load</li>
+    <li>"Magic wand" buttons with unclear scope</li>
+    <li>No confidence cues → user can't tell when to trust</li>
+    <li>No escape hatches → user can't steer or stop</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Solicit 2–3 examples from the room (live), but redirect anyone trying to defend their group answer — this is solo. Highlight one screenshot they brought.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Why AI-Native UX Matters</div>
+  <h2>The 95%-accuracy-with-bad-UX product loses</h2>
+  <p>You can have the best model, the cleanest RAG, the tightest evals — and still lose to a competitor whose UX:</p>
+  <ul>
+    <li>Reveals reasoning when it matters</li>
+    <li>Surfaces confidence visually</li>
+    <li>Lets the user steer in one click</li>
+    <li>Gets out of the way when the AI is wrong</li>
+  </ul>
+  <p>UX is where trust is built or destroyed. Spec it like a feature, not a polish task.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Reference Air Canada chatbot liability. UX failures become legal failures fast.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Designing Invisible UI for AI-Native Outcomes</div>
+  <h2>Invisible by design</h2>
+  <p>The default for AI-native UX. The system anticipates intent and acts at the right moment instead of waiting at a chat box.</p>
+  <div class="grid two">
+    <div class="card"><h3>Wrong</h3><p>Juno is a chat tab in the sidebar. PM must remember it exists, open it, type a query.</p></div>
+    <div class="card"><h3>Right</h3><p>Juno surfaces a prioritised risk panel in Slack #escalations the moment a P0 thread crosses 5 messages. PM gets the answer before asking.</p></div>
+  </div>
+  <div class="notes"><h4>Speaker Notes</h4>The right column is the principle. Anticipation > response. Visible only when value justifies attention.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Choosing the AI Interaction Placement</div>
+  <h2>Mapping Value to UX Treatment</h2>
+  <table>
+    <tr><th>Value frame</th><th>UX treatment</th><th>Juno example</th></tr>
+    <tr><td>Cost reduction</td><td>Background automation with audit trail</td><td>Auto-tag P0/P1 on incoming Slack threads</td></tr>
+    <tr><td>Revenue generation</td><td>Inline assist at the moment of decision</td><td>"Draft spec from this thread" button in Slack</td></tr>
+    <tr><td>Risk mitigation</td><td>Proactive flag + reason + one-click action</td><td>Daily top-3 risks panel in #pm-daily</td></tr>
+    <tr><td>User delight</td><td>Anticipatory suggestion, dismissible</td><td>"Looks like this thread is going P0 — want a summary?"</td></tr>
+  </table>
+  <div class="notes"><h4>Speaker Notes</h4>Ask: which row matters most for Juno? (Risk mitigation, per M2's value frame.) That dictates the dominant UX treatment.</div>
+</section>
+
+<section>
+  <div class="eyebrow">How to Architect an AI User Flow</div>
+  <h2>Architecting the AI Iceberg</h2>
+  <div class="grid two">
+    <div class="card"><h3>Tip (what users see)</h3><ul><li>Trigger</li><li>Surface</li><li>Confirm / Correct</li></ul></div>
+    <div class="card"><h3>Underwater (what runs)</h3><ul><li>Capture context</li><li>Retrieve from corpus</li><li>Reason (model call)</li><li>Act (tool calls, writes)</li><li>Log (evals, traces)</li><li>Guardrail checks</li><li>Fallback paths</li></ul></div>
+  </div>
+  <p class="muted">Most PMs design the tip and hand-wave the underwater. Spec both.</p>
+  <div class="notes"><h4>Speaker Notes</h4>The underwater is engineering territory, but PMs spec what happens at each step (when to retrieve, what to log, what fallback). Don't skip it.</div>
+</section>
+
+<section>
+  <div class="eyebrow">AI User Flow Example: HR Agent</div>
+  <h2>Seven nodes per flow</h2>
+  <ol>
+    <li><strong>Trigger</strong> — what initiates the flow</li>
+    <li><strong>Capture</strong> — what context the system gathers</li>
+    <li><strong>Retrieve</strong> — what data is pulled in</li>
+    <li><strong>Reason</strong> — what the model decides</li>
+    <li><strong>Act</strong> — what happens in the world (send / write / call)</li>
+    <li><strong>Surface</strong> — what the user sees</li>
+    <li><strong>Confirm / Correct</strong> — how the user steers, accepts, overrides</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>This list is the deliverable shape for the exercise. Use the original HR Agent walkthrough as the demo before learners apply it to Juno.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Tool · M4</div>
+  <h2>AI User Flow Architect</h2>
+  <p>Open <code>M4 - AI User Flow Architect.html</code>.</p>
+  <ul>
+    <li>For each of Juno's three pillars (Synthesize / Draft / Prioritize), specify the 7 nodes.</li>
+    <li>Mark which nodes are visible (tip) vs. invisible (underwater).</li>
+    <li>Copy as markdown → <code>04-ai-ux/user-flow.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Tee up the exercise. 30 minutes.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 min</div>
+  <h2>Architect Juno's Core AI User Flow</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Pick <strong>one</strong> Juno pillar to flow first (recommendation: Prioritize Risks).</li>
+    <li>Open <code>M4 - AI User Flow Architect.html</code>.</li>
+    <li>Spec the 7 nodes. Be specific (e.g., trigger = "new P0 tagged in #escalations").</li>
+    <li>Mark tip vs. underwater per node.</li>
+    <li>Copy as markdown → <code>04-ai-ux/user-flow.md</code>.</li>
+    <li>Self-review, AI-review, commit, share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Don't let learners get bogged down in the technical underwater. Encourage 1-line specs per underwater node. The visible tip is where the PM craft lives today.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The PM's Playbook for Closing AI Trust Gaps</div>
+  <h2>Three trust gaps</h2>
+  <table>
+    <tr><th>Gap</th><th>Question</th><th>Mitigation</th></tr>
+    <tr><td>Black-box</td><td>Can the user see <em>why</em>?</td><td>Reasoning, citations, "show your work"</td></tr>
+    <tr><td>Hallucination</td><td>Could this confidently be wrong?</td><td>Confidence cues, source links, escape hatches</td></tr>
+    <tr><td>Control</td><td>Can the user steer or stop?</td><td>Undo, edit, regenerate, "don't suggest this again"</td></tr>
+  </table>
+  <p>All three must be closed for a probabilistic system to feel safe.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This table is the second deliverable for M4. The Trust Gap Checker tool walks them through it.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Tool · M4</div>
+  <h2>AI-UX Trust Gap Checker</h2>
+  <p>Open <code>M4 - AI-UX Trust Gap Checker.html</code>.</p>
+  <ul>
+    <li>Score Juno on each of the three gaps (1–5).</li>
+    <li>For each gap, write your mitigation in product terms.</li>
+    <li>Add a row for the intelligence tax (extra latency / cognitive load).</li>
+    <li>Copy as markdown → <code>04-ai-ux/trust-gaps.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>This is a quick exercise (~10 min) and rounds out the M4 artifacts.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Managing the Intelligence Tax</div>
+  <h2>The extra latency or cognitive load is a product surface</h2>
+  <ul>
+    <li>Spec the maximum acceptable latency (p95).</li>
+    <li>Decide whether to stream output (perceived latency drops dramatically).</li>
+    <li>Decide whether to show "Juno is reasoning…" (transparency vs. distraction).</li>
+    <li>If the intelligence tax exceeds the value frame, kill the feature.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Streaming output is the cheapest perceived-latency improvement most learners overlook.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Optional Post-Class Lab · Individual</div>
+  <h2>Reimagine Juno as an AI-Native Copilot</h2>
+  <ul>
+    <li>Move Juno out of a standalone chat tab.</li>
+    <li>Embed it directly into Slack/Jira/Notion — proactive surfaces, not reactive chat.</li>
+    <li>If the user never had to type a prompt, how would Juno still deliver value?</li>
+    <li>Update your Lovable URL or commit a screenshot to <code>04-ai-ux/screenshots/</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Encourage radicalism here. The course says "no chat in a tab" loudly; the post-class lab is where they prove it.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the AI-UX work</h2>
+  <ul>
+    <li>The user flow names a real trigger (not "user opens app")</li>
+    <li>Each of the 7 nodes has one specific line</li>
+    <li>Tip vs. underwater is marked per node</li>
+    <li>All three trust gaps have an explicit mitigation</li>
+    <li>The intelligence tax is bounded (p95 + streaming on/off)</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M5</h2>
+  <ol>
+    <li>Chat-in-a-tab is the wrong default.</li>
+    <li>Invisible by design — anticipate intent.</li>
+    <li>Map value → UX treatment. Don't pick UX patterns by aesthetic.</li>
+    <li>The AI Iceberg has 7 nodes. Spec all of them.</li>
+    <li>Close all three trust gaps before shipping.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Tee up M5: the user flow you just designed has an "Act" node. That's where agentic systems live. M5 spec's the rules of engagement.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Before M5</div>
+  <h2>Homework (~20 min)</h2>
+  <ul>
+    <li>Skim <strong>Module 5 - Pre-Read.md</strong> (agent spectrum, ReAct, Planner-Executor).</li>
+    <li>Re-read your <code>04-ai-ux/user-flow.md</code>'s <strong>Act</strong> node — that's what M5 turns into an Agent Workflow Spec.</li>
+    <li>Post your AI-UX links in <code>#ai-pm-cohort</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Q&amp;A · 5 min</div>
+  <h2>Questions before we close</h2>
+  <p class="muted">Park anything we can't answer live in <code>#ai-pm-cohort</code>.</p>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 2 — Validate AI Opportunities and Technical Feasibility (Instructor)</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line);position:relative}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em;letter-spacing:-.01em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent);letter-spacing:-.01em}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;color:var(--fg);max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr} .grid.four{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px;font-size:.92em}
+  .notes{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .notes h4{margin:0 0 6px;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.15em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 2 · ~2 hours · Individual format</div>
+  <h1>Validate AI Opportunities and Technical Feasibility</h1>
+  <p class="muted">Most AI features are fake-good. Pressure-test the bet before you waste a quarter.</p>
+  <p>By the end: a scored AI Solution Decision Matrix for Juno + an AI Strategy One-Pager committed to <code>02-strategy/</code>.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Open with the provocation. Pull up the M1 reflection in #ai-pm-cohort — call out 2-3 strong ones to set the tone for individual work.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The traditional assumption M2 breaks</div>
+  <h2>"Feature lists are roadmaps"</h2>
+  <p>Traditional PM ranks features by ICE / RICE / WSJF and ships. In AI:</p>
+  <ul>
+    <li>The same feature can be a *fake-good* (looks great in demos, dies in production) or a *boring killer* (looks dull, prints money).</li>
+    <li>The right autonomy level for a feature is a strategic decision, not an engineering one.</li>
+    <li>Bets fail more often than they succeed — your job is to kill bad bets fast and cheap.</li>
+  </ul>
+  <p><strong>You don't have feature lists. You have bets.</strong></p>
+  <div class="notes"><h4>Speaker Notes</h4>Reference the M1 mindset table — this module breaks the "spec is a doc" assumption. M2's spec is a *scored bet*.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Where Does AI Actually Fit?</div>
+  <h2>Fake-Good vs. Boring Killer</h2>
+  <div class="grid two">
+    <div class="card"><h3>Fake-Good</h3><ul><li>Demos brilliantly</li><li>No clear value frame</li><li>Loses to a platform feature in 6 months</li><li>"Generate this summary"</li></ul></div>
+    <div class="card"><h3>Boring Killer</h3><ul><li>Looks dull on a slide</li><li>Ladders to a real value frame</li><li>Survives a 3x cost stress test</li><li>"Cut on-call escalations by 40%"</li></ul></div>
+  </div>
+  <div class="notes"><h4>Speaker Notes</h4>Two-question filter: (a) does this ladder to a real value frame? (b) would it survive a 3x cost stress test? If either no, it's a fake-good.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Four AI Value Propositions</div>
+  <h2>Four ways AI creates real value</h2>
+  <div class="grid four">
+    <div class="card"><h3>Cost</h3><p class="muted">Replace human labour. Lower OPEX per unit of work.</p></div>
+    <div class="card"><h3>Revenue</h3><p class="muted">New product surfaces, new willingness to pay.</p></div>
+    <div class="card"><h3>Risk</h3><p class="muted">Catch what humans miss — compliance, fraud, escalation.</p></div>
+    <div class="card"><h3>Delight</h3><p class="muted">Anticipate intent, reduce friction, surprise positively.</p></div>
+  </div>
+  <p style="margin-top:18px"><em>If your AI bet doesn't ladder cleanly to one of these, it's a fake-good.</em></p>
+  <div class="notes"><h4>Speaker Notes</h4>Force learners to label Juno's bet by frame. Most will land on Cost + Risk. Push them to specify which one is primary — the one that justifies the budget.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Three-Layer Model</div>
+  <h2>From strategy to implementation</h2>
+  <table>
+    <tr><th>Layer</th><th>Question</th><th>For Juno PM</th></tr>
+    <tr><td><strong>Strategy</strong></td><td>Which bet? Why now? What value frame?</td><td>Risk mitigation — RocketShip is in Signal Collapse</td></tr>
+    <tr><td><strong>Mechanic</strong></td><td>What does the product actually do?</td><td>Synthesize + draft + prioritize, inside Slack/Notion/Jira</td></tr>
+    <tr><td><strong>Implementation</strong></td><td>How is it built? (prompt / RAG / fine-tune / agent)</td><td>System prompt + RAG over RocketShip corpus + bounded agent</td></tr>
+  </table>
+  <p>PMs own all three. Most fail at the Mechanic layer.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Use the Three-Layer Mapper tool live for 2 minutes. Show how easy it is to write strategy and implementation but skip mechanics.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Balancing AI Bets with Autonomy</div>
+  <h2>Jobs × Risk × Autonomy</h2>
+  <p>The strategy lens for choosing how independently an AI feature can act.</p>
+  <table>
+    <tr><th>Axis</th><th>Question</th></tr>
+    <tr><td><strong>Job</strong></td><td>What task is the AI doing?</td></tr>
+    <tr><td><strong>Risk</strong></td><td>What's the cost of a wrong output? (reputation, regulation, revenue)</td></tr>
+    <tr><td><strong>Autonomy</strong></td><td>How independently can it act? Suggest → Draft → Execute → Operate</td></tr>
+  </table>
+  <p>As autonomy increases, the cost of an error skyrockets. <strong>High-risk jobs cap at Draft.</strong></p>
+  <div class="notes"><h4>Speaker Notes</h4>Push them: should Juno draft a P0 spec without human oversight? (No — high-risk = stays at Draft, requires PM approval.) Should Juno summarise a backlog? (Yes — low-risk = can Execute.)</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Autonomy Levels</div>
+  <h2>Suggest → Draft → Execute → Operate</h2>
+  <div class="grid four">
+    <div class="card"><h3>Suggest</h3><p class="muted">"Here's an idea." Human decides.</p><p>Lowest risk, lowest leverage.</p></div>
+    <div class="card"><h3>Draft</h3><p class="muted">"Here's a v0.1." Human edits + approves.</p><p>Most AI PM work lives here.</p></div>
+    <div class="card"><h3>Execute</h3><p class="muted">AI acts; human reviews after.</p><p>Requires explicit guardrails.</p></div>
+    <div class="card"><h3>Operate</h3><p class="muted">AI runs long horizons.</p><p>Requires explicit handoff rules (M5).</p></div>
+  </div>
+  <div class="notes"><h4>Speaker Notes</h4>For Juno: Synthesize = Execute (low-risk, high-volume). Draft Specs = Draft (medium-risk, must be PM-edited). Prioritize Risks = Suggest at first, Draft once trust is built.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 25 minutes</div>
+  <h2>Map Juno's Strategic Bet</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Open <code>M2 - Three-Layer Model Mapper.html</code>.</li>
+    <li>For each Juno pillar (Synthesize / Draft / Prioritize): score Job × Risk × Autonomy.</li>
+    <li>Plot each on Suggest / Draft / Execute / Operate.</li>
+    <li>Copy as markdown → <code>02-strategy/decision-matrix.md</code> (Three-Layer + autonomy section).</li>
+    <li>Run the self-review checklist on the tool.</li>
+    <li>Run the AI-review prompt below in ChatGPT/Claude/Cursor.</li>
+    <li>Commit, push, share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Walk the room. Push back on anyone who marks all three pillars at the same autonomy level. Variance is realistic.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Making Product Decisions Based on Technical Needs</div>
+  <h2>The AI Solution Decision Matrix</h2>
+  <p>Pressure-test every proposed AI bet on five axes, scored 1–5.</p>
+  <table>
+    <tr><th>Axis</th><th>Question</th><th>1 (red flag)</th><th>5 (boring killer)</th></tr>
+    <tr><td>Value clarity</td><td>Does it ladder to a value frame?</td><td>Vague</td><td>Quantified $$$ or $$ saved</td></tr>
+    <tr><td>Technical feasibility</td><td>Can current models actually do this well enough?</td><td>Novel research</td><td>Standard pattern, off-the-shelf</td></tr>
+    <tr><td>Data availability</td><td>Do you have / can you get the corpus?</td><td>No corpus</td><td>Clean labelled corpus exists</td></tr>
+    <tr><td>Risk tolerance</td><td>Can you tolerate wrong outputs?</td><td>Regulatory / reputational</td><td>Internal, reversible</td></tr>
+    <tr><td>Strategic fit</td><td>Does it earn company oxygen?</td><td>Pet project</td><td>Directly serves a top-3 priority</td></tr>
+  </table>
+  <p><strong>Score &lt;3 average = don't ship. Score 4+ on all five = boring killer.</strong></p>
+  <div class="notes"><h4>Speaker Notes</h4>This is the artefact that will outlive the course for them. It's the rubric they use for every future bet, not just Juno.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Responsible AI: Strategic Guardrails</div>
+  <h2>Risk is a strategic lever, not a checklist</h2>
+  <ul>
+    <li><strong>Compliance</strong> — regulatory (GDPR, EU AI Act, sector-specific).</li>
+    <li><strong>Safety</strong> — content, prompt injection, misuse.</li>
+    <li><strong>Reliability</strong> — uptime, fallback paths, graceful degradation.</li>
+    <li><strong>Reputation</strong> — public failure scenarios + response playbook.</li>
+  </ul>
+  <p>Each guardrail you commit to is a sales asset for enterprise buyers — not just a cost.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Tee up M5 (governance) without going deep. Today's job is to make them factor risk into the bet.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Run Your Bets Through the Matrix</div>
+  <h2>Tool · M2 - AI Solution Decision Matrix</h2>
+  <p>Open <code>M2 - AI Solution Decision Matrix.html</code>. Score Juno (and your real bet from M1 homework) on all five axes.</p>
+  <ul>
+    <li>Use the sliders. Watch the verdict update.</li>
+    <li>Copy as markdown → <code>02-strategy/decision-matrix.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>5 min hands-on. If a bet scores below 3 average, ask them what would have to be true to raise the score. That's the gap to close before they pitch.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The AI Strategy One-Pager</div>
+  <h2>How to communicate a bet to leadership</h2>
+  <p>Seven blocks. One page. The deliverable for M2.</p>
+  <ol>
+    <li><strong>The bet</strong> — one sentence, with the value frame it ladders to.</li>
+    <li><strong>The user / job</strong> — who, what.</li>
+    <li><strong>The mechanic</strong> — what the product actually does.</li>
+    <li><strong>The autonomy</strong> — Suggest / Draft / Execute / Operate.</li>
+    <li><strong>The technical approach</strong> — prompt / RAG / fine-tune / agent.</li>
+    <li><strong>The risk + guardrail</strong> — what can go wrong + how you block it.</li>
+    <li><strong>The success metric</strong> — how you'll know it works.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Focus their feedback on the *justification phase*. The PM job is not to make a decision; it's to explain why this bet deserves company oxygen.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 minutes</div>
+  <h2>Build Juno's AI Strategy One-Pager</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Open <code>M2 - AI Strategy One-Pager Builder.html</code>.</li>
+    <li>Fill in the 7 blocks for Juno PM.</li>
+    <li>Copy as markdown → <code>02-strategy/strategy-one-pager.md</code>.</li>
+    <li>Run the self-review checklist on the tool.</li>
+    <li>Run the AI-review prompt — does the one-pager survive a board challenge?</li>
+    <li>Commit, push, share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>The one-pager is the second M2 deliverable. Two artifacts now committed for the final project (decision matrix + one-pager).</div>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the one-pager</h2>
+  <ul>
+    <li>The bet is one sentence, naming a value frame and a quantified outcome.</li>
+    <li>The mechanic answers "what does this product do?" in a way a non-PM understands.</li>
+    <li>The autonomy level is justified against Job × Risk.</li>
+    <li>The technical approach ladders to the M1 Optimization Framework (prompt → RAG → fine-tune).</li>
+    <li>The success metric is measurable in the first 30 days.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Hit the success metric hard. Most learners write vague "increase efficiency." Push them to "cut median P0 triage time from 90 min to 20 min by Sprint 3."</div>
+</section>
+
+<section>
+  <div class="eyebrow">Strategic Scorecard</div>
+  <h2>Which AI bets deserve oxygen?</h2>
+  <p>You now have three artifacts that, together, make a board-ready bet:</p>
+  <ul>
+    <li><code>02-strategy/decision-matrix.md</code> — pressure-tested scores</li>
+    <li><code>02-strategy/strategy-one-pager.md</code> — the pitch</li>
+    <li>(From M1) <code>01-prompting/system-prompt.md</code> — proof you've gone past chat</li>
+  </ul>
+  <p>That's the M2 close. Next: M3 — how do you spec the data?</p>
+  <div class="notes"><h4>Speaker Notes</h4>Close the loop to M1. They walked in with a prototype + system prompt. They walk out with a scored, justified bet.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M3</h2>
+  <ol>
+    <li>Most AI features are fake-good. Use the four value frames to filter.</li>
+    <li>Strategy / Mechanic / Implementation — own all three.</li>
+    <li>Autonomy is a strategic decision. Job × Risk → Autonomy.</li>
+    <li>The AI Solution Decision Matrix is your reusable rubric for any future bet.</li>
+    <li>The AI Strategy One-Pager fits on a page and survives a board challenge.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Wrap on time. Tee up M3: the data corpus they specced in the one-pager is what M3 turns into a real RAG architecture.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Before M3</div>
+  <h2>Homework (~20 min)</h2>
+  <ul>
+    <li>Skim <strong>Module 3 - Pre-Read.md</strong> (Context engineering + RAG primer).</li>
+    <li>Identify what corpus Juno would need to actually do its job for RocketShip. (Slack history? Notion docs? Jira metadata? Support tickets?)</li>
+    <li>Post your one-pager + decision matrix links in <code>#ai-pm-cohort</code> if you haven't.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>The corpus prep matters — M3's hands-on lab uses the RocketShip Strategy One-Pager corpus. Learners who think about what *should* be in the corpus will get more from M3.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Q&amp;A · 5 min</div>
+  <h2>Questions before we close</h2>
+  <p class="muted">Park anything we can't answer live in <code>#ai-pm-cohort</code>.</p>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

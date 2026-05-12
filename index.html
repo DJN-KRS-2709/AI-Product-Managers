@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Product Management — Course Modules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #07162C;
+  color: #e8e8f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.grain {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+.bg-glow {
+  position: fixed; top: -20%; left: -10%; width: 60%; height: 70%;
+  background: radial-gradient(ellipse, rgba(124,140,255,0.13) 0%, transparent 70%);
+  z-index: 0; pointer-events: none;
+}
+.bg-glow-2 {
+  position: fixed; bottom: -30%; right: -15%; width: 50%; height: 60%;
+  background: radial-gradient(ellipse, rgba(34,211,238,0.08) 0%, transparent 70%);
+  z-index: 0; pointer-events: none;
+}
+
+.container {
+  position: relative; z-index: 1;
+  max-width: 1000px; margin: 0 auto;
+  padding: 60px 40px 80px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 64px;
+  animation: fadeUp 0.8s ease both;
+}
+
+.logo-row {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 40px;
+}
+.logo-row img { height: 52px; width: auto; mix-blend-mode: lighten; }
+
+.label {
+  display: inline-block;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #7c8cff; margin-bottom: 20px;
+  background: rgba(124,140,255,0.08); border: 1px solid rgba(124,140,255,0.18);
+  padding: 6px 18px; border-radius: 20px;
+}
+
+h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 52px; font-weight: 900; color: #fff; line-height: 1.1;
+  margin-bottom: 16px;
+}
+h1 span { color: #7c8cff; }
+
+.subtitle {
+  font-size: 18px; color: #8899bb; max-width: 560px; margin: 0 auto; line-height: 1.6;
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.module-card {
+  position: relative;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 36px 32px 32px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  animation: fadeUp 0.6s ease both;
+}
+.module-card:nth-child(1) { animation-delay: 0.1s; }
+.module-card:nth-child(2) { animation-delay: 0.15s; }
+.module-card:nth-child(3) { animation-delay: 0.2s; }
+.module-card:nth-child(4) { animation-delay: 0.25s; }
+.module-card:nth-child(5) { animation-delay: 0.3s; }
+.module-card:nth-child(6) { animation-delay: 0.35s; }
+
+.module-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.module-card:hover::before { transform: scaleX(1); }
+.module-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(124,140,255,0.06);
+  background: rgba(255,255,255,0.05);
+}
+
+.module-num {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 800; color: var(--accent);
+  letter-spacing: 0.06em; margin-bottom: 10px;
+  opacity: 0.85;
+}
+
+.module-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px; font-weight: 800; color: #fff;
+  margin-bottom: 8px; line-height: 1.2;
+}
+
+.module-question {
+  font-size: 15px; color: #7c8cff; font-weight: 600;
+  margin-bottom: 12px; font-style: italic;
+}
+
+.module-desc {
+  font-size: 14px; color: #8899bb; line-height: 1.6;
+  padding-right: 40px;
+}
+
+.module-arrow {
+  position: absolute; bottom: 28px; right: 28px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #556;
+  transition: all 0.3s;
+}
+.module-card:hover .module-arrow {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff; transform: translateX(2px);
+}
+
+.secondary-nav {
+  margin-top: 56px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.secondary-nav a {
+  font-size: 13px; color: #8899bb; text-decoration: none;
+  padding: 6px 2px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.02em;
+}
+.secondary-nav a:hover { color: #7c8cff; border-bottom-color: rgba(124,140,255,0.4); }
+.secondary-nav span { color: #334; }
+
+footer {
+  text-align: center; margin-top: 40px;
+  animation: fadeUp 0.8s ease 0.5s both;
+}
+.footer-line {
+  font-size: 13px; color: #445; letter-spacing: 0.04em;
+}
+.footer-line strong { color: #8899bb; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 700px) {
+  .container { padding: 40px 20px 60px; }
+  h1 { font-size: 36px; }
+  .modules-grid { grid-template-columns: 1fr; }
+  .module-title { font-size: 22px; }
+  .module-desc { padding-right: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow-2"></div>
+
+<div class="container">
+  <header>
+    <div class="logo-row">
+      <img src="Design/Minimalist shield with glowing _P_.png" alt="Product School" id="logo">
+    </div>
+    <div class="label">6-Module Certification</div>
+    <h1>AI Product <span>Management</span></h1>
+    <p class="subtitle">Six sessions. One AI copilot. Each module ships one production-grade artifact into your Juno PM repo — your certification submission.</p>
+  </header>
+
+  <div class="modules-grid">
+    <a class="module-card" style="--accent:#3b82f6;" href="Modules/Module%201%20-%20Slides%20(Shareable).html">
+      <div class="module-num">Module 1 · Bet</div>
+      <div class="module-title">The Copilot</div>
+      <div class="module-question">How do I configure my first copilot?</div>
+      <div class="module-desc">Anatomise prompts as product configuration, build Juno's system prompt, ship a Lovable prototype.</div>
+      <div class="module-arrow">→</div>
+    </a>
+    <a class="module-card" style="--accent:#58a6ff;" href="Modules/Module%202%20-%20Slides%20(Shareable).html">
+      <div class="module-num">Module 2 · Decide</div>
+      <div class="module-title">The Bet</div>
+      <div class="module-question">Is this bet real, and can we ship it?</div>
+      <div class="module-desc">Score across 6 lenses, place on the three-layer model, write a fundable AI Strategy One-Pager.</div>
+      <div class="module-arrow">→</div>
+    </a>
+    <a class="module-card" style="--accent:#d29922;" href="Modules/Module%203%20-%20Slides%20(Shareable).html">
+      <div class="module-num">Module 3 · Specify</div>
+      <div class="module-title">The Spec</div>
+      <div class="module-question">How do I write a spec engineers can build from?</div>
+      <div class="module-desc">Decide a RAG architecture, write the AI PRD with data corpus, eval plan, and failure modes.</div>
+      <div class="module-arrow">→</div>
+    </a>
+    <a class="module-card" style="--accent:#bc8cff;" href="Modules/Module%204%20-%20Slides%20(Shareable).html">
+      <div class="module-num">Module 4 · Trust</div>
+      <div class="module-title">The Trust</div>
+      <div class="module-question">How do I close the three trust gaps?</div>
+      <div class="module-desc">Architect the AI Iceberg, close black-box, hallucination, and control gaps with concrete UX patterns.</div>
+      <div class="module-arrow">→</div>
+    </a>
+    <a class="module-card" style="--accent:#f85149;" href="Modules/Module%205%20-%20Slides%20(Shareable).html">
+      <div class="module-num">Module 5 · Orchestrate</div>
+      <div class="module-title">The Agent</div>
+      <div class="module-question">When do I let the system act on its own?</div>
+      <div class="module-desc">Spec the agent in 9 sections, define the PM control panel, run the optional Langflow lab.</div>
+      <div class="module-arrow">→</div>
+    </a>
+    <a class="module-card" style="--accent:#34d399;" href="Modules/Module%206%20-%20Slides%20(Shareable).html">
+      <div class="module-num">Module 6 · Prove</div>
+      <div class="module-title">The Proof</div>
+      <div class="module-question">How do I prove this is shippable?</div>
+      <div class="module-desc">Plan the 3-layer eval stack, build an anchored rubric, finalise your README — your submission.</div>
+      <div class="module-arrow">→</div>
+    </a>
+  </div>
+
+  <nav class="secondary-nav">
+    <a href="AI%20Product%20Management%20-%20Course%20Overview.html">Course Overview</a>
+    <span>·</span>
+    <a href="Curriculum%20Map.html">Curriculum Map</a>
+    <span>·</span>
+    <a href="Final%20Project%20Brief.html">Final Project Brief</a>
+    <span>·</span>
+    <a href="Tools%20Overview.html">Tools Overview</a>
+    <span>·</span>
+    <a href="juno-project-template/README.md">Juno Project Template</a>
+    <span>·</span>
+    <a href="Pitch/AI%20Product%20Management%20-%20Pitch%20Deck.html">Pitch Deck</a>
+  </nav>
+
+  <footer>
+    <p class="footer-line"><strong>Product School</strong> — AI Product Management Certification</p>
+  </footer>
+</div>
+
+</body>
+</html>

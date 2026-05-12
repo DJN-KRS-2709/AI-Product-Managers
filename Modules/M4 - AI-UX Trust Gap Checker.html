@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M4 — AI-UX Trust Gap Checker</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{max-width:1100px;margin:0 auto;padding:24px 32px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .gap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:14px}
+  .gap h2{margin:0 0 4px;font-size:18px;color:var(--accent)}
+  .gap p.q{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .score-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 10px}
+  .slider{width:100%;-webkit-appearance:none;appearance:none;background:transparent;margin:0}
+  .slider::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,#f87171,#fbbf24,#34d399);border-radius:99px}
+  .slider::-moz-range-track{height:6px;background:linear-gradient(90deg,#f87171,#fbbf24,#34d399);border-radius:99px}
+  .slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--fg);margin-top:-6px;cursor:pointer;border:2px solid var(--accent)}
+  .slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--fg);cursor:pointer;border:2px solid var(--accent)}
+  .score{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--accent2);min-width:48px;text-align:right}
+  textarea{width:100%;background:#0a0d18;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:14px;min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  label.lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin:8px 0 4px;font-weight:600}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 4 · Tool</div><h1>AI-UX Trust Gap Checker</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <p style="color:var(--muted);font-size:14px;margin-top:0">Score Juno on each of the three trust gaps (1 = wide open, 5 = closed). Write the mitigation in product terms. Add an intelligence-tax row. Export to <code>04-ai-ux/trust-gaps.md</code>.</p>
+
+  <div id="gaps"></div>
+
+  <h2 style="margin-top:24px;font-size:16px;color:var(--accent2);letter-spacing:.14em;text-transform:uppercase">Preview</h2>
+  <div class="preview" id="preview"></div>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const GAPS=[
+    {id:'blackbox',name:'Black-box gap',q:'Can the user see *why* the AI decided?',mit:'Reasoning, citations, "show your work"'},
+    {id:'halluc',name:'Hallucination gap',q:'Could this confidently be wrong?',mit:'Confidence cues, source links, escape hatches'},
+    {id:'control',name:'Control gap',q:'Can the user steer or stop?',mit:'Undo, edit, regenerate, "don’t suggest this again"'},
+    {id:'tax',name:'Intelligence tax',q:'Extra latency or cognitive load — is the value worth it?',mit:'p95 cap, streaming on/off, "Juno is reasoning…" indicator'},
+  ];
+  const KEY='m4-trust-gaps';
+  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):Object.fromEntries(GAPS.map(g=>[g.id,{score:3,mit:''}]))}
+  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+  let state=load();
+  function render(){
+    const root=document.getElementById('gaps');root.innerHTML='';
+    GAPS.forEach(g=>{
+      const s=state[g.id]||{score:3,mit:''};
+      const div=document.createElement('div');div.className='gap';
+      div.innerHTML=`
+        <h2>${g.name}</h2>
+        <p class="q">${g.q}</p>
+        <div class="score-row">
+          <input type="range" min="1" max="5" step="1" class="slider" id="s_${g.id}" value="${s.score}" />
+          <span class="score" id="sc_${g.id}">${s.score}/5</span>
+        </div>
+        <label class="lbl">Your mitigation for Juno</label>
+        <textarea id="m_${g.id}" placeholder="${g.mit}">${s.mit||''}</textarea>
+      `;
+      root.appendChild(div);
+      document.getElementById('s_'+g.id).addEventListener('input',e=>{state[g.id]={...state[g.id],score:Number(e.target.value)};document.getElementById('sc_'+g.id).textContent=e.target.value+'/5';save(state);preview()});
+      document.getElementById('m_'+g.id).addEventListener('input',e=>{state[g.id]={...state[g.id],mit:e.target.value};save(state);preview()});
+    });
+  }
+  function md(){
+    let s='# AI-UX Trust Gaps — Juno PM\n\n| Gap | Score | Mitigation |\n|---|---|---|\n';
+    GAPS.forEach(g=>{const x=state[g.id]||{};s+=`| ${g.name} | ${x.score||1}/5 | ${(x.mit||'_(missing)_').replace(/\|/g,'\\|').replace(/\n/g,' ')} |\n`});
+    const avg=(GAPS.reduce((a,g)=>a+(state[g.id]?.score||1),0)/GAPS.length).toFixed(2);
+    s+=`\n**Average:** ${avg}/5\n`;
+    const min=Math.min(...GAPS.map(g=>state[g.id]?.score||1));
+    if(min>=4) s+='**Verdict:** Trust posture is shippable. Confirm with eval data in M6.\n';
+    else if(min>=2) s+='**Verdict:** One or more gaps still wide. Close before shipping.\n';
+    else s+='**Verdict:** Trust posture is unsafe. Do not ship.\n';
+    return s;
+  }
+  function preview(){document.getElementById('preview').textContent=md()}
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='trust-gaps.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Reset?')){localStorage.removeItem(KEY);state=load();render();preview()}}
+  render();preview();
+</script>
+</body>
+</html>

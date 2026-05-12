@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M2 — AI Solution Decision Matrix</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1.4fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .field{margin-bottom:18px}
+  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  input[type=text]{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;margin-bottom:18px}
+  .axis{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+  .axis h3{margin:0 0 6px;font-size:16px;color:var(--accent)}
+  .axis p.q{margin:0 0 12px;color:var(--muted);font-size:13px}
+  .anchors{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px}
+  .slider{width:100%;-webkit-appearance:none;appearance:none;background:transparent;margin:8px 0 0}
+  .slider::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,#f87171,#fbbf24,#34d399);border-radius:99px}
+  .slider::-moz-range-track{height:6px;background:linear-gradient(90deg,#f87171,#fbbf24,#34d399);border-radius:99px}
+  .slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--fg);margin-top:-6px;cursor:pointer;border:2px solid var(--accent)}
+  .slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--fg);cursor:pointer;border:2px solid var(--accent)}
+  .score{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--accent2);text-align:right}
+  .verdict{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:18px;text-align:center}
+  .verdict .num{font-size:48px;font-weight:700;letter-spacing:-.02em}
+  .verdict .label{font-size:14px;text-transform:uppercase;letter-spacing:.16em;margin-top:6px}
+  .verdict.good{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.04)} .verdict.good .num,.verdict.good .label{color:var(--ok)}
+  .verdict.warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.04)} .verdict.warn .num,.verdict.warn .label{color:var(--warn)}
+  .verdict.bad{border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.04)} .verdict.bad .num,.verdict.bad .label{color:var(--bad)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 2 · Tool</div><h1>AI Solution Decision Matrix</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <div class="field">
+      <label>The bet you're scoring</label>
+      <input type="text" id="betName" placeholder="e.g., Juno PM — AI Associate PM inside Slack/Notion/Jira" />
+      <label style="margin-top:8px">Justification (one line)</label>
+      <input type="text" id="betWhy" placeholder="e.g., Cut median P0 triage time from 90→20 min by Sprint 3" />
+    </div>
+    <div id="axes"></div>
+  </section>
+  <section class="panel right">
+    <div id="verdict" class="verdict warn"><div class="num">—</div><div class="label">Average score</div></div>
+    <div class="check">
+      <h3>What the verdict means</h3>
+      <ul style="margin:0;padding-left:18px;font-size:14px">
+        <li><strong style="color:var(--ok)">Boring killer</strong> — 4+ on all five. Ship it.</li>
+        <li><strong style="color:var(--warn)">Promising bet</strong> — avg ≥3 but at least one axis weak. Close the gap before pitching.</li>
+        <li><strong style="color:var(--bad)">Fake-good</strong> — avg &lt;3. Kill it or reshape it.</li>
+      </ul>
+    </div>
+    <label style="margin-top:18px">Markdown export</label>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your bet name + the markdown export + this into ChatGPT, Claude, or Cursor:</p>
+      <div class="preview" style="font-size:12px">You are a CFO doing diligence on an AI bet. Read this AI Solution Decision Matrix scorecard and challenge it. (a) Is the weakest axis a real risk or just under-developed evidence? (b) What would have to be true to raise it by 1 point? (c) If you had to kill this bet, which axis would you use as the justification? Reply in 3 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const AXES=[
+    {id:'value',name:'Value clarity',q:'Does it ladder to a value frame (Cost / Revenue / Risk / Delight)?',anchors:['Vague','Quantified outcome']},
+    {id:'feas',name:'Technical feasibility',q:'Can current models actually do this well enough?',anchors:['Novel research','Off-the-shelf']},
+    {id:'data',name:'Data availability',q:'Do you have / can you get the corpus?',anchors:['No corpus','Clean labelled corpus']},
+    {id:'risk',name:'Risk tolerance',q:'Can you tolerate wrong outputs?',anchors:['Regulatory/reputational','Internal, reversible']},
+    {id:'fit',name:'Strategic fit',q:'Does it earn company oxygen vs. other priorities?',anchors:['Pet project','Top-3 priority']},
+  ];
+  const KEY='m2-decision-matrix';
+  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):{betName:'',betWhy:'',scores:{}}}
+  function save(state){localStorage.setItem(KEY,JSON.stringify(state))}
+  let state=load();
+  AXES.forEach(a=>{if(state.scores[a.id]==null)state.scores[a.id]=3});
+  if(document.getElementById('betName')){document.getElementById('betName').value=state.betName||''; document.getElementById('betWhy').value=state.betWhy||''}
+
+  function render(){
+    const root=document.getElementById('axes');root.innerHTML='';
+    AXES.forEach(a=>{
+      const div=document.createElement('div');div.className='axis';
+      div.innerHTML=`<h3>${a.name}</h3><p class="q">${a.q}</p>
+        <input type="range" min="1" max="5" step="1" class="slider" id="s_${a.id}" value="${state.scores[a.id]}" />
+        <div class="anchors"><span>1 — ${a.anchors[0]}</span><span class="score" id="sc_${a.id}">${state.scores[a.id]}/5</span><span>5 — ${a.anchors[1]}</span></div>`;
+      root.appendChild(div);
+      document.getElementById('s_'+a.id).addEventListener('input',e=>{state.scores[a.id]=Number(e.target.value);document.getElementById('sc_'+a.id).textContent=state.scores[a.id]+'/5';save(state);updateVerdict()});
+    });
+    document.getElementById('betName').addEventListener('input',e=>{state.betName=e.target.value;save(state);updateVerdict()});
+    document.getElementById('betWhy').addEventListener('input',e=>{state.betWhy=e.target.value;save(state);updateVerdict()});
+    updateVerdict();
+  }
+
+  function avg(){const ss=AXES.map(a=>state.scores[a.id]);return ss.reduce((x,y)=>x+y,0)/ss.length}
+  function md(){
+    let s='# AI Solution Decision Matrix — '+(state.betName||'(no bet name)')+'\n\n';
+    if(state.betWhy) s+='**Justification:** '+state.betWhy+'\n\n';
+    s+='| Axis | Score | Anchor |\n|---|---|---|\n';
+    AXES.forEach(a=>{s+='| '+a.name+' | '+state.scores[a.id]+'/5 | '+a.q+' |\n'});
+    s+='\n**Average:** '+avg().toFixed(2)+'/5\n\n';
+    const min=Math.min(...AXES.map(a=>state.scores[a.id]));
+    if(avg()>=4&&min>=4) s+='**Verdict:** Boring killer — ship it.\n';
+    else if(avg()>=3) s+='**Verdict:** Promising bet — close the weakest axis before pitching.\n';
+    else s+='**Verdict:** Fake-good — kill or reshape.\n';
+    return s;
+  }
+  function updateVerdict(){
+    const v=document.getElementById('verdict');const a=avg();const min=Math.min(...AXES.map(x=>state.scores[x.id]));
+    v.querySelector('.num').textContent=a.toFixed(2);
+    let cls='warn',label='Promising — close the weakest axis';
+    if(a>=4 && min>=4){cls='good';label='Boring killer — ship it'}
+    else if(a<3){cls='bad';label='Fake-good — kill or reshape'}
+    v.className='verdict '+cls;
+    v.querySelector('.label').textContent=label;
+    document.getElementById('preview').textContent=md();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='decision-matrix.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Reset all scores to 3 and clear bet name?')){state={betName:'',betWhy:'',scores:{}};AXES.forEach(a=>state.scores[a.id]=3);save(state);document.getElementById('betName').value='';document.getElementById('betWhy').value='';render()}}
+  render();
+</script>
+</body>
+</html>

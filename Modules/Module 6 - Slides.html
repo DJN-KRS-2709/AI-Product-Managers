@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 6 — Measure AI Quality with Evals and Guardrails (Instructor)</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .notes{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .notes h4{margin:0 0 6px;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.15em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 6 · ~2 hours · Individual format</div>
+  <h1>Measure AI Quality with Evals and Guardrails</h1>
+  <p class="muted">95% accuracy is a 5% production disaster waiting to happen.</p>
+  <p>By the end: Juno's eval stack + human eval rubric + finalised repo README. Optional async showcase in <code>#ai-pm-cohort</code>.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This module breaks the "ship-and-monitor-with-analytics" assumption. Today: eval harness + human rubric + governance.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Production-Grade Evaluation Requirements</div>
+  <h2>Why vibe checks fail</h2>
+  <p>"It looks good in five prompts" is the most common AI-PM trap.</p>
+  <ul>
+    <li>A handful of successful prompts is not a quality bar.</li>
+    <li>Production traffic exposes long-tail inputs no demo ever touches.</li>
+    <li>Models drift; prompts decay; corpora go stale.</li>
+    <li>Without a harness, you can't tell whether your change made things better.</li>
+  </ul>
+  <p>Vibe checks are the QA strategy of a team that has not shipped yet.</p>
+  <div class="notes"><h4>Speaker Notes</h4>If anyone is currently in "demos look great" mode, this is the slide that should land.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The 95% Accuracy Trap</div>
+  <h2>The last 5% is where production risk lives</h2>
+  <p>95% accuracy on a golden set sounds great. Until you do the math at production volume:</p>
+  <ul>
+    <li>1,000 P0 thread triages per day × 5% wrong = 50 wrong outputs per day.</li>
+    <li>Some of those 50 are <em>silently</em> wrong (no PM correction).</li>
+    <li>A single high-stakes wrong output can outweigh the value of the other 950.</li>
+  </ul>
+  <p><strong>Eval design is the product surface that decides whether you can ship.</strong></p>
+  <div class="notes"><h4>Speaker Notes</h4>Reframe: a 95% pass rate is a 5% liability surface. The eval stack's job is to make that 5% visible and bounded.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The AI Evals Stack</div>
+  <h2>Three layers — always all three</h2>
+  <table>
+    <tr><th>Layer</th><th>Volume</th><th>Fidelity</th><th>What it tells you</th></tr>
+    <tr><td>User feedback</td><td>Highest</td><td>Lowest</td><td>What users do (thumbs, regen, abandon)</td></tr>
+    <tr><td>Human evaluation</td><td>Mid</td><td>High</td><td>What graders think (rubric scores)</td></tr>
+    <tr><td>Automated evals</td><td>Highest</td><td>Mid</td><td>What an LLM-judge or regression suite measures</td></tr>
+  </table>
+  <p class="muted">You need <em>all three</em>. They answer different questions.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Most teams ship one layer. Two if mature. Three is what shippable AI products do.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Measuring AI-Powered Product Outputs</div>
+  <h2>How to build a Human Eval Rubric</h2>
+  <ol>
+    <li><strong>Dimensions</strong> — what you're scoring (accuracy, tone, completeness, safety, citation correctness)</li>
+    <li><strong>Scale</strong> — 1–5 or pass/fail, with anchor descriptions</li>
+    <li><strong>Examples</strong> — one example per scale point</li>
+    <li><strong>Disagreement protocol</strong> — what to do when graders disagree</li>
+    <li><strong>Sampling cadence</strong> — how often, how many</li>
+  </ol>
+  <p>Real-world: Google Assistant uses a 5-point rubric across 4 dimensions, sampled at ~50 utterances/week per intent.</p>
+  <div class="notes"><h4>Speaker Notes</h4>The rubric is a contract between the PM and the graders. Anchors per scale point are non-negotiable — without them, graders drift.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Tool · M6</div>
+  <h2>Human Evaluation Rubric</h2>
+  <p>Open <code>M6 - Human Evaluation Rubric.html</code>.</p>
+  <ul>
+    <li>Spec 3–5 dimensions for Juno's risk lists.</li>
+    <li>Write anchor descriptions for each scale point.</li>
+    <li>Pick a sampling cadence.</li>
+    <li>Copy as markdown → <code>06-evals/human-rubric.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>5 min hands-on. Common miss: people skip the disagreement protocol. Push them.</div>
+</section>
+
+<section>
+  <div class="eyebrow">PM's Role in Evaluations</div>
+  <h2>Eval is product surface</h2>
+  <ul>
+    <li>The PM owns the rubric and the golden set.</li>
+    <li>The PM defines the pass bar.</li>
+    <li>The PM decides the regression cadence.</li>
+    <li>The PM acts on eval data — model swap, data fix, architecture change.</li>
+  </ul>
+  <p>If you delegate evals to QA, you have outsourced your product surface.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This is the most-pushed-back-on slide. Engineers want to own evals. They can run them, but the PM owns the bar.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 25 min</div>
+  <h2>Plan Juno's Eval Stack</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Open <code>M6 - Eval Stack Designer.html</code>.</li>
+    <li>Plan all three layers: user feedback, human eval, automated.</li>
+    <li>For each layer, name: volume, cadence, pass bar, who acts on it.</li>
+    <li>Copy as markdown → <code>06-evals/eval-stack.md</code>.</li>
+    <li>Self-review, AI-review, commit, share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>This is the M6 deliverable. Walk the room. Push back on anyone who skips the automated layer because "it's too complex."</div>
+</section>
+
+<section>
+  <div class="eyebrow">AI Levers for Optimization</div>
+  <h2>Three knobs when eval scores miss the bar</h2>
+  <table>
+    <tr><th>Lever</th><th>Try first</th><th>Cost</th></tr>
+    <tr><td><strong>Model</strong></td><td>Swap, upgrade, or fine-tune</td><td>Low (swap) to high (fine-tune)</td></tr>
+    <tr><td><strong>Data</strong></td><td>Improve corpus, clean inputs, expand context</td><td>Mid — your time + ops</td></tr>
+    <tr><td><strong>Architecture</strong></td><td>Add RAG, decompose agents, add guardrails</td><td>High — engineering time</td></tr>
+  </table>
+  <p>Try model and data before architecture.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Most teams reach for architecture first. It's the most expensive and slowest. Use this rule of thumb to push back.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Operationalizing AI Risks</div>
+  <h2>Governance framework — four buckets</h2>
+  <ul>
+    <li><strong>Compliance</strong> — regulatory (GDPR, EU AI Act).</li>
+    <li><strong>Safety</strong> — content, prompt injection, misuse.</li>
+    <li><strong>Reliability</strong> — uptime, fallback paths, graceful degradation.</li>
+    <li><strong>Reputation</strong> — public failure scenarios + response playbook.</li>
+  </ul>
+  <p>Each bucket gets a row in your PM Execution Plan.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This is the same framework from M2. Difference: now you operationalise it with real metrics + owners.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 20 min</div>
+  <h2>Finalise Your Project Deliverables</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Open <code>M6 - Final Project Deliverables Builder.html</code>.</li>
+    <li>The tool pulls together one structured page covering: system prompt, AI Strategy One-Pager, RAG architecture + AI PRD, AI user flow + trust gaps, AWSpec, eval stack.</li>
+    <li>Add your <strong>Build Insights</strong> reflection: 1 friction point, 1 key learning, 1 aha moment.</li>
+    <li>Copy as markdown → top-level <code>README.md</code> of your <code>juno-pm/</code> fork.</li>
+    <li>Commit, push.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>This replaces the old "deliverables deck." Their README is now their pitch.</div>
+</section>
+
+<section>
+  <div class="eyebrow">PM Execution Plan</div>
+  <h2>The closing artifact</h2>
+  <p>Your finalised <code>juno-pm/README.md</code> covers:</p>
+  <ul>
+    <li><strong>Where Juno is today</strong> — eval scores, known gaps</li>
+    <li><strong>What you ship next</strong> — next 2 sprints</li>
+    <li><strong>What you watch</strong> — the dashboard + cadence</li>
+    <li><strong>What blocks shipping</strong> — the red lines</li>
+  </ul>
+  <p>That's the deliverable. That's the certificate.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Make sure they understand the README is the pitch. Not a deck. Not a doc. A repo's front page.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Async Showcase · ~10 min in class, days after async</div>
+  <h2>Demo Your Juno Copilot</h2>
+  <p class="muted">Was 30-min live group presentations. Now async, individual.</p>
+  <ol>
+    <li>Record a 3-minute Loom walkthrough of your <code>juno-pm/</code> repo.</li>
+    <li>Hit: the bet, the system prompt, the user flow, the AWSpec, the eval stack.</li>
+    <li>Post the repo URL + Loom in <code>#ai-pm-cohort</code>.</li>
+    <li>Instructor responds in-thread with feedback within ~5 days.</li>
+  </ol>
+  <p class="muted">Optional but encouraged. Not required for certification.</p>
+  <div class="notes"><h4>Speaker Notes</h4>The async showcase is the new live presentation. Instructor commits to ~5-day response window in #ai-pm-cohort. No live demos.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Certification</div>
+  <h2>What you submit, and how it's graded</h2>
+  <ul>
+    <li>Submit: the URL of your finalised <code>juno-pm/</code> GitHub repo.</li>
+    <li>Window: within 7 days of cohort end.</li>
+    <li>Graded on: Application of Concepts, Credibility & Reasoning, Clarity, Strategic Thinking.</li>
+    <li>Scale: 1 — Poor (0–49), 2 — Sufficient (50–79), 3 — Excellent (80–100).</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>Stress: it's the repo URL, not a deck. Re-read aloud the rubric. No one fails for not presenting live.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into Monday</h2>
+  <ol>
+    <li>Vibe checks fail in production.</li>
+    <li>The AI Evals Stack has three layers. Always all three.</li>
+    <li>The Human Eval Rubric needs anchors + a disagreement protocol.</li>
+    <li>When eval scores miss the bar: model → data → architecture.</li>
+    <li>Eval is product surface. PMs own the bar.</li>
+    <li>Your README is the pitch. Ship it.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>The final takeaway is the most important: the repo is theirs forever. They built a real artifact. Make sure they leave proud.</div>
+</section>
+
+<section>
+  <div class="eyebrow">After the cohort</div>
+  <h2>What's next</h2>
+  <ul>
+    <li>Submit your repo within 7 days for certification.</li>
+    <li>Post Loom (optional) in <code>#ai-pm-cohort</code>.</li>
+    <li>Re-run the AI-review prompt from M6 on your next AI bet — it's reusable forever.</li>
+    <li>Fork the course repo if you want to evolve it for your own org.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Q&amp;A · 5 min</div>
+  <h2>Questions before we close</h2>
+  <p class="muted">Park anything we can't answer live in <code>#ai-pm-cohort</code>. Thank you.</p>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+---
+description: File naming conventions for the AI Product Management course repo.
+globs:
+  - "**/*"
+alwaysApply: false
+---
+
+# File naming conventions
+
+## Slides (HTML)
+
+- `Modules/Module {N} - Slides.html` — instructor version (includes speaker notes)
+- `Modules/Module {N} - Slides (Shareable).html` — shareable version (notes stripped, takeaways added)
+
+## Module content (Markdown)
+
+- `Modules/Module {N} - Notes (Shareable).md`
+- `Modules/Module {N} - Frameworks Reference Card.md`
+- `Modules/Module {N} - Glossary.md`
+- `Modules/Module {N} - Pre-Read.md`
+
+## Interactive tools (HTML)
+
+- `Modules/M{N} - {Tool Name}.html` — single-file HTML app, vanilla JS, localStorage
+- Exception: `Modules/Final Project Deliverables Builder.html` (no M6 prefix — used in M6 but produces top-level README)
+
+## Cross-cutting
+
+- `Modules/Concepts Primer (Pre-Read).md`
+- `Modules/Frameworks Reference Card.md`
+- `Modules/Glossary.md`
+
+## Root pages (HTML)
+
+- `index.html` — landing
+- `AI Product Management - Course Overview.html`
+- `Curriculum Map.html`
+- `Final Project Brief.html`
+- `Tools Overview.html`
+
+## Internal docs (Markdown)
+
+- `course-architecture.md`
+- `storyline.md`
+- `course-status.md`
+- `README.md`
+
+## Juno project template
+
+- `juno-project-template/README.md` — dashboard
+- `juno-project-template/{NN-name}/` — one folder per module:
+  - `01-prompting/`
+  - `02-strategy/`
+  - `03-rag-prd/`
+  - `04-ai-ux/`
+  - `05-agentic-workflows/`
+  - `06-evals/`
+- Each subfolder has its own `README.md` + the artifact files named per module
+
+## Pitch
+
+- `Pitch/AI Product Management - Pitch Deck.html`
+- `Pitch/Gamma Prompt.md`

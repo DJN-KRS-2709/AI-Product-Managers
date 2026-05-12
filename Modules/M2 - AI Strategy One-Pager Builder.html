@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M2 — AI Strategy One-Pager Builder</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;min-height:100vh}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .field{margin-bottom:18px}
+  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  .hint{color:var(--muted);font-size:13px;margin:0 0 8px}
+  textarea,input,select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px}
+  textarea{min-height:64px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .check li{margin:6px 0;font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;margin-left:8px;background:#22293a;color:var(--muted)}
+  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
+  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 2 · Tool · Final-project deliverable</div><h1>AI Strategy One-Pager Builder</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint">Seven blocks. One page. Survives a board challenge.</p>
+
+    <div class="field"><label>1. The bet (one sentence + value frame) <span class="badge" id="b1">empty</span></label>
+      <p class="hint">"We will build X for Y so that Z (Cost/Revenue/Risk/Delight)."</p>
+      <textarea id="f1" placeholder="We will build Juno PM — an AI Associate PM inside RocketShip's Slack/Notion/Jira — so that the product team cuts median P0 triage time from 90 to 20 minutes (Risk mitigation)."></textarea>
+    </div>
+
+    <div class="field"><label>2. The user / job <span class="badge" id="b2">empty</span></label>
+      <p class="hint">Who, doing what?</p>
+      <textarea id="f2" placeholder="RocketShip senior AI PMs triaging P0 escalations, drafting spec v0.1s, and prioritising weekly risk lists."></textarea>
+    </div>
+
+    <div class="field"><label>3. The mechanic <span class="badge" id="b3">empty</span></label>
+      <p class="hint">What does the product do? Non-PM-readable.</p>
+      <textarea id="f3" placeholder="Juno reads P0 threads, retrieves the RocketShip strategy corpus, and outputs a daily prioritised risk list with source IDs. On request it drafts a v0.1 PRD that the PM edits."></textarea>
+    </div>
+
+    <div class="field"><label>4. The autonomy <span class="badge" id="b4">empty</span></label>
+      <select id="f4">
+        <option value="">Pick one…</option>
+        <option>Suggest — AI proposes, human decides</option>
+        <option>Draft — AI drafts v0.1, human edits + approves</option>
+        <option>Mixed — Synthesize=Execute, Draft=Draft, Prioritize=Suggest</option>
+        <option>Execute — AI acts, human reviews after</option>
+        <option>Operate — AI runs long horizons</option>
+      </select>
+      <p class="hint" style="margin-top:6px">For Juno, Mixed is the realistic answer. Lock the pillar mapping here.</p>
+    </div>
+
+    <div class="field"><label>5. The technical approach <span class="badge" id="b5">empty</span></label>
+      <p class="hint">Prompt / RAG / fine-tune / agent — cheapest first.</p>
+      <textarea id="f5" placeholder="V1: system prompt (M1) + RAG over RocketShip strategy + Slack/Notion/Jira corpora (M3). V2: bounded agent with explicit handoff rules (M5). No fine-tune."></textarea>
+    </div>
+
+    <div class="field"><label>6. The risk + guardrail <span class="badge" id="b6">empty</span></label>
+      <p class="hint">What can go wrong + how you block it.</p>
+      <textarea id="f6" placeholder="Risk: Juno hallucinates a customer ARR figure on a P0 risk. Guardrail: refuse to assert ARR without the ARR sheet; cite source IDs for every claim; hand off to PM if confidence <70%."></textarea>
+    </div>
+
+    <div class="field"><label>7. The success metric <span class="badge" id="b7">empty</span></label>
+      <p class="hint">Measurable in 30 days. Specific number.</p>
+      <textarea id="f7" placeholder="Median P0 triage time falls from 90 minutes to 20 minutes by Sprint 3. Sprint-over-sprint trend reported in #ai-pm-cohort."></textarea>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <label>Live preview — strategy-one-pager.md</label>
+    <p class="hint">Commit to <code>02-strategy/strategy-one-pager.md</code>.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li id="c1">The bet is one sentence with a quantified outcome</li>
+        <li id="c2">The mechanic is non-PM-readable</li>
+        <li id="c3">The autonomy level is explicit</li>
+        <li id="c4">The tech approach ladders to prompt → RAG → fine-tune</li>
+        <li id="c5">The success metric is measurable in 30 days</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your one-pager + this into ChatGPT, Claude, or Cursor:</p>
+      <div class="preview" style="font-size:12px">You are the CFO of RocketShip. Read this AI Strategy One-Pager and challenge it. (a) Is the success metric specific enough to defund the bet if missed? (b) Is the autonomy level appropriate for the risk? (c) Is the technical approach the cheapest path that works? (d) Which of the seven blocks is weakest? Reply in 5 short bullets.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const ids=['f1','f2','f3','f4','f5','f6','f7'];
+  const KEY='m2-one-pager';
+  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);ids.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
+  function save(){const o={};ids.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
+  function val(id){return document.getElementById(id).value.trim()}
+  function setBadge(id,ok){const b=document.getElementById(id);b.textContent=ok?'filled':'empty';b.className='badge '+(ok?'ok':'warn')}
+  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
+  function md(){
+    const [a,b,c,d,e,f,g]=ids.map(val);
+    return `# Juno PM — AI Strategy One-Pager\n\n## 1. The bet\n\n${a||'_(missing)_'}\n\n## 2. The user / job\n\n${b||'_(missing)_'}\n\n## 3. The mechanic\n\n${c||'_(missing)_'}\n\n## 4. The autonomy\n\n${d||'_(missing)_'}\n\n## 5. The technical approach\n\n${e||'_(missing)_'}\n\n## 6. The risk + guardrail\n\n${f||'_(missing)_'}\n\n## 7. The success metric\n\n${g||'_(missing)_'}\n`;
+  }
+  function update(){
+    const [a,b,c,d,e,f,g]=ids.map(val);
+    setBadge('b1',!!a);setBadge('b2',!!b);setBadge('b3',!!c);setBadge('b4',!!d);setBadge('b5',!!e);setBadge('b6',!!f);setBadge('b7',!!g);
+    setCheck('c1',a.length>30 && /(cost|revenue|risk|delight|reduce|cut|save|gain|mitigate|grow|delight)/i.test(a) && /\d/.test(a));
+    setCheck('c2',c.length>30);
+    setCheck('c3',!!d);
+    setCheck('c4',e.length>0 && /(prompt|rag|fine.?tune|agent)/i.test(e));
+    setCheck('c5',g.length>0 && /\d/.test(g) && /(day|sprint|week|month|hour|minute|%|per)/i.test(g));
+    document.getElementById('preview').textContent=md();save();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='strategy-one-pager.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all fields?')){ids.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
+  ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
+  load();update();
+</script>
+</body>
+</html>

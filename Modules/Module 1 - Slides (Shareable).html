@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 1 — Drive AI-First Execution with Prompting</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line);position:relative}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em;letter-spacing:-.01em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent);letter-spacing:-.01em}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;color:var(--fg);max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px;font-size:.92em}
+  .takeaway{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent2);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .takeaway h4{margin:0 0 6px;color:var(--accent2);font-size:13px;text-transform:uppercase;letter-spacing:.15em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 1 · Individual format</div>
+  <h1>Drive AI-First Execution with Prompting</h1>
+  <p class="muted">Stop chatting with AI. Start configuring it.</p>
+  <p>By the end of this module: a working Juno PM prototype in Lovable + a system prompt committed to your <code>juno-pm/</code> repo.</p>
+</section>
+
+<section>
+  <div class="eyebrow">The scenario</div>
+  <h2>RocketShip is in Signal Collapse</h2>
+  <p>B2B SaaS for Enterprise Data Teams. You are the AI PM. The org is winning on paper and drowning in reality.</p>
+  <div class="grid two">
+    <div class="card"><h3>Reality</h3><ul><li>P0 escalation wall in Slack</li><li>Thousands of stalled tickets</li><li>Sales velocity stalling</li></ul></div>
+    <div class="card"><h3>Budget</h3><ul><li>Innovation experiments: yes</li><li>Headcount: zero</li></ul></div>
+  </div>
+  <p style="margin-top:18px"><strong>You cannot scale yourself. You must scale your judgment.</strong></p>
+</section>
+
+<section>
+  <div class="eyebrow">The throughline</div>
+  <h2>You will build Juno PM</h2>
+  <p>An AI Associate PM that lives inside Slack, Notion, and Jira.</p>
+  <div class="grid three">
+    <div class="card"><h3>Synthesize</h3><p>Transcripts, tickets, calls → structured clarity.</p></div>
+    <div class="card"><h3>Draft</h3><p>Raw findings → "Version 0.1" PRDs.</p></div>
+    <div class="card"><h3>Prioritize</h3><p>Risk watchdog — flag edge cases, debt, assumptions.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">The AI-First Product Mindset</div>
+  <h2>Every PM is now an AI PM</h2>
+  <table>
+    <tr><th>Traditional PM assumption</th><th>What AI broke</th></tr>
+    <tr><td>Outputs are deterministic</td><td>Outputs are probabilistic — drift, hallucination, variance</td></tr>
+    <tr><td>Spec is a doc</td><td>Spec is a doc + prompt + data corpus + eval set</td></tr>
+    <tr><td>UI is command-driven</td><td>UI is intent-driven and often invisible</td></tr>
+    <tr><td>Workflows are sequential</td><td>Workflows are agentic — branched, conditional, handed off</td></tr>
+    <tr><td>Ship + monitor with analytics</td><td>Ship + eval harness + human rubric + guardrails</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">The PM's dual role</div>
+  <h2>Broker between probability and trust</h2>
+  <ul>
+    <li><strong>Inward</strong> — translate non-determinism into specs your team can build (prompt, RAG, eval, guardrail).</li>
+    <li><strong>Outward</strong> — translate non-determinism into user expectations the product can honour (trust UX, confidence cues, escape hatches).</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">A PM's AI toolkit</div>
+  <h2>Five categories you need bookmarked</h2>
+  <table>
+    <tr><th>Category</th><th>Pick one</th><th>Use for</th></tr>
+    <tr><td>Prompt-to-prototype</td><td>Lovable, v0, Cursor</td><td>Build UI fast</td></tr>
+    <tr><td>LLM playground</td><td>OpenAI / Anthropic Console</td><td>Tune prompts</td></tr>
+    <tr><td>No-code agent builder</td><td>Langflow, n8n</td><td>Wire agents</td></tr>
+    <tr><td>Eval / observability</td><td>LangSmith, Phoenix, Braintrust</td><td>Score, trace, regress</td></tr>
+    <tr><td>Repo + version control</td><td>GitHub</td><td>Your <code>juno-pm/</code> lives here</td></tr>
+  </table>
+  <p class="takeaway"><strong>Tool:</strong> M1 - PM Toolkit Picker.html — pick + commit your stack to <code>01-prompting/toolkit.md</code></p>
+</section>
+
+<section>
+  <div class="eyebrow">The Anatomy of a High-Quality Prompt</div>
+  <h2>Five elements every production prompt declares</h2>
+  <ol>
+    <li><strong>Context</strong> — who the AI is, what it knows, what system it lives in.</li>
+    <li><strong>Task</strong> — the explicit instruction (verb-first).</li>
+    <li><strong>Constraints</strong> — must-not-do, format requirements, scope.</li>
+    <li><strong>Output format</strong> — schema, length, structure.</li>
+    <li><strong>Examples</strong> (few-shot when useful) — 1–3 ideal pairs.</li>
+  </ol>
+  <p class="takeaway"><strong>Tool:</strong> M1 - Prompt Anatomy Builder.html — assemble live, copy as markdown to <code>01-prompting/anatomy-prompt.md</code></p>
+</section>
+
+<section>
+  <div class="eyebrow">Hands-On Lab · 25 min · Individual</div>
+  <h2>Prompt-to-Prototype Juno with Lovable</h2>
+  <ol>
+    <li>Open Lovable; sign in.</li>
+    <li>Paste the seed prompt for Juno (see Notes).</li>
+    <li>Iterate <em>once</em> — change UI shape, palette, or copy.</li>
+    <li>Copy the shareable URL.</li>
+    <li>Commit the URL to <code>01-prompting/README.md</code>.</li>
+  </ol>
+  <p class="muted">Goal: a functional URL, not a polished product.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Prompting Strategy Matrix</div>
+  <h2>You are not chatting. You are configuring.</h2>
+  <table>
+    <tr><th>Technique</th><th>Use when</th></tr>
+    <tr><td>Zero-shot</td><td>Simple instruction, model knows the domain</td></tr>
+    <tr><td>Few-shot</td><td>You need a specific format/style — show 1–3 examples</td></tr>
+    <tr><td>Chain-of-thought</td><td>Multi-step reasoning required</td></tr>
+    <tr><td>System prompt + role</td><td>Persona, persistent guardrails, org context</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">Hyperparameters · the two PM dials</div>
+  <h2>Temperature + length cap</h2>
+  <div class="grid two">
+    <div class="card"><h3>Temperature</h3><p>0 = deterministic-ish. 1+ = creative. Spec it for the job. Juno-as-risk-watchdog = low; Juno-as-brainstorm-partner = high.</p></div>
+    <div class="card"><h3>Max tokens</h3><p>Cap it. Long outputs hide failures. Short outputs force prioritisation.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 min</div>
+  <h2>Configure Juno's System Prompt</h2>
+  <ol>
+    <li>Open <code>M1 - System Prompt Configurator.html</code>.</li>
+    <li>Fill in persona, scope, guardrails, output format, refusal rules.</li>
+    <li>Copy as markdown → save to <code>01-prompting/system-prompt.md</code>.</li>
+    <li>Run the self-review checklist on the tool.</li>
+    <li>Run the AI-review prompt in ChatGPT/Claude/Cursor.</li>
+    <li>Commit, push, share the link in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the system prompt</h2>
+  <ul>
+    <li>Persona names role + operating context?</li>
+    <li>Scope boundaries explicit ("only act on Slack escalations tagged P0")?</li>
+    <li>At least 3 guardrails, including 1 refusal rule?</li>
+    <li>Output format declared (markdown, schema, length cap)?</li>
+    <li>An example for the trickiest case?</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">The Optimization Decision Framework</div>
+  <h2>Prompt → RAG → Fine-tune. Cheapest first.</h2>
+  <table>
+    <tr><th>Lever</th><th>Try when</th><th>Cost / time</th></tr>
+    <tr><td><strong>Prompt</strong></td><td>Behaviour needs tuning, not knowledge</td><td>Minutes. Almost free.</td></tr>
+    <tr><td><strong>RAG</strong></td><td>You need <em>your</em> data grounded (M3)</td><td>Days. Real infra cost.</td></tr>
+    <tr><td><strong>Fine-tune</strong></td><td>Style/format/behaviour at scale (last resort)</td><td>Weeks. Training cost.</td></tr>
+  </table>
+  <p><em>If you can fix it with the prompt, do not build infra.</em></p>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M2</h2>
+  <ol>
+    <li>Prompting is configuration, not chat.</li>
+    <li>Every prompt declares context, task, constraints, output, examples.</li>
+    <li>Optimization order: prompt → RAG → fine-tune.</li>
+    <li>You have a working Lovable URL + a committed system prompt.</li>
+    <li>Next: M2 — is this bet worth oxygen, and how autonomous can it be?</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Before M2</div>
+  <h2>~20 min homework</h2>
+  <ul>
+    <li>Skim <strong>Module 2 - Pre-Read.md</strong>.</li>
+    <li>Confirm your <code>juno-pm/</code> fork has the M1 artifacts.</li>
+    <li>Post your M1 reflection in <code>#ai-pm-cohort</code>.</li>
+    <li>Bring a real AI bet from your day job to M2 — we'll pressure-test it.</li>
+  </ul>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

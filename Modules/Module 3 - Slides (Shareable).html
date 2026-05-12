@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 3 — Improve AI Product Requirements with RAG Architecture</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .takeaway{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent2);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 3 · Individual format</div>
+  <h1>Improve AI Product Requirements with RAG Architecture</h1>
+  <p class="muted">Your PRD is missing the data corpus. That's not the engineer's problem — it's yours.</p>
+  <p>End state: a Juno AI PRD with explicit RAG architecture in <code>03-rag-prd/ai-prd.md</code>.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Prompt → Context Engineering</div>
+  <h2>Where PMs own the data</h2>
+  <table>
+    <tr><th>Prompt engineering</th><th>Context engineering</th></tr>
+    <tr><td>Words to the model</td><td>Data assembled around the prompt</td></tr>
+    <tr><td>Engineer / PM, shared</td><td><strong>PM-owned</strong></td></tr>
+    <tr><td>Tunes behaviour</td><td>Grounds output in <em>your</em> reality</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">The RAG Process</div>
+  <h2>Retrieval-Augmented Generation in 4 steps</h2>
+  <ol>
+    <li><strong>Index</strong> — chunk, embed, store</li>
+    <li><strong>Retrieve</strong> — fetch relevant chunks for the query</li>
+    <li><strong>Augment</strong> — inject chunks into the prompt</li>
+    <li><strong>Generate</strong> — model responds, grounded</li>
+  </ol>
+  <p class="muted">Reduces hallucination. Adds cost + latency. The trade-off is what to retrieve and when.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Hands-On Lab · 25 min · Individual</div>
+  <h2>Improve Juno's Capabilities With RAG</h2>
+  <ol>
+    <li>Open your Juno Lovable prototype.</li>
+    <li>Ground Juno in the RocketShip Strategy One-Pager corpus.</li>
+    <li>Ask: "What are the top 3 risks for our Q3 launch, with citations?"</li>
+    <li>Compare before vs. after.</li>
+    <li>Save both answers in <code>03-rag-prd/before-after-rag.md</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">What's New in an AI PRD?</div>
+  <h2>Three new sections</h2>
+  <ol>
+    <li><strong>Data corpus + retrieval strategy</strong></li>
+    <li><strong>Eval plan</strong> (filled in M6)</li>
+    <li><strong>Failure modes + guardrails</strong></li>
+  </ol>
+  <p>Skip these and you ship a probabilistic system with no idea how it will fail.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Three Key RAG Trade-offs</div>
+  <h2>Cost · Speed · Accuracy</h2>
+  <table>
+    <tr><th>Trade-off</th><th>Lever</th><th>Watch</th></tr>
+    <tr><td>Cost</td><td>Embedding model, storage, retrieval calls</td><td>$/query at scale</td></tr>
+    <tr><td>Speed</td><td>k, reranker, hybrid, parallelism</td><td>p95 latency</td></tr>
+    <tr><td>Accuracy</td><td>Chunk size, k, reranker, query rewrite</td><td>Eval score on golden set</td></tr>
+  </table>
+  <p>The right context at the right time beats more context.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Architecture Decision Factors</div>
+  <h2>Five questions to pick your RAG architecture</h2>
+  <ol>
+    <li>Data freshness — how stale can context be?</li>
+    <li>Corpus size — fits in context window vs. retrieve?</li>
+    <li>Query latency budget</li>
+    <li>Update cadence — read- or write-heavy?</li>
+    <li>Privacy / tenancy</li>
+  </ol>
+  <p class="takeaway"><strong>Tool:</strong> M3 - RAG Architecture Decider.html — answer the five questions, get a recommended architecture, export to your PRD.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Tokens and Context Windows</div>
+  <h2>Bigger windows ≠ free</h2>
+  <ul>
+    <li>Context windows: 8k → 128k → 1M tokens</li>
+    <li>Cost per million tokens × usage = your AI margin line</li>
+    <li>Latency and "needle in a haystack" recall degrade with size</li>
+  </ul>
+  <p>The 1M-token era changes the trade-off — it doesn't kill RAG.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Data Preparation</div>
+  <h2>The PM corpus-readiness checklist</h2>
+  <ul>
+    <li>Source identification — which docs, channels, tickets?</li>
+    <li>Quality bar — freshness, accuracy, completeness</li>
+    <li>PII / sensitive-content handling</li>
+    <li>Permissions — does the corpus respect access?</li>
+    <li>Update cadence — how often does the index refresh?</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 min</div>
+  <h2>Specify Juno's RAG Architecture in Your AI PRD</h2>
+  <ol>
+    <li>Open <code>M3 - AI PRD Builder.html</code>.</li>
+    <li>Carry over bet / mechanic / autonomy from your M2 one-pager.</li>
+    <li>Fill <strong>Data corpus + retrieval strategy</strong> (from the Decider).</li>
+    <li>Fill <strong>Failure modes + guardrails</strong>.</li>
+    <li>Leave Eval plan stub for M6.</li>
+    <li>Copy → <code>03-rag-prd/ai-prd.md</code>. Self-review, AI-review, commit, share.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the AI PRD</h2>
+  <ul>
+    <li>Data corpus names specific sources (not "internal docs")</li>
+    <li>Retrieval strategy specifies chunk size, top-k, rerank on/off</li>
+    <li>≥3 concrete failure modes</li>
+    <li>Each failure mode paired with a guardrail</li>
+    <li>Eval plan stub points to M6</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M4</h2>
+  <ol>
+    <li>Context engineering is PM-owned.</li>
+    <li>AI PRD has 3 new sections vs. traditional.</li>
+    <li>Right context at right time beats more context.</li>
+    <li>RAG trade-offs: cost / speed / accuracy.</li>
+    <li>You have a real AI PRD with explicit architecture choices.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">Before M4</div>
+  <h2>~20 min homework</h2>
+  <ul>
+    <li>Skim <strong>Module 4 - Pre-Read.md</strong>.</li>
+    <li>Bring one screenshot of a clunky AI UX you've experienced.</li>
+    <li>Post AI PRD link in <code>#ai-pm-cohort</code>.</li>
+  </ul>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

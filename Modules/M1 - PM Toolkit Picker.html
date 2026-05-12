@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M1 — PM Toolkit Picker</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px;letter-spacing:-.01em}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{max-width:1200px;margin:0 auto;padding:24px 32px}
+  .cat{margin-bottom:22px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:18px 22px}
+  .cat h2{margin:0 0 6px;font-size:18px;color:var(--accent2)}
+  .cat p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .opt{cursor:pointer;padding:6px 12px;border-radius:99px;background:#161b25;border:1px solid var(--line);color:var(--fg);font-size:13px}
+  .opt.on{background:var(--accent);color:#0b0d12;border-color:var(--accent);font-weight:600}
+  .reason{width:100%;background:#0a0d18;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:14px}
+  .row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 1 · Tool</div><h1>PM Toolkit Picker</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <p style="color:var(--muted);font-size:14px">Pick one tool per category. Add a one-line reason. Commit the result to <code>01-prompting/toolkit.md</code>.</p>
+  <div id="cats"></div>
+  <h2 style="margin-top:24px;font-size:16px;color:var(--accent2);letter-spacing:.14em;text-transform:uppercase">Preview</h2>
+  <div class="preview" id="preview"></div>
+</main>
+<div class="toast" id="toast">Copied to clipboard</div>
+<script>
+  const cats=[
+    {id:'p2p',name:'Prompt-to-prototype',hint:'Build a working UI in minutes',opts:['Lovable','v0','Cursor','Bolt','Other…']},
+    {id:'pg',name:'LLM playground',hint:'Tune prompts + hyperparameters',opts:['OpenAI Playground','Anthropic Console','Google AI Studio','Cursor chat','Other…']},
+    {id:'agent',name:'No-code agent builder',hint:'Wire agents and tool calls',opts:['Langflow','n8n','Make','Zapier Agents','Other…']},
+    {id:'eval',name:'Eval / observability',hint:'Score, trace, regress',opts:['LangSmith','Phoenix','Braintrust','Helicone','Other…']},
+    {id:'repo',name:'Repo + version control',hint:'Your juno-pm/ lives here',opts:['GitHub','GitLab','Bitbucket']},
+  ];
+  const KEY='m1-toolkit';
+  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):{}}
+  function save(state){localStorage.setItem(KEY,JSON.stringify(state))}
+  let state=load();
+  function render(){
+    const root=document.getElementById('cats');root.innerHTML='';
+    cats.forEach(c=>{
+      const div=document.createElement('div');div.className='cat';
+      div.innerHTML=`<h2>${c.name}</h2><p>${c.hint}</p>`;
+      const opts=document.createElement('div');opts.className='opts';
+      c.opts.forEach(o=>{
+        const b=document.createElement('span');b.className='opt'+(state[c.id]?.pick===o?' on':'');b.textContent=o;
+        b.onclick=()=>{state[c.id]={...(state[c.id]||{}),pick:o};save(state);render()};
+        opts.appendChild(b);
+      });
+      div.appendChild(opts);
+      const r=document.createElement('input');r.type='text';r.className='reason';r.placeholder='One-line reason (e.g., "fastest UI for early-stage Juno")';
+      r.value=state[c.id]?.why||'';
+      r.oninput=e=>{state[c.id]={...(state[c.id]||{}),why:e.target.value};save(state);updatePreview()};
+      div.appendChild(r);
+      root.appendChild(div);
+    });
+    updatePreview();
+  }
+  function md(){
+    let s='# Juno PM — My AI PM Toolkit\n\n_Committed for `01-prompting/toolkit.md`_\n\n| Category | Pick | Reason |\n|---|---|---|\n';
+    cats.forEach(c=>{const x=state[c.id]||{};s+=`| ${c.name} | ${x.pick||'_(not picked)_'} | ${(x.why||'').replace(/\|/g,'\\|')} |\n`});
+    return s;
+  }
+  function updatePreview(){document.getElementById('preview').textContent=md()}
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='toolkit.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all picks?')){state={};save(state);render()}}
+  render();
+</script>
+</body>
+</html>

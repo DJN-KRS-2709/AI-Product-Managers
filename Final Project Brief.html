@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Final Project Brief — Juno PM</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:980px;margin:0 auto;padding:64px 7vw}
+  .eyebrow{color:var(--accent2);font-size:13px;text-transform:uppercase;letter-spacing:.18em;font-weight:600;margin-bottom:14px}
+  h1{font-size:clamp(32px,4vw,52px);line-height:1.05;margin:0 0 .3em}
+  h2{font-size:clamp(20px,2vw,28px);margin:48px 0 14px;color:var(--accent)}
+  h3{font-size:17px;margin:22px 0 6px;color:var(--accent2)}
+  p,li{font-size:16px;line-height:1.65}
+  ul,ol{padding-left:1.2em}
+  .lede{color:var(--muted);font-size:18px;max-width:780px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:14px 0}
+  .card.warn{border-left:3px solid var(--accent2)}
+  table{border-collapse:collapse;width:100%;margin:14px 0}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;font-size:14.5px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px;font-size:14px}
+  .pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(52,211,153,.12);color:var(--ok);margin-left:6px}
+  hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+  a{color:var(--accent2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">Certification · Individual format · Repo-as-portfolio</div>
+<h1>Final Project Brief — Juno PM</h1>
+<p class="lede">Across six modules you architect, spec, and ship an AI copilot — Juno PM — into a public GitHub repo. The repo is your portfolio. The repo is your certification submission.</p>
+
+<div class="card warn">
+  <strong>What changed from the legacy brief.</strong> The previous course ran this as a 3–5 person group project with an in-class group demo. This course is <strong>individual</strong>. You commit your own artifacts to your own fork. The final showcase is async and optional. Grading happens on your repo, not on a slide deck.
+</div>
+
+<h2>The scenario</h2>
+<p>You are the AI PM at <strong>RocketShip</strong>, a hyper-growth B2B SaaS platform for Enterprise Data Teams. On paper, the company is winning. In reality, you are the bottleneck of the entire organisation. The team calls it the <strong>Signal Collapse</strong>:</p>
+<ul>
+  <li>Your inbox is a wall of P0 escalations.</li>
+  <li>Support has thousands of unread tickets.</li>
+  <li>Sales reports stalling because requirements can't be vetted fast enough.</li>
+  <li>You have an innovation budget but zero headcount.</li>
+</ul>
+<p>Your bet: build <strong>Juno PM</strong> — an AI Associate PM that lives inside Slack, Notion, and Jira. Three pillars:</p>
+<ul>
+  <li><strong>Synthesise insights</strong> — turn multi-channel chaos into structured, evidence-backed clarity.</li>
+  <li><strong>Draft specs</strong> — produce Version-0.1 PRDs you refine instead of starting from a blank page.</li>
+  <li><strong>Prioritise risks</strong> — flag unclear edge cases, technical debt, and risky assumptions.</li>
+</ul>
+
+<h2>What you build (per module)</h2>
+<p>Every module pushes one real artifact into a folder of your <code>juno-pm/</code> fork. By the end of M6, you finalise the top-level README — that's the submission.</p>
+
+<table>
+  <tr><th>Module</th><th>Folder</th><th>Artifact</th></tr>
+  <tr><td>M1 · Prompting</td><td><code>01-prompting/</code></td><td><code>system-prompt.md</code> · <code>lovable-prototype.md</code></td></tr>
+  <tr><td>M2 · Strategy</td><td><code>02-strategy/</code></td><td><code>decision-matrix.md</code> · <code>strategy-one-pager.md</code></td></tr>
+  <tr><td>M3 · RAG / AI PRD</td><td><code>03-rag-prd/</code></td><td><code>prd.md</code> (with RAG decisions)</td></tr>
+  <tr><td>M4 · AI-UX</td><td><code>04-ai-ux/</code></td><td><code>user-flow.md</code> · <code>trust-gaps.md</code></td></tr>
+  <tr><td>M5 · Agentic</td><td><code>05-agentic-workflows/</code></td><td><code>awspec.md</code> · <code>control-panel.md</code> · <code>Juno Agent.json</code> (optional Langflow)</td></tr>
+  <tr><td>M6 · Evals</td><td><code>06-evals/</code></td><td><code>eval-stack.md</code> · <code>human-rubric.md</code> · finalised top-level <code>README.md</code></td></tr>
+</table>
+
+<h2>The finalised README — your PM Execution Plan</h2>
+<p>The top-level <code>README.md</code> of your fork is the closing artifact. Generate it via <a href="Modules/Final Project Deliverables Builder.html"><code>Final Project Deliverables Builder.html</code></a>. It must contain:</p>
+<ol>
+  <li>Title + one-line pitch + name + cohort.</li>
+  <li>Links to all six modules' artifacts.</li>
+  <li><strong>PM Execution Plan</strong> — Where Juno is today · What ships next (2 sprints) · What you watch (dashboards) · Red lines (numeric).</li>
+  <li><strong>Governance</strong> — one row per bucket (Compliance · Safety · Reliability · Reputation).</li>
+  <li><strong>Build Insights</strong> — 1 friction · 1 learning · 1 aha.</li>
+  <li><em>(Optional)</em> Loom URL — 3-min walkthrough of your repo.</li>
+</ol>
+
+<h2>How exercises run (individual format)</h2>
+<p>Every module's exercise follows the same pattern:</p>
+<ol>
+  <li><strong>Build.</strong> Use the module's interactive tool to produce the artifact.</li>
+  <li><strong>Self-review.</strong> Run the in-tool checklist (3–6 specific bullets).</li>
+  <li><strong>AI-review.</strong> Paste your artifact + the in-tool AI-review prompt into ChatGPT/Claude/Cursor. Reflect on the critique.</li>
+  <li><strong>Commit.</strong> Push the artifact to the named folder in your fork. Optionally post the link in <code>#ai-pm-cohort</code>.</li>
+</ol>
+<p>No group breakouts. No partner work. No notetakers. Instructor responds in-thread within ~5 days for any post in <code>#ai-pm-cohort</code>.</p>
+
+<h2>Final showcase — async &amp; optional</h2>
+<p>The original 30-minute live group showcase is replaced with an async, individual, optional walkthrough:</p>
+<ol>
+  <li>Record a <strong>3-minute Loom</strong> walkthrough of your repo. Hit: the bet, the system prompt, the user flow, the AWSpec, the eval stack.</li>
+  <li>Post the repo URL + Loom in <code>#ai-pm-cohort</code>.</li>
+  <li>Instructor responds in-thread within ~5 days with qualitative feedback.</li>
+</ol>
+<p>Optional. Not required for certification. Encouraged for portfolio.</p>
+
+<h2>Submission</h2>
+<table>
+  <tr><th>What</th><th>How</th></tr>
+  <tr><td>Submit</td><td>The URL of your finalised <code>juno-pm/</code> repo, via your course dashboard.</td></tr>
+  <tr><td>When</td><td>Within <strong>7 days</strong> of cohort end.</td></tr>
+  <tr><td>Who</td><td>Each learner submits individually.</td></tr>
+</table>
+
+<h2>Grading</h2>
+<p>Graded on four qualities, scored 1–3 overall:</p>
+<table>
+  <tr><th>Quality</th><th>What we look for</th></tr>
+  <tr><td>Application of Concepts</td><td>Course frameworks visibly applied (Prompt Anatomy, Decision Matrix, Three-Layer Model, AI PRD sections, AI Iceberg, AWSpec, Evals Stack).</td></tr>
+  <tr><td>Credibility &amp; Reasoning</td><td>Choices justified — trade-offs named, alternatives considered, evidence cited.</td></tr>
+  <tr><td>Clarity</td><td>Repo is readable. README walks a reader through the bet, the design, the risk.</td></tr>
+  <tr><td>Strategic Thinking</td><td>The bet is real. The execution plan is concrete. Red lines are numeric.</td></tr>
+</table>
+<p><strong>Score:</strong> 1 — Poor (0–49) · 2 — Sufficient (50–79) · 3 — Excellent (80–100). Feedback returned via your dashboard a few days post-submission.</p>
+
+<hr />
+
+<h2>FAQs</h2>
+
+<h3>Do I need to write code?</h3>
+<p>No. The interactive tools produce all artifacts. The optional M5 Langflow lab is the only place code-adjacent work happens, and we provide a starter export.</p>
+
+<h3>Do I have to do the Lovable prototype?</h3>
+<p>Yes — it's how you prove your M1 system prompt actually runs. Lovable's free tier is enough.</p>
+
+<h3>Do I have to do the optional showcase?</h3>
+<p>No. It doesn't affect certification. It is the highest-leverage portfolio asset to produce, however.</p>
+
+<h3>Can I submit a real product instead of Juno?</h3>
+<p>Only if you can map every artifact 1:1 to the Juno scenario and the grading is still possible on a public repo. Most learners get more out of Juno because every module's exercise is purpose-built for it.</p>
+
+<h3>What happens if I miss the 7-day window?</h3>
+<p>Submissions after the window may not be eligible for certification. Reach out via the dashboard if you have a genuine reason.</p>
+
+</div>
+</body>
+</html>

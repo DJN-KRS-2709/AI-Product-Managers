@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M2 — Three-Layer Model Mapper</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{max-width:1200px;margin:0 auto;padding:24px 32px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .layer{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:18px}
+  .layer h2{margin:0 0 4px;font-size:18px;color:var(--accent2)}
+  .layer .q{margin:0 0 12px;color:var(--muted);font-size:13px}
+  textarea{width:100%;background:#0a0d18;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .pillar{background:#0a0d18;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+  .pillar h3{margin:0 0 10px;font-size:16px;color:var(--accent)}
+  .pillar .grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px}
+  @media(max-width:760px){.pillar .grid{grid-template-columns:1fr}}
+  .pillar label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:4px;font-weight:600}
+  .pillar input,.pillar select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 2 · Tool</div><h1>Three-Layer Model Mapper</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <p style="color:var(--muted);font-size:14px;margin-top:0">Map Juno's bet across the three layers, then score Job × Risk × Autonomy per pillar. Export to <code>02-strategy/decision-matrix.md</code> (Three-Layer + autonomy section).</p>
+
+  <div class="layer">
+    <h2>Strategy</h2>
+    <p class="q">Which bet? Why now? What value frame (Cost / Revenue / Risk / Delight)?</p>
+    <textarea id="strategy" placeholder="Primary value frame: Risk mitigation. Why now: RocketShip is in Signal Collapse — P0 escalations stack up and the PM is the bottleneck. The bet: an AI Associate PM that scales judgment, not headcount."></textarea>
+  </div>
+
+  <div class="layer">
+    <h2>Mechanic</h2>
+    <p class="q">What does the product actually do? In a way a non-PM understands.</p>
+    <textarea id="mechanic" placeholder="Juno lives inside Slack, Notion, and Jira. It synthesises P0 threads into prioritised risks (with source IDs), drafts v0.1 PRDs from raw findings, and flags the top 3 risks daily."></textarea>
+  </div>
+
+  <div class="layer">
+    <h2>Implementation</h2>
+    <p class="q">How is it built? Prompt / RAG / fine-tune / agent?</p>
+    <textarea id="impl" placeholder="System prompt (M1) + RAG over the RocketShip corpus (M3) + bounded agent with explicit handoff rules (M5). No fine-tune in v1."></textarea>
+  </div>
+
+  <h2 style="margin-top:28px;font-size:18px;color:var(--accent2);letter-spacing:.14em;text-transform:uppercase">Juno's pillars · Jobs × Risk × Autonomy</h2>
+  <div id="pillars"></div>
+
+  <h2 style="margin-top:24px;font-size:16px;color:var(--accent2);letter-spacing:.14em;text-transform:uppercase">Preview</h2>
+  <div class="preview" id="preview"></div>
+
+  <div class="check">
+    <h3>Self-review checklist</h3>
+    <ul style="margin:0;padding-left:18px;font-size:14px">
+      <li>Each pillar has a clear Job statement.</li>
+      <li>Risk is explicit (financial / reputational / regulatory).</li>
+      <li>Autonomy level is justified, not aspirational.</li>
+      <li>At least one pillar is at a lower autonomy than feels comfortable.</li>
+      <li>Strategy block names a single primary value frame.</li>
+    </ul>
+  </div>
+
+  <div class="check">
+    <h3>AI-review prompt</h3>
+    <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your markdown export + this into ChatGPT, Claude, or Cursor:</p>
+    <div class="preview" style="font-size:12px">You are a senior AI PM reviewer. For each of these three Juno pillars, evaluate whether the assigned autonomy level matches the Job × Risk score. Identify any pillar that has been over-granted autonomy. Suggest one guardrail per pillar that would let it stay at its current autonomy level safely.</div>
+  </div>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const KEY='m2-three-layer';
+  const AUTO=['Suggest','Draft','Execute','Operate'];
+  const RISK=['Low','Medium','High'];
+  const DEF=()=>({strategy:'',mechanic:'',impl:'',pillars:[
+    {name:'Synthesize insights',job:'Turn multi-channel signals (Slack/Notion/Jira) into structured, evidence-backed risk lists',risk:'Low',autonomy:'Execute',note:''},
+    {name:'Draft specs',job:'Produce v0.1 PRDs from raw findings, with citations',risk:'Medium',autonomy:'Draft',note:''},
+    {name:'Prioritize risks',job:'Flag top-3 risks daily, with reasoning and citations',risk:'High',autonomy:'Suggest',note:''},
+  ]});
+  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):DEF()}
+  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+  let state=load();
+  ['strategy','mechanic','impl'].forEach(k=>{document.getElementById(k).value=state[k]||''});
+  function renderPillars(){
+    const root=document.getElementById('pillars');root.innerHTML='';
+    state.pillars.forEach((p,i)=>{
+      const div=document.createElement('div');div.className='pillar';
+      div.innerHTML=`
+        <h3>Pillar ${i+1}</h3>
+        <div class="grid">
+          <div><label>Pillar name</label><input id="pn_${i}" value="${p.name}"/></div>
+          <div><label>Risk</label><select id="pr_${i}">${RISK.map(r=>`<option ${r===p.risk?'selected':''}>${r}</option>`).join('')}</select></div>
+          <div><label>Autonomy</label><select id="pa_${i}">${AUTO.map(a=>`<option ${a===p.autonomy?'selected':''}>${a}</option>`).join('')}</select></div>
+        </div>
+        <label style="margin-top:10px">Job (what task the AI does)</label>
+        <textarea id="pj_${i}" style="min-height:42px">${p.job}</textarea>
+        <label style="margin-top:8px">Why this autonomy / guardrail note</label>
+        <textarea id="pno_${i}" style="min-height:42px">${p.note||''}</textarea>
+      `;
+      root.appendChild(div);
+      document.getElementById('pn_'+i).addEventListener('input',e=>{state.pillars[i].name=e.target.value;saveAndPreview()});
+      document.getElementById('pr_'+i).addEventListener('change',e=>{state.pillars[i].risk=e.target.value;saveAndPreview()});
+      document.getElementById('pa_'+i).addEventListener('change',e=>{state.pillars[i].autonomy=e.target.value;saveAndPreview()});
+      document.getElementById('pj_'+i).addEventListener('input',e=>{state.pillars[i].job=e.target.value;saveAndPreview()});
+      document.getElementById('pno_'+i).addEventListener('input',e=>{state.pillars[i].note=e.target.value;saveAndPreview()});
+    });
+  }
+  function saveAndPreview(){save(state);preview()}
+  function md(){
+    let s='# Three-Layer Model + Autonomy — Juno PM\n\n## Strategy\n\n'+(state.strategy||'_(missing)_')+'\n\n## Mechanic\n\n'+(state.mechanic||'_(missing)_')+'\n\n## Implementation\n\n'+(state.impl||'_(missing)_')+'\n\n## Pillars\n\n| Pillar | Job | Risk | Autonomy | Note |\n|---|---|---|---|---|\n';
+    state.pillars.forEach(p=>{s+=`| ${p.name} | ${p.job.replace(/\|/g,'\\|')} | ${p.risk} | ${p.autonomy} | ${(p.note||'').replace(/\|/g,'\\|')} |\n`});
+    return s;
+  }
+  function preview(){document.getElementById('preview').textContent=md()}
+  ['strategy','mechanic','impl'].forEach(k=>{document.getElementById(k).addEventListener('input',e=>{state[k]=e.target.value;saveAndPreview()})});
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='three-layer.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Reset to Juno defaults?')){state=DEF();save(state);['strategy','mechanic','impl'].forEach(k=>document.getElementById(k).value=state[k]);renderPillars();preview()}}
+  renderPillars();preview();
+</script>
+</body>
+</html>

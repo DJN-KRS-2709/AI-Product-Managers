@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M4 — AI User Flow Architect</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--tip:#7c8cff;--under:#22d3ee}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1.3fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .field{margin-bottom:14px}
+  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  input,textarea,select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:14px}
+  textarea{min-height:46px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;border-left:4px solid var(--tip)}
+  .node.underwater{border-left-color:var(--under)}
+  .node-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .node-head h3{margin:0;font-size:15px}
+  .tag{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(124,140,255,.15);color:var(--tip);text-transform:uppercase;letter-spacing:.14em;font-weight:600}
+  .tag.under{background:rgba(34,211,238,.15);color:var(--under)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 4 · Tool · Final-project deliverable</div><h1>AI User Flow Architect</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <div class="field"><label>Flow name (Juno pillar)</label>
+      <select id="pillar">
+        <option>Prioritize Risks</option>
+        <option>Synthesize Insights</option>
+        <option>Draft Specs</option>
+      </select>
+    </div>
+    <div class="field"><label>Value frame (from M2)</label>
+      <select id="vf">
+        <option>Risk mitigation</option>
+        <option>Cost reduction</option>
+        <option>Revenue generation</option>
+        <option>User delight</option>
+      </select>
+    </div>
+    <div class="field"><label>UX treatment (auto-mapped from value frame; edit if you disagree)</label>
+      <input id="ux" />
+    </div>
+
+    <h3 style="margin-top:24px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.14em;border-bottom:1px solid var(--line);padding-bottom:6px">The seven nodes</h3>
+    <div id="nodes"></div>
+  </section>
+  <section class="panel right">
+    <label>Live preview — user-flow.md</label>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 8px">Commit to <code>04-ai-ux/user-flow.md</code>.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px;font-size:14px">
+        <li id="c1">Trigger is specific and testable</li>
+        <li id="c2">Each node has one concrete line</li>
+        <li id="c3">Tip vs. underwater is marked per node</li>
+        <li id="c4">Act node names specific tool calls</li>
+        <li id="c5">Surface node specifies the channel/page/block</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your user-flow + this into ChatGPT/Claude/Cursor:</p>
+      <div class="preview" style="font-size:12px">You are an AI-UX designer. Read this AI user flow for Juno PM. (a) Is the trigger specific enough to test? (b) Are the underwater nodes specced thinly enough that engineering knows what to build, but not so thickly that the PM is doing eng's job? (c) Which node creates the most user trust risk, and what would you add? Reply in 4 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const NODES=[
+    {id:'trigger',name:'1. Trigger',hint:'What initiates the flow? Be specific.',layer:'tip',ph:'New P0 tagged in #escalations and ≥5 messages within 10 minutes'},
+    {id:'capture',name:'2. Capture',hint:'What context the system gathers.',layer:'under',ph:'Thread metadata, customer ID, last 50 messages, ARR if available'},
+    {id:'retrieve',name:'3. Retrieve',hint:'What data is pulled in.',layer:'under',ph:'Top-10 RAG chunks from Strategy + Notion + similar past P0s; hybrid retrieval; rerank on'},
+    {id:'reason',name:'4. Reason',hint:'What the model decides.',layer:'under',ph:'LLM call: classify risk type, score severity 1–5, draft 1-line rationale, list 2 mitigations'},
+    {id:'act',name:'5. Act',hint:'What happens in the world (tool calls, writes).',layer:'under',ph:'Append to #pm-daily top-3 panel; create Jira ROCKET stub if score ≥4; log to eval pipeline'},
+    {id:'surface',name:'6. Surface',hint:'What the user sees and where.',layer:'tip',ph:'Slack message in #pm-daily: emoji + risk title + confidence + 2 mitigations + 1-click "Open" button'},
+    {id:'confirm',name:'7. Confirm / Correct',hint:'How the user steers, accepts, overrides.',layer:'tip',ph:'Buttons: "Open thread" / "Accept and assign" / "Edit" / "Suppress this pattern" / "Why this?"'},
+  ];
+  const KEY='m4-user-flow';
+  const UX_MAP={'Cost reduction':'Background automation with audit trail','Revenue generation':'Inline assist at the moment of decision','Risk mitigation':'Proactive flag + reason + one-click action','User delight':'Anticipatory suggestion, dismissible without friction'};
+  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):{pillar:'Prioritize Risks',vf:'Risk mitigation',ux:UX_MAP['Risk mitigation'],nodes:Object.fromEntries(NODES.map(n=>[n.id,{layer:n.layer,text:''}]))}}
+  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+  let state=load();
+  document.getElementById('pillar').value=state.pillar;
+  document.getElementById('vf').value=state.vf;
+  document.getElementById('ux').value=state.ux;
+  function renderNodes(){
+    const root=document.getElementById('nodes');root.innerHTML='';
+    NODES.forEach(n=>{
+      const s=state.nodes[n.id]||{layer:n.layer,text:''};
+      const div=document.createElement('div');div.className='node'+(s.layer==='under'?' underwater':'');
+      div.innerHTML=`<div class="node-head"><h3>${n.name}</h3><span class="tag ${s.layer==='under'?'under':''}">${s.layer==='under'?'Underwater':'Tip'}</span></div>
+        <p style="margin:0 0 8px;color:var(--muted);font-size:13px">${n.hint}</p>
+        <textarea id="t_${n.id}" placeholder="${n.ph}">${s.text||''}</textarea>
+        <div style="margin-top:8px"><label style="display:inline-flex;align-items:center;gap:8px;font-size:12px;text-transform:none;letter-spacing:0;color:var(--muted)"><input type="checkbox" id="u_${n.id}" ${s.layer==='under'?'checked':''}> Underwater (invisible to user)</label></div>`;
+      root.appendChild(div);
+      document.getElementById('t_'+n.id).addEventListener('input',e=>{state.nodes[n.id]={...state.nodes[n.id],text:e.target.value};save(state);preview();});
+      document.getElementById('u_'+n.id).addEventListener('change',e=>{state.nodes[n.id]={...state.nodes[n.id],layer:e.target.checked?'under':'tip'};save(state);renderNodes();preview();});
+    });
+  }
+  function md(){
+    let s=`# AI User Flow — Juno PM · ${state.pillar}\n\n**Value frame:** ${state.vf}\n**UX treatment:** ${state.ux}\n\n## Flow (7 nodes)\n\n| # | Node | Layer | Spec |\n|---|---|---|---|\n`;
+    NODES.forEach((n,i)=>{const x=state.nodes[n.id]||{};s+=`| ${i+1} | ${n.name.replace(/^\d+\.\s*/,'')} | ${(x.layer==='under'?'Underwater':'Tip')} | ${(x.text||'_(missing)_').replace(/\|/g,'\\|').replace(/\n/g,' ')} |\n`});
+    return s;
+  }
+  function preview(){
+    document.getElementById('preview').textContent=md();
+    const get=id=>(state.nodes[id]||{}).text||'';
+    const tip=Object.values(state.nodes).every(x=>x&&x.layer);
+    const setCheck=(id,ok)=>{const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')};
+    setCheck('c1',get('trigger').length>15 && !/user (opens|clicks|types)/i.test(get('trigger')));
+    setCheck('c2',NODES.every(n=>get(n.id).length>5));
+    setCheck('c3',tip);
+    setCheck('c4',get('act').length>10 && /(slack|jira|notion|api|append|create|write|call|tool|log)/i.test(get('act')));
+    setCheck('c5',get('surface').length>10 && /(slack|channel|page|panel|block|jira|notion|email)/i.test(get('surface')));
+  }
+  document.getElementById('pillar').addEventListener('change',e=>{state.pillar=e.target.value;save(state);preview()});
+  document.getElementById('vf').addEventListener('change',e=>{state.vf=e.target.value;state.ux=UX_MAP[e.target.value]||state.ux;document.getElementById('ux').value=state.ux;save(state);preview()});
+  document.getElementById('ux').addEventListener('input',e=>{state.ux=e.target.value;save(state);preview()});
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='user-flow.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Reset?')){localStorage.removeItem(KEY);state=load();document.getElementById('pillar').value=state.pillar;document.getElementById('vf').value=state.vf;document.getElementById('ux').value=state.ux;renderNodes();preview()}}
+  renderNodes();preview();
+</script>
+</body>
+</html>

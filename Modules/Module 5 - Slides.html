@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Module 5 — Deploy Agentic Systems and Workflows (Instructor)</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  h3{font-size:clamp(18px,1.6vw,22px);margin:.6em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr} .grid.four{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .notes{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
+  .notes h4{margin:0 0 6px;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.15em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">Module 5 · ~2 hours · Individual format</div>
+  <h1>Deploy Agentic Systems and Workflows</h1>
+  <p class="muted">An agent without explicit handoff rules is a liability.</p>
+  <p>By the end: Juno's Agent Workflow Spec (AWSpec) + Agent Control Panel in <code>05-agentic-workflows/</code>.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This module breaks the "workflows are sequential" assumption. Today: branched, conditional, handed off.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Shift to Agentic Orchestration</div>
+  <h2>From chat → autonomous task execution</h2>
+  <p>Year 1 of GenAI: chat boxes. Year 2: copilots. Year 3 (now): agents that <em>do</em> work.</p>
+  <ul>
+    <li>Chat: model generates text. Human acts.</li>
+    <li>Copilot: model drafts, human approves, human acts.</li>
+    <li>Agent: model plans, calls tools, observes results, iterates. <strong>Model acts.</strong></li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>The big shift is "model acts." Up until now we've spec'd outputs. Now we spec rules of action.</div>
+</section>
+
+<section>
+  <div class="eyebrow">What is an agent?</div>
+  <h2>Key traits of agency</h2>
+  <div class="grid four">
+    <div class="card"><h3>Goals</h3><p class="muted">Pursues a goal, not just responds.</p></div>
+    <div class="card"><h3>Tool use</h3><p class="muted">Calls functions on the world.</p></div>
+    <div class="card"><h3>Memory</h3><p class="muted">State persists across turns or sessions.</p></div>
+    <div class="card"><h3>Iteration</h3><p class="muted">Observes results, re-plans.</p></div>
+  </div>
+  <p>If a system has all four, it's an agent. If it has one or two, it's a tool or assistant.</p>
+  <div class="notes"><h4>Speaker Notes</h4>The four-trait test is more useful than the agent spectrum for spec work. Use it to pressure-test "agentic" claims.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Agent Spectrum</div>
+  <h2>Tool → Assistant → Agent → Autonomous Agent</h2>
+  <table>
+    <tr><th>Level</th><th>Behaviour</th><th>Juno example</th></tr>
+    <tr><td>Tool</td><td>Does one thing on request</td><td>"Summarise this thread"</td></tr>
+    <tr><td>Assistant</td><td>Drafts, recommends</td><td>Juno suggests 3 risks; PM picks</td></tr>
+    <tr><td>Agent</td><td>Plans + calls tools + iterates</td><td>Juno triages P0s, opens Jira stubs, posts to #pm-daily</td></tr>
+    <tr><td>Autonomous Agent</td><td>Operates long horizons unsupervised</td><td>Not appropriate for Juno's risk profile</td></tr>
+  </table>
+  <p>Pick the <strong>lowest</strong> level that delivers the job. Higher levels need explicit handoff rules.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Most "autonomous agents" you'll see in vendor pitches are actually mid-agents. Don't pay autonomous-agent prices for mid-agent capability.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Examples in the wild</div>
+  <h2>Where agents are being deployed</h2>
+  <ul>
+    <li><strong>Devin (Cognition)</strong> — autonomous software engineer.</li>
+    <li><strong>Salesforce Agentforce</strong> — customer service + sales workflows.</li>
+    <li><strong>Klarna AI assistant</strong> — resolves 2.3M customer queries/month.</li>
+    <li><strong>Anthropic Computer Use</strong> — controls a desktop to complete tasks.</li>
+  </ul>
+  <p class="muted">Common pattern: bounded scope, explicit tools, human checkpoint at high-risk steps.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Klarna's "we replaced 700 reps" claim is the headline, but the more interesting datum is the handoff rate — what percentage of queries still go to humans, and which kind.</div>
+</section>
+
+<section>
+  <div class="eyebrow">The Hidden Costs of Autonomy</div>
+  <h2>Speed vs. reliability trade-offs</h2>
+  <ul>
+    <li><strong>Cascading errors</strong> — one wrong tool call → next step builds on it.</li>
+    <li><strong>Cost blowup</strong> — autonomous loops without stop conditions burn tokens.</li>
+    <li><strong>Audit opacity</strong> — "the agent decided" is not an audit log.</li>
+    <li><strong>Drift</strong> — long-term memory pulls behaviour off-spec over weeks.</li>
+  </ul>
+  <p>The PM job: make these costs visible and bounded in the spec.</p>
+  <div class="notes"><h4>Speaker Notes</h4>This is the slide that makes the AWSpec valuable. Without it, you ship a liability.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Agentic Design Patterns</div>
+  <h2>ReAct + Planner-Executor</h2>
+  <div class="grid two">
+    <div class="card"><h3>ReAct</h3><p><em>Reason → Act → Observe → loop</em></p><p>Single-agent reasoning. Best for bounded, sequential tasks with feedback loops.</p><p class="muted">Juno triaging one P0 thread.</p></div>
+    <div class="card"><h3>Planner-Executor</h3><p>Planner agent decomposes; one or many executors run; planner re-plans on failure.</p><p>Best for multi-step tasks with parallelism.</p><p class="muted">Juno running the full daily risk pipeline across all #escalations.</p></div>
+  </div>
+  <div class="notes"><h4>Speaker Notes</h4>For most PM purposes, ReAct is the workhorse. Planner-Executor enters when you have parallel sub-tasks or when a single agent's context window can't hold the whole plan.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Types of Agentic Memory</div>
+  <h2>Four memory flavours</h2>
+  <table>
+    <tr><th>Type</th><th>Lifetime</th><th>Use for</th></tr>
+    <tr><td>Short-term</td><td>Within one task</td><td>Tool results, intermediate reasoning</td></tr>
+    <tr><td>Long-term</td><td>Across sessions</td><td>User preferences, learned facts</td></tr>
+    <tr><td>Episodic</td><td>Specific past events</td><td>"Last week the user said X"</td></tr>
+    <tr><td>Semantic</td><td>General knowledge</td><td>Org context, domain facts</td></tr>
+  </table>
+  <p>Memory choices shape privacy, cost, and behaviour. <strong>Spec each one explicitly.</strong></p>
+  <div class="notes"><h4>Speaker Notes</h4>Memory is where most agents go wrong in production. Get learners thinking about *what* they remember, *for whom*, and *for how long*.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Common Failure Modes</div>
+  <h2>Spec for the failure</h2>
+  <ul>
+    <li><strong>Hallucinated tool calls</strong> — the agent invents an API.</li>
+    <li><strong>Memory poisoning</strong> — bad data persisted as fact.</li>
+    <li><strong>Runaway loops</strong> — no stop condition; cost explosion.</li>
+    <li><strong>Silent handoff failure</strong> — should have escalated, didn't.</li>
+    <li><strong>Drift across sessions</strong> — long-term memory off-spec.</li>
+  </ul>
+  <p>The AWSpec has explicit handling for each.</p>
+  <div class="notes"><h4>Speaker Notes</h4>These five are the canonical list. Add anything specific to Juno's context if it surfaces in discussion.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Managing the Agentic Handoff</div>
+  <h2>The PM's Agent Control Panel</h2>
+  <p>The levers a PM specs and watches:</p>
+  <ul>
+    <li><strong>Triggers</strong> — when does the agent activate?</li>
+    <li><strong>Tools</strong> — what can it call?</li>
+    <li><strong>Memory scope</strong> — what does it remember, for how long?</li>
+    <li><strong>Stop conditions</strong> — when does it hand back / shut down?</li>
+    <li><strong>Observability</strong> — logs, traces, eval surface (M6).</li>
+  </ul>
+  <p class="muted">If any lever is missing, you've shipped a liability.</p>
+  <div class="notes"><h4>Speaker Notes</h4>The Agent Control Panel tool covers each lever with examples for Juno. Use it for 5 minutes here.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Tool · M5</div>
+  <h2>Agent Control Panel</h2>
+  <p>Open <code>M5 - Agent Control Panel.html</code>.</p>
+  <ul>
+    <li>Spec each of the 5 levers for Juno.</li>
+    <li>For each lever, declare the minimum viable rule.</li>
+    <li>Copy as markdown → <code>05-agentic-workflows/agent-control-panel.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>5 minutes hands-on. The output is a supporting artifact; the AWSpec is the main deliverable below.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Agent Workflow Spec (AWSpec)</div>
+  <h2>The rules of engagement</h2>
+  <p>Nine sections. The deliverable for M5.</p>
+  <ol>
+    <li><strong>Goal</strong> — one sentence.</li>
+    <li><strong>Trigger</strong> — exact condition.</li>
+    <li><strong>Inputs</strong> — required context.</li>
+    <li><strong>Tools available</strong> — explicit list, with each tool's scope.</li>
+    <li><strong>Memory</strong> — what's stored, where, for how long.</li>
+    <li><strong>Pattern</strong> — ReAct or Planner-Executor (+ why).</li>
+    <li><strong>Stop conditions</strong> — success, failure, escalation, timeout.</li>
+    <li><strong>Handoff rules</strong> — when does Juno hand back to the PM?</li>
+    <li><strong>Eval hooks</strong> — what gets logged for the M6 eval stack.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>This is the M5 deliverable. The AWSpec Builder tool follows. Get them spec'ing.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Tool · M5</div>
+  <h2>Agent Workflow Spec Builder</h2>
+  <p>Open <code>M5 - Agent Workflow Spec Builder.html</code>.</p>
+  <ul>
+    <li>Fill in the 9 sections for Juno.</li>
+    <li>Tool emits a versioned AWSpec.</li>
+    <li>Copy as markdown → <code>05-agentic-workflows/awspec.md</code>.</li>
+  </ul>
+  <div class="notes"><h4>Speaker Notes</h4>The Stop conditions and Handoff rules sections are the highest-leverage. Push learners to be precise — "if confidence &lt; 70%" not "if uncertain."</div>
+</section>
+
+<section>
+  <div class="eyebrow">Individual Exercise · 30 min</div>
+  <h2>Write Juno's Agent Workflow Spec</h2>
+  <p class="muted">Was breakout group. Now solo.</p>
+  <ol>
+    <li>Open <code>M5 - Agent Workflow Spec Builder.html</code>.</li>
+    <li>Take your M4 user-flow's <strong>Act</strong> node and turn it into an AWSpec.</li>
+    <li>Use ReAct as the default pattern unless you have a specific reason for Planner-Executor.</li>
+    <li>Be precise about stop conditions and handoff rules.</li>
+    <li>Copy as markdown → <code>05-agentic-workflows/awspec.md</code>.</li>
+    <li>Self-review, AI-review, commit, share in <code>#ai-pm-cohort</code>.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Challenge learners to define precise triggers for the handoff. If Juno is prioritizing risks, at what confidence does it stop suggesting and start requiring approval?</div>
+</section>
+
+<section>
+  <div class="eyebrow">Self-review checklist</div>
+  <h2>Before you ship the AWSpec</h2>
+  <ul>
+    <li>Goal is one sentence and names the value frame.</li>
+    <li>Trigger is a precise, testable condition.</li>
+    <li>Tools are listed with scope (read-only? write?).</li>
+    <li>Memory section names each of the 4 types in scope or out.</li>
+    <li>Stop conditions list at least 3 (success, failure, escalation).</li>
+    <li>Handoff rules name a confidence threshold.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">The PM Decision Triangle</div>
+  <h2>At every step: AI alone / AI + human / human alone</h2>
+  <p>The triangle is the <em>boundary contract</em> between PM and agent.</p>
+  <div class="grid three">
+    <div class="card"><h3>AI alone</h3><p>Full execute. Low risk, high trust earned via evals.</p></div>
+    <div class="card"><h3>AI + human</h3><p>Draft + approve. The default for high-risk steps.</p></div>
+    <div class="card"><h3>Human alone</h3><p>Agent declines, escalates. For contracts, regulators, novel situations.</p></div>
+  </div>
+  <div class="notes"><h4>Speaker Notes</h4>Use this slide to validate their AWSpec. Each step in their flow should be tagged with one of these.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Optional Post-Class Lab · Individual</div>
+  <h2>Build Juno's Agentic Workflow in Langflow</h2>
+  <ul>
+    <li>Open <code>juno-project-template/05-agentic-workflows/Juno Agent.json</code>.</li>
+    <li>Import into Langflow.</li>
+    <li>Add an OpenAI API key.</li>
+    <li>Run the workflow with a test P0 thread.</li>
+    <li>Capture screenshots → <code>05-agentic-workflows/langflow-screenshots/</code>.</li>
+  </ul>
+  <p class="muted">Optional. Requires Langflow + OpenAI API credits.</p>
+  <div class="notes"><h4>Speaker Notes</h4>Make sure learners know there are tool requirements (API credits, Langflow account). Most won't do this in class — it's homework.</div>
+</section>
+
+<section>
+  <div class="eyebrow">Key takeaways</div>
+  <h2>What you carry into M6</h2>
+  <ol>
+    <li>Pick the lowest agent level that delivers the job.</li>
+    <li>Spec the four traits (goals, tools, memory, iteration) — including the no's.</li>
+    <li>ReAct is the default pattern. Planner-Executor for parallel/long.</li>
+    <li>The AWSpec has 9 sections. All of them required.</li>
+    <li>The PM Decision Triangle is the boundary contract.</li>
+  </ol>
+  <div class="notes"><h4>Speaker Notes</h4>Tee up M6: you have an agent. M6 answers "how do you prove it's shippable?"</div>
+</section>
+
+<section>
+  <div class="eyebrow">Before M6</div>
+  <h2>Homework (~20 min)</h2>
+  <ul>
+    <li>Skim <strong>Module 6 - Pre-Read.md</strong> (AI Evals Stack).</li>
+    <li>Read your AWSpec's <strong>Eval hooks</strong> section — M6 turns it into a real eval stack.</li>
+    <li>Post your AWSpec link in <code>#ai-pm-cohort</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Q&amp;A · 5 min</div>
+  <h2>Questions before we close</h2>
+  <p class="muted">Park anything we can't answer live in <code>#ai-pm-cohort</code>.</p>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

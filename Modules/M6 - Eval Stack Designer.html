@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M6 — Eval Stack Designer</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399;--warn:#fbbf24}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;min-height:100vh}
+  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{margin:0;font-size:22px}
+  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+  @media(max-width:960px){main{grid-template-columns:1fr}}
+  .panel{padding:24px 32px;overflow:auto}
+  .panel.left{border-right:1px solid var(--line)}
+  .layer{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:18px}
+  .layer h3{margin:0 0 6px;color:var(--accent);font-size:16px}
+  .layer .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+  .field{margin-bottom:12px}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+  .hint{color:var(--muted);font-size:12px;margin:0 0 6px}
+  textarea,input,select{width:100%;background:#0a0d18;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}
+  textarea{min-height:50px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .row.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button{background:var(--accent);color:#0b0d12;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  .preview{background:#0a0d18;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
+  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
+  .check li{margin:6px 0;font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;margin-left:6px;background:#22293a;color:var(--muted)}
+  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
+  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
+  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 6 · Tool · Final-project deliverable</div><h1>Eval Stack Designer</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="hint">Three layers. All required. Plan each layer with volume, cadence, pass bar, and owner.</p>
+
+    <div class="layer">
+      <h3>Layer 1 · User feedback <span class="badge" id="bA">empty</span></h3>
+      <p class="sub">Highest volume. Lowest fidelity. Answers: what do users do?</p>
+      <div class="field"><label>Signals captured</label>
+        <textarea id="A1" placeholder="- Thumbs up/down on each Juno output\n- Regenerate count per output\n- Suppress / dismiss actions\n- Free-text feedback when thumbs-down"></textarea>
+      </div>
+      <div class="row two">
+        <div class="field"><label>Cadence</label><input id="A2" placeholder="Per request (real-time)" /></div>
+        <div class="field"><label>Pass bar</label><input id="A3" placeholder="≥80% thumbs-up · regenerate rate ≤15%" /></div>
+      </div>
+      <div class="field"><label>Who acts on it</label>
+        <input id="A4" placeholder="PM reviews weekly; on-call PM responds to >2 thumbs-down on same intent in 24h" />
+      </div>
+    </div>
+
+    <div class="layer">
+      <h3>Layer 2 · Human evaluation <span class="badge" id="bB">empty</span></h3>
+      <p class="sub">Mid volume. Highest fidelity. Answers: what do trained graders think?</p>
+      <div class="field"><label>What gets sampled</label>
+        <textarea id="B1" placeholder="- 50 P0 triage runs / week\n- Stratified across confidence buckets (high / mid / low)\n- All hand-off cases included"></textarea>
+      </div>
+      <div class="row two">
+        <div class="field"><label>Rubric</label><input id="B2" placeholder="See 06-evals/human-rubric.md" /></div>
+        <div class="field"><label>Cadence</label><input id="B3" placeholder="Weekly batch (Fri afternoon)" /></div>
+      </div>
+      <div class="row two">
+        <div class="field"><label>Pass bar</label><input id="B4" placeholder="≥4.0 / 5 mean across accuracy + safety; 0 critical safety fails" /></div>
+        <div class="field"><label>Who grades</label><input id="B5" placeholder="2 graders + PM tiebreak (per disagreement protocol)" /></div>
+      </div>
+    </div>
+
+    <div class="layer">
+      <h3>Layer 3 · Automated evals <span class="badge" id="bC">empty</span></h3>
+      <p class="sub">Highest volume. Mid fidelity. Answers: did this change regress anything?</p>
+      <div class="field"><label>Golden set</label>
+        <textarea id="C1" placeholder="- 200 anonymised P0 threads with PM-curated expected top-3 risks\n- Versioned in 06-evals/golden-set/\n- Refresh quarterly (and after any major incident)"></textarea>
+      </div>
+      <div class="field"><label>Eval checks</label>
+        <textarea id="C2" placeholder="- LLM-judge scores accuracy of top-3 (rubric-aligned)\n- Format check: valid markdown table with required columns\n- Citation check: each risk cites a message index that exists\n- Refusal check: contracts/legal language triggers refusal"></textarea>
+      </div>
+      <div class="row two">
+        <div class="field"><label>Cadence</label><input id="C3" placeholder="Every PR + nightly cron" /></div>
+        <div class="field"><label>Pass bar</label><input id="C4" placeholder="≥90% golden-set accuracy · 100% format/citation/refusal pass" /></div>
+      </div>
+      <div class="field"><label>Who acts on it</label>
+        <input id="C5" placeholder="CI fails the PR. Eng owns format/citation. PM owns the accuracy bar." />
+      </div>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <label>Live preview — eval-stack.md</label>
+    <p class="hint">Commit to <code>06-evals/eval-stack.md</code>.</p>
+    <div class="preview" id="preview"></div>
+
+    <div class="check">
+      <h3>Self-review checklist</h3>
+      <ul style="margin:6px 0 0;padding-left:18px">
+        <li id="c1">All three layers have signals/checks specified</li>
+        <li id="c2">Each layer has a numeric pass bar</li>
+        <li id="c3">Each layer has a cadence</li>
+        <li id="c4">Each layer names who acts on it (PM / on-call / CI)</li>
+        <li id="c5">Layer 2 references the human-rubric.md file</li>
+        <li id="c6">Layer 3 has a versioned golden set</li>
+      </ul>
+    </div>
+
+    <div class="check">
+      <h3>AI-review prompt</h3>
+      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your <code>eval-stack.md</code> + this into ChatGPT/Claude/Cursor:</p>
+      <div class="preview" style="font-size:12px">You are an AI ops engineer reviewing a three-layer eval stack. (a) For each layer, is the cadence realistic given the stated volume? (b) Where is the weakest layer for catching the 95%-accuracy-trap failures (silent wrong outputs at the long tail)? (c) What single addition would make this eval stack production-ready? Reply in 3 short paragraphs.</div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Copied</div>
+<script>
+  const fields=['A1','A2','A3','A4','B1','B2','B3','B4','B5','C1','C2','C3','C4','C5'];
+  const KEY='m6-eval-stack';
+  function v(id){return document.getElementById(id).value.trim()}
+  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);fields.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
+  function save(){const o={};fields.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
+  function setBadge(id,filled){const b=document.getElementById(id);b.textContent=filled?'filled':'empty';b.className='badge '+(filled?'ok':'warn')}
+  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
+  function md(){
+    return `# Juno PM — Eval Stack
+
+_Version 0.1 · committed to \`06-evals/eval-stack.md\`_
+
+## Layer 1 · User feedback
+
+**Signals captured:**
+${v('A1')||'_(missing)_'}
+
+- **Cadence:** ${v('A2')||'_(missing)_'}
+- **Pass bar:** ${v('A3')||'_(missing)_'}
+- **Who acts on it:** ${v('A4')||'_(missing)_'}
+
+## Layer 2 · Human evaluation
+
+**What gets sampled:**
+${v('B1')||'_(missing)_'}
+
+- **Rubric:** ${v('B2')||'_(missing)_'}
+- **Cadence:** ${v('B3')||'_(missing)_'}
+- **Pass bar:** ${v('B4')||'_(missing)_'}
+- **Who grades:** ${v('B5')||'_(missing)_'}
+
+## Layer 3 · Automated evals
+
+**Golden set:**
+${v('C1')||'_(missing)_'}
+
+**Eval checks:**
+${v('C2')||'_(missing)_'}
+
+- **Cadence:** ${v('C3')||'_(missing)_'}
+- **Pass bar:** ${v('C4')||'_(missing)_'}
+- **Who acts on it:** ${v('C5')||'_(missing)_'}
+`;
+  }
+  function update(){
+    setBadge('bA',v('A1')&&v('A2')&&v('A3')&&v('A4'));
+    setBadge('bB',v('B1')&&v('B2')&&v('B3')&&v('B4')&&v('B5'));
+    setBadge('bC',v('C1')&&v('C2')&&v('C3')&&v('C4')&&v('C5'));
+    setCheck('c1', v('A1')&&v('B1')&&v('C2'));
+    setCheck('c2', /\d+\s*%|\d+\s*\/\s*\d+|≥|>=/.test(v('A3')) && /\d+\s*%|\d+\s*\/\s*\d+|≥|>=/.test(v('B4')) && /\d+\s*%|\d+\s*\/\s*\d+|≥|>=/.test(v('C4')));
+    setCheck('c3', v('A2')&&v('B3')&&v('C3'));
+    setCheck('c4', v('A4')&&v('B5')&&v('C5'));
+    setCheck('c5', /rubric|human-rubric/i.test(v('B2')));
+    setCheck('c6', /golden|version|refresh/i.test(v('C1')));
+    document.getElementById('preview').textContent=md();save();
+  }
+  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='eval-stack.md';a.click();URL.revokeObjectURL(u)}
+  function reset(){if(confirm('Clear all fields?')){fields.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
+  fields.forEach(i=>document.getElementById(i).addEventListener('input',update));
+  load();update();
+</script>
+</body>
+</html>

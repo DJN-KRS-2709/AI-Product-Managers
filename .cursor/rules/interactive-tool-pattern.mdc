@@ -1,0 +1,70 @@
+---
+description: Interactive HTML tool pattern — vanilla JS, localStorage, two-pane, copy-as-markdown, self-review + AI-review.
+globs:
+  - "Modules/M*.html"
+  - "Modules/Final Project Deliverables Builder.html"
+alwaysApply: false
+---
+
+# Interactive tool pattern
+
+All M-prefixed tools (`M1 - Prompt Anatomy Builder.html`, etc.) follow this pattern.
+
+## Implementation constraints
+
+- **Single file.** No external CSS, no external JS, no build step.
+- **Vanilla JS only.** No framework, no dependencies.
+- **localStorage persistence.** Key format: `m{N}-{tool-slug}` (e.g., `m6-eval-stack`).
+- **Auto-save on input.** Every `input`/`textarea`/`select` change triggers save + update.
+
+## Layout
+
+Two-pane grid (`grid-template-columns: 1fr 1fr`) collapsing to single column under 960px.
+
+- **Left pane:** input fields, organised into `.field` or `.group` blocks
+- **Right pane:** live markdown preview + self-review checklist + AI-review prompt
+
+Header at top with three buttons:
+- **Copy as markdown** — copies rendered markdown to clipboard
+- **Download .md** — downloads the rendered file
+- **Reset** — clears all fields after confirm
+
+## Visual style
+
+Same dark palette as the slide pattern:
+- `--bg: #0b0d12` · `--fg: #f6f7fb` · `--muted: #9aa3b2`
+- `--accent: #7c8cff` · `--accent2: #22d3ee`
+- `--card: #11141c` · `--line: #1b1f29`
+- `--ok: #34d399` · `--warn: #fbbf24`
+
+Plus a `.toast` (bottom-right, fixed) for the "Copied" confirmation.
+
+## Required components per tool
+
+1. **Header** — crumb (`Module {N} · Tool · Final-project deliverable` if final), title, three action buttons.
+2. **Field validation badges** — small `.badge` next to each label (`empty` / `filled`) with colour states.
+3. **Live preview** — fixed-width `.preview` block, monospaced, showing the rendered markdown.
+4. **Self-review checklist** — `.check` block with 4–6 items, each `<li>` toggled to `✓` / `•` based on validation.
+5. **AI-review prompt** — `.check` block with a paste-into-LLM prompt verbatim. Prompt always asks 3 things and asks for "3 short paragraphs" or "4 short paragraphs".
+
+## Export target
+
+Each tool's exported markdown is the artifact for a specific path in `juno-project-template/`:
+
+| Tool | Exports to |
+|---|---|
+| M1 System Prompt Configurator | `01-prompting/system-prompt.md` |
+| M2 AI Solution Decision Matrix | `02-strategy/decision-matrix.md` |
+| M2 AI Strategy One-Pager Builder | `02-strategy/strategy-one-pager.md` |
+| M3 AI PRD Builder | `03-rag-prd/prd.md` |
+| M4 AI User Flow Architect | `04-ai-ux/user-flow.md` |
+| M4 AI-UX Trust Gap Checker | `04-ai-ux/trust-gaps.md` |
+| M5 Agent Workflow Spec Builder | `05-agentic-workflows/awspec.md` |
+| M5 Agent Control Panel | `05-agentic-workflows/control-panel.md` |
+| M6 Eval Stack Designer | `06-evals/eval-stack.md` |
+| M6 Human Evaluation Rubric | `06-evals/human-rubric.md` |
+| Final Project Deliverables Builder | top-level `README.md` of fork |
+
+## Voice
+
+Solo. Apply `individual-only-voice.mdc`. AI-review prompts are written in second person directed at an LLM acting as an expert reviewer.

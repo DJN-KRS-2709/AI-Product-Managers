@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Product Management — Course Overview</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
+  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
+  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
+  h3{font-size:clamp(17px,1.5vw,21px);margin:.7em 0 .3em}
+  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
+  ul,ol{padding-left:1.2em}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:18px}
+  .grid.two{grid-template-columns:1fr 1fr}
+  .grid.three{grid-template-columns:1fr 1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin-top:0;color:var(--accent2)}
+  table{border-collapse:collapse;width:100%;max-width:1100px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
+  th{background:#161b25;color:var(--accent2);font-weight:600}
+  code{background:#161b25;padding:1px 6px;border-radius:6px}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
+  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+</style>
+</head>
+<body>
+<div class="progress" id="p"></div>
+<div class="dots" id="d"></div>
+<main id="m">
+
+<section>
+  <div class="eyebrow">AI Product Management Certification</div>
+  <h1>The course on one page</h1>
+  <p class="muted">Six modules. One scenario. One forkable repo. Individual format throughout.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Audience</div>
+  <h2>Who this is for</h2>
+  <ul>
+    <li>Practising PMs adding AI to traditional product surfaces.</li>
+    <li>AI/ML PMs who want a shipping-grade operating system.</li>
+    <li>Founders / staff engineers running the PM function for AI features.</li>
+  </ul>
+  <p>Pre-req: you've written at least one PRD. You're comfortable in the browser. You don't need to write code, but you should be willing to read it.</p>
+</section>
+
+<section>
+  <div class="eyebrow">The Arc</div>
+  <h2>One execution question per module</h2>
+  <table>
+    <tr><th>Module</th><th>Title</th><th>Execution Question</th></tr>
+    <tr><td>M1 · Bet</td><td>Drive AI-First Execution with Prompting</td><td>What does an AI-native PM <em>do differently</em>, and how do I configure my first copilot?</td></tr>
+    <tr><td>M2 · Decide</td><td>Validate AI Opportunities and Technical Feasibility</td><td>Is this bet real, and can we actually ship it?</td></tr>
+    <tr><td>M3 · Specify</td><td>Improve AI Product Requirements with RAG Architecture</td><td>How do I write a spec an AI engineer can build from?</td></tr>
+    <tr><td>M4 · Trust</td><td>Design AI-Native User Experiences</td><td>How do I close the three trust gaps that kill AI products?</td></tr>
+    <tr><td>M5 · Orchestrate</td><td>Deploy Agentic Systems and Workflows</td><td>When (and how) do I let the system act on its own?</td></tr>
+    <tr><td>M6 · Prove</td><td>Measure AI Quality with Evals and Guardrails</td><td>How do I prove this is shippable and stay shippable?</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">Traditional PM vs. AI PM</div>
+  <h2>Why this course exists</h2>
+  <table>
+    <tr><th>Traditional PM</th><th>AI PM</th></tr>
+    <tr><td>Outputs are deterministic</td><td>Outputs are probabilistic — drift, hallucination, variance</td></tr>
+    <tr><td>Spec → eng → ship</td><td>Spec → eng → eval → re-spec → ship</td></tr>
+    <tr><td>UX is the surface</td><td>UX is the surface <em>and</em> the trust layer</td></tr>
+    <tr><td>Quality = QA after build</td><td>Quality = evals as product surface</td></tr>
+    <tr><td>Risk = bug count</td><td>Risk = hallucination + safety + cost + drift</td></tr>
+    <tr><td>PM owns the what</td><td>PM owns the what + the data + the eval bar</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="eyebrow">The Juno Scenario</div>
+  <h2>One scenario all six modules</h2>
+  <p>You are the AI PM at <strong>RocketShip</strong>, a hyper-growth B2B SaaS platform for Enterprise Data Teams. Success has created a <strong>Signal Collapse</strong> — too many escalations, too many threads, too many open decisions. You've been given an innovation budget but no headcount.</p>
+  <p>So you ship <strong>Juno PM</strong> — an AI Associate PM embedded in Slack, Notion, and Jira. By M6 your Juno PM is a finalised repo (your portfolio).</p>
+</section>
+
+<section>
+  <div class="eyebrow">Design Principles</div>
+  <h2>Seven principles every module obeys</h2>
+  <div class="grid two">
+    <div class="card"><h3>1. Build in every module</h3><p>No empty modules. Every module ships one real artifact into your fork.</p></div>
+    <div class="card"><h3>2. Individual-only</h3><p>No group work. Self-review checklist + AI-review prompt + async share in <code>#ai-pm-cohort</code>.</p></div>
+    <div class="card"><h3>3. One scenario</h3><p>Juno, RocketShip, all six modules. No re-contexting overhead.</p></div>
+    <div class="card"><h3>4. Frameworks as mental models</h3><p>You leave with frameworks that work without your slides.</p></div>
+    <div class="card"><h3>5. AI PM is different</h3><p>We never let learners think their existing PM playbook is enough.</p></div>
+    <div class="card"><h3>6. Effective tools</h3><p>Bespoke interactive tools per module, with Copy-as-markdown / Export-to-repo.</p></div>
+    <div class="card"><h3>7. AI as critique partner</h3><p>Every exercise ends with an AI-review prompt — using AI to evaluate AI strategy.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Format</div>
+  <h2>How it runs</h2>
+  <ul>
+    <li><strong>Cadence:</strong> 6 sessions × ~2 hours.</li>
+    <li><strong>Live:</strong> instructor walks the deck; learners build in the tools as they go.</li>
+    <li><strong>Async:</strong> commit artifacts to your fork between modules; instructor responds in <code>#ai-pm-cohort</code>.</li>
+    <li><strong>Submission:</strong> the URL of your finalised <code>juno-pm/</code> fork, within 7 days of cohort end.</li>
+    <li><strong>Grading:</strong> Application of Concepts · Credibility &amp; Reasoning · Clarity · Strategic Thinking · 1/2/3 scale.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">What you leave with</div>
+  <h2>Portfolio + operating system</h2>
+  <ul>
+    <li>A public <code>juno-pm/</code> repo demonstrating every M1–M6 framework.</li>
+    <li>A System Prompt + Lovable prototype.</li>
+    <li>An AI Strategy One-Pager + Decision Matrix.</li>
+    <li>An AI PRD with explicit RAG decisions.</li>
+    <li>An AI user flow with trust-gap mitigations.</li>
+    <li>An Agent Workflow Spec + control panel.</li>
+    <li>A three-layer eval stack + human rubric.</li>
+    <li>A finalised README — your PM Execution Plan + pitch.</li>
+  </ul>
+</section>
+
+</main>
+<script>
+  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
+  const sections=[...document.querySelectorAll('section')];
+  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
+  const dots=[...d.children];
+  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
+  m.addEventListener('scroll',update);update();
+  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>
