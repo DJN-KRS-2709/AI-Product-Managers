@@ -1,174 +1,637 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AI Product Management Certification — Pitch Deck</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Product Management — Pitch Deck</title>
 <style>
-  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
-  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
-  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
-  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
-  h1{font-size:clamp(36px,5vw,72px);line-height:1.02;margin:0 0 .3em;letter-spacing:-.01em}
-  h2{font-size:clamp(26px,2.8vw,44px);margin:0 0 .55em;color:var(--accent)}
-  p,li{font-size:clamp(16px,1.3vw,20px);line-height:1.6;max-width:1100px}
-  .lede{color:var(--muted);font-size:clamp(18px,1.5vw,22px);max-width:1100px}
-  ul,ol{margin:.3em 0;padding-left:1.2em}
-  li{margin:.3em 0}
-  .grid{display:grid;gap:18px}
-  .grid.two{grid-template-columns:1fr 1fr}
-  .grid.three{grid-template-columns:repeat(3,1fr)}
-  @media(max-width:900px){.grid.two,.grid.three{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
-  .card h3{margin:0 0 8px;color:var(--accent2);font-size:18px}
-  table{border-collapse:collapse;width:100%;max-width:1100px}
-  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
-  th{background:#161b25;color:var(--accent2);font-weight:600}
-  code{background:#161b25;padding:1px 6px;border-radius:6px}
-  .big{font-size:clamp(48px,6vw,84px);font-weight:700;color:var(--accent);letter-spacing:-.01em;line-height:1}
-  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
-  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
-  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: 'Lato', -apple-system, sans-serif;
+  background: #07162C;
+  color: #e8e8f0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  padding: 80px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.25) 0%, #07162C 60%);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+section.visible { opacity: 1; transform: translateY(0); }
+section.skipped { display: none; }
+
+.nav-dots {
+  position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 6px; z-index: 100;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #333; border: none; cursor: pointer;
+  transition: all 0.3s; position: relative;
+}
+.nav-dot.active { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.5); transform: scale(1.4); }
+.nav-dot:hover { background: rgba(59,130,246,0.7); }
+.nav-dot .tooltip {
+  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  background: #0c2244; color: #b0b4c8; padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; border: 1px solid rgba(59,130,246,0.2);
+}
+.nav-dot:hover .tooltip { opacity: 1; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 100;
+  background: linear-gradient(90deg, #1241B0, #3b82f6);
+  transition: width 0.3s ease;
+}
+
+h1, h2 { font-family: 'Poppins', sans-serif; }
+h1 { font-size: 56px; font-weight: 900; color: #fff; line-height: 1.1; }
+h2 { font-size: 40px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+h3 { font-size: 22px; font-weight: 700; color: #e0e0f0; }
+p, li { font-size: 17px; line-height: 1.7; color: #b0b4c8; }
+.subtitle { font-size: 20px; color: #8899bb; margin-top: 8px; margin-bottom: 32px; }
+.section-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 3px;
+  color: rgba(255,255,255,0.7); margin-bottom: 12px; font-weight: 700;
+}
+strong { color: #fff; font-weight: 700; }
+em { color: #60a5fa; font-style: normal; font-weight: 600; }
+code {
+  background: rgba(18,65,176,0.15); padding: 2px 8px; border-radius: 4px;
+  font-size: 14px; color: #60a5fa; font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+ul { list-style: none; padding: 0; }
+ul li { padding: 6px 0; padding-left: 24px; position: relative; }
+ul li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 8px; height: 8px; border-radius: 2px; background: #1241B0;
+}
+
+.inner { max-width: 880px; width: 100%; text-align: left; }
+section.centered { text-align: center; }
+section.centered .inner { text-align: center; }
+section.centered ul li { padding-left: 0; }
+section.centered ul li::before { display: none; }
+
+/* HERO */
+.hero { align-items: center; text-align: center; }
+.hero h1 { font-size: 64px; margin-bottom: 4px; }
+.hero h1 span { color: #60a5fa; }
+.hero .subtitle { font-size: 22px; max-width: 600px; margin: 12px auto 28px; color: #60a5fa; }
+.hero .scroll-hint { font-size: 13px; color: #444; margin-top: 32px; animation: pulse 2s ease infinite; }
+.hero .scroll-hint span { display: block; margin-top: 8px; font-size: 20px; }
+.hero-logo { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); }
+.hero-logo img { height: 48px; width: auto; opacity: 0.95; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+/* TAGS */
+.demo-tag {
+  display: inline-block; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 6px; margin-bottom: 18px;
+}
+.tag-provocation { background: rgba(248,81,73,0.12); color: #ff7b72; }
+.tag-lecture { background: rgba(88,166,255,0.12); color: #79c0ff; }
+.tag-case { background: rgba(210,153,34,0.12); color: #e3b341; }
+.tag-exercise { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+.tag-activity { background: rgba(188,140,255,0.12); color: #d2a8ff; }
+.tag-build { background: rgba(255,123,182,0.12); color: #ff7b72; }
+.tag-break { background: rgba(100,116,139,0.12); color: #94a3b8; }
+.tag-debrief { background: rgba(188,140,255,0.12); color: #d2a8ff; }
+.tag-complete { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+.tag-recall { background: rgba(59,130,246,0.12); color: #79c0ff; }
+.tag-framework { background: rgba(210,153,34,0.12); color: #e3b341; }
+
+.lab-timer {
+  position: absolute; top: 24px; right: 32px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 10px 18px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+  color: #60a5fa; z-index: 10;
+}
+
+/* WAYPOINTS */
+.waypoints { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 720px; }
+.waypoint {
+  display: flex; align-items: flex-start; gap: 18px;
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 12px; padding: 20px 24px;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+.waypoint:hover { transform: translateX(4px); border-color: rgba(59,130,246,0.3); }
+.waypoint-num {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff; background: #1241B0;
+}
+.waypoint-text { flex: 1; }
+.waypoint-text .wt-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.waypoint-text .wt-desc { font-size: 14px; color: #8899bb; line-height: 1.5; }
+
+/* CARDS */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin: 24px 0;
+}
+.card-item {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 22px; text-align: center;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.card-item::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, #3b82f6);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.card-item:hover { border-color: var(--card-accent, #3b82f6); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.card-item:hover::before { transform: scaleX(1); }
+.card-item .card-icon { font-size: 24px; margin-bottom: 8px; }
+.card-item .card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.card-item .card-desc { font-size: 12.5px; color: #8899bb; line-height: 1.45; }
+
+/* EXPECT GRID (How This Module Runs) */
+.expect-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0;
+}
+.expect-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 18px; text-align: center;
+  transition: all 0.3s ease;
+}
+.expect-card:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-2px); }
+.expect-icon { font-size: 26px; margin-bottom: 8px; }
+.expect-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.expect-desc { font-size: 12.5px; color: #8899bb; line-height: 1.45; }
+
+/* TRUE/FALSE */
+.tf-grid { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.tf-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 24px; border-radius: 12px;
+  transition: all 0.3s ease; cursor: pointer;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+.tf-item:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.15); }
+.tf-item.revealed.tf-false { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.15); }
+.tf-item.revealed.tf-true { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.15); }
+.tf-item.revealed.tf-partial { background: rgba(210,153,34,0.06); border: 1px solid rgba(210,153,34,0.15); }
+.tf-verdict { font-size: 13px; font-weight: 900; min-width: 64px; padding-top: 2px; letter-spacing: 0.05em; }
+.tf-item:not(.revealed) .tf-verdict { visibility: hidden; }
+.tf-item:not(.revealed) .tf-verdict::after { content: '?'; visibility: visible; color: #555; font-size: 16px; }
+.tf-false .tf-verdict { color: #fca5a5; }
+.tf-true .tf-verdict { color: #6ee7b7; }
+.tf-partial .tf-verdict { color: #fde68a; }
+.tf-body .tf-claim { font-size: 16px; font-weight: 700; color: #e0e0f0; margin-bottom: 4px; }
+.tf-body .tf-why { font-size: 13px; color: #8899bb; line-height: 1.5; }
+.tf-item:not(.revealed) .tf-why { display: none; }
+
+/* ARC FLOW */
+.arc-flow {
+  display: flex; gap: 8px; align-items: center; margin: 28px 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.arc-node {
+  padding: 12px 16px; border-radius: 10px; text-align: center;
+  font-size: 13px; font-weight: 700; color: #fff; min-width: 110px;
+  transition: all 0.3s ease;
+  background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+}
+.arc-node:hover { transform: scale(1.05); }
+.arc-node.active-node { box-shadow: 0 0 20px rgba(59,130,246,0.3); background: rgba(59,130,246,0.2); border: 2px solid #3b82f6; }
+.arc-arrow { color: #333; font-size: 18px; }
+.arc-node .ad-num { font-size: 10px; opacity: 0.5; margin-bottom: 2px; }
+
+/* TABLE */
+.ref-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.ref-table th {
+  text-align: left; padding: 12px; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: #8899bb;
+  border-bottom: 1px solid rgba(59,130,246,0.15);
+}
+.ref-table td {
+  padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 14px; color: #b0b4c8; line-height: 1.4;
+}
+.ref-table td:first-child { font-weight: 700; color: #e0e0f0; white-space: nowrap; }
+.ref-table tr:hover td { background: rgba(59,130,246,0.04); }
+
+/* EVIDENCE CARDS */
+.evidence-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.evidence-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  padding: 22px; transition: all 0.3s ease; text-align: left;
+}
+.evidence-card:hover { transform: translateY(-2px); border-color: rgba(59,130,246,0.3); }
+.evidence-card .ec-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #60a5fa; margin-bottom: 8px;
+}
+.evidence-card .ec-company { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.evidence-card .ec-text { font-size: 13px; color: #8899bb; line-height: 1.5; }
+
+/* CASE STUDY */
+.case-acts { display: flex; gap: 16px; margin: 24px 0; }
+.case-act { flex: 1; border-radius: 14px; padding: 24px; transition: all 0.3s ease; text-align: left; }
+.case-act:hover { transform: translateY(-3px); }
+.case-act .ca-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.case-act .ca-text { font-size: 14px; color: #a0a8b4; line-height: 1.5; }
+.act-bet { background: rgba(88,166,255,0.06); border: 1px solid rgba(88,166,255,0.15); }
+.act-bet .ca-label { color: #58a6ff; }
+.act-crack { background: rgba(210,153,34,0.06); border: 1px solid rgba(210,153,34,0.15); }
+.act-crack .ca-label { color: #d29922; }
+.act-correct { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.15); }
+.act-correct .ca-label { color: #34d399; }
+
+/* DIAG AXES */
+.diag-axes { display: flex; gap: 20px; margin: 24px 0; }
+.diag-axis {
+  flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 28px; text-align: center;
+  transition: all 0.3s ease;
+}
+.diag-axis:hover { transform: translateY(-3px); border-color: rgba(59,130,246,0.3); }
+.diag-axis .da-num { font-size: 28px; font-weight: 900; margin-bottom: 6px; color: #60a5fa; }
+.diag-axis .da-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.diag-axis .da-q { font-size: 13px; color: #8899bb; line-height: 1.4; }
+
+/* SECTION BREAK */
+section.section-break { padding: 0; }
+section.section-break .section-break-inner {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 20%, rgba(59,130,246,0.25) 0%, rgba(59,130,246,0.08) 35%, #07162C 75%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 80px;
+  text-align: left;
+}
+.section-break-inner .lab-title {
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.16em; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.section-break-inner .lab-name { font-size: 52px; font-weight: 900; color: #fff; line-height: 1.1; max-width: 700px; font-family: 'Poppins', sans-serif; }
+.section-break-inner .lab-desc { font-size: 18px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-top: 16px; max-width: 600px; }
+
+/* COMPLETION / TAKEAWAYS */
+.takeaway-list { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 880px; }
+.takeaway-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px 22px; transition: all 0.3s; text-align: left; }
+.takeaway-item:hover { border-color: rgba(59,130,246,0.3); transform: translateX(4px); }
+.takeaway-item p { font-size: 15px; color: #b0b4c8; line-height: 1.6; }
+
+.artifact-preview {
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 14px; padding: 24px; margin: 20px auto; max-width: 700px;
+  text-align: left;
+}
+.artifact-preview .ap-title {
+  font-size: 14px; font-weight: 800; color: #60a5fa; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-bottom: 14px;
+}
+
+.bottom-cta {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(52,211,153,0.08); border-top: 1px solid rgba(52,211,153,0.25);
+  padding: 14px 32px; text-align: center;
+  font-size: 14px; font-weight: 600; color: #6ee7b7;
+}
+.bottom-cta a { color: #6ee7b7; text-decoration: underline; }
+
+/* INSTRUCTOR NOTES */
+.notes {
+  background: rgba(59,130,246,0.06); border-left: 3px solid #1241B0;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 24px 0 0;
+  text-align: left; max-width: 880px;
+}
+.notes h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #60a5fa; margin: 0 0 6px; }
+.notes p { font-size: 14px; color: #cdd5e3; line-height: 1.55; }
+
+/* SHAREABLE TAKEAWAY (replaces .notes in shareable decks) */
+.takeaway {
+  background: rgba(34,211,238,0.05); border-left: 3px solid #22d3ee;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 24px 0 0;
+  text-align: left; max-width: 880px;
+}
+.takeaway h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #22d3ee; margin: 0 0 6px; }
+.takeaway p { font-size: 14px; color: #cdd5e3; line-height: 1.55; }
+
+/* Repo CTA inline */
+.repo-cta { font-size: 14px; color: #6ee7b7; margin-top: 14px; text-align: center; }
+.repo-cta strong { color: #6ee7b7; }
+.repo-cta code { color: #6ee7b7; }
+
+/* Tool button */
+.tool-btn {
+  display: inline-block; background: #1241B0; color: #fff; text-decoration: none;
+  font-size: 14px; font-weight: 800; padding: 10px 22px; border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(18,65,176,0.35); margin-top: 14px;
+  transition: transform .2s, box-shadow .2s;
+}
+.tool-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(18,65,176,0.5); }
+
+/* Help hint, skip badge, sorter */
+.help-hint {
+  position: fixed; bottom: 14px; right: 18px;
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  font-family: 'IBM Plex Mono', monospace; z-index: 90;
+}
+.skip-badge {
+  position: fixed; bottom: 14px; left: 18px;
+  background: rgba(248,113,113,0.2); color: #fca5a5;
+  border: 1px solid rgba(248,113,113,0.3);
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; z-index: 90;
+}
+.skip-badge.visible { opacity: 1; pointer-events: auto; }
+.slide-sorter {
+  position: fixed; inset: 0; background: rgba(7,22,44,0.95);
+  z-index: 200; padding: 60px; overflow-y: auto;
+  display: none; flex-direction: column;
+}
+.slide-sorter.visible { display: flex; }
+.sorter-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+.sorter-title { font-size: 28px; font-weight: 800; color: #fff; font-family: 'Poppins', sans-serif; }
+.sorter-subtitle { font-size: 14px; color: #8899bb; margin-top: 4px; }
+.sorter-close { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.sorter-close:hover { background: rgba(255,255,255,0.05); }
+.sorter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.sorter-item {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s ease;
+}
+.sorter-item:hover { border-color: #3b82f6; transform: translateY(-2px); }
+.sorter-item.sorter-active { border-color: #3b82f6; background: rgba(59,130,246,0.1); }
+.sorter-item.sorter-skipped { opacity: 0.4; }
+.sorter-num { font-size: 11px; font-weight: 800; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.1em; }
+.sorter-label { font-size: 14px; color: #fff; margin: 4px 0 8px; font-weight: 600; }
+.sorter-skip-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; border: 0; }
+.sorter-skip-btn.skip-on { background: rgba(248,113,113,0.2); color: #fca5a5; }
+.sorter-skip-btn.skip-off { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+
+@media (max-width: 768px) {
+  section { padding: 40px 24px; }
+  h1 { font-size: 36px; }
+  h2 { font-size: 28px; }
+  .hero h1 { font-size: 40px; }
+  .case-acts, .diag-axes { flex-direction: column; }
+  .cards-grid, .evidence-cards, .expect-grid { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="progress" id="p"></div>
-<div class="dots" id="d"></div>
-<main id="m">
 
-<section>
-  <div class="eyebrow">Pitch · Course positioning</div>
-  <h1>AI Product Management Certification</h1>
-  <p class="lede">The repo-as-portfolio AI-PM course. Six modules. One forkable project. Production-grade artifacts you ship to your own GitHub.</p>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots"></nav>
+
+<section class="hero" data-title="AI Product Management Certification — Pitch">
+  <div class="hero-logo"><img src="../Design/Minimalist shield with glowing _P_.png" alt="Product School logo"/></div>
+  <div class="section-label">Pitch Deck · Internal</div>
+  <h1>AI Product Management <span>Certification — Pitch</span></h1>
+  <p class="subtitle">The story of why this course exists, and what it ships.</p>
+  <div class="waypoints" style="max-width:640px;">
+  <div class="waypoint"><div class="waypoint-num">1</div><div class="waypoint-text"><div class="wt-title">The shift</div><div class="wt-desc">Every PM is now an AI PM.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">2</div><div class="waypoint-text"><div class="wt-title">The arc</div><div class="wt-desc">Bet → Decide → Specify → Trust → Orchestrate → Prove.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">3</div><div class="waypoint-text"><div class="wt-title">The artifact</div><div class="wt-desc">A repo, not a deck. The juno-pm/ fork is the certificate.</div></div></div>
+  </div>
+  <p style="font-size:15px; color:#8899bb; margin-top:8px;">Out: a 6-week course every AI-curious PM can finish in evenings.</p>
+  <div class="scroll-hint">Scroll to explore<span>&#8595;</span></div>
 </section>
 
-<section>
-  <div class="eyebrow">The problem</div>
-  <h2>Most AI-PM courses leave you with notes, not artifacts</h2>
-  <ul>
-    <li>You watch slides. You take notes. You produce a slide of your own.</li>
-    <li>You leave with vocabulary, not a portfolio.</li>
-    <li>You can describe RAG. You can't ship a RAG decision a staff engineer would build from.</li>
-    <li>You learn "evals matter." You don't leave with an eval stack.</li>
-  </ul>
-</section>
 
-<section>
-  <div class="eyebrow">The bet</div>
-  <h2>This course is a repo, not a deck</h2>
-  <p>Each module pushes one real artifact into your <strong><code>juno-pm/</code></strong> fork. By the end you have:</p>
-  <div class="grid three">
-    <div class="card"><h3>A system prompt</h3><p>Production-grade. Configured. Runs in a Lovable prototype.</p></div>
-    <div class="card"><h3>An AI Strategy One-Pager</h3><p>Fundable. Scored across 6 lenses.</p></div>
-    <div class="card"><h3>An AI PRD</h3><p>With RAG, eval plan, failure modes, guardrails.</p></div>
-    <div class="card"><h3>An AI user flow</h3><p>7-node Iceberg, three trust gaps closed.</p></div>
-    <div class="card"><h3>An Agent Workflow Spec</h3><p>9 sections. Ready for engineering.</p></div>
-    <div class="card"><h3>An eval stack</h3><p>3 layers. Anchored rubric. Pass bar. Governance.</p></div>
+<section data-title="The Five Shifts">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>The Five Shifts</h2>
+    <div class="subtitle">AI broke five PM assumptions. Each shift maps to one module.</div>
+    <table class="ref-table">
+      <thead><tr><th>Old PM assumption</th><th>What AI broke</th><th>Module</th></tr></thead>
+      <tbody>
+<tr><td>Outputs are deterministic</td><td>Outputs are probabilistic</td><td>M1</td></tr>
+<tr><td>Spec is a doc</td><td>Spec is doc + prompt + corpus + evals</td><td>M2 + M3</td></tr>
+<tr><td>UI is command-driven</td><td>UI is intent-driven, often invisible</td><td>M4</td></tr>
+<tr><td>Workflows are sequential</td><td>Workflows are agentic</td><td>M5</td></tr>
+<tr><td>Ship + monitor with analytics</td><td>Ship + eval harness + human rubric + guardrails</td><td>M6</td></tr>
+      </tbody>
+    </table>
+    
   </div>
 </section>
 
-<section>
-  <div class="eyebrow">Course arc</div>
-  <h2>One execution question per module</h2>
-  <table>
-    <tr><th>Module</th><th>Arc verb</th><th>Question</th></tr>
-    <tr><td>M1 — Prompting</td><td>Bet</td><td>What does an AI-native PM do differently?</td></tr>
-    <tr><td>M2 — Strategy</td><td>Decide</td><td>Is this bet real, and can we ship it?</td></tr>
-    <tr><td>M3 — RAG / PRD</td><td>Specify</td><td>How do I write a spec engineers can build from?</td></tr>
-    <tr><td>M4 — AI-UX</td><td>Trust</td><td>How do I close the three trust gaps?</td></tr>
-    <tr><td>M5 — Agentic</td><td>Orchestrate</td><td>When do I let the system act on its own?</td></tr>
-    <tr><td>M6 — Evals</td><td>Prove</td><td>How do I prove this is shippable and stay shippable?</td></tr>
-  </table>
-</section>
 
-<section>
-  <div class="eyebrow">The scenario</div>
-  <h2>One scenario the whole course: Juno PM at RocketShip</h2>
-  <p>You are the AI PM at <strong>RocketShip</strong>, a B2B SaaS platform for Enterprise Data Teams. The org is in a <strong>Signal Collapse</strong> — too many escalations, too few hours. You build <strong>Juno PM</strong>, an AI Associate PM in Slack/Notion/Jira.</p>
-  <p>Every framework lands against the same scenario. No re-contexting between modules. The artifact you build in M1 is the one you finalise in M6.</p>
-</section>
-
-<section>
-  <div class="eyebrow">What's different</div>
-  <h2>Five things this course does that others don't</h2>
-  <div class="grid two">
-    <div class="card"><h3>Repo as portfolio</h3><p>The submission is a public repo URL. Not a slide deck. Hireable.</p></div>
-    <div class="card"><h3>16 bespoke interactive tools</h3><p>One per concept. Copy-as-markdown, export-to-repo. Built for the course.</p></div>
-    <div class="card"><h3>Individual format</h3><p>No groupwork. Self-review checklist + AI-review prompt + async share. Works in any cohort size.</p></div>
-    <div class="card"><h3>AI as critique partner</h3><p>Every exercise ends with an AI-review prompt — you use AI to evaluate AI strategy.</p></div>
-    <div class="card"><h3>Frameworks > content</h3><p>You leave with mental models — Decision Matrix, Iceberg, AWSpec, Eval Stack — that work without our slides.</p></div>
-    <div class="card"><h3>Production-grade</h3><p>The artifacts you commit are the artifacts a real AI-PM team ships. No toy templates.</p></div>
+<section data-title="What Makes This Course Different">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Lecture</div>
+    <h2>What Makes This Course Different</h2>
+    <div class="subtitle">Three deliberate choices.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">📂</div><div class="card-title">Repo, not deck</div><div class="card-desc">Submission is the URL of a forkable repo. Six committed artifacts. README is the pitch.</div></div>
+      <div class="card-item"><div class="card-icon">👤</div><div class="card-title">100% individual</div><div class="card-desc">No groups. No partner work. No live presentation. Each exercise has self-review + AI-review.</div></div>
+      <div class="card-item"><div class="card-icon">🛠</div><div class="card-title">Bespoke tools</div><div class="card-desc">16 single-file HTML tools. Each one emits a markdown artifact straight into the fork.</div></div>
+    </div>
+    
   </div>
 </section>
 
-<section>
-  <div class="eyebrow">Outcomes</div>
-  <h2>What you can do Monday morning</h2>
-  <ul>
-    <li>Pressure-test an AI bet across 6 lenses, in 20 minutes.</li>
-    <li>Decide a RAG architecture against cost / speed / accuracy.</li>
-    <li>Write an AI PRD that includes data corpus, eval plan, and failure modes.</li>
-    <li>Architect an AI user flow with trust gaps closed.</li>
-    <li>Spec an agent in 9 sections, including hand-off rules.</li>
-    <li>Stand up a 3-layer eval stack with an anchored human rubric.</li>
-    <li>Pitch the whole bet from one README.</li>
-  </ul>
-</section>
 
-<section>
-  <div class="eyebrow">Who it's for</div>
-  <h2>Three audiences</h2>
-  <div class="grid three">
-    <div class="card"><h3>The Crossover PM</h3><p>Traditional PM adding AI to existing surfaces. Needs the playbook shift.</p></div>
-    <div class="card"><h3>The AI-Native PM</h3><p>Already shipping AI. Needs a structured operating system + portfolio.</p></div>
-    <div class="card"><h3>The Founder / Staff PM</h3><p>Running the PM function for an AI bet. Needs frameworks the team can adopt.</p></div>
+<section data-title="The Strategic Arc">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>The Strategic Arc</h2>
+    <div class="subtitle">One verb per module.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">M1</div><div class="card-title">Bet — Prompting</div><div class="card-desc">Stop chatting. Configure.</div></div>
+      <div class="card-item"><div class="card-icon">M2</div><div class="card-title">Decide — Strategy</div><div class="card-desc">From tactics to a CFO-ready bet.</div></div>
+      <div class="card-item"><div class="card-icon">M3</div><div class="card-title">Specify — RAG/PRD</div><div class="card-desc">Spec an LLM can execute.</div></div>
+      <div class="card-item"><div class="card-icon">M4</div><div class="card-title">Trust — AI-UX</div><div class="card-desc">Make uncertainty feel safe.</div></div>
+      <div class="card-item"><div class="card-icon">M5</div><div class="card-title">Orchestrate — Agentic</div><div class="card-desc">Hand work to agents — bounded.</div></div>
+      <div class="card-item"><div class="card-icon">M6</div><div class="card-title">Prove — Evals</div><div class="card-desc">Vibe checks fail. Evals don't.</div></div>
+    </div>
+    
   </div>
 </section>
 
-<section>
-  <div class="eyebrow">Format</div>
-  <h2>How it runs</h2>
-  <ul>
-    <li><strong>6 sessions × ~2h</strong> — live, instructor-led.</li>
-    <li><strong>Async commits</strong> — push artifacts between sessions, instructor responds in <code>#ai-pm-cohort</code>.</li>
-    <li><strong>Individual format</strong> — no group breakouts. Works for any cohort size, including 1.</li>
-    <li><strong>Submission window</strong> — 7 days post-cohort.</li>
-    <li><strong>Grading</strong> — 4 qualities, 1–3 scale, qualitative feedback in-platform.</li>
-  </ul>
+
+<section data-title="Distribution">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>Distribution</h2>
+    <div class="subtitle">How learners actually use this.</div>
+    <table class="ref-table">
+      <thead><tr><th>Surface</th><th>Use</th></tr></thead>
+      <tbody>
+<tr><td>GitHub Pages site</td><td>All slides and interactive tools — public, indexable, shareable.</td></tr>
+<tr><td><code>juno-project-template/</code></td><td>Forkable repo. One folder per module. Pre-filled READMEs.</td></tr>
+<tr><td><code>#ai-pm-cohort</code></td><td>Async share + instructor in-thread response within ~5 days.</td></tr>
+<tr><td>Submission</td><td>Repo URL within 7 days post-cohort. No deck.</td></tr>
+      </tbody>
+    </table>
+    
+  </div>
 </section>
 
-<section>
-  <div class="eyebrow">The differentiator</div>
-  <h2 style="margin-bottom:.2em">What you leave with</h2>
-  <div class="big">A public repo.</div>
-  <p style="margin-top:18px">Not a certificate PDF. A real, hireable, peer-reviewable, AI-PM portfolio. <code>github.com/yourname/juno-pm</code>.</p>
+
+<section class="centered" data-title="Q&A">
+  <div class="inner">
+    <h1 style="font-size:64px; color:#60a5fa; margin-bottom:24px;">Q&amp;A</h1>
+    <p style="font-size:20px; color:#8899bb;">Park anything we can't unblock here in <code>#ai-pm-cohort</code>.</p>
+    <p style="font-size:14px; color:#555; margin-top:20px;">Instructor responds in-thread within ~5 days.</p>
+  </div>
 </section>
 
-<section>
-  <div class="eyebrow">Ready to teach this?</div>
-  <h2>Everything's in the repo</h2>
-  <ul>
-    <li>HTML slide decks per module (instructor + shareable).</li>
-    <li>16 interactive tools, single-file, vanilla JS.</li>
-    <li>Markdown notes, frameworks, glossaries, pre-reads.</li>
-    <li>A forkable <code>juno-project-template/</code> for learners.</li>
-    <li>A landing <code>index.html</code> + Curriculum Map + Final Project Brief + Tools Overview.</li>
-    <li>This pitch deck (you're looking at it).</li>
-  </ul>
-  <p style="margin-top:18px">Fork the course repo. Run a cohort. Or run yourself through it.</p>
-</section>
 
-</main>
+<div class="help-hint">↑ ↓ navigate · K skip section · M section sorter</div>
+<div class="skip-badge" id="skip-badge" title="Click to unskip (K)">SKIPPED</div>
+<div class="slide-sorter" id="slide-sorter">
+  <div class="sorter-header">
+    <div><div class="sorter-title">Section Sorter</div><div class="sorter-subtitle">Click a section to jump · Toggle skip to hide during presentation</div></div>
+    <button class="sorter-close" onclick="closeSorter()" title="Close (M / Esc)">✕</button>
+  </div>
+  <div class="sorter-grid" id="sorter-grid"></div>
+</div>
+
 <script>
-  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
-  const sections=[...document.querySelectorAll('section')];
-  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
-  const dots=[...d.children];
-  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
-  m.addEventListener('scroll',update);update();
-  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+const sections = Array.from(document.querySelectorAll('section'));
+const navDotsContainer = document.getElementById('navDots');
+let currentIdx = 0;
+let sorterVisible = false;
+
+const STORAGE_KEY = 'skip-sections-' + document.title.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 60);
+const skippedSections = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+
+function saveSkips() { localStorage.setItem(STORAGE_KEY, JSON.stringify([...skippedSections])); }
+
+function applySkips() {
+  sections.forEach((sec, i) => sec.classList.toggle('skipped', skippedSections.has(i)));
+  rebuildDots();
+}
+
+function rebuildDots() {
+  navDotsContainer.innerHTML = '';
+  sections.forEach((sec, i) => {
+    if (skippedSections.has(i)) return;
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    const title = sec.dataset.title || 'Section';
+    dot.innerHTML = `<span class="tooltip">${title}</span>`;
+    dot.dataset.idx = i;
+    dot.onclick = () => sections[i].scrollIntoView({ behavior: 'smooth' });
+    navDotsContainer.appendChild(dot);
+  });
+}
+
+function getActiveSections() { return sections.map((s, i) => i).filter(i => !skippedSections.has(i)); }
+
+function updateProgress(idx) {
+  currentIdx = idx;
+  const active = getActiveSections();
+  const posInActive = active.indexOf(idx);
+  const progress = posInActive >= 0 ? (posInActive + 1) / active.length * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+  const dots = navDotsContainer.querySelectorAll('.nav-dot');
+  dots.forEach(d => d.classList.toggle('active', parseInt(d.dataset.idx) === idx));
+  document.getElementById('skip-badge').classList.toggle('visible', skippedSections.has(idx));
+}
+
+function toggleSkip(idx) {
+  if (skippedSections.has(idx)) skippedSections.delete(idx);
+  else skippedSections.add(idx);
+  saveSkips();
+  applySkips();
+  updateProgress(currentIdx);
+  if (sorterVisible) renderSorter();
+}
+
+function nextActive(from, dir) {
+  let i = from + dir;
+  while (i >= 0 && i < sections.length) {
+    if (!skippedSections.has(i)) return i;
+    i += dir;
+  }
+  return -1;
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const idx = sections.indexOf(entry.target);
+      updateProgress(idx);
+    }
+  });
+}, { threshold: 0.35 });
+sections.forEach(sec => observer.observe(sec));
+
+function renderSorter() {
+  const grid = document.getElementById('sorter-grid');
+  grid.innerHTML = '';
+  sections.forEach((sec, i) => {
+    const isSkipped = skippedSections.has(i);
+    const isCurrent = i === currentIdx;
+    const div = document.createElement('div');
+    div.className = 'sorter-item' + (isSkipped ? ' sorter-skipped' : '') + (isCurrent ? ' sorter-active' : '');
+    const title = sec.dataset.title || 'Section';
+    div.innerHTML = `
+      <div class="sorter-num">Section ${i + 1}</div>
+      <div class="sorter-label">${title}</div>
+      <button class="sorter-skip-btn ${isSkipped ? 'skip-on' : 'skip-off'}"
+              onclick="event.stopPropagation(); toggleSkip(${i})">
+        ${isSkipped ? '↩ Unskip' : '⊘ Skip'}
+      </button>`;
+    div.addEventListener('click', () => { sections[i].scrollIntoView({ behavior: 'smooth' }); closeSorter(); });
+    grid.appendChild(div);
+  });
+}
+function openSorter() { sorterVisible = true; renderSorter(); document.getElementById('slide-sorter').classList.add('visible'); }
+function closeSorter() { sorterVisible = false; document.getElementById('slide-sorter').classList.remove('visible'); }
+
+document.getElementById('skip-badge').addEventListener('click', () => toggleSkip(currentIdx));
+
+document.addEventListener('keydown', (e) => {
+  if (sorterVisible) {
+    if (e.key === 'Escape' || e.key === 'm' || e.key === 'M') { e.preventDefault(); closeSorter(); }
+    return;
+  }
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    const n = nextActive(currentIdx, 1);
+    if (n >= 0) sections[n].scrollIntoView({ behavior: 'smooth' });
+  }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const n = nextActive(currentIdx, -1);
+    if (n >= 0) sections[n].scrollIntoView({ behavior: 'smooth' });
+  }
+  else if (e.key === 'k' || e.key === 'K') { toggleSkip(currentIdx); }
+  else if (e.key === 'm' || e.key === 'M') { openSorter(); }
+});
+
+applySkips();
+sections[0].classList.add('visible');
+document.querySelectorAll('.tf-item').forEach(item => {
+  item.addEventListener('click', () => item.classList.toggle('revealed'));
+});
 </script>
 </body>
 </html>

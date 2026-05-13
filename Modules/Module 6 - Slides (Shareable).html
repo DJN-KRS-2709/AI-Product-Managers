@@ -1,201 +1,867 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Module 6 — Measure AI Quality with Evals and Guardrails</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 6: Measure AI Quality with Evals & Guardrails</title>
 <style>
-  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29}
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
-  main{scroll-snap-type:y mandatory;height:100vh;overflow-y:auto}
-  section{scroll-snap-align:start;min-height:100vh;padding:7vh 7vw;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
-  .eyebrow{color:var(--accent2);font-size:14px;text-transform:uppercase;letter-spacing:.18em;margin-bottom:18px;font-weight:600}
-  h1{font-size:clamp(32px,4.4vw,64px);line-height:1.04;margin:0 0 .35em}
-  h2{font-size:clamp(24px,2.6vw,40px);margin:0 0 .7em;color:var(--accent)}
-  p,li{font-size:clamp(15px,1.25vw,19px);line-height:1.6;max-width:1100px}
-  ul,ol{margin:.2em 0;padding-left:1.2em} li{margin:.25em 0}
-  .muted{color:var(--muted)}
-  .grid{display:grid;gap:18px} .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:1fr 1fr 1fr}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-  .card h3{margin-top:0;color:var(--accent2)}
-  table{border-collapse:collapse;width:100%;max-width:1100px}
-  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;font-size:15px;vertical-align:top}
-  th{background:#161b25;color:var(--accent2);font-weight:600}
-  code{background:#161b25;padding:1px 6px;border-radius:6px}
-  .takeaway{margin-top:24px;background:#0f1320;border-left:3px solid var(--accent2);border-radius:6px;padding:14px 16px;color:#cdd5e3;max-width:1100px}
-  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .12s;z-index:50}
-  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:50}
-  .dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;cursor:pointer} .dot.on{background:var(--accent);transform:scale(1.4)}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: 'Lato', -apple-system, sans-serif;
+  background: #07162C;
+  color: #e8e8f0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  padding: 80px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.25) 0%, #07162C 60%);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+section.visible { opacity: 1; transform: translateY(0); }
+section.skipped { display: none; }
+
+.nav-dots {
+  position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 6px; z-index: 100;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #333; border: none; cursor: pointer;
+  transition: all 0.3s; position: relative;
+}
+.nav-dot.active { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.5); transform: scale(1.4); }
+.nav-dot:hover { background: rgba(59,130,246,0.7); }
+.nav-dot .tooltip {
+  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  background: #0c2244; color: #b0b4c8; padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; border: 1px solid rgba(59,130,246,0.2);
+}
+.nav-dot:hover .tooltip { opacity: 1; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 100;
+  background: linear-gradient(90deg, #1241B0, #3b82f6);
+  transition: width 0.3s ease;
+}
+
+h1, h2 { font-family: 'Poppins', sans-serif; }
+h1 { font-size: 56px; font-weight: 900; color: #fff; line-height: 1.1; }
+h2 { font-size: 40px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+h3 { font-size: 22px; font-weight: 700; color: #e0e0f0; }
+p, li { font-size: 17px; line-height: 1.7; color: #b0b4c8; }
+.subtitle { font-size: 20px; color: #8899bb; margin-top: 8px; margin-bottom: 32px; }
+.section-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 3px;
+  color: rgba(255,255,255,0.7); margin-bottom: 12px; font-weight: 700;
+}
+strong { color: #fff; font-weight: 700; }
+em { color: #60a5fa; font-style: normal; font-weight: 600; }
+code {
+  background: rgba(18,65,176,0.15); padding: 2px 8px; border-radius: 4px;
+  font-size: 14px; color: #60a5fa; font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+ul { list-style: none; padding: 0; }
+ul li { padding: 6px 0; padding-left: 24px; position: relative; }
+ul li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 8px; height: 8px; border-radius: 2px; background: #1241B0;
+}
+
+.inner { max-width: 880px; width: 100%; text-align: left; }
+section.centered { text-align: center; }
+section.centered .inner { text-align: center; }
+section.centered ul li { padding-left: 0; }
+section.centered ul li::before { display: none; }
+
+/* HERO */
+.hero { align-items: center; text-align: center; }
+.hero h1 { font-size: 64px; margin-bottom: 4px; }
+.hero h1 span { color: #60a5fa; }
+.hero .subtitle { font-size: 22px; max-width: 600px; margin: 12px auto 28px; color: #60a5fa; }
+.hero .scroll-hint { font-size: 13px; color: #444; margin-top: 32px; animation: pulse 2s ease infinite; }
+.hero .scroll-hint span { display: block; margin-top: 8px; font-size: 20px; }
+.hero-logo { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); }
+.hero-logo img { height: 48px; width: auto; opacity: 0.95; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+/* TAGS */
+.demo-tag {
+  display: inline-block; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 6px; margin-bottom: 18px;
+}
+.tag-provocation { background: rgba(248,81,73,0.12); color: #ff7b72; }
+.tag-lecture { background: rgba(88,166,255,0.12); color: #79c0ff; }
+.tag-case { background: rgba(210,153,34,0.12); color: #e3b341; }
+.tag-exercise { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+.tag-activity { background: rgba(188,140,255,0.12); color: #d2a8ff; }
+.tag-build { background: rgba(255,123,182,0.12); color: #ff7b72; }
+.tag-break { background: rgba(100,116,139,0.12); color: #94a3b8; }
+.tag-debrief { background: rgba(188,140,255,0.12); color: #d2a8ff; }
+.tag-complete { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+.tag-recall { background: rgba(59,130,246,0.12); color: #79c0ff; }
+.tag-framework { background: rgba(210,153,34,0.12); color: #e3b341; }
+
+.lab-timer {
+  position: absolute; top: 24px; right: 32px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 10px 18px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+  color: #60a5fa; z-index: 10;
+}
+
+/* WAYPOINTS */
+.waypoints { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 720px; }
+.waypoint {
+  display: flex; align-items: flex-start; gap: 18px;
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 12px; padding: 20px 24px;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+.waypoint:hover { transform: translateX(4px); border-color: rgba(59,130,246,0.3); }
+.waypoint-num {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff; background: #1241B0;
+}
+.waypoint-text { flex: 1; }
+.waypoint-text .wt-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.waypoint-text .wt-desc { font-size: 14px; color: #8899bb; line-height: 1.5; }
+
+/* CARDS */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin: 24px 0;
+}
+.card-item {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 22px; text-align: center;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.card-item::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, #3b82f6);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.card-item:hover { border-color: var(--card-accent, #3b82f6); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.card-item:hover::before { transform: scaleX(1); }
+.card-item .card-icon { font-size: 24px; margin-bottom: 8px; }
+.card-item .card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.card-item .card-desc { font-size: 12.5px; color: #8899bb; line-height: 1.45; }
+
+/* EXPECT GRID (How This Module Runs) */
+.expect-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0;
+}
+.expect-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 18px; text-align: center;
+  transition: all 0.3s ease;
+}
+.expect-card:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-2px); }
+.expect-icon { font-size: 26px; margin-bottom: 8px; }
+.expect-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.expect-desc { font-size: 12.5px; color: #8899bb; line-height: 1.45; }
+
+/* TRUE/FALSE */
+.tf-grid { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.tf-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 24px; border-radius: 12px;
+  transition: all 0.3s ease; cursor: pointer;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+.tf-item:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.15); }
+.tf-item.revealed.tf-false { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.15); }
+.tf-item.revealed.tf-true { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.15); }
+.tf-item.revealed.tf-partial { background: rgba(210,153,34,0.06); border: 1px solid rgba(210,153,34,0.15); }
+.tf-verdict { font-size: 13px; font-weight: 900; min-width: 64px; padding-top: 2px; letter-spacing: 0.05em; }
+.tf-item:not(.revealed) .tf-verdict { visibility: hidden; }
+.tf-item:not(.revealed) .tf-verdict::after { content: '?'; visibility: visible; color: #555; font-size: 16px; }
+.tf-false .tf-verdict { color: #fca5a5; }
+.tf-true .tf-verdict { color: #6ee7b7; }
+.tf-partial .tf-verdict { color: #fde68a; }
+.tf-body .tf-claim { font-size: 16px; font-weight: 700; color: #e0e0f0; margin-bottom: 4px; }
+.tf-body .tf-why { font-size: 13px; color: #8899bb; line-height: 1.5; }
+.tf-item:not(.revealed) .tf-why { display: none; }
+
+/* ARC FLOW */
+.arc-flow {
+  display: flex; gap: 8px; align-items: center; margin: 28px 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.arc-node {
+  padding: 12px 16px; border-radius: 10px; text-align: center;
+  font-size: 13px; font-weight: 700; color: #fff; min-width: 110px;
+  transition: all 0.3s ease;
+  background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+}
+.arc-node:hover { transform: scale(1.05); }
+.arc-node.active-node { box-shadow: 0 0 20px rgba(59,130,246,0.3); background: rgba(59,130,246,0.2); border: 2px solid #3b82f6; }
+.arc-arrow { color: #333; font-size: 18px; }
+.arc-node .ad-num { font-size: 10px; opacity: 0.5; margin-bottom: 2px; }
+
+/* TABLE */
+.ref-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.ref-table th {
+  text-align: left; padding: 12px; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: #8899bb;
+  border-bottom: 1px solid rgba(59,130,246,0.15);
+}
+.ref-table td {
+  padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 14px; color: #b0b4c8; line-height: 1.4;
+}
+.ref-table td:first-child { font-weight: 700; color: #e0e0f0; white-space: nowrap; }
+.ref-table tr:hover td { background: rgba(59,130,246,0.04); }
+
+/* EVIDENCE CARDS */
+.evidence-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.evidence-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  padding: 22px; transition: all 0.3s ease; text-align: left;
+}
+.evidence-card:hover { transform: translateY(-2px); border-color: rgba(59,130,246,0.3); }
+.evidence-card .ec-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #60a5fa; margin-bottom: 8px;
+}
+.evidence-card .ec-company { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.evidence-card .ec-text { font-size: 13px; color: #8899bb; line-height: 1.5; }
+
+/* CASE STUDY */
+.case-acts { display: flex; gap: 16px; margin: 24px 0; }
+.case-act { flex: 1; border-radius: 14px; padding: 24px; transition: all 0.3s ease; text-align: left; }
+.case-act:hover { transform: translateY(-3px); }
+.case-act .ca-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.case-act .ca-text { font-size: 14px; color: #a0a8b4; line-height: 1.5; }
+.act-bet { background: rgba(88,166,255,0.06); border: 1px solid rgba(88,166,255,0.15); }
+.act-bet .ca-label { color: #58a6ff; }
+.act-crack { background: rgba(210,153,34,0.06); border: 1px solid rgba(210,153,34,0.15); }
+.act-crack .ca-label { color: #d29922; }
+.act-correct { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.15); }
+.act-correct .ca-label { color: #34d399; }
+
+/* DIAG AXES */
+.diag-axes { display: flex; gap: 20px; margin: 24px 0; }
+.diag-axis {
+  flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 28px; text-align: center;
+  transition: all 0.3s ease;
+}
+.diag-axis:hover { transform: translateY(-3px); border-color: rgba(59,130,246,0.3); }
+.diag-axis .da-num { font-size: 28px; font-weight: 900; margin-bottom: 6px; color: #60a5fa; }
+.diag-axis .da-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.diag-axis .da-q { font-size: 13px; color: #8899bb; line-height: 1.4; }
+
+/* SECTION BREAK */
+section.section-break { padding: 0; }
+section.section-break .section-break-inner {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 20%, rgba(59,130,246,0.25) 0%, rgba(59,130,246,0.08) 35%, #07162C 75%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 80px;
+  text-align: left;
+}
+.section-break-inner .lab-title {
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.16em; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.section-break-inner .lab-name { font-size: 52px; font-weight: 900; color: #fff; line-height: 1.1; max-width: 700px; font-family: 'Poppins', sans-serif; }
+.section-break-inner .lab-desc { font-size: 18px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-top: 16px; max-width: 600px; }
+
+/* COMPLETION / TAKEAWAYS */
+.takeaway-list { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 880px; }
+.takeaway-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px 22px; transition: all 0.3s; text-align: left; }
+.takeaway-item:hover { border-color: rgba(59,130,246,0.3); transform: translateX(4px); }
+.takeaway-item p { font-size: 15px; color: #b0b4c8; line-height: 1.6; }
+
+.artifact-preview {
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 14px; padding: 24px; margin: 20px auto; max-width: 700px;
+  text-align: left;
+}
+.artifact-preview .ap-title {
+  font-size: 14px; font-weight: 800; color: #60a5fa; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-bottom: 14px;
+}
+
+.bottom-cta {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(52,211,153,0.08); border-top: 1px solid rgba(52,211,153,0.25);
+  padding: 14px 32px; text-align: center;
+  font-size: 14px; font-weight: 600; color: #6ee7b7;
+}
+.bottom-cta a { color: #6ee7b7; text-decoration: underline; }
+
+/* INSTRUCTOR NOTES */
+.notes {
+  background: rgba(59,130,246,0.06); border-left: 3px solid #1241B0;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 24px 0 0;
+  text-align: left; max-width: 880px;
+}
+.notes h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #60a5fa; margin: 0 0 6px; }
+.notes p { font-size: 14px; color: #cdd5e3; line-height: 1.55; }
+
+/* SHAREABLE TAKEAWAY (replaces .notes in shareable decks) */
+.takeaway {
+  background: rgba(34,211,238,0.05); border-left: 3px solid #22d3ee;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 24px 0 0;
+  text-align: left; max-width: 880px;
+}
+.takeaway h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #22d3ee; margin: 0 0 6px; }
+.takeaway p { font-size: 14px; color: #cdd5e3; line-height: 1.55; }
+
+/* Repo CTA inline */
+.repo-cta { font-size: 14px; color: #6ee7b7; margin-top: 14px; text-align: center; }
+.repo-cta strong { color: #6ee7b7; }
+.repo-cta code { color: #6ee7b7; }
+
+/* Tool button */
+.tool-btn {
+  display: inline-block; background: #1241B0; color: #fff; text-decoration: none;
+  font-size: 14px; font-weight: 800; padding: 10px 22px; border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(18,65,176,0.35); margin-top: 14px;
+  transition: transform .2s, box-shadow .2s;
+}
+.tool-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(18,65,176,0.5); }
+
+/* Help hint, skip badge, sorter */
+.help-hint {
+  position: fixed; bottom: 14px; right: 18px;
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  font-family: 'IBM Plex Mono', monospace; z-index: 90;
+}
+.skip-badge {
+  position: fixed; bottom: 14px; left: 18px;
+  background: rgba(248,113,113,0.2); color: #fca5a5;
+  border: 1px solid rgba(248,113,113,0.3);
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; z-index: 90;
+}
+.skip-badge.visible { opacity: 1; pointer-events: auto; }
+.slide-sorter {
+  position: fixed; inset: 0; background: rgba(7,22,44,0.95);
+  z-index: 200; padding: 60px; overflow-y: auto;
+  display: none; flex-direction: column;
+}
+.slide-sorter.visible { display: flex; }
+.sorter-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+.sorter-title { font-size: 28px; font-weight: 800; color: #fff; font-family: 'Poppins', sans-serif; }
+.sorter-subtitle { font-size: 14px; color: #8899bb; margin-top: 4px; }
+.sorter-close { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.sorter-close:hover { background: rgba(255,255,255,0.05); }
+.sorter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.sorter-item {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s ease;
+}
+.sorter-item:hover { border-color: #3b82f6; transform: translateY(-2px); }
+.sorter-item.sorter-active { border-color: #3b82f6; background: rgba(59,130,246,0.1); }
+.sorter-item.sorter-skipped { opacity: 0.4; }
+.sorter-num { font-size: 11px; font-weight: 800; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.1em; }
+.sorter-label { font-size: 14px; color: #fff; margin: 4px 0 8px; font-weight: 600; }
+.sorter-skip-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; border: 0; }
+.sorter-skip-btn.skip-on { background: rgba(248,113,113,0.2); color: #fca5a5; }
+.sorter-skip-btn.skip-off { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+
+@media (max-width: 768px) {
+  section { padding: 40px 24px; }
+  h1 { font-size: 36px; }
+  h2 { font-size: 28px; }
+  .hero h1 { font-size: 40px; }
+  .case-acts, .diag-axes { flex-direction: column; }
+  .cards-grid, .evidence-cards, .expect-grid { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="progress" id="p"></div>
-<div class="dots" id="d"></div>
-<main id="m">
 
-<section>
-  <div class="eyebrow">Module 6 · Individual format</div>
-  <h1>Measure AI Quality with Evals and Guardrails</h1>
-  <p class="muted">95% accuracy is a 5% production disaster waiting to happen.</p>
-  <p>End state: Juno's eval stack + human rubric + finalised <code>juno-pm/README.md</code>.</p>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots"></nav>
+
+<section class="hero" data-title="Measure AI Quality with Evals & Guardrails">
+  <div class="hero-logo"><img src="../Design/Minimalist shield with glowing _P_.png" alt="Product School logo"/></div>
+  <div class="section-label">Module 6 &mdash; AI Product Management Certification</div>
+  <h1>Measure AI Quality with <span>Evals & Guardrails</span></h1>
+  <p class="subtitle">95% accuracy is a 5% production disaster waiting to happen.</p>
+  <div class="waypoints" style="max-width:640px;">
+  <div class="waypoint"><div class="waypoint-num">1</div><div class="waypoint-text"><div class="wt-title">Stack</div><div class="wt-desc">Three eval layers — always all three.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">2</div><div class="waypoint-text"><div class="wt-title">Rubric</div><div class="wt-desc">Human eval rubric · anchors · disagreement protocol.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">3</div><div class="waypoint-text"><div class="wt-title">Ship</div><div class="wt-desc">PM Execution Plan — your README is the pitch.</div></div></div>
+  </div>
+  <p style="font-size:15px; color:#8899bb; margin-top:8px;">Out: folder 06-evals/ · eval-stack.md · human-rubric.md · finalised README.md.</p>
+  <div class="scroll-hint">Scroll to explore<span>&#8595;</span></div>
+<div class="takeaway"><h4>Takeaway</h4><p>By the end you have evals + the finalised README of your fork.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Why Vibe Checks Fail</div>
-  <h2>"It looks good in five prompts" is a trap</h2>
-  <ul>
-    <li>A handful of successful prompts is not a quality bar.</li>
-    <li>Production traffic exposes long-tail inputs.</li>
-    <li>Models drift; prompts decay; corpora go stale.</li>
-    <li>Without a harness, you can't tell whether a change improved things.</li>
-  </ul>
+
+<section class="centered" data-title="How This Module Runs">
+  <div class="inner">
+    <div class="section-label">Ground Rules</div>
+    <h2>How This Module Runs</h2>
+    <div class="expect-grid">
+      <div class="expect-card"><div class="expect-icon">⏱</div><div class="expect-title">~2 hours, async-friendly</div><div class="expect-desc">Self-paced. Each module builds one repo artifact.</div></div>
+      <div class="expect-card"><div class="expect-icon">👤</div><div class="expect-title">100% individual</div><div class="expect-desc">No groups. No partner work. You own every deliverable.</div></div>
+      <div class="expect-card"><div class="expect-icon">🛠</div><div class="expect-title">Open the tool</div><div class="expect-desc">Each exercise points at a single-file HTML tool you fill in.</div></div>
+      <div class="expect-card"><div class="expect-icon">✅</div><div class="expect-title">Self-review</div><div class="expect-desc">Each tool ships with a 4–6 item checklist. Do it before you commit.</div></div>
+      <div class="expect-card"><div class="expect-icon">🤖</div><div class="expect-title">AI-review</div><div class="expect-desc">Paste your artifact + the verbatim prompt into ChatGPT or Claude.</div></div>
+      <div class="expect-card"><div class="expect-icon">📂</div><div class="expect-title">Async share</div><div class="expect-desc">Commit to your <code>juno-pm/</code> fork. Optional Loom in <code>#ai-pm-cohort</code>.</div></div>
+    </div>
+  </div>
 </section>
 
-<section>
-  <div class="eyebrow">The 95% Accuracy Trap</div>
-  <h2>The last 5% is where production risk lives</h2>
-  <p>1,000 P0 thread triages/day × 5% wrong = 50 wrong outputs/day. Some silently wrong.</p>
-  <p><strong>Eval design is the product surface that decides whether you can ship.</strong></p>
+
+<section class="centered" data-title="Course Arc">
+  <div class="inner">
+    <div class="section-label">The Course Arc</div>
+    <h2>Six Modules. One Living Copilot.</h2>
+    <div class="arc-flow"><div class="arc-node"><div class="ad-num">M1</div>Prompting</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M2</div>Strategy</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M3</div>RAG / PRD</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M4</div>AI-UX</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M5</div>Agentic</div><div class="arc-arrow">→</div><div class="arc-node active-node"><div class="ad-num">M6</div>Evals</div></div>
+    <div class="artifact-preview" style="max-width:680px; margin:20px auto;">
+      <div class="ap-title">Your Throughline — Juno PM, in a Repo You Build Across 6 Modules</div>
+      <p style="font-size:15px; color:#8899bb; line-height:1.5;">Not a deck. Not a Notion page. A <strong>GitHub repo</strong> — version-controlled, shareable, alive. One folder per module, one artifact each. <strong>Today &rarr; folder <code>06-evals/</code>.</strong></p>
+    </div>
+  </div>
 </section>
 
-<section>
-  <div class="eyebrow">The AI Evals Stack</div>
-  <h2>Three layers — always all three</h2>
-  <table>
-    <tr><th>Layer</th><th>Volume</th><th>Fidelity</th><th>What it tells you</th></tr>
-    <tr><td>User feedback</td><td>Highest</td><td>Lowest</td><td>What users do</td></tr>
-    <tr><td>Human evaluation</td><td>Mid</td><td>High</td><td>What graders think</td></tr>
-    <tr><td>Automated evals</td><td>Highest</td><td>Mid</td><td>What an LLM-judge or regression suite measures</td></tr>
-  </table>
+
+<section data-title="Recall">
+  <div class="inner">
+    <div class="demo-tag tag-recall">Recall from Module 5</div>
+    <h2>What You Brought Today</h2>
+    <div class="waypoints">
+      <div class="waypoint"><div class="waypoint-num" style="background:#059669;">✓</div><div class="waypoint-text"><div class="wt-title">05-agentic-workflows/awspec.md</div><div class="wt-desc">Nine-section spec · the rules of engagement</div></div></div>
+      <div class="waypoint"><div class="waypoint-num" style="background:#059669;">✓</div><div class="waypoint-text"><div class="wt-title">05-agentic-workflows/agent-control-panel.md</div><div class="wt-desc">Five levers · minimum-viable rules</div></div></div>
+      <div class="waypoint"><div class="waypoint-num" style="background:#059669;">✓</div><div class="waypoint-text"><div class="wt-title">Eval hooks (in AWSpec)</div><div class="wt-desc">What gets logged — M6's input</div></div></div>
+    </div>
+    <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.15); border-radius:10px; padding:16px; margin-top:16px; text-align:center;">
+      <p style="font-size:15px; font-weight:700; color:#fca5a5;">Five components built. M6 makes the whole stack shippable.</p>
+    </div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Five components. M6 ships them.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Human Eval Rubric</div>
-  <h2>Five components</h2>
-  <ol>
-    <li>Dimensions (accuracy, tone, completeness, safety, citation correctness)</li>
-    <li>Scale (1–5 or pass/fail) with anchor descriptions</li>
-    <li>Examples — one per scale point</li>
-    <li>Disagreement protocol</li>
-    <li>Sampling cadence</li>
-  </ol>
-  <p class="takeaway"><strong>Tool:</strong> M6 - Human Evaluation Rubric.html — spec dimensions, anchors, cadence; export.</p>
+
+<section data-title="Provocation">
+  <div class="inner">
+    <div class="demo-tag tag-provocation">Provocation</div>
+    <h2>Vibe checks fail in production.<br>The 95% pass rate is a 5% liability surface.</h2>
+    <div class="subtitle">Vote, then unpack.</div>
+    <div class="tf-grid">
+      <div class="tf-item tf-true"><div class="tf-verdict">TRUE</div><div class="tf-body"><div class="tf-claim">"Most teams ship one eval layer. Two if mature."</div><div class="tf-why">Three is what shippable AI products do. <em>Google Assistant</em> samples ~50 utterances/week per intent across 4 dimensions.</div></div></div>
+      <div class="tf-item tf-true"><div class="tf-verdict">TRUE</div><div class="tf-body"><div class="tf-claim">"PMs own the eval bar — not QA."</div><div class="tf-why">If you delegate evals to QA, you've outsourced the product surface. Engineers run them. PMs own the bar.</div></div></div>
+      <div class="tf-item tf-false"><div class="tf-verdict">FALSE</div><div class="tf-body"><div class="tf-claim">"95% accuracy means it's safe to ship."</div><div class="tf-why">Do the math: 1,000 calls/day × 5% = 50 wrong outputs/day. Some silently. One high-stakes wrong outweighs the other 950.</div></div></div>
+    </div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>The eval stack is what makes the 5% liability bounded.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">PM's Role in Evaluations</div>
-  <h2>Eval is product surface</h2>
-  <ul>
-    <li>PM owns the rubric and the golden set</li>
-    <li>PM defines the pass bar</li>
-    <li>PM decides the regression cadence</li>
-    <li>PM acts on eval data — model / data / architecture</li>
-  </ul>
+
+<section data-title="AI Evals Stack">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>AI Evals Stack</h2>
+    <div class="subtitle">You need all three. They answer different questions.</div>
+    <table class="ref-table">
+      <thead><tr><th>Layer</th><th>Volume</th><th>Fidelity</th><th>What it tells you</th></tr></thead>
+      <tbody>
+<tr><td>User feedback</td><td>Highest</td><td>Lowest</td><td>What users do (thumbs · regen · abandon)</td></tr>
+<tr><td>Human evaluation</td><td>Mid</td><td>High</td><td>What graders think (rubric scores)</td></tr>
+<tr><td>Automated evals</td><td>Highest</td><td>Mid</td><td>What an LLM-judge or regression suite measures</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;"><em>Real-world:</em> Google Assistant samples ~50 utterances/week per intent across 4 dimensions.</p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Three layers. Always all three. They answer different questions.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Individual Exercise · 25 min</div>
-  <h2>Plan Juno's Eval Stack</h2>
-  <ol>
-    <li>Open <code>M6 - Eval Stack Designer.html</code>.</li>
-    <li>Plan all three layers.</li>
-    <li>For each: volume, cadence, pass bar, who acts on it.</li>
-    <li>Copy → <code>06-evals/eval-stack.md</code>. Self-review, AI-review, commit.</li>
-  </ol>
+
+<section data-title="Build a Human Eval Rubric">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>Build a Human Eval Rubric</h2>
+    <div class="subtitle">A contract between the PM and the graders.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">①</div><div class="card-title">Dimensions</div><div class="card-desc">Accuracy · tone · completeness · safety · citation correctness.</div></div>
+      <div class="card-item"><div class="card-icon">②</div><div class="card-title">Scale</div><div class="card-desc">1–5 or pass/fail — with anchor descriptions per scale point.</div></div>
+      <div class="card-item"><div class="card-icon">③</div><div class="card-title">Examples</div><div class="card-desc">One example per scale point. Non-negotiable.</div></div>
+      <div class="card-item"><div class="card-icon">④</div><div class="card-title">Disagreement</div><div class="card-desc">Protocol for when graders disagree.</div></div>
+      <div class="card-item"><div class="card-icon">⑤</div><div class="card-title">Cadence</div><div class="card-desc">How often, how many. Weekly · ~50/intent · etc.</div></div>
+    </div>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Anchors per scale point are the difference between a rubric and a vibe check.</p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Anchors + disagreement protocol or it's a vibe check.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Three Levers to Optimize</div>
-  <h2>Try in this order</h2>
-  <table>
-    <tr><th>Lever</th><th>What</th><th>Cost</th></tr>
-    <tr><td>Model</td><td>Swap, upgrade, fine-tune</td><td>Low → high</td></tr>
-    <tr><td>Data</td><td>Improve corpus, clean inputs, expand context</td><td>Mid</td></tr>
-    <tr><td>Architecture</td><td>Add RAG, decompose, add guardrails</td><td>High</td></tr>
-  </table>
-  <p>Try model and data before architecture.</p>
+
+<section data-title="Human Evaluation Rubric">
+  <div class="lab-timer">⏰ 12 min</div>
+  <div class="inner">
+    <div class="demo-tag tag-exercise">Applied Work</div>
+    <h2>Human Evaluation Rubric</h2>
+    <div class="subtitle">Spec 3–5 dimensions · anchors per scale point · disagreement protocol · sampling cadence.</div>
+    <ol style="text-align:left; max-width:720px; margin:0 auto;">
+      <li>Open <code>M6 - Human Evaluation Rubric.html</code>.</li>
+      <li>Spec 3–5 dimensions for Juno's risk lists.</li>
+      <li>Write anchor descriptions for each scale point.</li>
+      <li>Pick a sampling cadence + disagreement protocol.</li>
+      <li>Copy as markdown &rarr; <code>06-evals/human-rubric.md</code>.</li>
+    </ol>
+    <div style="text-align:center; margin-top:18px;">
+      <a class="tool-btn" href="M6 - Human Evaluation Rubric.html" target="_blank" rel="noopener">Open the tool ↗</a>
+      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Build the rubric · anchors required · disagreement protocol · markdown export.</div>
+    </div>
+
+    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>06-evals/human-rubric.md</code></p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Anchors per scale. Otherwise graders drift.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Governance Framework</div>
-  <h2>Four buckets to operationalise</h2>
-  <ul>
-    <li>Compliance — GDPR, EU AI Act</li>
-    <li>Safety — content, prompt injection, misuse</li>
-    <li>Reliability — uptime, fallback, graceful degradation</li>
-    <li>Reputation — public failure scenarios + playbook</li>
-  </ul>
+
+<section class="section-break" data-title="Plan Juno's Eval Stack">
+  <div class="section-break-inner">
+    <div class="lab-title">Hands-On Lab · 25 min · Final-Project Deliverable</div>
+    <div class="lab-name">Plan Juno's Eval Stack</div>
+    <div class="lab-desc">Three layers. For each: signals · cadence · pass bar · who acts on it.</div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Final-project deliverable.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Individual Exercise · 20 min</div>
-  <h2>Finalise Your Project Deliverables</h2>
-  <ol>
-    <li>Open <code>M6 - Final Project Deliverables Builder.html</code>.</li>
-    <li>The tool pulls together: prompt, strategy, RAG/PRD, UX flow + trust gaps, AWSpec, eval stack.</li>
-    <li>Add Build Insights: 1 friction / 1 learning / 1 aha.</li>
-    <li>Copy → top-level <code>README.md</code> of your <code>juno-pm/</code> fork. Commit.</li>
-  </ol>
+
+<section data-title="Eval Stack Designer">
+  <div class="lab-timer">⏰ 25 min</div>
+  <div class="inner">
+    <div class="demo-tag tag-exercise">Applied Work</div>
+    <h2>Eval Stack Designer</h2>
+    <div class="subtitle">Plan all three layers — user feedback · human · automated.</div>
+    <ol style="text-align:left; max-width:720px; margin:0 auto;">
+      <li>Open <code>M6 - Eval Stack Designer.html</code>.</li>
+      <li>Plan all three layers: user feedback · human eval · automated.</li>
+      <li>For each: signals · cadence · pass bar · who acts on it.</li>
+      <li>Copy as markdown &rarr; <code>06-evals/eval-stack.md</code>.</li>
+      <li>Self-review · AI-review · commit · share.</li>
+    </ol>
+    <div style="text-align:center; margin-top:18px;">
+      <a class="tool-btn" href="M6 - Eval Stack Designer.html" target="_blank" rel="noopener">Open the tool ↗</a>
+      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Plan three eval layers · self + AI review · markdown export.</div>
+    </div>
+
+    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>06-evals/eval-stack.md</code></p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Automated layer is required. Even a 10-prompt regression counts.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">PM Execution Plan</div>
-  <h2>The closing artifact</h2>
-  <p>Your finalised <code>juno-pm/README.md</code>:</p>
-  <ul>
-    <li>Where Juno is today (eval scores, gaps)</li>
-    <li>What you ship next (next 2 sprints)</li>
-    <li>What you watch (dashboard + cadence)</li>
-    <li>What blocks shipping (red lines)</li>
-  </ul>
+
+<section class="centered" data-title="Break">
+  <div class="inner">
+    <div class="demo-tag tag-break">Take a Beat</div>
+    <h1 style="font-size:64px; color:#333; margin-top:40px;">☕</h1>
+    <div class="subtitle" style="margin:16px auto;">Pause. Stretch. Refill. Back in five.</div>
+  </div>
 </section>
 
-<section>
-  <div class="eyebrow">Async Showcase · individual</div>
-  <h2>Demo Your Juno Copilot</h2>
-  <ol>
-    <li>Record a 3-min Loom of your <code>juno-pm/</code> repo.</li>
-    <li>Hit: bet, system prompt, user flow, AWSpec, eval stack.</li>
-    <li>Post URL + Loom in <code>#ai-pm-cohort</code>.</li>
-    <li>Instructor responds in-thread within ~5 days.</li>
-  </ol>
-  <p class="muted">Optional. Not required for certification.</p>
+
+<section data-title="Three Optimisation Levers">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>Three Optimisation Levers</h2>
+    <div class="subtitle">When eval scores miss the bar — model · data · architecture. In that order.</div>
+    <table class="ref-table">
+      <thead><tr><th>Lever</th><th>Try first</th><th>Cost</th></tr></thead>
+      <tbody>
+<tr><td><strong>Model</strong></td><td>Swap · upgrade · fine-tune</td><td>Low (swap) → high (fine-tune)</td></tr>
+<tr><td><strong>Data</strong></td><td>Improve corpus · clean inputs · expand context</td><td>Mid — your time + ops</td></tr>
+<tr><td><strong>Architecture</strong></td><td>Add RAG · decompose agents · add guardrails</td><td>High — engineering time</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Most teams reach for architecture first. It's the slowest and most expensive.</p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Try model and data before architecture.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Certification</div>
-  <h2>What you submit, and how it's graded</h2>
-  <ul>
-    <li>Submit: your <code>juno-pm/</code> repo URL</li>
-    <li>Window: within 7 days of cohort end</li>
-    <li>Graded on: Application of Concepts, Credibility & Reasoning, Clarity, Strategic Thinking</li>
-    <li>Scale: 1 — Poor / 2 — Sufficient / 3 — Excellent</li>
-  </ul>
+
+<section data-title="Operationalise Risk — Four Buckets">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>Operationalise Risk — Four Buckets</h2>
+    <div class="subtitle">Each bucket gets a row in your PM Execution Plan.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">⚖️</div><div class="card-title">Compliance</div><div class="card-desc">Regulatory (GDPR · EU AI Act).</div></div>
+      <div class="card-item"><div class="card-icon">🛑</div><div class="card-title">Safety</div><div class="card-desc">Content · prompt injection · misuse.</div></div>
+      <div class="card-item"><div class="card-icon">🔁</div><div class="card-title">Reliability</div><div class="card-desc">Uptime · fallback paths · graceful degradation.</div></div>
+      <div class="card-item"><div class="card-icon">📣</div><div class="card-title">Reputation</div><div class="card-desc">Public failure scenarios + response playbook.</div></div>
+    </div>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Same framework as M2. Difference: now you operationalise it with metrics + owners.</p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>M2 buckets — now with metrics and owners.</p></div>
 </section>
 
-<section>
-  <div class="eyebrow">Key takeaways</div>
-  <h2>What you carry into Monday</h2>
-  <ol>
-    <li>Vibe checks fail in production.</li>
-    <li>Three-layer eval stack — always all three.</li>
-    <li>Rubric needs anchors + disagreement protocol.</li>
-    <li>Eval score miss → model → data → architecture.</li>
-    <li>Eval is product surface. PM owns the bar.</li>
-    <li>Your README is the pitch.</li>
-  </ol>
+
+<section class="section-break" data-title="Finalise Your Project README">
+  <div class="section-break-inner">
+    <div class="lab-title">Hands-On Lab · 20 min · The Final Artifact</div>
+    <div class="lab-name">Finalise Your Project README</div>
+    <div class="lab-desc">Pull every artifact together. Your README is the pitch.</div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Your README is the pitch. The repo is the certificate.</p></div>
 </section>
 
-</main>
+
+<section data-title="Final Project Deliverables Builder">
+  <div class="lab-timer">⏰ 20 min</div>
+  <div class="inner">
+    <div class="demo-tag tag-exercise">Applied Work</div>
+    <h2>Final Project Deliverables Builder</h2>
+    <div class="subtitle">One structured page · every M1–M6 artifact · Build Insights reflection.</div>
+    <ol style="text-align:left; max-width:720px; margin:0 auto;">
+      <li>Open <code>Final Project Deliverables Builder.html</code>.</li>
+      <li>The tool pulls together: system prompt · strategy one-pager · AI PRD · user flow + trust gaps · AWSpec · eval stack.</li>
+      <li>Add your <strong>Build Insights</strong> reflection: 1 friction · 1 learning · 1 aha.</li>
+      <li>Copy as markdown &rarr; top-level <code>README.md</code> of your <code>juno-pm/</code> fork.</li>
+      <li>Commit. Push. Done.</li>
+    </ol>
+    <div style="text-align:center; margin-top:18px;">
+      <a class="tool-btn" href="Final Project Deliverables Builder.html" target="_blank" rel="noopener">Open the tool ↗</a>
+      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Pulls every M1–M6 artifact into one README · Build Insights · optional Loom.</div>
+    </div>
+
+    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>README.md (top-level of your juno-pm/ fork)</code></p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>The README is the pitch. The repo is the certificate.</p></div>
+</section>
+
+
+<section data-title="Certification — What You Submit">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>Certification — What You Submit</h2>
+    <div class="subtitle">Submit: the URL of your finalised <code>juno-pm/</code> fork. Window: 7 days post-cohort.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">📋</div><div class="card-title">Application of Concepts</div><div class="card-desc">How well M1–M6 frameworks land in your artifacts.</div></div>
+      <div class="card-item"><div class="card-icon">🧠</div><div class="card-title">Credibility & Reasoning</div><div class="card-desc">Whether your decisions hold up to scrutiny.</div></div>
+      <div class="card-item"><div class="card-icon">✏️</div><div class="card-title">Clarity</div><div class="card-desc">Whether a stranger could read your README and "get" Juno.</div></div>
+      <div class="card-item"><div class="card-icon">🎯</div><div class="card-title">Strategic Thinking</div><div class="card-desc">Whether the bet, the bar, and the trade-offs are coherent.</div></div>
+    </div>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Scale: 1 — Poor (0–49) · 2 — Sufficient (50–79) · 3 — Excellent (80–100). No live demo required.</p>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Repo URL = submission. Within 7 days. Four rubric dimensions.</p></div>
+</section>
+
+
+<section class="centered" data-title="Synthesis">
+  <div class="inner">
+    <div class="section-label">Synthesis</div>
+    <h2>Your Repo After Today</h2>
+    <p class="subtitle">6 of 6 components committed.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:24px 0;">
+      <div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">01-prompting/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">02-strategy/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">03-rag-prd/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">04-ai-ux/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">05-agentic-workflows/ ✓</div></div><div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); border-radius:10px; padding:18px 22px; min-width:220px; text-align:left;"><div style="font-size:13px; font-weight:800; color:#34d399; margin-bottom:6px;">06-evals/ ✓</div><div style="font-size:12px; color:#d8def0;">eval-stack.md</div><div style="font-size:12px; color:#7a7a9a; margin-top:2px;">Three layers · cadence · pass bar · owner per layer</div><div style="font-size:12px; color:#d8def0;">human-rubric.md</div><div style="font-size:12px; color:#7a7a9a; margin-top:2px;">Dimensions · anchors · disagreement protocol</div><div style="font-size:12px; color:#d8def0;">README.md (root)</div><div style="font-size:12px; color:#7a7a9a; margin-top:2px;">PM Execution Plan · finalised pitch</div></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:820px; margin:0 auto;">
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;"><div style="font-size:12px; font-weight:800; color:#6ee7b7; margin-bottom:6px;">eval-stack.md</div><div style="font-size:12px; color:#8899bb; line-height:1.45;">Three layers · cadence · pass bar · owner per layer</div></div><div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;"><div style="font-size:12px; font-weight:800; color:#6ee7b7; margin-bottom:6px;">human-rubric.md</div><div style="font-size:12px; color:#8899bb; line-height:1.45;">Dimensions · anchors · disagreement protocol</div></div><div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;"><div style="font-size:12px; font-weight:800; color:#6ee7b7; margin-bottom:6px;">README.md (root)</div><div style="font-size:12px; color:#8899bb; line-height:1.45;">PM Execution Plan · finalised pitch</div></div>
+    </div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Six down. The repo is the certificate.</p></div>
+</section>
+
+
+<section data-title="Takeaways">
+  <div class="inner">
+    <div class="section-label">Key Takeaways</div>
+    <h2>Measure AI Quality with Evals & Guardrails</h2>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><p><strong>Vibe checks fail in production.</strong> A handful of successful prompts is not a quality bar.</p></div>
+      <div class="takeaway-item"><p><strong>AI Evals Stack: three layers, always all three.</strong> User feedback · human eval · automated. They answer different questions.</p></div>
+      <div class="takeaway-item"><p><strong>Human eval needs anchors.</strong> Without anchor descriptions per scale point, graders drift. Disagreement protocol non-negotiable.</p></div>
+      <div class="takeaway-item"><p><strong>Optimise model → data → architecture.</strong> Most teams architecture-first. It's the slowest, most expensive lever.</p></div>
+      <div class="takeaway-item"><p><strong>Eval is product surface. PMs own the bar.</strong> Engineers can run evals. Only PMs can decide what's good enough to ship.</p></div>
+      <div class="takeaway-item"><p><strong>Your README is the pitch.</strong> Not a deck. Not a doc. The front page of a repo you're proud to submit.</p></div>
+    </div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Six takeaways. The repo is the artifact you keep forever.</p></div>
+</section>
+
+
+<section data-title="Extra Practice">
+  <div class="inner">
+    <div class="section-label">Extra Practice</div>
+    <h2>Optional: Go Deeper</h2>
+    <div class="evidence-cards" style="margin:24px 0;">
+      <div class="evidence-card"><div class="ec-label">Practice 1</div><div class="ec-company">Optional Async Showcase</div><div class="ec-text">Record a 3-min Loom of your <code>juno-pm/</code> walkthrough — bet · system prompt · user flow · AWSpec · eval stack. Post in <code>#ai-pm-cohort</code> with the repo URL. Instructor responds in-thread within ~5 days.</div></div>
+      <div class="evidence-card"><div class="ec-label">Practice 2</div><div class="ec-company">Re-Run M6 Reviews on Your Next Bet</div><div class="ec-text">The eval-stack template + human-rubric template are reusable forever. Re-run them on the next AI bet on your roadmap.</div></div>
+    </div>
+    <div class="artifact-preview">
+      <div class="ap-title">Next: After the cohort: submit your repo within 7 days for certification.</div>
+    </div>
+  </div>
+<div class="takeaway"><h4>Takeaway</h4><p>Course toolkit is reusable forever. Re-run on every future bet.</p></div>
+</section>
+
+
+<section class="centered" data-title="Q&A">
+  <div class="inner">
+    <h1 style="font-size:64px; color:#60a5fa; margin-bottom:24px;">Q&amp;A</h1>
+    <p style="font-size:20px; color:#8899bb;">Park anything we can't unblock here in <code>#ai-pm-cohort</code>.</p>
+    <p style="font-size:14px; color:#555; margin-top:20px;">Instructor responds in-thread within ~5 days.</p>
+  </div>
+</section>
+
+
+<div class="help-hint">↑ ↓ navigate · K skip section · M section sorter</div>
+<div class="skip-badge" id="skip-badge" title="Click to unskip (K)">SKIPPED</div>
+<div class="slide-sorter" id="slide-sorter">
+  <div class="sorter-header">
+    <div><div class="sorter-title">Section Sorter</div><div class="sorter-subtitle">Click a section to jump · Toggle skip to hide during presentation</div></div>
+    <button class="sorter-close" onclick="closeSorter()" title="Close (M / Esc)">✕</button>
+  </div>
+  <div class="sorter-grid" id="sorter-grid"></div>
+</div>
+
 <script>
-  const m=document.getElementById('m'),p=document.getElementById('p'),d=document.getElementById('d');
-  const sections=[...document.querySelectorAll('section')];
-  sections.forEach((_,i)=>{const x=document.createElement('div');x.className='dot';x.onclick=()=>sections[i].scrollIntoView({behavior:'smooth'});d.appendChild(x)});
-  const dots=[...d.children];
-  const update=()=>{const t=m.scrollTop,h=m.scrollHeight-m.clientHeight;p.style.width=(t/Math.max(1,h)*100)+'%';const i=Math.round(t/m.clientHeight);dots.forEach((x,j)=>x.classList.toggle('on',i===j))};
-  m.addEventListener('scroll',update);update();
-  document.addEventListener('keydown',e=>{const cur=Math.round(m.scrollTop/m.clientHeight);if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();sections[Math.min(sections.length-1,cur+1)].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();sections[Math.max(0,cur-1)].scrollIntoView({behavior:'smooth'})}});
+const sections = Array.from(document.querySelectorAll('section'));
+const navDotsContainer = document.getElementById('navDots');
+let currentIdx = 0;
+let sorterVisible = false;
+
+const STORAGE_KEY = 'skip-sections-' + document.title.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 60);
+const skippedSections = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+
+function saveSkips() { localStorage.setItem(STORAGE_KEY, JSON.stringify([...skippedSections])); }
+
+function applySkips() {
+  sections.forEach((sec, i) => sec.classList.toggle('skipped', skippedSections.has(i)));
+  rebuildDots();
+}
+
+function rebuildDots() {
+  navDotsContainer.innerHTML = '';
+  sections.forEach((sec, i) => {
+    if (skippedSections.has(i)) return;
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    const title = sec.dataset.title || 'Section';
+    dot.innerHTML = `<span class="tooltip">${title}</span>`;
+    dot.dataset.idx = i;
+    dot.onclick = () => sections[i].scrollIntoView({ behavior: 'smooth' });
+    navDotsContainer.appendChild(dot);
+  });
+}
+
+function getActiveSections() { return sections.map((s, i) => i).filter(i => !skippedSections.has(i)); }
+
+function updateProgress(idx) {
+  currentIdx = idx;
+  const active = getActiveSections();
+  const posInActive = active.indexOf(idx);
+  const progress = posInActive >= 0 ? (posInActive + 1) / active.length * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+  const dots = navDotsContainer.querySelectorAll('.nav-dot');
+  dots.forEach(d => d.classList.toggle('active', parseInt(d.dataset.idx) === idx));
+  document.getElementById('skip-badge').classList.toggle('visible', skippedSections.has(idx));
+}
+
+function toggleSkip(idx) {
+  if (skippedSections.has(idx)) skippedSections.delete(idx);
+  else skippedSections.add(idx);
+  saveSkips();
+  applySkips();
+  updateProgress(currentIdx);
+  if (sorterVisible) renderSorter();
+}
+
+function nextActive(from, dir) {
+  let i = from + dir;
+  while (i >= 0 && i < sections.length) {
+    if (!skippedSections.has(i)) return i;
+    i += dir;
+  }
+  return -1;
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const idx = sections.indexOf(entry.target);
+      updateProgress(idx);
+    }
+  });
+}, { threshold: 0.35 });
+sections.forEach(sec => observer.observe(sec));
+
+function renderSorter() {
+  const grid = document.getElementById('sorter-grid');
+  grid.innerHTML = '';
+  sections.forEach((sec, i) => {
+    const isSkipped = skippedSections.has(i);
+    const isCurrent = i === currentIdx;
+    const div = document.createElement('div');
+    div.className = 'sorter-item' + (isSkipped ? ' sorter-skipped' : '') + (isCurrent ? ' sorter-active' : '');
+    const title = sec.dataset.title || 'Section';
+    div.innerHTML = `
+      <div class="sorter-num">Section ${i + 1}</div>
+      <div class="sorter-label">${title}</div>
+      <button class="sorter-skip-btn ${isSkipped ? 'skip-on' : 'skip-off'}"
+              onclick="event.stopPropagation(); toggleSkip(${i})">
+        ${isSkipped ? '↩ Unskip' : '⊘ Skip'}
+      </button>`;
+    div.addEventListener('click', () => { sections[i].scrollIntoView({ behavior: 'smooth' }); closeSorter(); });
+    grid.appendChild(div);
+  });
+}
+function openSorter() { sorterVisible = true; renderSorter(); document.getElementById('slide-sorter').classList.add('visible'); }
+function closeSorter() { sorterVisible = false; document.getElementById('slide-sorter').classList.remove('visible'); }
+
+document.getElementById('skip-badge').addEventListener('click', () => toggleSkip(currentIdx));
+
+document.addEventListener('keydown', (e) => {
+  if (sorterVisible) {
+    if (e.key === 'Escape' || e.key === 'm' || e.key === 'M') { e.preventDefault(); closeSorter(); }
+    return;
+  }
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    const n = nextActive(currentIdx, 1);
+    if (n >= 0) sections[n].scrollIntoView({ behavior: 'smooth' });
+  }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const n = nextActive(currentIdx, -1);
+    if (n >= 0) sections[n].scrollIntoView({ behavior: 'smooth' });
+  }
+  else if (e.key === 'k' || e.key === 'K') { toggleSkip(currentIdx); }
+  else if (e.key === 'm' || e.key === 'M') { openSorter(); }
+});
+
+applySkips();
+sections[0].classList.add('visible');
+document.querySelectorAll('.tf-item').forEach(item => {
+  item.addEventListener('click', () => item.classList.toggle('revealed'));
+});
 </script>
 </body>
 </html>

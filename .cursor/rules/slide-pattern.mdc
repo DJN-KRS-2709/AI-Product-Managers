@@ -1,5 +1,5 @@
 ---
-description: HTML slide deck pattern — scroll-snap, dark theme, progress bar, nav dots, keyboard controls.
+description: HTML slide deck pattern for Module decks, Course Overview, Pitch Deck. Dark navy + Product School branding with rich design components.
 globs:
   - "**/*.html"
 alwaysApply: false
@@ -7,57 +7,114 @@ alwaysApply: false
 
 # HTML slide deck pattern
 
-All slide decks (`Module {N} - Slides.html`, root deck pages, pitch deck) follow this pattern.
+All slide decks (`Module {N} - Slides.html`, `Module {N} - Slides (Shareable).html`, `Course Overview`, `Pitch Deck`) follow this pattern, mirroring the AI Product Strategy reference deck so the two certifications read as a paired family.
 
-## Visual style
+## Brand identity
 
-- Dark theme. CSS variables on `:root`:
-  - `--bg: #0b0d12`
-  - `--fg: #f6f7fb`
-  - `--muted: #9aa3b2`
-  - `--accent: #7c8cff` (indigo — section headings, links, focus)
-  - `--accent2: #22d3ee` (cyan — eyebrows, tags, table headers)
-  - `--card: #11141c`
-  - `--line: #1b1f29`
-- Typography: system font stack. Headings are bold, large, tight line-height.
-- Use `clamp()` for responsive font sizes.
+- **Background:** `#07162C` (deep navy)
+- **Fonts:** `Poppins` 300–900 for headings + `Lato` 300/400/700 for body + `IBM Plex Mono` 400/500/600 for code.
+- **Logo:** `Design/Minimalist shield with glowing _P_.png` placed at top of hero.
+- **Branding line:** `Module {N} — AI Product Management Certification` in the section label.
+
+## CSS variables (use exact values)
+
+| Role | Hex |
+|---|---|
+| Primary blue | `#3b82f6` |
+| Deep blue | `#1241B0` |
+| Light blue | `#60a5fa` |
+| Body text | `#b0b4c8` |
+| Muted | `#8899bb` |
+| Heading | `#fff` |
+| Body bg | `#07162C` |
+| Card bg | `rgba(255,255,255,0.04)` |
+| Card border | `rgba(255,255,255,0.08)` |
+| Code | `#60a5fa` on `rgba(18,65,176,0.15)` |
+
+Tag accents:
+
+| Tag | Color |
+|---|---|
+| `tag-provocation` | `#ff7b72` |
+| `tag-lecture` | `#79c0ff` |
+| `tag-case` | `#e3b341` |
+| `tag-exercise` | `#6ee7b7` |
+| `tag-activity` | `#d2a8ff` |
+| `tag-recall` | `#79c0ff` |
+| `tag-framework` | `#e3b341` |
+| `tag-build` | `#ff7b72` |
+| `tag-break` | `#94a3b8` |
+| `tag-debrief` | `#d2a8ff` |
+| `tag-complete` | `#6ee7b7` |
 
 ## Layout
 
-- `main` element is `scroll-snap-type: y mandatory`, `height: 100vh`, `overflow-y: auto`.
-- Each `section` is `scroll-snap-align: start`, `min-height: 100vh`, padding `7vh 7vw`.
-- Sections are full-viewport, one idea per slide.
+- `html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }`
+- Each `<section>` = `min-height: 100vh`, scroll-snap, padding `80px 60px 60px`, fades up on intersection (`section.visible` class).
+- `.inner { max-width: 880px; }` for left-aligned content; `.centered` modifier for centered sections.
+- Section background: `radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.25) 0%, #07162C 60%)` for hero + standard sections.
 
 ## Required UI elements
 
-- **Progress bar.** `.progress` div, fixed top, 3px high, linear-gradient indigo→cyan, width = scroll progress.
-- **Nav dots.** `.dots` div, fixed right-center, 8px circles. Click jumps to section.
-- **Keyboard nav.** Arrow Down / Page Down / Space → next section. Arrow Up / Page Up → previous.
+- **Progress bar.** `.progress-bar` fixed top 3px, gradient `#1241B0 → #3b82f6`, width = `(activeIdx + 1) / activeCount`.
+- **Nav dots.** `.nav-dots` fixed right-center. `.nav-dot` 8px, hover tooltip with `data-title`. Active = `#3b82f6` glow + 1.4× scale.
+- **Section sorter.** Modal opened with `M`. Each section gets a card with title, current marker, skip toggle. Skipped sections hidden during presentation. State persisted in `localStorage` keyed by document title.
+- **Skip badge.** `K` toggles skip on current section. `SKIPPED` chip appears bottom-right when current section is skipped.
+- **Help hint.** Bottom-right text: `↑ ↓ navigate · K skip section · M section sorter`.
+- **Keyboard nav.** Arrow Down / Right / Space → next active. Arrow Up / Left → previous active.
 
-## Per-slide structure
+## Reusable section components
 
-Each `section` should contain:
+- **`.hero`** — large radial-gradient title slide. Logo top, `.section-label` ("Module N — AI Product Management Certification"), `<h1>The <span>...</span></h1>` (span is white on blue h1 / blue on white-h1), subtitle, 3 `.waypoint` cards, `Out:` line, scroll hint.
+- **`.expect-grid` / `.expect-card`** — 6-icon "How This Module Runs" panel (replaces the strategy course's "Class Expectations"). Icons + title + 1-line desc.
+- **`.arc-flow`** — horizontal strip of 6 `.arc-node` (one per module) + `.arc-arrow` between. Active module gets `.active-node` + 2px border in section accent. Use these short labels in nodes (consistent with `juno-project-template/` folder names): `Prompting`, `Strategy`, `RAG / PRD`, `AI-UX`, `Agentic`, `Evals`.
+- **`.tf-grid` / `.tf-item`** — provocation thumb-vote panel. `.tf-verdict` shows `?` until clicked, then `TRUE`/`FALSE`/`PARTIAL`. Body has `.tf-claim` + `.tf-why` (hidden until revealed).
+- **`.case-acts`** — 3-act case study: `.act-bet` (blue), `.act-crack` (gold), `.act-correct` (green).
+- **`.waypoints` / `.waypoint`** — numbered list cards with `.waypoint-num` (white digit on blue square) + `.waypoint-text`.
+- **`.evidence-cards`** — 2-up cards with label + company + text. Used for examples and extra practice.
+- **`section.section-break`** — full-bleed lab header. `.lab-title` (small caps) + `.lab-name` (52px Poppins) + `.lab-desc`.
+- **`.split-section` (`.split-left` + `.split-right`)** — large 45/55 split. Used for Build Moments. Right pane has soft white panel; left has `.lab-badge` + `.lab-timer` + `.lab-goal` + `.lab-tip`.
+- **`.lab-timer`** — top-right pill showing `⏰ N min` for applied-work sections.
+- **`.demo-tag`** — pill-tag at top of section indicating section type: `Provocation`, `Lecture · X`, `Case Study`, `Applied Work`, etc.
+- **`.bottom-cta`** — full-width footer banner inside an applied-work section. Repo CTA button + repo path.
+- **`.takeaway-list` / `.takeaway-item`** — closing-slide bullets with bold lead.
+- **`.artifact-preview`** — outlined blue card showing what gets committed.
+- **`.complete-stats`** — 3-up stat cards on a closing slide.
+- **`.debrief-box`** — purple-outline slide for reflection prompts.
 
-- `.eyebrow` — small cyan label, uppercase, letter-spaced (e.g., "Module 3 · Individual exercise · 30 min")
-- `h1` or `h2` — the slide headline
-- One core block: paragraph, list, table, or grid of `.card` divs
+## Per-deck structure (canonical M1–M6 flow)
 
-## Instructor vs. shareable decks
+Recommended order:
 
-- **Instructor (`Module {N} - Slides.html`):** includes `.notes` blocks per slide with a `<h4>Speaker Notes</h4>` and the speaker's prose.
-- **Shareable (`Module {N} - Slides (Shareable).html`):** instructor notes stripped. Replaced where appropriate with `.takeaway` blocks (lighter, summary phrasing).
+1. **Hero** with 3 waypoints + `Out:` line.
+2. **How This Module Runs** (6 expect-cards — solo format).
+3. **The Course Arc** (arc-flow, current module active).
+4. **Recall / Scenario** — for M1: "RocketShip is in Signal Collapse." For M2–M6: "What you brought from M{N-1}" with green-check waypoints.
+5. **Provocation** — TF panel of 3 claims.
+6. **Lecture(s)** — domain-specific frameworks. Use cards/tables/diag-axes.
+7. **Section break** — "Lab 1: …".
+8. **Applied Work** — Open the M{N} tool, with `.lab-timer`, table or fields, repo CTA.
+9. **Break ☕**.
+10. **Case Study** — 3-act real-world example.
+11. More lectures + applied work.
+12. **Synthesis** — "Your Repo After Today" with `.arc-flow` of folders.
+13. **Bridge to next module** — arc-flow with next module as active.
+14. **Key Takeaways** — `.takeaway-list`, 3–5 items.
+15. **Extra Practice** — `.evidence-cards`, 2 items.
+16. **Q&A**.
 
-## Tone
+## Instructor vs. shareable
 
-- Confident. Opinionated. Direct.
-- No corporate softening.
-- Frame everything as **individual** — see `individual-only-voice.mdc`.
+- **Instructor (`Module {N} - Slides.html`):** includes `.notes` blocks per slide with `<h4>Speaker Notes</h4>` + prose for the instructor. Notes use blue left-border, dark blue background.
+- **Shareable (`Module {N} - Slides (Shareable).html`):** instructor notes stripped. Section count and structure otherwise identical. Replace `.notes` with `.takeaway` (cyan left-border, summary line) where the underlying point would otherwise be lost.
+
+## Voice
+
+- Confident. Opinionated. Direct. No corporate softening.
+- Apply `individual-only-voice.mdc` — solo throughout. No peer/pair/group.
 - One concept per slide. Never two.
-
-## Embedded code references
-
-- Use `<code>` for inline file paths and identifiers, e.g., `<code>06-evals/eval-stack.md</code>`.
+- Keep paragraphs ≤2 sentences inside slides.
 
 ## Closing slide
 
-Every module deck ends with a "Key takeaways" section — numbered list of 5–7 bullets the learner should carry into Monday.
+Every module deck ends with **Q&A** preceded by **Key Takeaways** (3–5 takeaway-items) and an **Extra Practice** card.

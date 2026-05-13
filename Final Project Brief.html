@@ -1,139 +1,640 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Final Project Brief — Juno PM</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Product Management — Final Project Brief</title>
 <style>
-  :root{--bg:#0b0d12;--fg:#f6f7fb;--muted:#9aa3b2;--accent:#7c8cff;--accent2:#22d3ee;--card:#11141c;--line:#1b1f29;--ok:#34d399}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;line-height:1.6}
-  .wrap{max-width:980px;margin:0 auto;padding:64px 7vw}
-  .eyebrow{color:var(--accent2);font-size:13px;text-transform:uppercase;letter-spacing:.18em;font-weight:600;margin-bottom:14px}
-  h1{font-size:clamp(32px,4vw,52px);line-height:1.05;margin:0 0 .3em}
-  h2{font-size:clamp(20px,2vw,28px);margin:48px 0 14px;color:var(--accent)}
-  h3{font-size:17px;margin:22px 0 6px;color:var(--accent2)}
-  p,li{font-size:16px;line-height:1.65}
-  ul,ol{padding-left:1.2em}
-  .lede{color:var(--muted);font-size:18px;max-width:780px;margin:0 0 18px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:14px 0}
-  .card.warn{border-left:3px solid var(--accent2)}
-  table{border-collapse:collapse;width:100%;margin:14px 0}
-  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;font-size:14.5px;vertical-align:top}
-  th{background:#161b25;color:var(--accent2);font-weight:600}
-  code{background:#161b25;padding:1px 6px;border-radius:6px;font-size:14px}
-  .pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(52,211,153,.12);color:var(--ok);margin-left:6px}
-  hr{border:0;border-top:1px solid var(--line);margin:40px 0}
-  a{color:var(--accent2)}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: 'Lato', -apple-system, sans-serif;
+  background: #07162C;
+  color: #e8e8f0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  padding: 80px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.25) 0%, #07162C 60%);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+section.visible { opacity: 1; transform: translateY(0); }
+section.skipped { display: none; }
+
+.nav-dots {
+  position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 6px; z-index: 100;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #333; border: none; cursor: pointer;
+  transition: all 0.3s; position: relative;
+}
+.nav-dot.active { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.5); transform: scale(1.4); }
+.nav-dot:hover { background: rgba(59,130,246,0.7); }
+.nav-dot .tooltip {
+  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  background: #0c2244; color: #b0b4c8; padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; border: 1px solid rgba(59,130,246,0.2);
+}
+.nav-dot:hover .tooltip { opacity: 1; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 100;
+  background: linear-gradient(90deg, #1241B0, #3b82f6);
+  transition: width 0.3s ease;
+}
+
+h1, h2 { font-family: 'Poppins', sans-serif; }
+h1 { font-size: 56px; font-weight: 900; color: #fff; line-height: 1.1; }
+h2 { font-size: 40px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+h3 { font-size: 22px; font-weight: 700; color: #e0e0f0; }
+p, li { font-size: 17px; line-height: 1.7; color: #b0b4c8; }
+.subtitle { font-size: 20px; color: #8899bb; margin-top: 8px; margin-bottom: 32px; }
+.section-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 3px;
+  color: rgba(255,255,255,0.7); margin-bottom: 12px; font-weight: 700;
+}
+strong { color: #fff; font-weight: 700; }
+em { color: #60a5fa; font-style: normal; font-weight: 600; }
+code {
+  background: rgba(18,65,176,0.15); padding: 2px 8px; border-radius: 4px;
+  font-size: 14px; color: #60a5fa; font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+ul { list-style: none; padding: 0; }
+ul li { padding: 6px 0; padding-left: 24px; position: relative; }
+ul li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 8px; height: 8px; border-radius: 2px; background: #1241B0;
+}
+
+.inner { max-width: 880px; width: 100%; text-align: left; }
+section.centered { text-align: center; }
+section.centered .inner { text-align: center; }
+section.centered ul li { padding-left: 0; }
+section.centered ul li::before { display: none; }
+
+/* HERO */
+.hero { align-items: center; text-align: center; }
+.hero h1 { font-size: 64px; margin-bottom: 4px; }
+.hero h1 span { color: #60a5fa; }
+.hero .subtitle { font-size: 22px; max-width: 600px; margin: 12px auto 28px; color: #60a5fa; }
+.hero .scroll-hint { font-size: 13px; color: #444; margin-top: 32px; animation: pulse 2s ease infinite; }
+.hero .scroll-hint span { display: block; margin-top: 8px; font-size: 20px; }
+.hero-logo { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); }
+.hero-logo img { height: 48px; width: auto; opacity: 0.95; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+/* TAGS */
+.demo-tag {
+  display: inline-block; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 6px; margin-bottom: 18px;
+}
+.tag-provocation { background: rgba(248,81,73,0.12); color: #ff7b72; }
+.tag-lecture { background: rgba(88,166,255,0.12); color: #79c0ff; }
+.tag-case { background: rgba(210,153,34,0.12); color: #e3b341; }
+.tag-exercise { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+.tag-activity { background: rgba(188,140,255,0.12); color: #d2a8ff; }
+.tag-build { background: rgba(255,123,182,0.12); color: #ff7b72; }
+.tag-break { background: rgba(100,116,139,0.12); color: #94a3b8; }
+.tag-debrief { background: rgba(188,140,255,0.12); color: #d2a8ff; }
+.tag-complete { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+.tag-recall { background: rgba(59,130,246,0.12); color: #79c0ff; }
+.tag-framework { background: rgba(210,153,34,0.12); color: #e3b341; }
+
+.lab-timer {
+  position: absolute; top: 24px; right: 32px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 10px 18px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+  color: #60a5fa; z-index: 10;
+}
+
+/* WAYPOINTS */
+.waypoints { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 720px; }
+.waypoint {
+  display: flex; align-items: flex-start; gap: 18px;
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 12px; padding: 20px 24px;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+.waypoint:hover { transform: translateX(4px); border-color: rgba(59,130,246,0.3); }
+.waypoint-num {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff; background: #1241B0;
+}
+.waypoint-text { flex: 1; }
+.waypoint-text .wt-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.waypoint-text .wt-desc { font-size: 14px; color: #8899bb; line-height: 1.5; }
+
+/* CARDS */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin: 24px 0;
+}
+.card-item {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 22px; text-align: center;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.card-item::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, #3b82f6);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.card-item:hover { border-color: var(--card-accent, #3b82f6); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.card-item:hover::before { transform: scaleX(1); }
+.card-item .card-icon { font-size: 24px; margin-bottom: 8px; }
+.card-item .card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.card-item .card-desc { font-size: 12.5px; color: #8899bb; line-height: 1.45; }
+
+/* EXPECT GRID (How This Module Runs) */
+.expect-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0;
+}
+.expect-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 18px; text-align: center;
+  transition: all 0.3s ease;
+}
+.expect-card:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-2px); }
+.expect-icon { font-size: 26px; margin-bottom: 8px; }
+.expect-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.expect-desc { font-size: 12.5px; color: #8899bb; line-height: 1.45; }
+
+/* TRUE/FALSE */
+.tf-grid { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.tf-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 24px; border-radius: 12px;
+  transition: all 0.3s ease; cursor: pointer;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+.tf-item:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.15); }
+.tf-item.revealed.tf-false { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.15); }
+.tf-item.revealed.tf-true { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.15); }
+.tf-item.revealed.tf-partial { background: rgba(210,153,34,0.06); border: 1px solid rgba(210,153,34,0.15); }
+.tf-verdict { font-size: 13px; font-weight: 900; min-width: 64px; padding-top: 2px; letter-spacing: 0.05em; }
+.tf-item:not(.revealed) .tf-verdict { visibility: hidden; }
+.tf-item:not(.revealed) .tf-verdict::after { content: '?'; visibility: visible; color: #555; font-size: 16px; }
+.tf-false .tf-verdict { color: #fca5a5; }
+.tf-true .tf-verdict { color: #6ee7b7; }
+.tf-partial .tf-verdict { color: #fde68a; }
+.tf-body .tf-claim { font-size: 16px; font-weight: 700; color: #e0e0f0; margin-bottom: 4px; }
+.tf-body .tf-why { font-size: 13px; color: #8899bb; line-height: 1.5; }
+.tf-item:not(.revealed) .tf-why { display: none; }
+
+/* ARC FLOW */
+.arc-flow {
+  display: flex; gap: 8px; align-items: center; margin: 28px 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.arc-node {
+  padding: 12px 16px; border-radius: 10px; text-align: center;
+  font-size: 13px; font-weight: 700; color: #fff; min-width: 110px;
+  transition: all 0.3s ease;
+  background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+}
+.arc-node:hover { transform: scale(1.05); }
+.arc-node.active-node { box-shadow: 0 0 20px rgba(59,130,246,0.3); background: rgba(59,130,246,0.2); border: 2px solid #3b82f6; }
+.arc-arrow { color: #333; font-size: 18px; }
+.arc-node .ad-num { font-size: 10px; opacity: 0.5; margin-bottom: 2px; }
+
+/* TABLE */
+.ref-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.ref-table th {
+  text-align: left; padding: 12px; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: #8899bb;
+  border-bottom: 1px solid rgba(59,130,246,0.15);
+}
+.ref-table td {
+  padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 14px; color: #b0b4c8; line-height: 1.4;
+}
+.ref-table td:first-child { font-weight: 700; color: #e0e0f0; white-space: nowrap; }
+.ref-table tr:hover td { background: rgba(59,130,246,0.04); }
+
+/* EVIDENCE CARDS */
+.evidence-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.evidence-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  padding: 22px; transition: all 0.3s ease; text-align: left;
+}
+.evidence-card:hover { transform: translateY(-2px); border-color: rgba(59,130,246,0.3); }
+.evidence-card .ec-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #60a5fa; margin-bottom: 8px;
+}
+.evidence-card .ec-company { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.evidence-card .ec-text { font-size: 13px; color: #8899bb; line-height: 1.5; }
+
+/* CASE STUDY */
+.case-acts { display: flex; gap: 16px; margin: 24px 0; }
+.case-act { flex: 1; border-radius: 14px; padding: 24px; transition: all 0.3s ease; text-align: left; }
+.case-act:hover { transform: translateY(-3px); }
+.case-act .ca-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.case-act .ca-text { font-size: 14px; color: #a0a8b4; line-height: 1.5; }
+.act-bet { background: rgba(88,166,255,0.06); border: 1px solid rgba(88,166,255,0.15); }
+.act-bet .ca-label { color: #58a6ff; }
+.act-crack { background: rgba(210,153,34,0.06); border: 1px solid rgba(210,153,34,0.15); }
+.act-crack .ca-label { color: #d29922; }
+.act-correct { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.15); }
+.act-correct .ca-label { color: #34d399; }
+
+/* DIAG AXES */
+.diag-axes { display: flex; gap: 20px; margin: 24px 0; }
+.diag-axis {
+  flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 28px; text-align: center;
+  transition: all 0.3s ease;
+}
+.diag-axis:hover { transform: translateY(-3px); border-color: rgba(59,130,246,0.3); }
+.diag-axis .da-num { font-size: 28px; font-weight: 900; margin-bottom: 6px; color: #60a5fa; }
+.diag-axis .da-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.diag-axis .da-q { font-size: 13px; color: #8899bb; line-height: 1.4; }
+
+/* SECTION BREAK */
+section.section-break { padding: 0; }
+section.section-break .section-break-inner {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 20%, rgba(59,130,246,0.25) 0%, rgba(59,130,246,0.08) 35%, #07162C 75%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 80px;
+  text-align: left;
+}
+.section-break-inner .lab-title {
+  font-size: 13px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.16em; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.section-break-inner .lab-name { font-size: 52px; font-weight: 900; color: #fff; line-height: 1.1; max-width: 700px; font-family: 'Poppins', sans-serif; }
+.section-break-inner .lab-desc { font-size: 18px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-top: 16px; max-width: 600px; }
+
+/* COMPLETION / TAKEAWAYS */
+.takeaway-list { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 880px; }
+.takeaway-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px 22px; transition: all 0.3s; text-align: left; }
+.takeaway-item:hover { border-color: rgba(59,130,246,0.3); transform: translateX(4px); }
+.takeaway-item p { font-size: 15px; color: #b0b4c8; line-height: 1.6; }
+
+.artifact-preview {
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 14px; padding: 24px; margin: 20px auto; max-width: 700px;
+  text-align: left;
+}
+.artifact-preview .ap-title {
+  font-size: 14px; font-weight: 800; color: #60a5fa; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-bottom: 14px;
+}
+
+.bottom-cta {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(52,211,153,0.08); border-top: 1px solid rgba(52,211,153,0.25);
+  padding: 14px 32px; text-align: center;
+  font-size: 14px; font-weight: 600; color: #6ee7b7;
+}
+.bottom-cta a { color: #6ee7b7; text-decoration: underline; }
+
+/* INSTRUCTOR NOTES */
+.notes {
+  background: rgba(59,130,246,0.06); border-left: 3px solid #1241B0;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 24px 0 0;
+  text-align: left; max-width: 880px;
+}
+.notes h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #60a5fa; margin: 0 0 6px; }
+.notes p { font-size: 14px; color: #cdd5e3; line-height: 1.55; }
+
+/* SHAREABLE TAKEAWAY (replaces .notes in shareable decks) */
+.takeaway {
+  background: rgba(34,211,238,0.05); border-left: 3px solid #22d3ee;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 24px 0 0;
+  text-align: left; max-width: 880px;
+}
+.takeaway h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: #22d3ee; margin: 0 0 6px; }
+.takeaway p { font-size: 14px; color: #cdd5e3; line-height: 1.55; }
+
+/* Repo CTA inline */
+.repo-cta { font-size: 14px; color: #6ee7b7; margin-top: 14px; text-align: center; }
+.repo-cta strong { color: #6ee7b7; }
+.repo-cta code { color: #6ee7b7; }
+
+/* Tool button */
+.tool-btn {
+  display: inline-block; background: #1241B0; color: #fff; text-decoration: none;
+  font-size: 14px; font-weight: 800; padding: 10px 22px; border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(18,65,176,0.35); margin-top: 14px;
+  transition: transform .2s, box-shadow .2s;
+}
+.tool-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(18,65,176,0.5); }
+
+/* Help hint, skip badge, sorter */
+.help-hint {
+  position: fixed; bottom: 14px; right: 18px;
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  font-family: 'IBM Plex Mono', monospace; z-index: 90;
+}
+.skip-badge {
+  position: fixed; bottom: 14px; left: 18px;
+  background: rgba(248,113,113,0.2); color: #fca5a5;
+  border: 1px solid rgba(248,113,113,0.3);
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; z-index: 90;
+}
+.skip-badge.visible { opacity: 1; pointer-events: auto; }
+.slide-sorter {
+  position: fixed; inset: 0; background: rgba(7,22,44,0.95);
+  z-index: 200; padding: 60px; overflow-y: auto;
+  display: none; flex-direction: column;
+}
+.slide-sorter.visible { display: flex; }
+.sorter-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+.sorter-title { font-size: 28px; font-weight: 800; color: #fff; font-family: 'Poppins', sans-serif; }
+.sorter-subtitle { font-size: 14px; color: #8899bb; margin-top: 4px; }
+.sorter-close { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.sorter-close:hover { background: rgba(255,255,255,0.05); }
+.sorter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.sorter-item {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s ease;
+}
+.sorter-item:hover { border-color: #3b82f6; transform: translateY(-2px); }
+.sorter-item.sorter-active { border-color: #3b82f6; background: rgba(59,130,246,0.1); }
+.sorter-item.sorter-skipped { opacity: 0.4; }
+.sorter-num { font-size: 11px; font-weight: 800; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.1em; }
+.sorter-label { font-size: 14px; color: #fff; margin: 4px 0 8px; font-weight: 600; }
+.sorter-skip-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; border: 0; }
+.sorter-skip-btn.skip-on { background: rgba(248,113,113,0.2); color: #fca5a5; }
+.sorter-skip-btn.skip-off { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+
+@media (max-width: 768px) {
+  section { padding: 40px 24px; }
+  h1 { font-size: 36px; }
+  h2 { font-size: 28px; }
+  .hero h1 { font-size: 40px; }
+  .case-acts, .diag-axes { flex-direction: column; }
+  .cards-grid, .evidence-cards, .expect-grid { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<div class="eyebrow">Certification · Individual format · Repo-as-portfolio</div>
-<h1>Final Project Brief — Juno PM</h1>
-<p class="lede">Across six modules you architect, spec, and ship an AI copilot — Juno PM — into a public GitHub repo. The repo is your portfolio. The repo is your certification submission.</p>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots"></nav>
 
-<div class="card warn">
-  <strong>What changed from the legacy brief.</strong> The previous course ran this as a 3–5 person group project with an in-class group demo. This course is <strong>individual</strong>. You commit your own artifacts to your own fork. The final showcase is async and optional. Grading happens on your repo, not on a slide deck.
+<section class="hero" data-title="Final Project Brief">
+  <div class="hero-logo"><img src="Design/Minimalist shield with glowing _P_.png" alt="Product School logo"/></div>
+  <div class="section-label">Final Project Brief · 2026 cohort</div>
+  <h1>Final Project <span>Brief</span></h1>
+  <p class="subtitle">Submit your juno-pm/ fork. Within 7 days post-cohort. Solo.</p>
+  <div class="waypoints" style="max-width:640px;">
+  <div class="waypoint"><div class="waypoint-num">1</div><div class="waypoint-text"><div class="wt-title">Six artifacts</div><div class="wt-desc">One per module. All committed to your fork.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">2</div><div class="waypoint-text"><div class="wt-title">Build Insights</div><div class="wt-desc">1 friction · 1 learning · 1 aha moment.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">3</div><div class="waypoint-text"><div class="wt-title">Optional async showcase</div><div class="wt-desc">3-min Loom + repo URL.</div></div></div>
+  </div>
+  <p style="font-size:15px; color:#8899bb; margin-top:8px;">Out: a finalised, certifiable juno-pm/ repo.</p>
+  <div class="scroll-hint">Scroll to explore<span>&#8595;</span></div>
+</section>
+
+
+<section data-title="What You Submit">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>What You Submit</h2>
+    <div class="subtitle">The repo URL. That's the submission. Not a deck. Not a doc.</div>
+    <table class="ref-table">
+      <thead><tr><th>Aspect</th><th>Detail</th></tr></thead>
+      <tbody>
+<tr><td>Format</td><td>Public or private GitHub repo. Forked from <code>juno-project-template/</code>.</td></tr>
+<tr><td>Window</td><td>Within 7 days of cohort end.</td></tr>
+<tr><td>Voice</td><td>Solo. Individual repo per learner.</td></tr>
+<tr><td>Live demo?</td><td><strong>No.</strong> Optional 3-min Loom in <code>#ai-pm-cohort</code> only.</td></tr>
+<tr><td>Instructor response</td><td>Async, in-thread, within ~5 days.</td></tr>
+      </tbody>
+    </table>
+    
+  </div>
+</section>
+
+
+<section data-title="What's In the Repo">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>What's In the Repo</h2>
+    <div class="subtitle">Six folders + one root README. All from the modules.</div>
+    <table class="ref-table">
+      <thead><tr><th>Folder / file</th><th>Module</th><th>Artifact</th></tr></thead>
+      <tbody>
+<tr><td><code>01-prompting/</code></td><td>M1</td><td>system-prompt.md · anatomy-prompt.md · lovable-prototype.md · toolkit.md</td></tr>
+<tr><td><code>02-strategy/</code></td><td>M2</td><td>decision-matrix.md · strategy-one-pager.md</td></tr>
+<tr><td><code>03-rag-prd/</code></td><td>M3</td><td>ai-prd.md · before-after-rag.md</td></tr>
+<tr><td><code>04-ai-ux/</code></td><td>M4</td><td>user-flow.md · trust-gaps.md</td></tr>
+<tr><td><code>05-agentic-workflows/</code></td><td>M5</td><td>awspec.md · agent-control-panel.md (Juno Agent.json optional)</td></tr>
+<tr><td><code>06-evals/</code></td><td>M6</td><td>eval-stack.md · human-rubric.md</td></tr>
+<tr><td><code>README.md</code> (root)</td><td>M6</td><td>PM Execution Plan · the pitch · Build Insights</td></tr>
+      </tbody>
+    </table>
+    
+  </div>
+</section>
+
+
+<section data-title="Grading Rubric">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Framework</div>
+    <h2>Grading Rubric</h2>
+    <div class="subtitle">Four dimensions. Three-point scale. The repo is the evidence.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">📋</div><div class="card-title">Application of Concepts</div><div class="card-desc">How well M1–M6 frameworks land in your artifacts.</div></div>
+      <div class="card-item"><div class="card-icon">🧠</div><div class="card-title">Credibility & Reasoning</div><div class="card-desc">Whether your decisions hold up to scrutiny.</div></div>
+      <div class="card-item"><div class="card-icon">✏️</div><div class="card-title">Clarity</div><div class="card-desc">Whether a stranger could read your README and "get" Juno.</div></div>
+      <div class="card-item"><div class="card-icon">🎯</div><div class="card-title">Strategic Thinking</div><div class="card-desc">Whether the bet, the bar, and the trade-offs are coherent.</div></div>
+    </div>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Scale: 1 — Poor (0–49) · 2 — Sufficient (50–79) · 3 — Excellent (80–100).</p>
+  </div>
+</section>
+
+
+<section data-title="Submission Walkthrough">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Lecture</div>
+    <h2>Submission Walkthrough</h2>
+    <div class="subtitle">Five steps to certify.</div>
+    <div class="cards-grid">
+      <div class="card-item"><div class="card-icon">①</div><div class="card-title">Fork</div><div class="card-desc">Fork <code>juno-project-template/</code> as <code>juno-pm/</code>.</div></div>
+      <div class="card-item"><div class="card-icon">②</div><div class="card-title">Build</div><div class="card-desc">Commit each module's artifact to its folder.</div></div>
+      <div class="card-item"><div class="card-icon">③</div><div class="card-title">Finalise</div><div class="card-desc">Open <code>Final Project Deliverables Builder.html</code>. Generate the root README.</div></div>
+      <div class="card-item"><div class="card-icon">④</div><div class="card-title">Reflect</div><div class="card-desc">Add 1 friction · 1 learning · 1 aha to the README.</div></div>
+      <div class="card-item"><div class="card-icon">⑤</div><div class="card-title">Submit</div><div class="card-desc">Post the repo URL in <code>#ai-pm-cohort</code> within 7 days. Optional Loom.</div></div>
+    </div>
+    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">That's it. No deck. No live demo. No group. The repo is the certificate.</p>
+  </div>
+</section>
+
+
+<section class="centered" data-title="Q&A">
+  <div class="inner">
+    <h1 style="font-size:64px; color:#60a5fa; margin-bottom:24px;">Q&amp;A</h1>
+    <p style="font-size:20px; color:#8899bb;">Park anything we can't unblock here in <code>#ai-pm-cohort</code>.</p>
+    <p style="font-size:14px; color:#555; margin-top:20px;">Instructor responds in-thread within ~5 days.</p>
+  </div>
+</section>
+
+
+<div class="help-hint">↑ ↓ navigate · K skip section · M section sorter</div>
+<div class="skip-badge" id="skip-badge" title="Click to unskip (K)">SKIPPED</div>
+<div class="slide-sorter" id="slide-sorter">
+  <div class="sorter-header">
+    <div><div class="sorter-title">Section Sorter</div><div class="sorter-subtitle">Click a section to jump · Toggle skip to hide during presentation</div></div>
+    <button class="sorter-close" onclick="closeSorter()" title="Close (M / Esc)">✕</button>
+  </div>
+  <div class="sorter-grid" id="sorter-grid"></div>
 </div>
 
-<h2>The scenario</h2>
-<p>You are the AI PM at <strong>RocketShip</strong>, a hyper-growth B2B SaaS platform for Enterprise Data Teams. On paper, the company is winning. In reality, you are the bottleneck of the entire organisation. The team calls it the <strong>Signal Collapse</strong>:</p>
-<ul>
-  <li>Your inbox is a wall of P0 escalations.</li>
-  <li>Support has thousands of unread tickets.</li>
-  <li>Sales reports stalling because requirements can't be vetted fast enough.</li>
-  <li>You have an innovation budget but zero headcount.</li>
-</ul>
-<p>Your bet: build <strong>Juno PM</strong> — an AI Associate PM that lives inside Slack, Notion, and Jira. Three pillars:</p>
-<ul>
-  <li><strong>Synthesise insights</strong> — turn multi-channel chaos into structured, evidence-backed clarity.</li>
-  <li><strong>Draft specs</strong> — produce Version-0.1 PRDs you refine instead of starting from a blank page.</li>
-  <li><strong>Prioritise risks</strong> — flag unclear edge cases, technical debt, and risky assumptions.</li>
-</ul>
+<script>
+const sections = Array.from(document.querySelectorAll('section'));
+const navDotsContainer = document.getElementById('navDots');
+let currentIdx = 0;
+let sorterVisible = false;
 
-<h2>What you build (per module)</h2>
-<p>Every module pushes one real artifact into a folder of your <code>juno-pm/</code> fork. By the end of M6, you finalise the top-level README — that's the submission.</p>
+const STORAGE_KEY = 'skip-sections-' + document.title.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 60);
+const skippedSections = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
 
-<table>
-  <tr><th>Module</th><th>Folder</th><th>Artifact</th></tr>
-  <tr><td>M1 · Prompting</td><td><code>01-prompting/</code></td><td><code>system-prompt.md</code> · <code>lovable-prototype.md</code></td></tr>
-  <tr><td>M2 · Strategy</td><td><code>02-strategy/</code></td><td><code>decision-matrix.md</code> · <code>strategy-one-pager.md</code></td></tr>
-  <tr><td>M3 · RAG / AI PRD</td><td><code>03-rag-prd/</code></td><td><code>prd.md</code> (with RAG decisions)</td></tr>
-  <tr><td>M4 · AI-UX</td><td><code>04-ai-ux/</code></td><td><code>user-flow.md</code> · <code>trust-gaps.md</code></td></tr>
-  <tr><td>M5 · Agentic</td><td><code>05-agentic-workflows/</code></td><td><code>awspec.md</code> · <code>control-panel.md</code> · <code>Juno Agent.json</code> (optional Langflow)</td></tr>
-  <tr><td>M6 · Evals</td><td><code>06-evals/</code></td><td><code>eval-stack.md</code> · <code>human-rubric.md</code> · finalised top-level <code>README.md</code></td></tr>
-</table>
+function saveSkips() { localStorage.setItem(STORAGE_KEY, JSON.stringify([...skippedSections])); }
 
-<h2>The finalised README — your PM Execution Plan</h2>
-<p>The top-level <code>README.md</code> of your fork is the closing artifact. Generate it via <a href="Modules/Final Project Deliverables Builder.html"><code>Final Project Deliverables Builder.html</code></a>. It must contain:</p>
-<ol>
-  <li>Title + one-line pitch + name + cohort.</li>
-  <li>Links to all six modules' artifacts.</li>
-  <li><strong>PM Execution Plan</strong> — Where Juno is today · What ships next (2 sprints) · What you watch (dashboards) · Red lines (numeric).</li>
-  <li><strong>Governance</strong> — one row per bucket (Compliance · Safety · Reliability · Reputation).</li>
-  <li><strong>Build Insights</strong> — 1 friction · 1 learning · 1 aha.</li>
-  <li><em>(Optional)</em> Loom URL — 3-min walkthrough of your repo.</li>
-</ol>
+function applySkips() {
+  sections.forEach((sec, i) => sec.classList.toggle('skipped', skippedSections.has(i)));
+  rebuildDots();
+}
 
-<h2>How exercises run (individual format)</h2>
-<p>Every module's exercise follows the same pattern:</p>
-<ol>
-  <li><strong>Build.</strong> Use the module's interactive tool to produce the artifact.</li>
-  <li><strong>Self-review.</strong> Run the in-tool checklist (3–6 specific bullets).</li>
-  <li><strong>AI-review.</strong> Paste your artifact + the in-tool AI-review prompt into ChatGPT/Claude/Cursor. Reflect on the critique.</li>
-  <li><strong>Commit.</strong> Push the artifact to the named folder in your fork. Optionally post the link in <code>#ai-pm-cohort</code>.</li>
-</ol>
-<p>No group breakouts. No partner work. No notetakers. Instructor responds in-thread within ~5 days for any post in <code>#ai-pm-cohort</code>.</p>
+function rebuildDots() {
+  navDotsContainer.innerHTML = '';
+  sections.forEach((sec, i) => {
+    if (skippedSections.has(i)) return;
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    const title = sec.dataset.title || 'Section';
+    dot.innerHTML = `<span class="tooltip">${title}</span>`;
+    dot.dataset.idx = i;
+    dot.onclick = () => sections[i].scrollIntoView({ behavior: 'smooth' });
+    navDotsContainer.appendChild(dot);
+  });
+}
 
-<h2>Final showcase — async &amp; optional</h2>
-<p>The original 30-minute live group showcase is replaced with an async, individual, optional walkthrough:</p>
-<ol>
-  <li>Record a <strong>3-minute Loom</strong> walkthrough of your repo. Hit: the bet, the system prompt, the user flow, the AWSpec, the eval stack.</li>
-  <li>Post the repo URL + Loom in <code>#ai-pm-cohort</code>.</li>
-  <li>Instructor responds in-thread within ~5 days with qualitative feedback.</li>
-</ol>
-<p>Optional. Not required for certification. Encouraged for portfolio.</p>
+function getActiveSections() { return sections.map((s, i) => i).filter(i => !skippedSections.has(i)); }
 
-<h2>Submission</h2>
-<table>
-  <tr><th>What</th><th>How</th></tr>
-  <tr><td>Submit</td><td>The URL of your finalised <code>juno-pm/</code> repo, via your course dashboard.</td></tr>
-  <tr><td>When</td><td>Within <strong>7 days</strong> of cohort end.</td></tr>
-  <tr><td>Who</td><td>Each learner submits individually.</td></tr>
-</table>
+function updateProgress(idx) {
+  currentIdx = idx;
+  const active = getActiveSections();
+  const posInActive = active.indexOf(idx);
+  const progress = posInActive >= 0 ? (posInActive + 1) / active.length * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+  const dots = navDotsContainer.querySelectorAll('.nav-dot');
+  dots.forEach(d => d.classList.toggle('active', parseInt(d.dataset.idx) === idx));
+  document.getElementById('skip-badge').classList.toggle('visible', skippedSections.has(idx));
+}
 
-<h2>Grading</h2>
-<p>Graded on four qualities, scored 1–3 overall:</p>
-<table>
-  <tr><th>Quality</th><th>What we look for</th></tr>
-  <tr><td>Application of Concepts</td><td>Course frameworks visibly applied (Prompt Anatomy, Decision Matrix, Three-Layer Model, AI PRD sections, AI Iceberg, AWSpec, Evals Stack).</td></tr>
-  <tr><td>Credibility &amp; Reasoning</td><td>Choices justified — trade-offs named, alternatives considered, evidence cited.</td></tr>
-  <tr><td>Clarity</td><td>Repo is readable. README walks a reader through the bet, the design, the risk.</td></tr>
-  <tr><td>Strategic Thinking</td><td>The bet is real. The execution plan is concrete. Red lines are numeric.</td></tr>
-</table>
-<p><strong>Score:</strong> 1 — Poor (0–49) · 2 — Sufficient (50–79) · 3 — Excellent (80–100). Feedback returned via your dashboard a few days post-submission.</p>
+function toggleSkip(idx) {
+  if (skippedSections.has(idx)) skippedSections.delete(idx);
+  else skippedSections.add(idx);
+  saveSkips();
+  applySkips();
+  updateProgress(currentIdx);
+  if (sorterVisible) renderSorter();
+}
 
-<hr />
+function nextActive(from, dir) {
+  let i = from + dir;
+  while (i >= 0 && i < sections.length) {
+    if (!skippedSections.has(i)) return i;
+    i += dir;
+  }
+  return -1;
+}
 
-<h2>FAQs</h2>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const idx = sections.indexOf(entry.target);
+      updateProgress(idx);
+    }
+  });
+}, { threshold: 0.35 });
+sections.forEach(sec => observer.observe(sec));
 
-<h3>Do I need to write code?</h3>
-<p>No. The interactive tools produce all artifacts. The optional M5 Langflow lab is the only place code-adjacent work happens, and we provide a starter export.</p>
+function renderSorter() {
+  const grid = document.getElementById('sorter-grid');
+  grid.innerHTML = '';
+  sections.forEach((sec, i) => {
+    const isSkipped = skippedSections.has(i);
+    const isCurrent = i === currentIdx;
+    const div = document.createElement('div');
+    div.className = 'sorter-item' + (isSkipped ? ' sorter-skipped' : '') + (isCurrent ? ' sorter-active' : '');
+    const title = sec.dataset.title || 'Section';
+    div.innerHTML = `
+      <div class="sorter-num">Section ${i + 1}</div>
+      <div class="sorter-label">${title}</div>
+      <button class="sorter-skip-btn ${isSkipped ? 'skip-on' : 'skip-off'}"
+              onclick="event.stopPropagation(); toggleSkip(${i})">
+        ${isSkipped ? '↩ Unskip' : '⊘ Skip'}
+      </button>`;
+    div.addEventListener('click', () => { sections[i].scrollIntoView({ behavior: 'smooth' }); closeSorter(); });
+    grid.appendChild(div);
+  });
+}
+function openSorter() { sorterVisible = true; renderSorter(); document.getElementById('slide-sorter').classList.add('visible'); }
+function closeSorter() { sorterVisible = false; document.getElementById('slide-sorter').classList.remove('visible'); }
 
-<h3>Do I have to do the Lovable prototype?</h3>
-<p>Yes — it's how you prove your M1 system prompt actually runs. Lovable's free tier is enough.</p>
+document.getElementById('skip-badge').addEventListener('click', () => toggleSkip(currentIdx));
 
-<h3>Do I have to do the optional showcase?</h3>
-<p>No. It doesn't affect certification. It is the highest-leverage portfolio asset to produce, however.</p>
+document.addEventListener('keydown', (e) => {
+  if (sorterVisible) {
+    if (e.key === 'Escape' || e.key === 'm' || e.key === 'M') { e.preventDefault(); closeSorter(); }
+    return;
+  }
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    const n = nextActive(currentIdx, 1);
+    if (n >= 0) sections[n].scrollIntoView({ behavior: 'smooth' });
+  }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const n = nextActive(currentIdx, -1);
+    if (n >= 0) sections[n].scrollIntoView({ behavior: 'smooth' });
+  }
+  else if (e.key === 'k' || e.key === 'K') { toggleSkip(currentIdx); }
+  else if (e.key === 'm' || e.key === 'M') { openSorter(); }
+});
 
-<h3>Can I submit a real product instead of Juno?</h3>
-<p>Only if you can map every artifact 1:1 to the Juno scenario and the grading is still possible on a public repo. Most learners get more out of Juno because every module's exercise is purpose-built for it.</p>
-
-<h3>What happens if I miss the 7-day window?</h3>
-<p>Submissions after the window may not be eligible for certification. Reach out via the dashboard if you have a genuine reason.</p>
-
-</div>
+applySkips();
+sections[0].classList.add('visible');
+document.querySelectorAll('.tf-item').forEach(item => {
+  item.addEventListener('click', () => item.classList.toggle('revealed'));
+});
+</script>
 </body>
 </html>
