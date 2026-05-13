@@ -947,11 +947,12 @@ def build_module_1():
     sections_inst, sections_share = [], []
 
     def add(html: str, note: str = "", takeaway: str = ""):
-        # Append notes/takeaway *inside* the section by inserting before </section>
+        # Instructor decks get speaker notes inside the section. Shareable decks
+        # do not get a per-slide takeaway box — the dedicated Key Takeaways
+        # section at the end is the consolidated takeaway.
         s_inst = html.replace("</section>", (notes_block(note) if note else "") + "\n</section>") if note else html
-        s_share = html.replace("</section>", (takeaway_block(takeaway) if takeaway else "") + "\n</section>") if takeaway else html
         sections_inst.append(s_inst)
-        sections_share.append(s_share)
+        sections_share.append(html)
 
     # 1. Hero
     add(hero(
@@ -1356,10 +1357,12 @@ Use a calm professional palette — deep navy, off-white, one accent color. No e
 
 def _add_builder(sections_inst, sections_share):
     def add(html: str, note: str = "", takeaway: str = ""):
+        # Instructor decks: per-slide speaker notes (kept).
+        # Shareable decks: no per-slide takeaway box — the dedicated
+        # Key Takeaways section at the end is the consolidated takeaway.
         s_inst = html.replace("</section>", (notes_block(note) if note else "") + "\n</section>") if note else html
-        s_share = html.replace("</section>", (takeaway_block(takeaway) if takeaway else "") + "\n</section>") if takeaway else html
         sections_inst.append(s_inst)
-        sections_share.append(s_share)
+        sections_share.append(html)
     return add
 
 
