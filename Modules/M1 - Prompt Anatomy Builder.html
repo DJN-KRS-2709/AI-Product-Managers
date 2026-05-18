@@ -195,6 +195,66 @@ textarea:focus{outline:0;border-color:var(--accent);background:rgba(0,0,0,0.4)}
           <li id="c-length">Combined prompt is between 80 and 350 words</li>
         </ul>
       </div>
+
+      <!-- ─── STEP 2 — Refine the design ─── -->
+      <div style="margin-top:32px; padding-top:24px; border-top:1px solid var(--line);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:8px; background:#bcb1ff; color:#0c1838; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:900; font-size:14px;">2</div>
+          <h3 style="margin:0; font-size:16px; color:#fff;">Refine the design</h3>
+        </div>
+        <p class="question">After Lovable generates the V1 dashboard, send a <em>follow-up</em> prompt to make Juno look the way you want. Pick one path and copy.</p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;">
+          <div style="background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.25); border-radius:10px; padding:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
+              <div style="font-size:11px; font-weight:800; color:#bcb1ff; text-transform:uppercase; letter-spacing:0.12em;">Path A · Brand Alignment</div>
+              <button class="secondary" onclick="copyBrandPrompt()" style="padding:5px 12px; font-size:11px;">Copy</button>
+            </div>
+            <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 8px;">Make Juno look like your real company product. Upload a screenshot or paste Figma CSS.</p>
+            <div class="meta-prompt" style="padding:10px 12px; font-size:11.5px;" id="brand-prompt">I am uploading a screenshot of my company's current dashboard. Update Juno's colours, typography, and component styling to match this design system exactly. Match the rounded-corner radii, button styles, font weights, and accent colour usage. Keep the three-column structure intact.</div>
+            <p style="font-size:11px; color:var(--muted); margin:8px 0 0; line-height:1.45;">In Lovable: click the <code>+</code> in the chat box → <em>Attach</em> or <em>Take a Screenshot</em> → paste the prompt above → send.</p>
+          </div>
+
+          <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:10px; padding:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
+              <div style="font-size:11px; font-weight:800; color:#79c0ff; text-transform:uppercase; letter-spacing:0.12em;">Path B · Vibe Match</div>
+              <button class="secondary" onclick="copyVibePrompt()" style="padding:5px 12px; font-size:11px;">Copy</button>
+            </div>
+            <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 8px;">Mimic the design language of a tool you admire. Edit the company name below.</p>
+            <div style="margin:6px 0 8px;">
+              <label style="font-size:10.5px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em;">Company to mimic</label>
+              <input type="text" id="vibe-company" value="Linear" style="width:100%; background:rgba(0,0,0,0.25); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; margin-top:4px;" oninput="updateVibePrompt()" />
+            </div>
+            <div class="meta-prompt" style="padding:10px 12px; font-size:11.5px;" id="vibe-prompt"></div>
+            <p style="font-size:11px; color:var(--muted); margin:8px 0 0; line-height:1.45;">Tip: <a href="https://brandfetch.com" target="_blank" rel="noopener" style="color:#60a5fa;">brandfetch.com</a> gives you exact brand colours to paste into the prompt.</p>
+          </div>
+        </div>
+
+        <p style="font-size:12px; color:var(--muted); margin-top:10px;">⚙️ <em>Or</em> click Lovable's <strong>Design</strong> button at the top of the preview to toggle between built-in colour themes — no prompt needed.</p>
+      </div>
+
+      <!-- ─── STEP 3 — Test with the real artifact ─── -->
+      <div style="margin-top:32px; padding-top:24px; border-top:1px solid var(--line);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:8px; background:#34d399; color:#0c1838; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:900; font-size:14px;">3</div>
+          <h3 style="margin:0; font-size:16px; color:#fff;">Test the prototype</h3>
+        </div>
+        <p class="question">Once your dashboard looks right, paste this real user-interview transcript into the <strong>Raw User Transcripts</strong> column and press <strong>Process</strong>. Watch what the UI actually does with messy input.</p>
+
+        <div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.25); border-radius:10px; padding:14px; margin-top:10px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
+            <div style="font-size:11px; font-weight:800; color:#34d399; text-transform:uppercase; letter-spacing:0.12em;">Artifact 1 · User Interview Transcript (Sarah, Data Analyst)</div>
+            <button onclick="copyTranscript()" style="padding:6px 14px; font-size:12px;">📋 Copy transcript</button>
+          </div>
+          <div class="meta-prompt" style="padding:12px 14px; font-size:12px; color:#a7f3d0; line-height:1.65;" id="transcript">Interviewer: So, tell me about your workflow.
+
+User (Sarah, Data Analyst): honestly, it's been a week. My dog has been barking all morning, sorry if you hear him. Anyway, I log into RocketShip every Monday. The first thing I notice is that the new blue navigation bar is really bright, like hurts my eyes bright. Can we change that? But yeah, so I go to the 'Quarterly Reports' tab. I select my date range — usually last 90 days — and hit 'Generate PDF.' That works fine. But then — and this is the part that makes me want to scream — I try to click 'Export to CSV' because I need to pivot this in Excel. It spins for like 5 minutes and then just crashes. No error message. Just blank. I've lost hours because of this. I end up just taking screenshots of the table, which is stupid. Oh, and I'd love a dark mode.</div>
+        </div>
+
+        <div class="tip" style="margin-top:14px;">
+          <strong>What to notice.</strong> The dashboard will probably look great but the AI summary often misses the actual signal. The CSV export crash is the real Revenue Blocker. The blue nav bar is noise. The dark-mode request is filler. <em>This is the &ldquo;Beautiful Liar&rdquo; problem</em> &mdash; the prompt for Step 2 of the module fixes it.
+        </div>
+      </div>
     </div>
   </section>
 </main>
@@ -390,9 +450,34 @@ function switchTab(name) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + name));
 }
 
+// ─── Step 2 helpers ───
+function brandPromptText() {
+  return document.getElementById('brand-prompt').textContent.trim();
+}
+function vibePromptText() {
+  const company = (document.getElementById('vibe-company').value || 'Linear').trim();
+  return "Refine the dashboard UI to match the aesthetic of " + company + ". Use their specific colour palette, border styles, typography, and spacing to make Juno feel like it belongs in that ecosystem. Keep the three-column layout and the Process Transcript button intact.";
+}
+function updateVibePrompt() {
+  document.getElementById('vibe-prompt').textContent = vibePromptText();
+}
+function copyBrandPrompt() {
+  navigator.clipboard.writeText(brandPromptText()).then(() => toast('Brand-alignment prompt copied — paste into Lovable as a follow-up'));
+}
+function copyVibePrompt() {
+  navigator.clipboard.writeText(vibePromptText()).then(() => toast('Vibe prompt copied — paste into Lovable as a follow-up'));
+}
+
+// ─── Step 3 helpers ───
+function copyTranscript() {
+  const txt = document.getElementById('transcript').textContent.trim();
+  navigator.clipboard.writeText(txt).then(() => toast('Transcript copied — paste into the Raw User Transcripts column'));
+}
+
 FIELDS.forEach(f => document.getElementById('f-' + f).addEventListener('input', update));
 load();
 update();
+updateVibePrompt();
 </script>
 </body>
 </html>
