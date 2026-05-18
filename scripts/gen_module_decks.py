@@ -2423,8 +2423,12 @@ def write_module(n: int, title: str, sections_inst: list[str], sections_share: l
 
 def main():
     print(f"Writing module decks to {MODULES_DIR}")
+    # Module 1 follows the original PowerPoint flow — implementation lives
+    # in m1_v2.py to keep this file from ballooning.
+    from m1_v2 import build_module_1 as build_module_1_v2
+
     builders = {
-        1: build_module_1,
+        1: build_module_1_v2,
         2: build_module_2,
         3: build_module_3,
         4: build_module_4,
