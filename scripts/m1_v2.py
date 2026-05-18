@@ -919,30 +919,80 @@ def prds_to_prompts() -> str:
     <div class="demo-tag tag-framework">Workflow Shift</div>
     <h2>From PRDs to Prompts</h2>
     <div class="subtitle">Your prompt is the prototype. The interpretation gap between Product and Engineering closes.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:24px 0;">
-      <div style="background:rgba(100,116,139,0.08); border:1px solid rgba(100,116,139,0.2); border-radius:14px; padding:24px; text-align:left;">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-          <div style="font-size:32px;">📄</div>
-          <div style="font-size:14px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:0.1em;">Old Way &middot; Paper Spec</div>
+
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:stretch; margin:24px 0 18px;">
+
+      <!-- OLD WAY · Paper Spec — deliberately muted, dashed, static -->
+      <div style="background:linear-gradient(180deg, rgba(100,116,139,0.06), rgba(100,116,139,0.02)); border:1px dashed rgba(148,163,184,0.35); border-radius:14px; padding:18px 20px; text-align:left; position:relative; opacity:0.92;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:22px; filter:grayscale(0.5);">📄</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#94a3b8; letter-spacing:0.14em; text-transform:uppercase;">Old Way &middot; Paper Spec</div>
+          </div>
+          <span style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:800; color:#94a3b8; letter-spacing:0.16em; padding:3px 9px; background:rgba(148,163,184,0.12); border:1px solid rgba(148,163,184,0.25); border-radius:99px; text-transform:uppercase;">🐢 Static</span>
         </div>
-        <ul style="margin:0; padding:0 0 0 4px; list-style:none;">
-          <li style="font-size:14px; color:#cdd5e3; line-height:1.55; padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.08);">A static text document describing desired behaviour, like &ldquo;the chatbot should be helpful and polite.&rdquo;</li>
-          <li style="font-size:14px; color:#cdd5e3; line-height:1.55; padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.08);">PMs handed their requirements doc to Engineering to interpret it.</li>
-          <li style="font-size:14px; color:#cdd5e3; line-height:1.55; padding:8px 0;">You wait 2 weeks and find &ldquo;polite&rdquo; means different things to you, Eng, and the model.</li>
+
+        <div style="background:rgba(0,0,0,0.3); border:1px dashed rgba(148,163,184,0.2); border-radius:8px; padding:10px 12px; margin-bottom:12px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#94a3b8; line-height:1.55; font-style:italic;">
+          &ldquo;The chatbot should be helpful and polite.&rdquo;
+        </div>
+
+        <ul style="margin:0 0 12px; padding:0; list-style:none;">
+          <li style="font-size:12.5px; color:#cdd5e3; line-height:1.55; padding:4px 0 4px 18px; position:relative;"><span style="position:absolute; left:0; top:6px; width:8px; height:8px; border-radius:50%; background:rgba(148,163,184,0.4);"></span>Hand the doc to Eng, hope they get it.</li>
+          <li style="font-size:12.5px; color:#cdd5e3; line-height:1.55; padding:4px 0 4px 18px; position:relative;"><span style="position:absolute; left:0; top:6px; width:8px; height:8px; border-radius:50%; background:rgba(148,163,184,0.4);"></span>Wait 2 weeks for the build.</li>
+          <li style="font-size:12.5px; color:#cdd5e3; line-height:1.55; padding:4px 0 4px 18px; position:relative;"><span style="position:absolute; left:0; top:6px; width:8px; height:8px; border-radius:50%; background:rgba(148,163,184,0.4);"></span>Discover &ldquo;polite&rdquo; meant 3 different things.</li>
         </ul>
+
+        <div style="border-top:1px dashed rgba(148,163,184,0.2); padding-top:8px; font-family:'Poppins',sans-serif; font-size:11px; color:#94a3b8;"><strong style="color:#cbd5e1;">Result:</strong> 2 weeks &rarr; <span style="opacity:0.85;">guesswork</span></div>
       </div>
-      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:14px; padding:24px; text-align:left;">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-          <div style="font-size:32px;">📦</div>
-          <div style="font-size:14px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em;">New Way &middot; Prompt Spec</div>
+
+      <!-- Central transformation indicator -->
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 4px;">
+        <svg width="44" height="60" viewBox="0 0 44 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:8px;">
+          <defs>
+            <linearGradient id="prd-grad" x1="0" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#94a3b8" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#60a5fa"/>
+            </linearGradient>
+            <filter id="prd-glow"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+          <line x1="0" y1="30" x2="34" y2="30" stroke="url(#prd-grad)" stroke-width="2.5" stroke-linecap="round"/>
+          <polygon points="44,30 32,24 32,36" fill="#60a5fa"/>
+          <circle cx="44" cy="30" r="6" fill="#60a5fa" opacity="0.18" filter="url(#prd-glow)"/>
+        </svg>
+        <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#60a5fa; letter-spacing:0.18em; text-transform:uppercase; writing-mode:horizontal-tb;">Shift</div>
+      </div>
+
+      <!-- NEW WAY · Prompt Spec — glowing, structured, live -->
+      <div style="background:linear-gradient(180deg, rgba(96,165,250,0.1), rgba(96,165,250,0.03)); border:1px solid rgba(96,165,250,0.45); border-radius:14px; padding:18px 20px; text-align:left; box-shadow:0 0 0 1px rgba(96,165,250,0.08), 0 12px 32px rgba(96,165,250,0.12), inset 0 0 24px rgba(96,165,250,0.04); position:relative;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:22px;">⚡</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#60a5fa; letter-spacing:0.14em; text-transform:uppercase;">New Way &middot; Prompt Spec</div>
+          </div>
+          <span style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:800; color:#34d399; letter-spacing:0.16em; padding:3px 9px; background:rgba(52,211,153,0.14); border:1px solid rgba(52,211,153,0.3); border-radius:99px; text-transform:uppercase;">⚡ Live</span>
         </div>
-        <ul style="margin:0; padding:0 0 0 4px; list-style:none;">
-          <li style="font-size:14px; color:#cdd5e3; line-height:1.55; padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.08);">A working system prompt using the four prompt anatomy configurations and prompting techniques.</li>
-          <li style="font-size:14px; color:#cdd5e3; line-height:1.55; padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.08);">PMs build the logic in a playground and test edge cases immediately.</li>
-          <li style="font-size:14px; color:#cdd5e3; line-height:1.55; padding:8px 0;">You hand the working prompt to Eng and prove the logic works &mdash; no guessing required.</li>
+
+        <div style="background:rgba(0,0,0,0.34); border:1px solid rgba(96,165,250,0.18); border-radius:8px; padding:10px 12px; margin-bottom:12px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.65;">
+          <span style="color:#d29922;">role:</span> <span style="color:#cdd5e3;">senior B2B researcher</span><br>
+          <span style="color:#d29922;">task:</span> <span style="color:#cdd5e3;">synthesise raw transcripts</span><br>
+          <span style="color:#d29922;">constraints:</span> <span style="color:#cdd5e3;">cite source IDs, no PII</span><br>
+          <span style="color:#d29922;">format:</span> <span style="color:#cdd5e3;">markdown table | Risk | Source |</span>
+        </div>
+
+        <ul style="margin:0 0 12px; padding:0; list-style:none;">
+          <li style="font-size:12.5px; color:#cdd5e3; line-height:1.55; padding:4px 0 4px 18px; position:relative;"><span style="position:absolute; left:0; top:6px; width:8px; height:8px; border-radius:50%; background:#60a5fa; box-shadow:0 0 8px rgba(96,165,250,0.6);"></span>Build the logic in a playground.</li>
+          <li style="font-size:12.5px; color:#cdd5e3; line-height:1.55; padding:4px 0 4px 18px; position:relative;"><span style="position:absolute; left:0; top:6px; width:8px; height:8px; border-radius:50%; background:#60a5fa; box-shadow:0 0 8px rgba(96,165,250,0.6);"></span>Test edge cases instantly.</li>
+          <li style="font-size:12.5px; color:#cdd5e3; line-height:1.55; padding:4px 0 4px 18px; position:relative;"><span style="position:absolute; left:0; top:6px; width:8px; height:8px; border-radius:50%; background:#60a5fa; box-shadow:0 0 8px rgba(96,165,250,0.6);"></span>Hand Eng a working spec, not a guess.</li>
         </ul>
+
+        <div style="border-top:1px solid rgba(96,165,250,0.22); padding-top:8px; font-family:'Poppins',sans-serif; font-size:11px; color:#79c0ff;"><strong style="color:#fff;">Result:</strong> 30 min &rarr; <span style="color:#34d399;">proof</span></div>
       </div>
     </div>
+
+    <p style="font-size:13px; color:#cdd5e3; text-align:center; margin:0; max-width:760px; margin-left:auto; margin-right:auto; padding:10px 18px; background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.18); border-radius:99px;">
+      <span style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#60a5fa; letter-spacing:0.14em; text-transform:uppercase;">Punchline</span>
+      &nbsp;&nbsp;The prompt <em>is</em> the requirement <em>is</em> the prototype. One artefact for PM, Eng, and the model.
+    </p>
   </div>
 </section>
 """
