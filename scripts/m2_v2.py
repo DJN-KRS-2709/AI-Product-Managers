@@ -831,14 +831,14 @@ def m2_resources_templates() -> str:
     <div class="subtitle">Bonus &mdash; everything you need is one click away.</div>
     <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; margin:24px 0; max-width:980px; margin-left:auto; margin-right:auto;">
       <a href="M2%20-%20Three-Layer%20Model%20Mapper.html" style="text-decoration:none;"><div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
-        <div style="font-size:11px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 1 &middot; Three-Layer Mapper</div>
-        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">Three-Layer Model Mapper</div>
-        <div style="font-size:13px; color:#8899bb;">&rarr; Map Juno&rsquo;s strategic bet</div>
+        <div style="font-size:11px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 1 &middot; Solo Exercise</div>
+        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">Mapping Juno&rsquo;s Strategic Bet</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Open the Three-Layer Model Mapper</div>
       </div></a>
       <a href="M2%20-%20AI%20Strategy%20One-Pager%20Builder.html" style="text-decoration:none;"><div style="background:rgba(217,142,34,0.08); border:1px solid rgba(217,142,34,0.3); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
-        <div style="font-size:11px; font-weight:800; color:#d29922; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 2 &middot; One-Pager Workspace</div>
-        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">AI Strategy One-Pager Builder</div>
-        <div style="font-size:13px; color:#8899bb;">&rarr; Six-section defensible bet</div>
+        <div style="font-size:11px; font-weight:800; color:#d29922; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 2 &middot; Solo Exercise</div>
+        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">Build Juno&rsquo;s AI Strategy One-Pager</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Open the One-Pager Builder</div>
       </div></a>
       <a href="../Final%20Project%20Brief.html" style="text-decoration:none;"><div style="background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
         <div style="font-size:11px; font-weight:800; color:#bcb1ff; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">AI PM Certification</div>
