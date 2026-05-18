@@ -365,8 +365,8 @@ def build_tools_overview() -> list[str]:
         ["Tool", "Output", "Repo path"],
         [["<a href=\"Modules/M1 - PM Toolkit Picker.html\" style=\"color:#60a5fa;\">PM Toolkit Picker</a>",
           "5-category stack you commit to.", "<code>01-prompting/toolkit.md</code>"],
-         ["<a href=\"Modules/M1 - Prompt Anatomy Builder.html\" style=\"color:#60a5fa;\">Prompt Anatomy Builder</a>",
-          "5-element prompt assembled live.", "<code>01-prompting/anatomy-prompt.md</code>"],
+         ["<a href=\"Modules/M1 - Prompt Anatomy Builder.html\" style=\"color:#60a5fa;\">Juno Prototype Prompt Builder</a>",
+          "Pre-filled Role/Task/Constraints/Format with Option A (Build Your Own) and Option B (Juno Baseline) presets. Outputs a single block ready to paste into Lovable.", "<code>01-prompting/lovable-prompt.md</code>"],
          ["<a href=\"Modules/M1 - System Prompt Configurator.html\" style=\"color:#60a5fa;\">System Prompt Configurator</a>",
           "Persona · scope · refusal rules · format.", "<code>01-prompting/system-prompt.md</code>"]],
         tag_label="Framework"))

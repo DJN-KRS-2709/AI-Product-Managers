@@ -3,147 +3,396 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M1 — Prompt Anatomy Builder</title>
+<title>M1 — Juno Prototype Prompt Builder</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}h1,h2,h3{font-family:'Poppins',sans-serif}header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%)}button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}button:hover{transform:translateY(-1px)}button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px;letter-spacing:-.01em}
-  header .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
-  @media(max-width:960px){main{grid-template-columns:1fr}}
-  .panel{padding:24px 32px;overflow:auto}
-  .panel.left{border-right:1px solid var(--line)}
-  .field{margin-bottom:18px}
-  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
-  .hint{color:var(--muted);font-size:13px;margin:0 0 8px}
-  textarea,input[type=text]{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
-  textarea{min-height:80px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus,input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  .row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  button:hover{filter:brightness(1.08)}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
-  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
-  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
-  .check ul{margin:6px 0 0;padding-left:18px}
-  .check li{margin:6px 0;font-size:14px}
-  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;margin-left:8px;background:#22293a;color:var(--muted)}
-  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
-  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#07162C; --fg:#e8e8f0; --muted:#8899bb; --accent:#60a5fa; --accent2:#79c0ff;
+  --card:#0c2244; --line:rgba(255,255,255,0.08); --ok:#34d399; --warn:#fbbf24; --brand:#1241B0;
+  --pink:#ec4899;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-.005em}
+header{padding:24px 32px;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at 18% 50%, rgba(96,165,250,0.10) 0%, transparent 60%);display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px}
+header .crumb{color:var(--muted);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+header h1{margin:6px 0 4px;font-size:24px}
+header .lede{margin:0;font-size:14px;color:var(--muted);max-width:540px}
+.preset-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s, filter 0.15s}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+button.preset{background:linear-gradient(135deg, rgba(96,165,250,0.18), rgba(96,165,250,0.06));color:#cdd5e3;border:1px solid rgba(96,165,250,0.4);box-shadow:none;display:inline-flex;align-items:center;gap:8px}
+button.preset.active{background:linear-gradient(135deg, rgba(96,165,250,0.4), rgba(96,165,250,0.15));color:#fff;border-color:#60a5fa;box-shadow:0 0 18px rgba(96,165,250,0.3)}
+button.preset .dot{width:8px;height:8px;border-radius:50%;background:#60a5fa;flex-shrink:0}
+button.preset.active .dot{background:#fff}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 140px)}
+@media(max-width:1080px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.banner{background:linear-gradient(135deg, rgba(96,165,250,0.10), rgba(124,140,255,0.04));border:1px solid rgba(96,165,250,0.25);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:13.5px;color:#cdd5e3;line-height:1.55}
+.banner strong{color:#fff}
+.field{margin-bottom:22px;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:border-color 0.2s}
+.field:focus-within{border-color:rgba(96,165,250,0.4)}
+.field-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:10px}
+.field-label{display:inline-flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:800}
+.field-label .num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;font-size:11px;color:#fff;font-weight:900}
+.field[data-color="role"] .num{background:#3b82f6}
+.field[data-color="role"] .field-label{color:#3b82f6}
+.field[data-color="task"] .num{background:#79c0ff}
+.field[data-color="task"] .field-label{color:#79c0ff}
+.field[data-color="constraints"] .num{background:#d29922}
+.field[data-color="constraints"] .field-label{color:#d29922}
+.field[data-color="format"] .num{background:#34d399}
+.field[data-color="format"] .field-label{color:#34d399}
+.question{font-size:13.5px;color:#cdd5e3;line-height:1.5;margin:0 0 10px}
+.question em{color:var(--muted);font-style:normal;font-size:12.5px}
+textarea{width:100%;background:rgba(0,0,0,0.25);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font:inherit;font-size:13.5px;line-height:1.55;resize:vertical;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;min-height:90px}
+textarea:focus{outline:0;border-color:var(--accent);background:rgba(0,0,0,0.4)}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,0.05);color:var(--muted)}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
+.badge.warn{background:rgba(251,191,36,.14);color:var(--warn)}
+.preview-wrap{position:sticky;top:24px}
+.preview-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.preview-head h3{margin:0;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.preview-actions{display:flex;gap:8px;flex-wrap:wrap}
+.preview{background:rgba(0,0,0,0.4);border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:18px 22px;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.65;white-space:pre-wrap;color:#d5dbea;max-height:520px;overflow:auto;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
+.preview::-webkit-scrollbar{width:8px}
+.preview::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+.tip{background:rgba(212,153,34,0.06);border:1px solid rgba(212,153,34,0.2);border-radius:10px;padding:12px 16px;margin:14px 0;font-size:13px;color:#e3d4a8;line-height:1.55}
+.tip::before{content:"💡 ";margin-right:4px}
+.check{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-top:18px}
+.check h4{margin:0 0 8px;font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:.16em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:0;list-style:none}
+.check li{margin:8px 0;font-size:13.5px;color:#cdd5e3;line-height:1.5;padding-left:24px;position:relative;transition:color 0.2s}
+.check li::before{content:"○";position:absolute;left:0;top:0;font-size:14px;color:var(--muted)}
+.check li.done{color:var(--ok)}
+.check li.done::before{content:"✓";color:var(--ok);font-weight:900}
+.meta-prompt{background:rgba(124,140,255,0.06);border:1px solid rgba(124,140,255,0.2);border-radius:10px;padding:14px 16px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#bcb1ff;line-height:1.6;white-space:pre-wrap}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--ok);border-radius:8px;padding:12px 18px;color:var(--ok);font-size:13.5px;font-weight:700;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:100}
+.toast.show{display:block;animation:slidein 0.25s ease}
+@keyframes slidein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tab-row{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tab{padding:10px 18px;background:transparent;color:var(--muted);border:0;border-bottom:2px solid transparent;border-radius:0;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer;box-shadow:none;text-transform:uppercase}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover{color:#cdd5e3}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
 </style>
 </head>
 <body>
+
 <header>
   <div>
-    <div class="crumb">Module 1 · Tool</div>
-    <h1>Prompt Anatomy Builder</h1>
+    <div class="crumb">Module 1 · Lab Tool</div>
+    <h1>Juno Prototype Prompt Builder</h1>
+    <p class="lede">For the <strong>Prompt-to-Prototype Your Copilot with Lovable</strong> lab. Pre-filled with starter values from the lab guide — adjust to taste, then copy the combined prompt straight into Lovable.</p>
   </div>
-  <div class="row">
-    <button onclick="copyMd()">Copy as markdown</button>
-    <button class="secondary" onclick="download()">Download .md</button>
-    <button class="secondary" onclick="reset()">Reset</button>
+  <div class="preset-bar">
+    <button class="preset active" id="optA-btn" onclick="loadPreset('a')"><span class="dot"></span>Option A · Build Your Own</button>
+    <button class="preset" id="optB-btn" onclick="loadPreset('b')"><span class="dot"></span>Option B · Juno Baseline</button>
+    <button class="secondary" onclick="resetAll()" title="Clear all fields">Reset</button>
   </div>
 </header>
+
 <main>
   <section class="panel left">
-    <p class="hint">Fill in each element. A production prompt declares all five. The preview on the right updates live; export it to <code>01-prompting/anatomy-prompt.md</code>.</p>
+    <div class="banner" id="banner-a">
+      <strong>Option A · Build Your Own.</strong> Each field is pre-filled with a richer starter from the lab guide. Edit, refine, or replace anything you want. The right panel updates live and gives you a single block ready to paste into Lovable.
+    </div>
 
-    <div class="field"><label>1. Context <span class="badge" id="b1">empty</span></label>
-      <p class="hint">Who the AI is, what system it lives in, what it knows. Be specific about role + operating context.</p>
-      <textarea id="f1" placeholder="You are Juno PM, an AI Associate PM embedded in the Slack, Notion, and Jira of RocketShip's AI Product team..."></textarea>
+    <div class="field" data-color="role">
+      <div class="field-head">
+        <div class="field-label"><span class="num">1</span>Role</div>
+        <span class="badge" id="b-role">filled</span>
+      </div>
+      <p class="question">Expertise: Who is the model pretending to be to build this? <em>e.g., a Senior Frontend Engineer with B2B SaaS dashboard experience.</em></p>
+      <textarea id="f-role"></textarea>
     </div>
-    <div class="field"><label>2. Task <span class="badge" id="b2">empty</span></label>
-      <p class="hint">The explicit instruction, verb-first.</p>
-      <textarea id="f2" placeholder="Summarise the attached wall of P0 escalation threads into a prioritised list of 5 risks, each with the underlying customer signal..."></textarea>
+
+    <div class="field" data-color="task">
+      <div class="field-head">
+        <div class="field-label"><span class="num">2</span>Task</div>
+        <span class="badge" id="b-task">filled</span>
+      </div>
+      <p class="question">Objective: Based on RocketShip's bottleneck, what is the goal of this UI? <em>e.g., synthesise messy raw data into evidence-backed PRD drafts.</em></p>
+      <textarea id="f-task"></textarea>
     </div>
-    <div class="field"><label>3. Constraints <span class="badge" id="b3">empty</span></label>
-      <p class="hint">Must-not-dos, format requirements, scope boundaries. At least 3, including 1 explicit refusal rule.</p>
-      <textarea id="f3" placeholder="- Cite the Slack ticket ID for every risk.
-- If a thread is ambiguous, mark it 'NEEDS CLARIFICATION' instead of guessing.
-- Do not invent customer names, ARR values, or contractual terms."></textarea>
+
+    <div class="field" data-color="constraints">
+      <div class="field-head">
+        <div class="field-label"><span class="num">3</span>Constraints</div>
+        <span class="badge" id="b-constraints">filled</span>
+      </div>
+      <p class="question">Guardrails: What specific layout rules ensure you don't get buried in noise? <em>e.g., dark mode, three equal columns, persistent action button.</em></p>
+      <textarea id="f-constraints"></textarea>
     </div>
-    <div class="field"><label>4. Output format <span class="badge" id="b4">empty</span></label>
-      <p class="hint">Schema, length, structure (markdown / JSON / table).</p>
-      <textarea id="f4" placeholder="Markdown table with columns: Rank | Risk | Customer signal | Source ticket ID | Suggested action. Max 5 rows."></textarea>
+
+    <div class="field" data-color="format">
+      <div class="field-head">
+        <div class="field-label"><span class="num">4</span>Format</div>
+        <span class="badge" id="b-format">filled</span>
+      </div>
+      <p class="question">Structure: What UI blocks are required to handle RocketShip's data flood? <em>e.g., three columns: Raw input · Structured insights · Draft PRD.</em></p>
+      <textarea id="f-format"></textarea>
     </div>
-    <div class="field"><label>5. Examples <span class="badge" id="b5">optional</span></label>
-      <p class="hint">1–3 ideal input/output pairs. Skip for simple tasks; include for tricky formatting.</p>
-      <textarea id="f5" placeholder="Example input: [Slack thread...]
-Example output:
-| 1 | Auth retry storm | ACME (3 tickets, $850k ARR) | TICK-4421 | Page on-call; draft P0 hotfix spec |"></textarea>
+
+    <div class="tip">
+      <strong>Credit-saver tip.</strong> Lovable free accounts are limited to 2–3 prompts per day. If you go off-script, refine your final prompt in ChatGPT/Claude/Gemini <em>first</em>, then paste the polished version into Lovable. Use the meta-prompt on the right.
     </div>
   </section>
 
   <section class="panel right">
-    <label>Live preview</label>
-    <p class="hint">Copy this to your repo at <code>01-prompting/anatomy-prompt.md</code>.</p>
-    <div class="preview" id="preview"></div>
+    <div class="preview-wrap">
+      <div class="tab-row">
+        <button class="tab active" data-tab="prompt" onclick="switchTab('prompt')">Lovable Prompt</button>
+        <button class="tab" data-tab="markdown" onclick="switchTab('markdown')">Markdown for repo</button>
+        <button class="tab" data-tab="meta" onclick="switchTab('meta')">Refine in LLM first</button>
+      </div>
 
-    <div class="check">
-      <h3>Self-review checklist</h3>
-      <ul>
-        <li id="c1">Context names the role + operating context</li>
-        <li id="c2">Task starts with a verb</li>
-        <li id="c3">At least 3 constraints, including 1 refusal rule</li>
-        <li id="c4">Output format declared (schema or length)</li>
-        <li id="c5">An example for the trickiest case</li>
-      </ul>
-    </div>
+      <div class="tab-pane active" id="pane-prompt">
+        <div class="preview-head">
+          <h3>Ready to paste into Lovable</h3>
+          <div class="preview-actions">
+            <button onclick="copyPrompt()">📋 Copy for Lovable</button>
+          </div>
+        </div>
+        <div class="preview" id="preview-prompt"></div>
+      </div>
 
-    <div class="check">
-      <h3>AI-review prompt</h3>
-      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your prompt + this into ChatGPT, Claude, or Cursor:</p>
-      <div class="preview" style="font-size:12px">You are a senior AI PM reviewer. Critique this prompt against the 5-element anatomy (Context, Task, Constraints, Output Format, Examples). For each missing or weak element, suggest one specific change. End with the single biggest risk this prompt would have in production.</div>
+      <div class="tab-pane" id="pane-markdown">
+        <div class="preview-head">
+          <h3>Anatomy in Markdown</h3>
+          <div class="preview-actions">
+            <button onclick="copyMd()" class="secondary">Copy</button>
+            <button onclick="downloadMd()" class="secondary">Download .md</button>
+          </div>
+        </div>
+        <p class="question" style="margin-top:0">Commit this to your repo at <code>juno-pm/01-prompting/lovable-prompt.md</code> as part of your project deliverables.</p>
+        <div class="preview" id="preview-md"></div>
+      </div>
+
+      <div class="tab-pane" id="pane-meta">
+        <div class="preview-head">
+          <h3>Refine your prompt in a free LLM first</h3>
+          <div class="preview-actions">
+            <button onclick="copyMeta()" class="secondary">Copy meta-prompt</button>
+          </div>
+        </div>
+        <p class="question" style="margin-top:0">Paste this meta-prompt into ChatGPT, Claude, or Gemini together with your anatomy notes. The LLM polishes it into a single technical prompt — saving Lovable credits.</p>
+        <div class="meta-prompt" id="preview-meta"></div>
+      </div>
+
+      <div class="check">
+        <h4>Self-Review Checklist</h4>
+        <ul>
+          <li id="c-role">Role names a specific persona <strong>and</strong> their expertise (years, domain)</li>
+          <li id="c-task">Task starts with a verb and ties to RocketShip's actual bottleneck</li>
+          <li id="c-constraints">At least 3 constraints, including a "do not" rule</li>
+          <li id="c-format">Format describes columns, components, AND interaction (a button, a state)</li>
+          <li id="c-length">Combined prompt is between 80 and 350 words</li>
+        </ul>
+      </div>
     </div>
   </section>
 </main>
+
 <div class="toast" id="toast">Copied to clipboard</div>
+
 <script>
-  const ids=['f1','f2','f3','f4','f5'];
-  const KEY='m1-prompt-anatomy';
-  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);ids.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
-  function save(){const o={};ids.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
-  function val(id){return document.getElementById(id).value.trim()}
-  function setBadge(id,ok,label){const b=document.getElementById(id);b.textContent=ok?'filled':label;b.className='badge '+(ok?'ok':label==='optional'?'':'warn')}
-  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
-  function md(){
-    const c=val('f1'),t=val('f2'),k=val('f3'),o=val('f4'),e=val('f5');
-    let s='# Juno PM — Anatomy Prompt\n\n';
-    s+='## Context\n\n'+(c||'_(missing)_')+'\n\n';
-    s+='## Task\n\n'+(t||'_(missing)_')+'\n\n';
-    s+='## Constraints\n\n'+(k||'_(missing)_')+'\n\n';
-    s+='## Output format\n\n'+(o||'_(missing)_')+'\n\n';
-    if(e) s+='## Examples\n\n'+e+'\n\n';
-    return s;
+const FIELDS = ['role', 'task', 'constraints', 'format'];
+const KEY = 'm1-juno-prototype-prompt-v2';
+
+// PRESETS
+const OPTION_A = {
+  role: "Act as a Senior Frontend Engineer with 8+ years of experience shipping production React dashboards for B2B SaaS products. You specialise in clean, dark-mode interfaces that balance information density with breathing room.",
+  task: "Build a clickable three-column dashboard for 'Juno PM' — an AI Associate PM at RocketShip. Juno helps PMs synthesise messy raw inputs (interview transcripts, support tickets, executive emails) into evidence-backed PRD drafts, replacing the chaos of jumping between Slack, Notion, and Jira.",
+  constraints: "- Use a dark-mode aesthetic with a single accent colour for emphasis (no rainbow palettes).\n- Three columns of equal width that don't reflow on a standard laptop screen (1280px+).\n- Keep the 'Process Transcript' button persistently visible — never hidden behind a scroll.\n- Do not add settings, configuration panels, login screens, or auth flows for V1.\n- Do not add a sidebar or top navigation — go straight to the dashboard.",
+  format: "Three columns:\n• LEFT — 'Raw User Transcripts': a large textarea where users paste interviews, tickets, and emails.\n• MIDDLE — 'Structured Insights': cards with Priority and Sentiment tags, generated from the raw input.\n• RIGHT — 'Draft PRD': a markdown preview pane showing a rendered Opportunity Brief.\nAdd a prominent 'Process Transcript' button between LEFT and MIDDLE that triggers a loading state for 1.5s before populating the other two columns."
+};
+
+const OPTION_B = {
+  role: "Act as a Senior Frontend Engineer.",
+  task: "Build a clean, dark-mode Dashboard for 'Juno.'",
+  constraints: "Add a 'Process' button that triggers a loading state.",
+  format: "Left Column: Input area for 'Raw User Transcripts.'\nMiddle Column: 'Structured Insights' (Cards with Priority/Sentiment).\nRight Column: 'Draft PRD' (Markdown preview)."
+};
+
+let currentPreset = 'a';
+
+function val(field) { return document.getElementById('f-' + field).value.trim(); }
+function setVal(field, v) { document.getElementById('f-' + field).value = v; }
+
+function loadPreset(letter) {
+  if (currentPreset !== letter) {
+    if (!confirm("Replace your current edits with the " + (letter === 'a' ? 'Option A · Build Your Own' : 'Option B · Juno Baseline') + " values?")) {
+      return;
+    }
   }
-  function update(){
-    const c=val('f1'),t=val('f2'),k=val('f3'),o=val('f4'),e=val('f5');
-    setBadge('b1',!!c,'empty');
-    setBadge('b2',!!t,'empty');
-    const cs=(k.match(/^\s*[-*]/gm)||[]).length;
-    const hasRefusal=/\b(do not|never|must not|refuse|decline|if .* (missing|ambiguous|unclear))\b/i.test(k);
-    setBadge('b3',cs>=3&&hasRefusal,cs===0?'empty':(cs<3?'add more':'add refusal'));
-    setBadge('b4',!!o,'empty');
-    setBadge('b5',!!e,'optional');
-    setCheck('c1',/(you are|act as|persona)/i.test(c) && c.length>30);
-    setCheck('c2',/^[\s\S]*?\b(synthes|summari[sz]e|draft|prioriti[sz]e|list|generate|extract|classif|score|flag|review|analy[sz]e|propose|write|translate)\b/i.test(t));
-    setCheck('c3',cs>=3 && hasRefusal);
-    setCheck('c4',o.length>0 && /(markdown|json|table|list|schema|max|length|rows|columns)/i.test(o));
-    setCheck('c5',e.length>30);
-    document.getElementById('preview').textContent=md();
-    save();
+  const preset = letter === 'a' ? OPTION_A : OPTION_B;
+  FIELDS.forEach(f => setVal(f, preset[f]));
+  currentPreset = letter;
+  document.getElementById('optA-btn').classList.toggle('active', letter === 'a');
+  document.getElementById('optB-btn').classList.toggle('active', letter === 'b');
+  document.getElementById('banner-a').innerHTML = letter === 'a'
+    ? "<strong>Option A · Build Your Own.</strong> Each field is pre-filled with a richer starter from the lab guide. Edit, refine, or replace anything you want. The right panel updates live and gives you a single block ready to paste into Lovable."
+    : "<strong>Option B · Juno Baseline.</strong> The off-the-shelf prompt straight from the lab guide. Use this if you're tight on time or new to prompting — it works on Lovable's free tier. You can still adjust any field below before copying.";
+  update();
+}
+
+function resetAll() {
+  if (!confirm("Clear all fields?")) return;
+  FIELDS.forEach(f => setVal(f, ''));
+  localStorage.removeItem(KEY);
+  update();
+}
+
+function buildLovablePrompt() {
+  const r = val('role'), t = val('task'), c = val('constraints'), o = val('format');
+  if (!r && !t && !c && !o) return "(Fill in at least one field on the left to see your Lovable prompt.)";
+  const parts = [];
+  if (r) parts.push(r);
+  if (t) parts.push(t);
+  if (o) {
+    parts.push("");
+    parts.push(o);
   }
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='anatomy-prompt.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Clear all fields?')){ids.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
-  ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
-  load();update();
+  if (c) {
+    parts.push("");
+    parts.push("Rules:");
+    parts.push(c);
+  }
+  return parts.join("\n").trim();
+}
+
+function buildMarkdown() {
+  const r = val('role'), t = val('task'), c = val('constraints'), o = val('format');
+  let s = "# Juno Prototype Prompt — Module 1\n\n";
+  s += "_Generated from the Juno Prototype Prompt Builder. Used to scaffold the V1 UI in Lovable._\n\n";
+  s += "## 1. Role\n\n" + (r || "_(missing)_") + "\n\n";
+  s += "## 2. Task\n\n" + (t || "_(missing)_") + "\n\n";
+  s += "## 3. Constraints\n\n" + (c || "_(missing)_") + "\n\n";
+  s += "## 4. Format\n\n" + (o || "_(missing)_") + "\n\n";
+  s += "---\n\n## Combined prompt (paste into Lovable)\n\n```\n" + buildLovablePrompt() + "\n```\n";
+  return s;
+}
+
+function buildMetaPrompt() {
+  const r = val('role'), t = val('task'), c = val('constraints'), o = val('format');
+  return [
+    "I am building the 'Juno PM' dashboard for RocketShip in Lovable.",
+    "",
+    "Based on these anatomy notes, write a single cohesive technical prompt to generate a functional React interface that handles raw data on the left and outputs PRD drafts on the right. Output the prompt verbatim — no preamble, no explanation.",
+    "",
+    "ROLE:",
+    r || "(empty)",
+    "",
+    "TASK:",
+    t || "(empty)",
+    "",
+    "CONSTRAINTS:",
+    c || "(empty)",
+    "",
+    "FORMAT:",
+    o || "(empty)"
+  ].join("\n");
+}
+
+function setBadge(field, ok, label) {
+  const b = document.getElementById('b-' + field);
+  b.textContent = ok ? 'filled' : (label || 'empty');
+  b.className = 'badge ' + (ok ? 'ok' : 'warn');
+}
+
+function setCheck(id, ok) {
+  document.getElementById(id).classList.toggle('done', ok);
+}
+
+function update() {
+  const r = val('role'), t = val('task'), c = val('constraints'), o = val('format');
+  setBadge('role', r.length > 8);
+  setBadge('task', t.length > 12);
+  const cLines = (c.match(/^[\s•\-*]/gm) || []).length;
+  setBadge('constraints', cLines >= 2 || c.length > 40);
+  setBadge('format', o.length > 20);
+
+  setCheck('c-role', r.length > 30 && /(senior|engineer|specialist|expert|years|architect|designer)/i.test(r));
+  setCheck('c-task', t.length > 30 && /^[\s\S]{0,40}\b(act|build|design|create|generate|develop|implement|construct|prototype)\b/i.test(t));
+  setCheck('c-constraints', cLines >= 3 && /\b(do not|never|avoid|don't|no |without)\b/i.test(c));
+  setCheck('c-format', o.length > 40 && /(column|panel|card|button|component|section|preview|state|loading)/i.test(o));
+  const wc = buildLovablePrompt().split(/\s+/).length;
+  setCheck('c-length', wc >= 80 && wc <= 350);
+
+  document.getElementById('preview-prompt').textContent = buildLovablePrompt();
+  document.getElementById('preview-md').textContent = buildMarkdown();
+  document.getElementById('preview-meta').textContent = buildMetaPrompt();
+
+  save();
+}
+
+function save() {
+  const o = { preset: currentPreset };
+  FIELDS.forEach(f => o[f] = val(f));
+  localStorage.setItem(KEY, JSON.stringify(o));
+}
+
+function load() {
+  const s = localStorage.getItem(KEY);
+  if (!s) {
+    loadPresetSilent('a');
+    return;
+  }
+  try {
+    const o = JSON.parse(s);
+    FIELDS.forEach(f => { if (o[f] !== undefined) setVal(f, o[f]); });
+    currentPreset = o.preset || 'a';
+    document.getElementById('optA-btn').classList.toggle('active', currentPreset === 'a');
+    document.getElementById('optB-btn').classList.toggle('active', currentPreset === 'b');
+  } catch (e) {
+    loadPresetSilent('a');
+  }
+}
+
+function loadPresetSilent(letter) {
+  const preset = letter === 'a' ? OPTION_A : OPTION_B;
+  FIELDS.forEach(f => setVal(f, preset[f]));
+  currentPreset = letter;
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg || 'Copied to clipboard';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(buildLovablePrompt()).then(() => toast('Lovable prompt copied — paste into the Lovable chat box.'));
+}
+function copyMd() {
+  navigator.clipboard.writeText(buildMarkdown()).then(() => toast('Markdown copied — commit to juno-pm/01-prompting/'));
+}
+function copyMeta() {
+  navigator.clipboard.writeText(buildMetaPrompt()).then(() => toast('Meta-prompt copied — paste into ChatGPT or Claude'));
+}
+function downloadMd() {
+  const b = new Blob([buildMarkdown()], { type: 'text/markdown' });
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a');
+  a.href = u; a.download = 'lovable-prompt.md'; a.click();
+  URL.revokeObjectURL(u);
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + name));
+}
+
+FIELDS.forEach(f => document.getElementById('f-' + f).addEventListener('input', update));
+load();
+update();
 </script>
 </body>
 </html>

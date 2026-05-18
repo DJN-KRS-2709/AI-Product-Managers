@@ -1014,7 +1014,7 @@ def build_module_1():
             repo_path="juno-pm/01-prompting/lovable-prototype.md",
             timer_min=25,
             tool_url="../Modules/M1%20-%20Prompt%20Anatomy%20Builder.html",
-            tool_desc="Use the Prompt Anatomy Builder to draft Role · Task · Constraints · Format before pasting into Lovable.",
+            tool_desc="Pre-filled Role · Task · Constraints · Format. Toggle Option A (Build Your Own) ↔ Option B (Juno Baseline). Copy the combined prompt straight into Lovable.",
         ),
         note="25-minute solo build. The activity is 100% individual — original course called this an 'Individual Exercise', so we kept that. After the lab, learners post their experience in #ai-pm-cohort.",
     )
