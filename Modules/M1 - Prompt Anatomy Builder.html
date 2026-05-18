@@ -255,6 +255,45 @@ User (Sarah, Data Analyst): honestly, it's been a week. My dog has been barking 
           <strong>What to notice.</strong> The dashboard will probably look great but the AI summary often misses the actual signal. The CSV export crash is the real Revenue Blocker. The blue nav bar is noise. The dark-mode request is filler. <em>This is the &ldquo;Beautiful Liar&rdquo; problem</em> &mdash; the prompt for Step 2 of the module fixes it.
         </div>
       </div>
+
+      <!-- ─── STEP 4 — Connect to GitHub ─── -->
+      <div style="margin-top:32px; padding-top:24px; border-top:1px solid var(--line);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:8px; background:#f87171; color:#0c1838; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:900; font-size:14px;">4</div>
+          <h3 style="margin:0; font-size:16px; color:#fff;">Connect Lovable to GitHub</h3>
+        </div>
+        <p class="question">Push the prototype's React source code to a GitHub repo so it survives Lovable, can be forked by an engineer, and lives next to your <code>juno-pm</code> deliverables.</p>
+
+        <div style="background:rgba(248,113,113,0.05); border:1px solid rgba(248,113,113,0.25); border-radius:10px; padding:16px 18px; margin-top:10px;">
+          <div style="font-size:11px; font-weight:800; color:#fca5a5; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:10px;">In Lovable</div>
+          <ol style="margin:0; padding-left:20px; font-size:13.5px; color:#cdd5e3; line-height:1.75;">
+            <li>Top-right of the project: click the <strong>GitHub</strong> icon (or <em>Settings</em> → <em>GitHub</em>).</li>
+            <li>Click <strong>Connect GitHub</strong> and authorise the Lovable app for your account.</li>
+            <li>Choose <strong>Create new repository</strong>. Name it <code>juno-pm-prototype</code>. Public is fine — it&rsquo;s portfolio material.</li>
+            <li>Lovable pushes the source code automatically. Every prompt iteration creates a new commit, so your history is preserved.</li>
+          </ol>
+          <p style="font-size:12px; color:var(--muted); margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06); line-height:1.55;">
+            <strong style="color:#cdd5e3;">Free-tier note.</strong> Lovable's GitHub integration works on the free plan but may be rate-limited. If you hit a cap, do this step at the end after your final iteration.
+          </p>
+        </div>
+
+        <div style="background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.25); border-radius:10px; padding:16px 18px; margin-top:12px;">
+          <div style="font-size:11px; font-weight:800; color:#79c0ff; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:10px;">In your <code>juno-pm</code> repo</div>
+          <ol style="margin:0; padding-left:20px; font-size:13.5px; color:#cdd5e3; line-height:1.75;">
+            <li>Open <code>01-prompting/lovable-prototype.md</code>.</li>
+            <li>Paste your <strong>Lovable share URL</strong> in the <em>Lovable share link</em> field.</li>
+            <li>Paste the <strong>GitHub repo URL</strong> Lovable just created in the <em>GitHub source code</em> field.</li>
+            <li>(Optional) Drop 1–2 screenshots into the same folder. Commit + push.</li>
+          </ol>
+          <p style="font-size:12px; color:var(--muted); margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06); line-height:1.55;">
+            <strong style="color:#cdd5e3;">Why two URLs?</strong> The Lovable link is the live prototype anyone can click. The GitHub URL is the source of truth — version-controlled, forkable, and decoupled from your Lovable subscription.
+          </p>
+        </div>
+
+        <div class="tip" style="margin-top:14px;">
+          <strong>One more thing.</strong> When Lovable asks about <em>cloud integration / API connection</em> on the free plan, click <strong>Decline</strong>. You don't need it for this lab — Lovable will keep building the static UI just fine.
+        </div>
+      </div>
     </div>
   </section>
 </main>
