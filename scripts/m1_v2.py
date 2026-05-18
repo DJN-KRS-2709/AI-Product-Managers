@@ -992,17 +992,73 @@ def thank_you() -> str:
 # Lab content used inside applied_work() bodies
 # ─────────────────────────────────────────────────────────────────────────────
 
-LOVABLE_LAB_BODY = """
-<p>You will use Lovable to build a functional, high-fidelity dashboard for your AI Copilot, <strong>Juno</strong>. The goal: prompt Lovable to generate the interface for Juno with a three-column layout (Raw Input &middot; Analysis &middot; Output) and apply a professional design system.</p>
-<p style="font-size:14px; color:#cdd5e3; max-width:760px; margin:14px auto;">Everything you need lives inside the <strong>Juno Prototype Prompt Builder</strong> &mdash; open it from the <em>Open the tool</em> link below. The tool is your walkthrough.</p>
-<ol style="text-align:left; max-width:780px; margin:18px auto;">
-  <li><strong>Step 1 &middot; Build the prompt.</strong> Open <a href="https://lovable.dev" target="_blank" rel="noopener" style="color:#60a5fa;">Lovable</a>. In the prompt builder, pick <strong>Option A &middot; Build Your Own</strong> (pre-filled, edit to taste) or <strong>Option B &middot; Juno Baseline</strong> (one-click, free-tier-friendly). Click <em>Copy for Lovable</em> and paste into the Lovable chat.</li>
-  <li><strong>Step 2 &middot; Refine the design.</strong> Send a follow-up prompt. The tool gives you two paths ready to copy: <strong>Brand alignment</strong> (upload a screenshot of your company&rsquo;s UI) or <strong>Vibe match</strong> (mimic Linear, Notion, etc. &mdash; editable).</li>
-  <li><strong>Step 3 &middot; Test it.</strong> Copy the <strong>Sarah / Data Analyst</strong> transcript from the tool, paste it into the <em>Raw User Transcripts</em> column, and press <strong>Process</strong>. Note where the prototype falls short &mdash; you&rsquo;ll debrief that on the next slide.</li>
-  <li><strong>Step 4 &middot; Connect to GitHub.</strong> In Lovable, click <strong>GitHub &rarr; Connect &rarr; Create new repo</strong> &mdash; name it <code>juno-pm-prototype</code>. Lovable pushes the React source automatically. Then in your <code>juno-pm</code> repo, paste the Lovable share URL <em>and</em> the GitHub repo URL into <code>01-prompting/lovable-prototype.md</code>.</li>
-</ol>
-<p style="font-size:13px; color:#8899bb; max-width:780px; margin:18px auto 0;"><strong>Credit-saver.</strong> Lovable free accounts are capped at 2&ndash;3 prompts/day. Use the tool&rsquo;s <em>Refine in LLM first</em> tab to polish your prompt in ChatGPT/Claude before paying Lovable credits. Or swap Lovable for <a href="https://stitch.withgoogle.com/" target="_blank" rel="noopener" style="color:#60a5fa;">Google Stitch</a> or <a href="https://bolt.new" target="_blank" rel="noopener" style="color:#60a5fa;">Bolt</a>. <strong>Decline</strong> any &ldquo;cloud integration&rdquo; prompt on the free plan.</p>
+def _step_card(num: str, color: str, where: str, where_color: str, title: str, body_html: str, chip: str) -> str:
+    """One step card for the Lovable lab — number badge + content + action chip."""
+    return f"""<div style="display:flex; gap:18px; align-items:flex-start; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-left:3px solid {color}; border-radius:14px; padding:18px 22px; text-align:left;">
+  <div style="flex-shrink:0; width:44px; height:44px; border-radius:12px; background:{color}; color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:900; font-size:18px; box-shadow:0 4px 14px {color}55;">{num}</div>
+  <div style="flex:1; min-width:0;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
+      <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:800; color:{where_color}; letter-spacing:0.16em; text-transform:uppercase; padding:3px 10px; background:{where_color}1a; border-radius:99px;">{where}</span>
+      <span style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; letter-spacing:-0.005em;">{title}</span>
+    </div>
+    <p style="font-size:13.5px; color:#cdd5e3; line-height:1.6; margin:0;">{body_html}</p>
+    <div style="margin-top:10px; display:inline-flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:{color}; background:{color}14; border:1px solid {color}33; border-radius:8px; padding:6px 12px;">{chip}</div>
+  </div>
+</div>"""
+
+
+LOVABLE_LAB_BODY = (
+    """<p style="font-size:15px; color:#cdd5e3; line-height:1.6; max-width:780px; margin:0 auto 12px;">
+You&rsquo;ll prompt Lovable to generate a three-column dashboard for <strong>Juno PM</strong> &mdash; <code style="font-size:0.92em;">Raw Input</code> &middot; <code style="font-size:0.92em;">Analysis</code> &middot; <code style="font-size:0.92em;">Output</code> &mdash; then apply a real design system, test it, and version it on GitHub.
+</p>
+<p style="font-size:13.5px; color:#8899bb; max-width:780px; margin:0 auto 22px; padding:10px 16px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
+<strong style="color:#cdd5e3;">The Juno Prototype Prompt Builder is your walkthrough.</strong> Open it from <em>Open the tool</em> below &mdash; every step has a copy-ready output inside it.
+</p>
+
+<div style="display:flex; flex-direction:column; gap:12px; max-width:880px; margin:0 auto;">
 """
+    + _step_card(
+        num="1", color="#3b82f6",
+        where="In the tool", where_color="#79c0ff",
+        title="Build the prompt",
+        body_html="Pick <strong>Option A &middot; Build Your Own</strong> (pre-filled, edit to taste) or <strong>Option B &middot; Juno Baseline</strong> (one-click, free-tier-friendly). Click <strong>Copy for Lovable</strong>.",
+        chip="&rarr; Paste into the Lovable chat at lovable.dev",
+    )
+    + _step_card(
+        num="2", color="#bcb1ff",
+        where="In Lovable", where_color="#bcb1ff",
+        title="Refine the design",
+        body_html="Send a follow-up prompt. The tool gives you two paths to copy: <strong>Path A &middot; Brand Alignment</strong> (upload a screenshot of your company&rsquo;s UI) or <strong>Path B &middot; Vibe Match</strong> (mimic Linear, Notion &mdash; editable).",
+        chip="&rarr; Send as a follow-up Lovable prompt",
+    )
+    + _step_card(
+        num="3", color="#34d399",
+        where="In Lovable", where_color="#34d399",
+        title="Test the prototype",
+        body_html="Copy the <strong>Sarah / Data-Analyst transcript</strong> from the tool, paste it into the <em>Raw User Transcripts</em> column, and press <strong>Process</strong>. Watch where the UI falls short &mdash; that&rsquo;s the &ldquo;Beautiful Liar&rdquo; debrief on the next slide.",
+        chip="&rarr; Press Process &middot; observe the gap",
+    )
+    + _step_card(
+        num="4", color="#f87171",
+        where="In Lovable + GitHub", where_color="#f87171",
+        title="Connect to GitHub",
+        body_html="In Lovable: <strong>GitHub &rarr; Connect &rarr; Create new repo</strong>, name it <code>juno-pm-prototype</code>. Then in your <code>juno-pm</code> repo, paste both the Lovable share URL and the GitHub repo URL into <code>01-prompting/lovable-prototype.md</code>.",
+        chip="&rarr; Two URLs in one deliverable file",
+    )
+    + """</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:880px; margin:24px auto 0; text-align:left;">
+  <div style="background:rgba(212,153,34,0.06); border:1px solid rgba(212,153,34,0.25); border-radius:12px; padding:14px 18px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">💸 Credit-saver</div>
+    <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:0;">Lovable free is capped at <strong>2&ndash;3 prompts/day</strong>. Use the tool&rsquo;s <em>Refine in LLM first</em> tab to polish in ChatGPT or Claude before paying Lovable credits.</p>
+  </div>
+  <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.25); border-radius:12px; padding:14px 18px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#fca5a5; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">⚠️ Free-tier rule</div>
+    <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:0;"><strong>Decline</strong> any &ldquo;cloud integration / API connection&rdquo; prompt Lovable shows. Lovable will keep building the static UI just fine. Or swap Lovable for <a href="https://stitch.withgoogle.com/" target="_blank" rel="noopener" style="color:#60a5fa;">Google Stitch</a> or <a href="https://bolt.new" target="_blank" rel="noopener" style="color:#60a5fa;">Bolt</a>.</p>
+  </div>
+</div>
+"""
+)
 
 
 JUNO_SYSTEM_PROMPT_BODY = """
