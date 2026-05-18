@@ -646,12 +646,24 @@ def prompt_anatomy_4d() -> str:
 
 
 def cameras_on() -> str:
-    return """<section class="centered" data-title="Cameras On">
-  <div class="inner">
-    <div style="font-size:80px; margin-bottom:16px;">📹</div>
-    <div class="section-label" style="color:#f87171;">Reminder</div>
-    <h2>Cameras On (live cohort)</h2>
-    <div class="subtitle" style="max-width:560px;">It&rsquo;s always better to see your face. Be present and visible to stay engaged and keep interactions valuable. Async-only? You&rsquo;re excused.</div>
+    """Cameras On reminder — uses the exact layout from the AI Product
+    Strategy reference deck (logo + reminder card + tall photo strip).
+    """
+    return """<section class="cameras-section" data-title="Cameras On">
+  <div class="cameras-inner">
+    <div class="cameras-layout">
+      <div class="cameras-left">
+        <img class="cameras-logo" src="../Design/cameras-on-logo.png" alt="Logo"/>
+        <div class="cameras-card">
+          <h2>Reminder! 🎒</h2>
+          <div class="cameras-arrow">&rarr; Cameras On</div>
+          <p>It&rsquo;s always better to see your smiling face! Be present and visible to stay engaged and keep interactions valuable.</p>
+        </div>
+      </div>
+      <div class="cameras-photo-strip">
+        <img src="../Design/cameras-on-photo.png" alt="Cameras On"/>
+      </div>
+    </div>
   </div>
 </section>
 """

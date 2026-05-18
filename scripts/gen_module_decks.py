@@ -306,6 +306,29 @@ section.section-break .section-break-inner {
 .section-break-inner .lab-name { font-size: 52px; font-weight: 900; color: #fff; line-height: 1.1; max-width: 700px; font-family: 'Poppins', sans-serif; }
 .section-break-inner .lab-desc { font-size: 18px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-top: 16px; max-width: 600px; }
 
+/* CAMERAS ON — matches the AI Product Strategy reference deck */
+section.cameras-section { padding: 0; }
+section.cameras-section .cameras-inner {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #07162C 0%, #0c2244 50%, #1241B0 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.cameras-layout { display: flex; align-items: center; gap: 60px; max-width: 900px; width: 100%; }
+.cameras-left { flex: 1; position: relative; }
+.cameras-logo { width: 48px; height: 48px; margin-bottom: 40px; opacity: 0.9; }
+.cameras-card {
+  border: 1.5px solid rgba(255,255,255,0.15); border-radius: 20px;
+  padding: 48px 64px; max-width: 520px; text-align: left;
+}
+.cameras-card h2 { font-size: 32px; margin-bottom: 8px; }
+.cameras-card .cameras-arrow { font-size: 18px; font-weight: 700; color: #60a5fa; margin-bottom: 4px; }
+.cameras-card p { font-size: 16px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+.cameras-photo-strip {
+  flex-shrink: 0; width: 220px; height: 480px; border-radius: 16px;
+  overflow: hidden; border: 1.5px solid rgba(255,255,255,0.12);
+}
+.cameras-photo-strip img { width: 100%; height: 100%; object-fit: cover; }
+
 /* COMPLETION / TAKEAWAYS */
 .takeaway-list { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; max-width: 880px; }
 .takeaway-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px 22px; transition: all 0.3s; text-align: left; }
