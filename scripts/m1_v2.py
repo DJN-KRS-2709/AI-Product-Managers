@@ -954,11 +954,16 @@ def resources_templates() -> str:
     <div class="demo-tag tag-build">Resources</div>
     <h2>Resources &amp; Templates</h2>
     <div class="subtitle">Bonus &mdash; everything you need is one click away.</div>
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin:24px 0; max-width:980px; margin-left:auto; margin-right:auto;">
+    <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; margin:24px 0; max-width:980px; margin-left:auto; margin-right:auto;">
       <a href="M1%20-%20Prompt%20Anatomy%20Builder.html" style="text-decoration:none;"><div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
-        <div style="font-size:11px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Hands-On Lab Walkthrough</div>
+        <div style="font-size:11px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 1 &middot; Lovable Walkthrough</div>
         <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">Juno Prototype Prompt Builder</div>
-        <div style="font-size:13px; color:#8899bb;">&rarr; Open the tool</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Build the V1 dashboard prompt</div>
+      </div></a>
+      <a href="M1%20-%20System%20Prompt%20Configurator.html" style="text-decoration:none;"><div style="background:rgba(217,142,34,0.08); border:1px solid rgba(217,142,34,0.3); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
+        <div style="font-size:11px; font-weight:800; color:#d29922; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 2 &middot; System Prompt Workspace</div>
+        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">System Prompt Configurator</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Configure Juno&rsquo;s &ldquo;brain&rdquo;</div>
       </div></a>
       <a href="../Final%20Project%20Brief.html" style="text-decoration:none;"><div style="background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
         <div style="font-size:11px; font-weight:800; color:#bcb1ff; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">AI PM Certification</div>
@@ -1061,17 +1066,65 @@ You&rsquo;ll prompt Lovable to generate a three-column dashboard for <strong>Jun
 )
 
 
-JUNO_SYSTEM_PROMPT_BODY = """
-<p>You will move from being a <em>user</em> of an AI to being an <em>architect</em>. You&rsquo;ll configure a System Prompt that turns unstructured chaos into a professional <strong>Opportunity Brief</strong>. This system prompt is part of your final project deliverables.</p>
-<ol style="text-align:left; max-width:760px; margin:18px auto;">
-  <li>Skim the 5 artefacts in the lab guide. Identify <em>signal vs noise</em> on your own.</li>
-  <li>Open ChatGPT (or Claude). Using the template in the lab guide, define <strong>Role</strong> and <strong>Task</strong> &mdash; establishing Juno as an AI Associate PM whose job is to synthesise raw discovery notes into a structured Opportunity Brief.</li>
-  <li>Establish <strong>Constraints</strong> and <strong>Format</strong> by instructing Juno to never invent quotes, always cite source IDs, and follow a specific output schema (Problem · Persona · Evidence Table).</li>
-  <li>Provide <strong>one &ldquo;golden&rdquo; example</strong> (Few-Shot) within your prompt to show Juno how to filter raw chaos into a high-fidelity strategic insight.</li>
-  <li>Add a <strong>Chain-of-Thought</strong> instruction forcing Juno to surface risks and assumptions step-by-step before generating the final brief.</li>
-</ol>
-<p style="font-size:13px; color:#8899bb; max-width:720px; margin:18px auto 0;"><strong>Self-review checklist</strong> &mdash; built into the System Prompt Configurator tool. Run it before you commit. Then paste your artefact + the AI-review prompt into ChatGPT for a second opinion.</p>
+def _anatomy_card(emoji: str, label: str, color: str, what_to_write: str, juno_example: str) -> str:
+    """One anatomy-element card for the System Prompt Configurator slide.
+    Mirrors the colour palette of the Anatomy framework slide (Role · Task ·
+    Constraints · Format) so the two slides reference each other visually.
+    """
+    return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;">
+  <div style="position:absolute; top:0; left:0; right:0; height:3px; background:{color};"></div>
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:26px;">{emoji}</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:{color}; letter-spacing:0.14em; text-transform:uppercase;">{label}</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.55; margin:0 0 10px;">{what_to_write}</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:10px 12px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:{color}; line-height:1.5;">{juno_example}</div>
+</div>"""
+
+
+JUNO_SYSTEM_PROMPT_BODY = (
+    """<p style="font-size:15px; color:#cdd5e3; line-height:1.6; max-width:780px; margin:0 auto 12px;">
+Move from being a <em>user</em> of an AI to being an <em>architect</em>. The output of this exercise is one file: <code>system-prompt.md</code> &mdash; Juno&rsquo;s job description, committed to your repo.
+</p>
+<p style="font-size:13.5px; color:#8899bb; max-width:780px; margin:0 auto 22px; padding:10px 16px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
+<strong style="color:#cdd5e3;">The System Prompt Configurator is your workspace.</strong> Open it from <em>Open the tool</em> below. Each field has a <em>&ldquo;Use Juno seed &rarr;&rdquo;</em> button that pre-fills it. Edit, then copy as markdown.
+</p>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:880px; margin:0 auto 12px;">
 """
+    + _anatomy_card(
+        emoji="🎭", label="Role / Persona", color="#3b82f6",
+        what_to_write="Define <strong>who Juno is</strong>: an AI Associate PM at RocketShip, embedded in Slack/Notion/Jira, acting as a risk watchdog &mdash; not an autonomous executor.",
+        juno_example="You are <strong>Juno PM</strong>, an AI Associate PM at RocketShip. You synthesise, draft, and prioritise &mdash; you do not execute autonomously.",
+    )
+    + _anatomy_card(
+        emoji="🎯", label="Task", color="#79c0ff",
+        what_to_write="Define <strong>the one job</strong>: turn 5 messy artefacts (Slack threads, tickets, interview notes, Notion pages, emails) into <em>one Opportunity Brief</em>.",
+        juno_example="Synthesise raw cross-functional artefacts into a single <strong>Opportunity Brief</strong> with sections <em>Problem &middot; Persona &middot; Evidence Table</em>.",
+    )
+    + _anatomy_card(
+        emoji="🚧", label="Constraints", color="#d29922",
+        what_to_write="Set <strong>3+ guardrails including 1 refusal</strong>: never invent quotes/customers/ARR, cite source IDs, mark ambiguous threads as <code>NEEDS CLARIFICATION</code>.",
+        juno_example="Cite Slack ticket ID or Jira key for every claim. Never invent customer names, ARR, or PII. Refuse external comms &mdash; route to the human PM.",
+    )
+    + _anatomy_card(
+        emoji="📐", label="Output format", color="#34d399",
+        what_to_write="Declare the <strong>schema</strong>: a markdown table with columns <em>Problem &middot; Persona &middot; Evidence (source ID)</em>. Cap rows. Be machine-readable.",
+        juno_example="Markdown table | Rank | Risk | Customer signal | Source ID | Suggested action |. Max 5 rows. No prose preamble.",
+    )
+    + """</div>
+
+<div style="max-width:880px; margin:0 auto; background:rgba(188,177,255,0.06); border:1px solid rgba(188,177,255,0.25); border-radius:14px; padding:18px 22px; text-align:left;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:24px;">💡</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase;">Plus one &middot; Few-Shot + CoT</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.6; margin:0;">Add <strong>one worked example</strong> (Few-Shot) inside your prompt &mdash; a single ideal Input&nbsp;&rarr;&nbsp;Output pair for the trickiest artefact. Then add a <strong>Chain-of-Thought instruction</strong>: <em>&ldquo;Before drafting the brief, list assumptions and risks step-by-step.&rdquo;</em> These two upgrades convert a generic system prompt into a <em>Juno-grade</em> one.</p>
+</div>
+
+<p style="font-size:13px; color:#8899bb; max-width:780px; margin:18px auto 0;"><strong>Self-review checklist</strong> &mdash; built into the Configurator (5 checks, live-updating). Run it before you commit. Then paste your prompt + the AI-review meta-prompt into ChatGPT or Claude for a second opinion.</p>
+"""
+)
 
 
 
@@ -1211,8 +1264,8 @@ def build_module_1():
             body_html=JUNO_SYSTEM_PROMPT_BODY,
             repo_path="juno-pm/01-prompting/system-prompt.md",
             timer_min=30,
-            tool_url="../Modules/M1%20-%20Prompt%20Anatomy%20Builder.html",
-            tool_desc="Use the Prompt Anatomy Builder for Role/Task/Constraints/Format scaffolding.",
+            tool_url="../Modules/M1%20-%20System%20Prompt%20Configurator.html",
+            tool_desc="Pre-seeded Persona · Scope · Guardrails · Output format · Refusals · Examples for Juno PM. Live preview, self-review checklist, AI-review meta-prompt. Copy as markdown straight into your repo.",
         ),
         note="30-minute solo build. The original PowerPoint called this a 'Breakout Group Exercise' with permanent project teams — we converted it to a 100% individual exercise per the solo-only course design. Same scenario (Juno-as-Associate-PM, 5 messy artefacts, opportunity brief), different format. Output is part of their final project deliverables.",
     )

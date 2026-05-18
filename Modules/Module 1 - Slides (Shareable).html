@@ -1169,20 +1169,61 @@ You&rsquo;ll prompt Lovable to generate a three-column dashboard for <strong>Jun
     <div class="demo-tag tag-exercise">Applied Work</div>
     <h2>Configure Juno&rsquo;s System Prompt</h2>
     <div class="subtitle">Write a system message that turns messy cross-functional artefacts into a clean evidence-based opportunity brief — Juno&rsquo;s job description.</div>
-    
-<p>You will move from being a <em>user</em> of an AI to being an <em>architect</em>. You&rsquo;ll configure a System Prompt that turns unstructured chaos into a professional <strong>Opportunity Brief</strong>. This system prompt is part of your final project deliverables.</p>
-<ol style="text-align:left; max-width:760px; margin:18px auto;">
-  <li>Skim the 5 artefacts in the lab guide. Identify <em>signal vs noise</em> on your own.</li>
-  <li>Open ChatGPT (or Claude). Using the template in the lab guide, define <strong>Role</strong> and <strong>Task</strong> &mdash; establishing Juno as an AI Associate PM whose job is to synthesise raw discovery notes into a structured Opportunity Brief.</li>
-  <li>Establish <strong>Constraints</strong> and <strong>Format</strong> by instructing Juno to never invent quotes, always cite source IDs, and follow a specific output schema (Problem · Persona · Evidence Table).</li>
-  <li>Provide <strong>one &ldquo;golden&rdquo; example</strong> (Few-Shot) within your prompt to show Juno how to filter raw chaos into a high-fidelity strategic insight.</li>
-  <li>Add a <strong>Chain-of-Thought</strong> instruction forcing Juno to surface risks and assumptions step-by-step before generating the final brief.</li>
-</ol>
-<p style="font-size:13px; color:#8899bb; max-width:720px; margin:18px auto 0;"><strong>Self-review checklist</strong> &mdash; built into the System Prompt Configurator tool. Run it before you commit. Then paste your artefact + the AI-review prompt into ChatGPT for a second opinion.</p>
+    <p style="font-size:15px; color:#cdd5e3; line-height:1.6; max-width:780px; margin:0 auto 12px;">
+Move from being a <em>user</em> of an AI to being an <em>architect</em>. The output of this exercise is one file: <code>system-prompt.md</code> &mdash; Juno&rsquo;s job description, committed to your repo.
+</p>
+<p style="font-size:13.5px; color:#8899bb; max-width:780px; margin:0 auto 22px; padding:10px 16px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
+<strong style="color:#cdd5e3;">The System Prompt Configurator is your workspace.</strong> Open it from <em>Open the tool</em> below. Each field has a <em>&ldquo;Use Juno seed &rarr;&rdquo;</em> button that pre-fills it. Edit, then copy as markdown.
+</p>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:880px; margin:0 auto 12px;">
+<div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;">
+  <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#3b82f6;"></div>
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:26px;">🎭</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#3b82f6; letter-spacing:0.14em; text-transform:uppercase;">Role / Persona</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.55; margin:0 0 10px;">Define <strong>who Juno is</strong>: an AI Associate PM at RocketShip, embedded in Slack/Notion/Jira, acting as a risk watchdog &mdash; not an autonomous executor.</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:10px 12px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#3b82f6; line-height:1.5;">You are <strong>Juno PM</strong>, an AI Associate PM at RocketShip. You synthesise, draft, and prioritise &mdash; you do not execute autonomously.</div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;">
+  <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#79c0ff;"></div>
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:26px;">🎯</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase;">Task</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.55; margin:0 0 10px;">Define <strong>the one job</strong>: turn 5 messy artefacts (Slack threads, tickets, interview notes, Notion pages, emails) into <em>one Opportunity Brief</em>.</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:10px 12px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#79c0ff; line-height:1.5;">Synthesise raw cross-functional artefacts into a single <strong>Opportunity Brief</strong> with sections <em>Problem &middot; Persona &middot; Evidence Table</em>.</div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;">
+  <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#d29922;"></div>
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:26px;">🚧</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#d29922; letter-spacing:0.14em; text-transform:uppercase;">Constraints</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.55; margin:0 0 10px;">Set <strong>3+ guardrails including 1 refusal</strong>: never invent quotes/customers/ARR, cite source IDs, mark ambiguous threads as <code>NEEDS CLARIFICATION</code>.</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:10px 12px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#d29922; line-height:1.5;">Cite Slack ticket ID or Jira key for every claim. Never invent customer names, ARR, or PII. Refuse external comms &mdash; route to the human PM.</div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;">
+  <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#34d399;"></div>
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:26px;">📐</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase;">Output format</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.55; margin:0 0 10px;">Declare the <strong>schema</strong>: a markdown table with columns <em>Problem &middot; Persona &middot; Evidence (source ID)</em>. Cap rows. Be machine-readable.</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:10px 12px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#34d399; line-height:1.5;">Markdown table | Rank | Risk | Customer signal | Source ID | Suggested action |. Max 5 rows. No prose preamble.</div>
+</div></div>
+
+<div style="max-width:880px; margin:0 auto; background:rgba(188,177,255,0.06); border:1px solid rgba(188,177,255,0.25); border-radius:14px; padding:18px 22px; text-align:left;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:24px;">💡</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase;">Plus one &middot; Few-Shot + CoT</div>
+  </div>
+  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.6; margin:0;">Add <strong>one worked example</strong> (Few-Shot) inside your prompt &mdash; a single ideal Input&nbsp;&rarr;&nbsp;Output pair for the trickiest artefact. Then add a <strong>Chain-of-Thought instruction</strong>: <em>&ldquo;Before drafting the brief, list assumptions and risks step-by-step.&rdquo;</em> These two upgrades convert a generic system prompt into a <em>Juno-grade</em> one.</p>
+</div>
+
+<p style="font-size:13px; color:#8899bb; max-width:780px; margin:18px auto 0;"><strong>Self-review checklist</strong> &mdash; built into the Configurator (5 checks, live-updating). Run it before you commit. Then paste your prompt + the AI-review meta-prompt into ChatGPT or Claude for a second opinion.</p>
 
     <div style="text-align:center; margin-top:18px;">
-      <a class="tool-btn" href="../Modules/M1%20-%20Prompt%20Anatomy%20Builder.html" target="_blank" rel="noopener">Open the tool ↗</a>
-      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Use the Prompt Anatomy Builder for Role/Task/Constraints/Format scaffolding.</div>
+      <a class="tool-btn" href="../Modules/M1%20-%20System%20Prompt%20Configurator.html" target="_blank" rel="noopener">Open the tool ↗</a>
+      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Pre-seeded Persona · Scope · Guardrails · Output format · Refusals · Examples for Juno PM. Live preview, self-review checklist, AI-review meta-prompt. Copy as markdown straight into your repo.</div>
     </div>
 
     <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>juno-pm/01-prompting/system-prompt.md</code></p>
@@ -1314,11 +1355,16 @@ You&rsquo;ll prompt Lovable to generate a three-column dashboard for <strong>Jun
     <div class="demo-tag tag-build">Resources</div>
     <h2>Resources &amp; Templates</h2>
     <div class="subtitle">Bonus &mdash; everything you need is one click away.</div>
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin:24px 0; max-width:980px; margin-left:auto; margin-right:auto;">
+    <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; margin:24px 0; max-width:980px; margin-left:auto; margin-right:auto;">
       <a href="M1%20-%20Prompt%20Anatomy%20Builder.html" style="text-decoration:none;"><div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
-        <div style="font-size:11px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Hands-On Lab Walkthrough</div>
+        <div style="font-size:11px; font-weight:800; color:#60a5fa; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 1 &middot; Lovable Walkthrough</div>
         <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">Juno Prototype Prompt Builder</div>
-        <div style="font-size:13px; color:#8899bb;">&rarr; Open the tool</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Build the V1 dashboard prompt</div>
+      </div></a>
+      <a href="M1%20-%20System%20Prompt%20Configurator.html" style="text-decoration:none;"><div style="background:rgba(217,142,34,0.08); border:1px solid rgba(217,142,34,0.3); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
+        <div style="font-size:11px; font-weight:800; color:#d29922; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Lab 2 &middot; System Prompt Workspace</div>
+        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">System Prompt Configurator</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Configure Juno&rsquo;s &ldquo;brain&rdquo;</div>
       </div></a>
       <a href="../Final%20Project%20Brief.html" style="text-decoration:none;"><div style="background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
         <div style="font-size:11px; font-weight:800; color:#bcb1ff; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">AI PM Certification</div>
