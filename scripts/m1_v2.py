@@ -459,30 +459,80 @@ def role_evolved_quadrants() -> str:
 
 
 def pm_toolkit() -> str:
-    items = [
-        ("🔍", "Research &amp; Discovery", "Synthesise customer feedback, competitor activity, market signals."),
-        ("📋", "PRDs &amp; Documentation", "First drafts of PRDs, user stories, acceptance criteria &mdash; you refine."),
-        ("🗺️", "Roadmapping &amp; Prioritisation", "Cluster customer feedback, feature requests, support tickets into themes."),
-        ("✏️", "Prototyping &amp; Design", "Turn rough ideas into wireframes or interactive mockups in minutes."),
-        ("🧪", "Experimentation &amp; Insights", "Generate test hypotheses, analyse results, surface user behaviour patterns."),
-        ("📣", "Messaging &amp; Go-to-Market", "Draft messaging pillars, campaign copy, FAQs, sales enablement."),
-        ("🎤", "Presentations &amp; Enablement", "Generate decks, battlecards, training material &mdash; you keep the narrative."),
+    """Directory-of-AI-tools 3-column table — matches the legacy PPT layout but
+    with the 2026 refreshed tool stack.
+
+    Tool list refreshed May 2026 against the current AI PM landscape:
+    ChatPRD/Productboard Spark/Idam AI for PRDs; Lovable/Bolt/v0/Figma Make
+    for prototyping; Gamma/Tome for decks; Statsig/LaunchDarkly/Eppo for
+    experimentation; Loop & Granola for emerging meeting/email-native PM AI.
+    """
+    rows = [
+        ("🔍", "#3b82f6", "Research &amp; Discovery",
+         "Synthesise raw user feedback, competitor moves, and market signals into actionable insights.",
+         ["ChatGPT", "Claude", "Perplexity", "Granola"]),
+        ("📋", "#79c0ff", "PRDs &amp; Documentation",
+         "Draft PRDs, user stories, and acceptance criteria from prompts or meeting notes.",
+         ["ChatPRD", "Productboard Spark", "Idam AI", "Notion AI"]),
+        ("🗺️", "#bcb1ff", "Roadmapping &amp; Prioritisation",
+         "Cluster feedback, suggest priorities, and scenario-plan roadmaps.",
+         ["Productboard", "Linear", "Loop", "Jira"]),
+        ("✏️", "#d29922", "Prototyping &amp; Design",
+         "Turn rough ideas into working prototypes, wireframes, and mockups in minutes.",
+         ["Lovable", "Bolt", "v0", "Figma Make"]),
+        ("🧪", "#f87171", "Experimentation &amp; Insights",
+         "Generate test ideas, analyse results, and surface user-behaviour patterns.",
+         ["Statsig", "LaunchDarkly", "Eppo", "Optimizely"]),
+        ("📣", "#34d399", "Messaging &amp; GTM",
+         "Draft messaging pillars, campaign copy, FAQs, and sales enablement.",
+         ["Writer", "Jasper", "Claude", "Grammarly"]),
+        ("🎤", "#22d3ee", "Presentation &amp; Enablement",
+         "Create decks, battlecards, and launch materials in minutes.",
+         ["Gamma", "Tome", "Canva AI", "Beautiful.ai"]),
     ]
-    cells = "\n".join(
-        f'    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px; text-align:center;">'
-        f'<div style="font-size:40px; margin-bottom:10px;">{ic}</div>'
-        f'<div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.25;">{t}</div>'
-        f'<div style="font-size:12.5px; color:#8899bb; line-height:1.5;">{d}</div></div>'
-        for ic, t, d in items
+
+    def chips(tools, color):
+        return "".join(
+            f'<span style="display:inline-block; padding:5px 11px; margin:2px 4px 2px 0; '
+            f'background:rgba(255,255,255,0.05); border:1px solid {color}55; border-radius:999px; '
+            f'font-size:11.5px; font-weight:600; color:#cdd5e3; white-space:nowrap; line-height:1.2;">{t}</span>'
+            for t in tools
+        )
+
+    rows_html = "\n".join(
+        f'      <div style="display:grid; grid-template-columns: 220px 1fr 320px; gap:24px; align-items:center; padding:18px 22px; border-bottom:1px solid rgba(255,255,255,0.06); transition:background 0.2s;" '
+        f'onmouseover="this.style.background=\'rgba(255,255,255,0.025)\'" onmouseout="this.style.background=\'transparent\'">'
+        f'<div style="display:flex; align-items:center; gap:12px; text-align:left;">'
+        f'<div style="width:8px; height:8px; border-radius:50%; background:{color}; flex-shrink:0; box-shadow:0 0 10px {color}77;"></div>'
+        f'<div style="font-size:24px; line-height:1;">{ic}</div>'
+        f'<div style="font-size:14.5px; font-weight:700; color:#fff; line-height:1.25;">{cat}</div></div>'
+        f'<div style="font-size:13.5px; color:#cdd5e3; line-height:1.55; text-align:left;">{desc}</div>'
+        f'<div style="text-align:left;">{chips(tools, color)}</div></div>'
+        for ic, color, cat, desc, tools in rows
     )
+
     return f"""<section data-title="A PM's AI Toolkit">
-  <div class="inner">
-    <div class="demo-tag tag-lecture">Directory</div>
-    <h2>A PM&rsquo;s AI Toolkit</h2>
-    <div class="subtitle">Seven categories of AI capabilities you plug into PM work. AI is your co-pilot &mdash; you keep the judgment.</div>
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; margin:24px 0;">
-{cells}
+  <div class="inner" style="max-width:1200px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:20px;">
+      <div style="text-align:left;">
+        <div class="demo-tag tag-lecture" style="margin-bottom:12px;">Directory</div>
+        <h2 style="margin:0 0 8px;">A PM&rsquo;s AI Toolkit</h2>
+        <div style="font-size:15px; color:#8899bb; max-width:640px; line-height:1.5;">Seven categories of AI capability you plug into PM work. AI is your co-pilot &mdash; you keep the judgment.</div>
+      </div>
+      <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#bcd5ff; letter-spacing:0.18em; padding:10px 16px; border:1px solid rgba(96,165,250,0.4); border-radius:10px; background:rgba(96,165,250,0.06); white-space:nowrap; flex-shrink:0;">DIRECTORY OF AI TOOLS</div>
     </div>
+
+    <div style="background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:14px; overflow:hidden; margin-top:8px;">
+      <!-- header row -->
+      <div style="display:grid; grid-template-columns: 220px 1fr 320px; gap:24px; padding:14px 22px; background:rgba(96,165,250,0.08); border-bottom:1px solid rgba(96,165,250,0.25);">
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#79c0ff; letter-spacing:0.14em; text-align:left;">USE CASE</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#79c0ff; letter-spacing:0.14em; text-align:left;">BEST FOR</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#79c0ff; letter-spacing:0.14em; text-align:left;">EXAMPLE TOOLS</div>
+      </div>
+{rows_html}
+    </div>
+
+    <p style="font-size:12.5px; color:#7889a8; text-align:center; margin-top:14px; font-style:italic;">Tool list refreshed May 2026. Categories are stable; vendors rotate &mdash; check the repo README for updates.</p>
   </div>
 </section>
 """
