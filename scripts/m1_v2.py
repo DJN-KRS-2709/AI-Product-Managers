@@ -998,68 +998,65 @@ def thank_you() -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _step_card(num: str, color: str, where: str, where_color: str, title: str, body_html: str, chip: str) -> str:
-    """One step card for the Lovable lab — number badge + content + action chip."""
-    return f"""<div style="display:flex; gap:18px; align-items:flex-start; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-left:3px solid {color}; border-radius:14px; padding:18px 22px; text-align:left;">
-  <div style="flex-shrink:0; width:44px; height:44px; border-radius:12px; background:{color}; color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:900; font-size:18px; box-shadow:0 4px 14px {color}55;">{num}</div>
-  <div style="flex:1; min-width:0;">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
-      <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:800; color:{where_color}; letter-spacing:0.16em; text-transform:uppercase; padding:3px 10px; background:{where_color}1a; border-radius:99px;">{where}</span>
-      <span style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; letter-spacing:-0.005em;">{title}</span>
-    </div>
-    <p style="font-size:13.5px; color:#cdd5e3; line-height:1.6; margin:0;">{body_html}</p>
-    <div style="margin-top:10px; display:inline-flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:{color}; background:{color}14; border:1px solid {color}33; border-radius:8px; padding:6px 12px;">{chip}</div>
+    """One step card for the Lovable lab — number badge + tight content + action chip.
+    Sized for a 2x2 grid that fits on one viewport.
+    """
+    return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-left:3px solid {color}; border-radius:12px; padding:12px 14px; text-align:left;">
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <div style="flex-shrink:0; width:30px; height:30px; border-radius:8px; background:{color}; color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:900; font-size:14px; box-shadow:0 3px 10px {color}55;">{num}</div>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:800; color:{where_color}; letter-spacing:0.14em; text-transform:uppercase; padding:2px 8px; background:{where_color}1a; border-radius:99px;">{where}</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff;">{title}</span>
   </div>
+  <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 8px;">{body_html}</p>
+  <div style="display:inline-flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:{color}; background:{color}14; border:1px solid {color}33; border-radius:6px; padding:4px 9px;">{chip}</div>
 </div>"""
 
 
 LOVABLE_LAB_BODY = (
-    """<p style="font-size:15px; color:#cdd5e3; line-height:1.6; max-width:780px; margin:0 auto 12px;">
-You&rsquo;ll prompt Lovable to generate a three-column dashboard for <strong>Juno PM</strong> &mdash; <code style="font-size:0.92em;">Raw Input</code> &middot; <code style="font-size:0.92em;">Analysis</code> &middot; <code style="font-size:0.92em;">Output</code> &mdash; then apply a real design system, test it, and version it on GitHub.
-</p>
-<p style="font-size:13.5px; color:#8899bb; max-width:780px; margin:0 auto 22px; padding:10px 16px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
-<strong style="color:#cdd5e3;">The Juno Prototype Prompt Builder is your walkthrough.</strong> Open it from <em>Open the tool</em> below &mdash; every step has a copy-ready output inside it.
+    """<p style="font-size:13.5px; color:#cdd5e3; line-height:1.5; max-width:780px; margin:0 auto 14px; padding:8px 14px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
+Prompt Lovable to generate a three-column dashboard for <strong>Juno PM</strong>, refine the design, test it, version it on GitHub. <strong style="color:#fff;">The Juno Prototype Prompt Builder is your walkthrough</strong> &mdash; open it below.
 </p>
 
-<div style="display:flex; flex-direction:column; gap:12px; max-width:880px; margin:0 auto;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:880px; margin:0 auto;">
 """
     + _step_card(
         num="1", color="#3b82f6",
         where="In the tool", where_color="#79c0ff",
         title="Build the prompt",
-        body_html="Pick <strong>Option A &middot; Build Your Own</strong> (pre-filled, edit to taste) or <strong>Option B &middot; Juno Baseline</strong> (one-click, free-tier-friendly). Click <strong>Copy for Lovable</strong>.",
-        chip="&rarr; Paste into the Lovable chat at lovable.dev",
+        body_html="Pick <strong>Option A &middot; Build Your Own</strong> (pre-filled) or <strong>Option B &middot; Juno Baseline</strong> (one-click). Click <strong>Copy for Lovable</strong>.",
+        chip="&rarr; Paste into lovable.dev chat",
     )
     + _step_card(
         num="2", color="#bcb1ff",
         where="In Lovable", where_color="#bcb1ff",
         title="Refine the design",
-        body_html="Send a follow-up prompt. The tool gives you two paths to copy: <strong>Path A &middot; Brand Alignment</strong> (upload a screenshot of your company&rsquo;s UI) or <strong>Path B &middot; Vibe Match</strong> (mimic Linear, Notion &mdash; editable).",
-        chip="&rarr; Send as a follow-up Lovable prompt",
+        body_html="Copy the next prompt &mdash; <strong>Path A &middot; Brand Alignment</strong> (upload your UI screenshot) or <strong>Path B &middot; Vibe Match</strong> (mimic Linear, Notion).",
+        chip="&rarr; Send as follow-up prompt",
     )
     + _step_card(
         num="3", color="#34d399",
         where="In Lovable", where_color="#34d399",
         title="Test the prototype",
-        body_html="Copy the <strong>Sarah / Data-Analyst transcript</strong> from the tool, paste it into the <em>Raw User Transcripts</em> column, and press <strong>Process</strong>. Watch where the UI falls short &mdash; that&rsquo;s the &ldquo;Beautiful Liar&rdquo; debrief on the next slide.",
-        chip="&rarr; Press Process &middot; observe the gap",
+        body_html="Copy the <strong>Sarah / Data-Analyst transcript</strong> from the tool, paste into the <em>Raw User Transcripts</em> column, press <strong>Process</strong>. Note the gap.",
+        chip="&rarr; Beautiful Liar debrief next",
     )
     + _step_card(
         num="4", color="#f87171",
-        where="In Lovable + GitHub", where_color="#f87171",
+        where="Lovable + GitHub", where_color="#f87171",
         title="Connect to GitHub",
-        body_html="In Lovable: <strong>GitHub &rarr; Connect &rarr; Create new repo</strong>, name it <code>juno-pm-prototype</code>. Then in your <code>juno-pm</code> repo, paste both the Lovable share URL and the GitHub repo URL into <code>01-prompting/lovable-prototype.md</code>.",
-        chip="&rarr; Two URLs in one deliverable file",
+        body_html="In Lovable: <strong>GitHub &rarr; Connect &rarr; Create repo</strong> &mdash; name it <code>juno-pm-prototype</code>. Paste both URLs into <code>01-prompting/lovable-prototype.md</code>.",
+        chip="&rarr; Two URLs, one deliverable file",
     )
     + """</div>
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:880px; margin:24px auto 0; text-align:left;">
-  <div style="background:rgba(212,153,34,0.06); border:1px solid rgba(212,153,34,0.25); border-radius:12px; padding:14px 18px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">💸 Credit-saver</div>
-    <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:0;">Lovable free is capped at <strong>2&ndash;3 prompts/day</strong>. Use the tool&rsquo;s <em>Refine in LLM first</em> tab to polish in ChatGPT or Claude before paying Lovable credits.</p>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:880px; margin:12px auto 0; text-align:left;">
+  <div style="background:rgba(212,153,34,0.06); border:1px solid rgba(212,153,34,0.25); border-radius:10px; padding:8px 14px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:800; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase;">💸 Credit-saver &middot;</span>
+    <span style="font-size:12px; color:#cdd5e3;"> Lovable free = 2&ndash;3 prompts/day. Use the tool&rsquo;s <em>Refine in LLM first</em> tab to polish in ChatGPT/Claude before paying.</span>
   </div>
-  <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.25); border-radius:12px; padding:14px 18px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; color:#fca5a5; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">⚠️ Free-tier rule</div>
-    <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:0;"><strong>Decline</strong> any &ldquo;cloud integration / API connection&rdquo; prompt Lovable shows. Lovable will keep building the static UI just fine. Or swap Lovable for <a href="https://stitch.withgoogle.com/" target="_blank" rel="noopener" style="color:#60a5fa;">Google Stitch</a> or <a href="https://bolt.new" target="_blank" rel="noopener" style="color:#60a5fa;">Bolt</a>.</p>
+  <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.25); border-radius:10px; padding:8px 14px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:800; color:#fca5a5; letter-spacing:0.14em; text-transform:uppercase;">⚠️ Free-tier rule &middot;</span>
+    <span style="font-size:12px; color:#cdd5e3;"> <strong>Decline</strong> any &ldquo;cloud integration&rdquo; prompt. Or swap Lovable for <a href="https://stitch.withgoogle.com/" target="_blank" rel="noopener" style="color:#60a5fa;">Stitch</a> / <a href="https://bolt.new" target="_blank" rel="noopener" style="color:#60a5fa;">Bolt</a>.</span>
   </div>
 </div>
 """
@@ -1067,62 +1064,55 @@ You&rsquo;ll prompt Lovable to generate a three-column dashboard for <strong>Jun
 
 
 def _anatomy_card(emoji: str, label: str, color: str, what_to_write: str, juno_example: str) -> str:
-    """One anatomy-element card for the System Prompt Configurator slide.
-    Mirrors the colour palette of the Anatomy framework slide (Role · Task ·
-    Constraints · Format) so the two slides reference each other visually.
-    """
-    return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; text-align:left; position:relative; overflow:hidden;">
+    """One anatomy-element card — compact, sized for a 2x2 grid that fits one viewport."""
+    return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px 14px; text-align:left; position:relative; overflow:hidden;">
   <div style="position:absolute; top:0; left:0; right:0; height:3px; background:{color};"></div>
-  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-    <div style="font-size:26px;">{emoji}</div>
-    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:{color}; letter-spacing:0.14em; text-transform:uppercase;">{label}</div>
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <div style="font-size:20px;">{emoji}</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:11.5px; font-weight:900; color:{color}; letter-spacing:0.13em; text-transform:uppercase;">{label}</div>
   </div>
-  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.55; margin:0 0 10px;">{what_to_write}</p>
-  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:10px 12px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:{color}; line-height:1.5;">{juno_example}</div>
+  <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 7px;">{what_to_write}</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:6px; padding:7px 10px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:{color}; line-height:1.45;">{juno_example}</div>
 </div>"""
 
 
 JUNO_SYSTEM_PROMPT_BODY = (
-    """<p style="font-size:15px; color:#cdd5e3; line-height:1.6; max-width:780px; margin:0 auto 12px;">
-Move from being a <em>user</em> of an AI to being an <em>architect</em>. The output of this exercise is one file: <code>system-prompt.md</code> &mdash; Juno&rsquo;s job description, committed to your repo.
-</p>
-<p style="font-size:13.5px; color:#8899bb; max-width:780px; margin:0 auto 22px; padding:10px 16px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
-<strong style="color:#cdd5e3;">The System Prompt Configurator is your workspace.</strong> Open it from <em>Open the tool</em> below. Each field has a <em>&ldquo;Use Juno seed &rarr;&rdquo;</em> button that pre-fills it. Edit, then copy as markdown.
+    """<p style="font-size:13.5px; color:#cdd5e3; line-height:1.5; max-width:780px; margin:0 auto 14px; padding:8px 14px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
+Move from <em>user</em> to <em>architect</em>. Output: one file &mdash; <code>system-prompt.md</code>, committed to your repo. <strong style="color:#fff;">The System Prompt Configurator is your workspace</strong> &mdash; each field has a <em>&ldquo;Use Juno seed &rarr;&rdquo;</em> button to pre-fill, edit, then copy as markdown.
 </p>
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:880px; margin:0 auto 12px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:880px; margin:0 auto 10px;">
 """
     + _anatomy_card(
         emoji="🎭", label="Role / Persona", color="#3b82f6",
-        what_to_write="Define <strong>who Juno is</strong>: an AI Associate PM at RocketShip, embedded in Slack/Notion/Jira, acting as a risk watchdog &mdash; not an autonomous executor.",
-        juno_example="You are <strong>Juno PM</strong>, an AI Associate PM at RocketShip. You synthesise, draft, and prioritise &mdash; you do not execute autonomously.",
+        what_to_write="<strong>Who Juno is</strong>: an AI Associate PM at RocketShip in Slack/Notion/Jira &mdash; risk watchdog, not autonomous executor.",
+        juno_example="You are <strong>Juno PM</strong>. You synthesise, draft, and prioritise &mdash; you do not execute autonomously.",
     )
     + _anatomy_card(
         emoji="🎯", label="Task", color="#79c0ff",
-        what_to_write="Define <strong>the one job</strong>: turn 5 messy artefacts (Slack threads, tickets, interview notes, Notion pages, emails) into <em>one Opportunity Brief</em>.",
-        juno_example="Synthesise raw cross-functional artefacts into a single <strong>Opportunity Brief</strong> with sections <em>Problem &middot; Persona &middot; Evidence Table</em>.",
+        what_to_write="<strong>The one job</strong>: turn 5 messy artefacts (Slack, tickets, interviews, Notion, emails) into one Opportunity Brief.",
+        juno_example="Synthesise raw artefacts into one <strong>Opportunity Brief</strong>: <em>Problem &middot; Persona &middot; Evidence Table</em>.",
     )
     + _anatomy_card(
         emoji="🚧", label="Constraints", color="#d29922",
-        what_to_write="Set <strong>3+ guardrails including 1 refusal</strong>: never invent quotes/customers/ARR, cite source IDs, mark ambiguous threads as <code>NEEDS CLARIFICATION</code>.",
-        juno_example="Cite Slack ticket ID or Jira key for every claim. Never invent customer names, ARR, or PII. Refuse external comms &mdash; route to the human PM.",
+        what_to_write="<strong>3+ guardrails incl. 1 refusal</strong>: never invent quotes/ARR, cite source IDs, mark ambiguous threads <code>NEEDS CLARIFICATION</code>.",
+        juno_example="Cite Slack/Jira key for every claim. Never invent ARR or PII. Refuse external comms &mdash; route to PM.",
     )
     + _anatomy_card(
         emoji="📐", label="Output format", color="#34d399",
-        what_to_write="Declare the <strong>schema</strong>: a markdown table with columns <em>Problem &middot; Persona &middot; Evidence (source ID)</em>. Cap rows. Be machine-readable.",
-        juno_example="Markdown table | Rank | Risk | Customer signal | Source ID | Suggested action |. Max 5 rows. No prose preamble.",
+        what_to_write="<strong>Schema</strong>: markdown table with <em>Problem &middot; Persona &middot; Evidence (source ID)</em>. Cap rows. Machine-readable.",
+        juno_example="Markdown | Rank | Risk | Signal | Source ID | Action |. Max 5 rows. No prose preamble.",
     )
     + """</div>
 
-<div style="max-width:880px; margin:0 auto; background:rgba(188,177,255,0.06); border:1px solid rgba(188,177,255,0.25); border-radius:14px; padding:18px 22px; text-align:left;">
-  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-    <div style="font-size:24px;">💡</div>
-    <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase;">Plus one &middot; Few-Shot + CoT</div>
-  </div>
-  <p style="font-size:13.5px; color:#cdd5e3; line-height:1.6; margin:0;">Add <strong>one worked example</strong> (Few-Shot) inside your prompt &mdash; a single ideal Input&nbsp;&rarr;&nbsp;Output pair for the trickiest artefact. Then add a <strong>Chain-of-Thought instruction</strong>: <em>&ldquo;Before drafting the brief, list assumptions and risks step-by-step.&rdquo;</em> These two upgrades convert a generic system prompt into a <em>Juno-grade</em> one.</p>
+<div style="max-width:880px; margin:0 auto; background:rgba(188,177,255,0.06); border:1px solid rgba(188,177,255,0.25); border-radius:10px; padding:9px 14px; text-align:left;">
+  <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.13em; text-transform:uppercase;">💡 Plus one &middot; Few-Shot + CoT &middot;</span>
+  <span style="font-size:12px; color:#cdd5e3; line-height:1.5;"> Add one worked Input&nbsp;&rarr;&nbsp;Output example, then a Chain-of-Thought line: <em>&ldquo;List assumptions and risks step-by-step before drafting.&rdquo;</em> Turns a generic prompt Juno-grade.</span>
 </div>
 
-<p style="font-size:13px; color:#8899bb; max-width:780px; margin:18px auto 0;"><strong>Self-review checklist</strong> &mdash; built into the Configurator (5 checks, live-updating). Run it before you commit. Then paste your prompt + the AI-review meta-prompt into ChatGPT or Claude for a second opinion.</p>
+<p style="font-size:11.5px; color:#8899bb; max-width:780px; margin:8px auto 0; text-align:center;">
+<strong>Self-review</strong> &mdash; the Configurator's 5-check live checklist. Run it before commit, then run the AI-review meta-prompt in ChatGPT/Claude.
+</p>
 """
 )
 
