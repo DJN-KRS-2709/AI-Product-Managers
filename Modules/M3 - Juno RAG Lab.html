@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M3 - Juno RAG Lab Walkthrough</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#fbbf24;--c3:#bcb1ff;--c4:#34d399;--danger:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+button.copy-btn{background:rgba(96,165,250,0.18);color:var(--accent2);border:1px solid rgba(96,165,250,0.4);padding:6px 14px;font-size:12px;font-weight:700;border-radius:99px;box-shadow:none}
+button.copy-btn:hover{background:rgba(96,165,250,0.28)}
+button.copy-btn.copied{background:rgba(52,211,153,0.18);color:var(--ok);border-color:rgba(52,211,153,0.4)}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 18px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;position:relative;border-left:4px solid var(--accent)}
+.step.s1{border-left-color:var(--c1)}
+.step.s2{border-left-color:var(--c2)}
+.step.s3{border-left-color:var(--c3)}
+.step.s4{border-left-color:var(--c4)}
+.step-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.step-num{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-family:'Poppins',sans-serif;font-weight:900;font-size:13px;color:#07162C}
+.step.s1 .step-num{background:var(--c1)}
+.step.s2 .step-num{background:var(--c2)}
+.step.s3 .step-num{background:var(--c3)}
+.step.s4 .step-num{background:var(--c4)}
+.step-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:#fff;flex:1}
+.step .desc{margin:6px 0 12px;color:var(--muted);font-size:12.5px;line-height:1.55}
+.step .desc strong{color:var(--fg)}
+.copy-block{background:rgba(0,0,0,0.32);border:1px solid var(--line);border-radius:10px;padding:0;margin:8px 0 0;position:relative;overflow:hidden}
+.copy-block-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--line)}
+.copy-block-label{font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.copy-block-body{padding:11px 14px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.55;color:#cdd5e3;max-height:240px;overflow-y:auto;white-space:pre-wrap}
+.warn-box{background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.3);border-radius:8px;padding:9px 13px;margin-top:10px;font-size:12px;color:#fca5a5}
+.warn-box strong{color:#fff}
+.tip-box{background:rgba(124,140,255,0.06);border:1px solid rgba(124,140,255,0.3);border-radius:8px;padding:9px 13px;margin-top:10px;font-size:12px;color:#cdd5e3}
+.tip-box strong{color:#fff}
+.diff-area{margin-top:8px}
+.diff-area label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:4px;font-weight:700}
+textarea,input{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+textarea{min-height:70px;resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:560px;overflow-y:auto}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:6px 0;font-size:13px;color:#cdd5e3}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 3 &middot; Lab 1 &middot; Walkthrough</div><h1>Improve Juno&rsquo;s Capabilities with RAG</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="lead">Reopen your Juno Lovable prototype from M1. Walk the four steps below to ground Juno&rsquo;s prioritization in RocketShip&rsquo;s real strategy. Each step has a click-to-copy block. <strong>Goal:</strong> capture the &ldquo;before vs after&rdquo; diff &mdash; that&rsquo;s your demo forever.</p>
+
+    <div class="step s1">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div class="step-title">Re-baseline in Lovable</div>
+      </div>
+      <p class="desc">Open your Juno project in <a href="https://lovable.dev" target="_blank" style="color:var(--accent2)">Lovable</a>. Find it under <em>My Projects</em> or <em>Recently Viewed</em>. Paste <strong>Artifact 1 &middot; User Interview Transcript</strong> into the &ldquo;Raw Insights&rdquo; column and click Process.</p>
+      <div class="copy-block">
+        <div class="copy-block-head">
+          <span class="copy-block-label">&#x1F4DD; Artifact 1 &middot; Test Transcript</span>
+          <button class="copy-btn" onclick="copyText('artifact1', this)">Copy</button>
+        </div>
+        <div class="copy-block-body" id="artifact1">Interviewer: So, tell me about your workflow.
+
+User (Sarah, Data Analyst): honestly, it&rsquo;s been a week. My dog has been barking all morning, sorry if you hear him. Anyway, I log into RocketShip every Monday. The first thing I notice is that the new blue navigation bar is really bright, like hurts my eyes bright. Can we change that? But yeah, so I go to the &lsquo;Quarterly Reports&rsquo; tab. I select my date range&mdash;usually last 90 days&mdash;and hit &lsquo;Generate PDF.&rsquo; That works fine. But then&mdash;and this is the part that makes me want to scream&mdash;I try to click &lsquo;Export to CSV&rsquo; because I need to pivot this in Excel. It spins for like 5 minutes and then just crashes. No error message. Just blank. I&rsquo;ve lost hours because of this. I end up just taking screenshots of the table, which is stupid. Oh, and I&rsquo;d love a dark mode.</div>
+      </div>
+      <div class="tip-box">
+        <strong>What to notice:</strong> Juno over-prioritizes &ldquo;dark mode&rdquo; and &ldquo;blue nav bar&rdquo; alongside the actual workflow blocker (CSV crash). It has no idea what RocketShip cares about &mdash; relying on generic mock priorities.
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div class="step-title">Refactor for strategy ingestion</div>
+      </div>
+      <p class="desc">Paste the <strong>RAG Refactor Prompt</strong> in Lovable&rsquo;s chat. This adds a 4th column for the strategy doc and removes hardcoded pillars. Then re-process the same transcript &mdash; you&rsquo;ll see P0&ndash;P3 tags appear, but priorities are still generic without the strategy loaded.</p>
+      <div class="copy-block">
+        <div class="copy-block-head">
+          <span class="copy-block-label">&#x1F4E5; RAG Refactor Prompt</span>
+          <button class="copy-btn" onclick="copyText('refactor', this)">Copy</button>
+        </div>
+        <div class="copy-block-body" id="refactor">Refactor my Juno prototype to add a strategy document upload and remove all hardcoded strategy data.
+
+CURRENT STATE:
+- I have a 3-column layout: Transcript Input, Insights Panel, PRD Preview
+- I may have hardcoded strategy data (pillars, priorities) in src/data/strategy.ts or similar
+- My InsightCard and StrategyBadge components reference hardcoded pillar IDs
+
+REQUIRED CHANGES:
+
+1. ADD A 4TH COLUMN - Strategy Document Input (first column):
+   - Add a StrategyDocumentInput component with a textarea and file upload (.txt, .md)
+   - Show word count and a "Strategy loaded" indicator when content exists
+   - This column should be the leftmost, moving the others right
+
+2. ADD ActiveStrategyBadge COMPONENT:
+   - Shows above the grid when strategy is loaded
+   - Displays word count and can expand to show the full document
+   - Shows "No strategy document loaded" when empty
+
+3. UPDATE Dashboard.tsx:
+   - Add strategyDocument state (string)
+   - Pass strategyDocument to the edge function when processing
+   - Strategy is OPTIONAL - users can process with just a transcript
+   - Show a warning toast if processing without strategy
+
+4. UPDATE InsightCard.tsx:
+   - Remove ALL references to hardcoded pillar IDs or pillar lookups
+   - Display strategicPillar as a string directly from the AI response
+   - Handle case where strategic data is missing (show fallback message)
+   - Add notRecommended visual treatment (red border, strikethrough, warning icon)
+
+5. UPDATE StrategyBadge.tsx:
+   - Remove ALL hardcoded pillar data
+   - Accept pillarName as a simple string prop
+   - Keep priority styles (P0-P3) as semantic design tokens
+   - Priority descriptions should be generic (e.g., "High priority - Directly advances goals stated in the strategy document")
+
+6. DELETE any src/data/strategy.ts or similar hardcoded strategy files
+
+7. UPDATE Insight interface:
+   - strategicPillar should be string (pillar name from AI) not a pillar ID
+   - Add notRecommended?: boolean
+   - Add notRecommendedReason?: string
+
+IMPORTANT:
+- NO hardcoded company names, pillar names, or strategy content anywhere
+- All strategic information comes from the AI analysis of the user's uploaded document
+- The UI should work with ANY strategy document, not just a specific company's</div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="step-head">
+        <div class="step-num">3</div>
+        <div class="step-title">Wire the RAG backend</div>
+      </div>
+      <p class="desc">Paste the <strong>Logic Ingestion Prompt</strong>. This connects Juno to a real AI backend via Lovable Cloud + Supabase Edge Functions. <strong>Watch for the approval prompt.</strong></p>
+      <div class="warn-box">
+        <strong>&#x26A0;&#xFE0F; Critical:</strong> When Lovable asks <em>&ldquo;Enable Cloud&rdquo;</em> or <em>&ldquo;Enable AI&rdquo;</em> &mdash; click <strong>Approve</strong> / <strong>Allow</strong>. Otherwise Juno keeps returning mock outputs and the strategy doc has zero effect.
+      </div>
+      <div class="copy-block" style="margin-top:10px">
+        <div class="copy-block-head">
+          <span class="copy-block-label">&#x1F4E5; Logic Ingestion Prompt</span>
+          <button class="copy-btn" onclick="copyText('ingestion', this)">Copy</button>
+        </div>
+        <div class="copy-block-body" id="ingestion">REQUIRED PLATFORM SETUP:
+- Enable Lovable Cloud for this project.
+- Use the built-in backend and AI model access.
+- Implement AI processing using a Supabase Edge Function.
+- Replace any mock or simulated AI outputs with real edge-function calls.
+
+Update my analyze-transcript edge function to support dual-mode analysis: Strategy Mode and Quality Mode.
+
+BEHAVIOR:
+
+1. IF strategy document is provided -> STRATEGY MODE
+   - The user's strategy document is the ONLY source of truth
+   - Priority (P0-P3) based on explicit strategy document support
+   - strategicPillar = the pillar name extracted from their document
+   - strategicAlignment = how well the request aligns (0-100)
+   - strategicRationale = explains why, citing the strategy document
+
+2. IF no strategy document -> QUALITY MODE
+   - Evaluate requests on REQUEST QUALITY SIGNALS instead
+   - No strategic alignment possible without a strategy document
+   - Priority based on how well-defined the request is
+
+QUALITY SIGNALS (for Quality Mode):
+| Signal | Points |
+|--------|--------|
+| Problem Clarity - Clear user problem vs solution-first | 0-25 |
+| Evidence Quality - Data/quotes vs assumptions | 0-25 |
+| Requirement Specificity - Estimable vs vague | 0-25 |
+| Anti-Pattern Check - Red flags absent? | 0-25 |
+
+QUALITY-BASED PRIORITY MAPPING:
+- 80-100 points -> P1 (High quality request)
+- 50-79 points -> P2 (Medium quality request)
+- 20-49 points -> P3 (Low quality request)
+- 0-19 points -> P3 + notRecommended
+
+For Quality Mode:
+- strategicPillar = descriptive category ("User Experience", "Reliability", "Growth", "Efficiency")
+- strategicAlignment = the Quality Score (0-100)
+- strategicRationale = explains quality assessment, notes "Without strategy document, priority reflects request quality, not strategic alignment"
+
+ANTI-PATTERNS (flag in BOTH modes):
+- Competitor-driven: "They have this, we need it"
+- Vanity/Optics: "Make it pop", "Show innovation"
+- Vague requirements: No clear user problem
+- Arbitrary deadlines: "Need it by Friday" without justification
+- Executive opinions without user evidence
+
+Set notRecommended: true for requests with multiple anti-patterns.
+
+EDGE FUNCTION REQUIREMENTS:
+- Accept { transcript: string, strategyDocument?: string }
+- strategyDocument is OPTIONAL
+- Return { insights: Insight[], prdContent: string }
+- Use appropriate system prompt based on whether strategy document exists
+- Tool schema should include all Insight fields including notRecommended
+
+PRD GENERATION:
+- With strategy: Group by strategic priority, cite strategy document
+- Without strategy: Group by quality score, include warning that this is quality-based prioritization</div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="step-head">
+        <div class="step-num">4</div>
+        <div class="step-title">Test &mdash; with + without strategy</div>
+      </div>
+      <p class="desc">Process the transcript <strong>twice</strong>. First with the strategy column empty (Quality Mode). Then paste the <strong>RocketShip Strategy One-Pager</strong> below into the strategy column and re-process (Strategy Mode). Capture the diff.</p>
+      <div class="copy-block">
+        <div class="copy-block-head">
+          <span class="copy-block-label">&#x1F4DC; RocketShip Strategy One-Pager</span>
+          <button class="copy-btn" onclick="copyText('strategy', this)">Copy</button>
+        </div>
+        <div class="copy-block-body" id="strategy">RocketShip &mdash; Q3 2026 Strategy One-Pager
+
+NORTH STAR
+Become the fastest, most reliable analytics platform for mid-market data teams who currently rely on Excel + Salesforce.
+
+THREE STRATEGIC PILLARS
+
+1. Reliability First
+   The platform must work. Every export, every report, every load. We are losing enterprise deals (Pearson Co, Acme) because of P0 reliability bugs - CSV export crashes, 403 permission errors, queue overflows on large reports. ZERO new feature work ships if the legacy reporting API is redlining.
+
+2. Enterprise Compliance
+   We win or lose on SAML/SSO, audit logs, and role-based permissions. Acme deal worth $200k ARR is dead if we don't ship Okta SSO by Oct 1. This is not optional.
+
+3. Speed-to-Insight
+   Mid-market analysts choose us over Salesforce because we feel fast. Anything that makes the dashboard slower (heavy AI summarization on top of fragile DBs, 30+ second exports) is a step backwards.
+
+WHAT WE ARE NOT DOING THIS QUARTER
+- Aesthetic refreshes (dark mode, color palette tweaks, "make it pop" UI work)
+- Competitor-mimicking AI features without clear user evidence
+- TikTok integration or other social plumbing
+- Dashboard summarization that requires DB sharding work
+
+DECISION RULES
+- If a request reduces reliability OR slows export speed -> P3 or notRecommended
+- If a request unblocks an enterprise deal with stated $ARR -> P0
+- If a request comes from "exec opinion" without user evidence -> notRecommended
+- If a request fixes a workflow blocker (CSV crash, permission error) -> P0/P1</div>
+      </div>
+      <div class="tip-box">
+        <strong>What you should see:</strong> CSV crash jumps to P0 (cited: <em>&ldquo;Reliability First&rdquo;</em>). Dark mode + nav-bar color drop to <em>notRecommended</em> (cited: <em>&ldquo;What we are NOT doing&rdquo;</em>). Juno now defends every priority with a strategy clause.
+      </div>
+    </div>
+
+    <h3 class="section-h" style="margin-top:24px">Capture the diff</h3>
+    <p class="lead">Two short notes &mdash; what changed when the strategy doc was loaded. This goes into your final PRD as the &ldquo;diagnostic diff&rdquo; section.</p>
+
+    <div class="diff-area">
+      <label>Lovable prototype URL (after RAG)</label>
+      <input id="proto" placeholder="https://your-juno.lovable.app/" oninput="render()" />
+    </div>
+    <div class="diff-area">
+      <label>Quality Mode &mdash; top 3 priorities (no strategy)</label>
+      <textarea id="without" placeholder="e.g. P1 Dark mode (high quality clarity)..." oninput="render()"></textarea>
+    </div>
+    <div class="diff-area">
+      <label>Strategy Mode &mdash; top 3 priorities (with strategy)</label>
+      <textarea id="with" placeholder="e.g. P0 CSV export crash - cites Reliability First pillar..." oninput="render()"></textarea>
+    </div>
+    <div class="diff-area">
+      <label>One-line takeaway you&rsquo;ll never forget</label>
+      <input id="takeaway" placeholder="e.g. RAG turned Juno from a guesser into a citer." oninput="render()" />
+    </div>
+
+    <div class="check">
+      <h3>Self-review &middot; check before you commit</h3>
+      <ul>
+        <li>Lovable Cloud is enabled (no &ldquo;mock&rdquo; warnings in console).</li>
+        <li>The strategy column accepts text and shows word count when loaded.</li>
+        <li>Without strategy: priorities use quality scores + show the warning toast.</li>
+        <li>With strategy: every priority cites a specific clause from the doc.</li>
+        <li>At least one item flips from P1/P2 to <em>notRecommended</em> when strategy loads.</li>
+        <li>Prototype URL is recorded above (you&rsquo;ll need it for the final project README).</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <h3 class="section-h">Live preview &mdash; <code style="color:var(--accent2)">prd.md (Diagnostic Diff section)</code></h3>
+    <div class="preview" id="preview">Capture the diff to see your markdown render here.</div>
+
+    <div class="check" style="margin-top:18px">
+      <h3>AI-review prompt</h3>
+      <p style="font-size:12.5px; color:var(--muted); margin:6px 0 8px">After capturing the diff, paste your markdown plus this prompt into ChatGPT or Claude:</p>
+      <div class="copy-block">
+        <div class="copy-block-head">
+          <span class="copy-block-label">&#x1F916; AI-Review Meta-Prompt</span>
+          <button class="copy-btn" onclick="copyText('aireview', this)">Copy</button>
+        </div>
+        <div class="copy-block-body" id="aireview">You are a senior AI PM reviewer. I just ran a RAG diagnostic for Juno - my AI prioritization copilot. Below is the before/after diff. Critique it on three axes:
+
+1. Did the priority shift actually map to specific strategy clauses, or are the citations vague?
+2. Are the items that dropped to notRecommended truly out-of-strategy, or is the AI being lazy?
+3. What is one specific edge case I should test next to break this RAG implementation?
+
+Be specific and direct. No hedging.
+
+[paste prd.md Diagnostic Diff section here]</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast">Saved.</div>
+
+<script>
+const KEY = 'juno-rag-lab-v1';
+
+function $(id){ return document.getElementById(id); }
+
+function copyText(id, btn){
+  const el = document.getElementById(id);
+  const txt = el.innerText;
+  navigator.clipboard.writeText(txt).then(() => {
+    if (btn) {
+      const orig = btn.innerText;
+      btn.innerText = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.innerText = orig; btn.classList.remove('copied'); }, 1400);
+    }
+    showToast('Copied to clipboard.');
+  });
+}
+
+function showToast(msg){
+  const t = $('toast');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+function render(){
+  const proto = ($('proto').value || '').trim();
+  const w = ($('without').value || '').trim();
+  const s = ($('with').value || '').trim();
+  const tk = ($('takeaway').value || '').trim();
+
+  const hasAny = proto || w || s || tk;
+  if (!hasAny) {
+    $('preview').innerText = 'Capture the diff to see your markdown render here.';
+    save();
+    return;
+  }
+
+  let md = '## Diagnostic Diff · Juno RAG Lab\n\n';
+  if (proto) md += `**Lovable prototype:** ${proto}\n\n`;
+  md += '### Before — Quality Mode (no strategy)\n\n';
+  md += (w || '_(not captured)_') + '\n\n';
+  md += '### After — Strategy Mode (with RocketShip Strategy One-Pager)\n\n';
+  md += (s || '_(not captured)_') + '\n\n';
+  if (tk) md += `### Takeaway\n\n> ${tk}\n`;
+  $('preview').innerText = md;
+  save();
+}
+
+function buildMarkdown(){
+  const proto = ($('proto').value || '').trim();
+  const w = ($('without').value || '').trim();
+  const s = ($('with').value || '').trim();
+  const tk = ($('takeaway').value || '').trim();
+
+  let md = '## Diagnostic Diff - Juno RAG Lab\n\n';
+  md += '_Module 3 Lab 1 deliverable. Lives in `03-rag-prd/prd.md` under the_ **Diagnostic Diff** _section._\n\n';
+  if (proto) md += `**Lovable prototype:** ${proto}\n\n`;
+  md += '### Before - Quality Mode (no strategy)\n\n';
+  md += (w || '_(not captured - re-run with strategy column empty)_') + '\n\n';
+  md += '### After - Strategy Mode (with RocketShip Strategy One-Pager)\n\n';
+  md += (s || '_(not captured - re-run with strategy doc loaded)_') + '\n\n';
+  if (tk) md += `### Takeaway\n\n> ${tk}\n\n`;
+  md += '---\n_Reviewed by AI? Paste the markdown + meta-prompt into ChatGPT/Claude._\n';
+  return md;
+}
+
+function copyMd(){
+  const md = buildMarkdown();
+  navigator.clipboard.writeText(md).then(() => showToast('Markdown copied.'));
+}
+
+function download(){
+  const md = buildMarkdown();
+  const blob = new Blob([md], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'juno-rag-diff.md';
+  a.click();
+}
+
+function save(){
+  const data = {
+    proto: $('proto').value,
+    without: $('without').value,
+    with: $('with').value,
+    takeaway: $('takeaway').value,
+  };
+  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+}
+
+function load(){
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.proto) $('proto').value = d.proto;
+    if (d.without) $('without').value = d.without;
+    if (d.with) $('with').value = d.with;
+    if (d.takeaway) $('takeaway').value = d.takeaway;
+    render();
+  } catch(e){}
+}
+
+function reset(){
+  if (!confirm('Clear all captured notes?')) return;
+  $('proto').value = '';
+  $('without').value = '';
+  $('with').value = '';
+  $('takeaway').value = '';
+  try { localStorage.removeItem(KEY); } catch(e){}
+  render();
+}
+
+load();
+</script>
+</body>
+</html>

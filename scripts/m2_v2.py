@@ -1022,8 +1022,5 @@ def build_module_2():
     # Slide 29 - Q&A
     add(qa_section(), note="Async-only Q&A. Park unresolved questions in #ai-pm-cohort. Instructor responds in-thread within ~5 days.")
 
-    # Slide 30 - Thank You
-    add(thank_you_m2())
-
     return sections_inst, sections_share
 

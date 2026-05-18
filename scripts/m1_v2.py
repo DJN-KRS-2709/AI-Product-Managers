@@ -1358,7 +1358,5 @@ def build_module_1():
     add(qa_section(), note="Q&A. Live cohort: open the floor. Async: this is a thread in #ai-pm-cohort.")
 
     # Slide 36 — Thank you
-    add(thank_you(), note="Wrap. Remind learners to commit their Module 1 artefacts to their fork before Module 2.")
-
     return sections_inst, sections_share
 
