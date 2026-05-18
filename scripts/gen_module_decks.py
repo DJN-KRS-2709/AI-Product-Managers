@@ -1191,7 +1191,7 @@ def build_module_1():
     # 17. Section break — Configure Juno
     add(section_break(
         label="Hands-On Lab · 30 min · Final-Project Deliverable",
-        name="Configure Juno's System Prompt",
+        name="Lab · Configure Juno's System Prompt",
         desc="The biggest piece of M1. This system prompt is one of your six final-project deliverables. Self-review and AI-review before you commit.",
     ),
     note="This is the M1 deliverable. Do NOT cut it short. Walk the room — most people forget refusal rules.",

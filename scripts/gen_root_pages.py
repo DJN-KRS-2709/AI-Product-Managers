@@ -73,6 +73,37 @@ def render_root_page(title: str, body_sections: list[str], logo_path: str = ROOT
 """
 
 
+def how_this_course_runs() -> str:
+    """Course-level expectation grid (vs. how_it_runs() which is module-level).
+
+    Same six expect-cards as the per-module version, but headlined "How This
+    Course Runs" so the section makes sense at the Course Overview / pitch level.
+    """
+    cards = [
+        ("⏱", "~12 hours total, async-friendly", "Six modules. ~2 hours each. Self-paced. Async-first."),
+        ("👤", "100% individual", "No groups. No partner work. You own every deliverable."),
+        ("🛠", "Open the tool", "Each module has 1–4 single-file HTML tools. Vanilla JS. localStorage."),
+        ("✅", "Self-review", "Each tool ships with a 4–6 item checklist. Run before you commit."),
+        ("🤖", "AI-review", "Paste your artifact + the verbatim prompt into ChatGPT or Claude."),
+        ("📂", "Async share", "Commit to your <code>juno-pm/</code> fork. Optional Loom in <code>#ai-pm-cohort</code>."),
+    ]
+    cells = "\n".join(
+        f'      <div class="expect-card"><div class="expect-icon">{ic}</div>'
+        f'<div class="expect-title">{t}</div><div class="expect-desc">{d}</div></div>'
+        for ic, t, d in cards
+    )
+    return f"""<section class="centered" data-title="How This Course Runs">
+  <div class="inner">
+    <div class="section-label">Ground Rules</div>
+    <h2>How This Course Runs</h2>
+    <div class="expect-grid">
+{cells}
+    </div>
+  </div>
+</section>
+"""
+
+
 def hero_root(lead: str, accent: str, subtitle: str, waypoints: list[tuple[str, str]],
               out_line: str, label: str, logo_path: str = ROOT_LOGO) -> str:
     waypoints_html = "\n".join(
@@ -111,7 +142,7 @@ def build_course_overview() -> list[str]:
         "Out: a forkable juno-pm/ repo with six committed components and a finalised README.",
         "Course Overview · 2026 cohort"))
 
-    sections.append(how_it_runs())
+    sections.append(how_this_course_runs())
     sections.append(course_arc(0))  # 0 = no module active; this just renders without active node
 
     # Strategic arc as cards
