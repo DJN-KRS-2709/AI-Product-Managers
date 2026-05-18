@@ -3,42 +3,60 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M2 — AI Strategy One-Pager Builder</title>
+<title>M2 - AI Strategy One-Pager Builder</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}h1,h2,h3{font-family:'Poppins',sans-serif}header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%)}button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}button:hover{transform:translateY(-1px)}button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px}
-  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
-  @media(max-width:960px){main{grid-template-columns:1fr}}
-  .panel{padding:24px 32px;overflow:auto}
-  .panel.left{border-right:1px solid var(--line)}
-  .field{margin-bottom:18px}
-  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
-  .hint{color:var(--muted);font-size:13px;margin:0 0 8px}
-  textarea,input,select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px}
-  textarea{min-height:64px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  .row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
-  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
-  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
-  .check li{margin:6px 0;font-size:14px}
-  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;margin-left:8px;background:#22293a;color:var(--muted)}
-  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
-  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#79c0ff;--c3:#bcb1ff;--c4:#fbbf24;--c5:#f87171;--c6:#34d399}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(217,142,34,0.10) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px;letter-spacing:-.01em}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:960px){main{grid-template-columns:1fr}}
+.panel{padding:22px 28px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.preset-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.preset{font-size:12px;padding:6px 14px;border-radius:99px;background:transparent;color:var(--muted);border:1px solid var(--line);cursor:pointer;font-weight:600}
+.preset.active{background:rgba(217,142,34,0.12);color:#fbbf24;border-color:#d29922}
+.preset.airbnb.active{background:rgba(96,165,250,0.12);color:var(--accent2);border-color:var(--accent)}
+.section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:12px;position:relative;overflow:hidden}
+.section::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
+.s1::before{background:var(--c1)}.s2::before{background:var(--c2)}.s3::before{background:var(--c3)}
+.s4::before{background:var(--c4)}.s5::before{background:var(--c5)}.s6::before{background:var(--c6)}
+.s-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.s-icon{font-size:18px}
+.s-title{font-family:'Poppins',sans-serif;font-weight:900;font-size:12.5px;letter-spacing:.06em}
+.s1 .s-title{color:var(--c1)}.s2 .s-title{color:var(--c2)}.s3 .s-title{color:var(--c3)}
+.s4 .s-title{color:var(--c4)}.s5 .s-title{color:var(--c5)}.s6 .s-title{color:var(--c6)}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10.5px;margin-left:auto;background:#22293a;color:var(--muted);font-weight:600}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
+.section .q{margin:0 0 8px;color:var(--muted);font-size:11.5px;line-height:1.5}
+textarea{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;min-height:50px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:13px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:12.5px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:5px 0;font-size:13px}
+.tabs{display:flex;gap:4px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.tab{font-size:12px;padding:8px 14px;background:transparent;color:var(--muted);border:0;border-bottom:2px solid transparent;cursor:pointer;font-weight:700}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{display:none}
+.tabpanel.active{display:block}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
 </style>
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 2 · Tool · Final-project deliverable</div><h1>AI Strategy One-Pager Builder</h1></div>
+  <div><div class="crumb">Module 2 &middot; Lab 2 &middot; Deliverable for final project</div><h1>AI Strategy One-Pager Builder</h1></div>
   <div class="row">
     <button onclick="copyMd()">Copy as markdown</button>
     <button class="secondary" onclick="download()">Download .md</button>
@@ -47,102 +65,158 @@
 </header>
 <main>
   <section class="panel left">
-    <p class="hint">Seven blocks. One page. Survives a board challenge.</p>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 12px">Six sections. One page. The defensible doc that justifies your bet to leadership. Pre-seeded for Juno&rsquo;s Automated Prioritization engine. Pick a preset, edit to your conviction, copy as markdown.</p>
 
-    <div class="field"><label>1. The bet (one sentence + value frame) <span class="badge" id="b1">empty</span></label>
-      <p class="hint">"We will build X for Y so that Z (Cost/Revenue/Risk/Delight)."</p>
-      <textarea id="f1" placeholder="We will build Juno PM — an AI Associate PM inside RocketShip's Slack/Notion/Jira — so that the product team cuts median P0 triage time from 90 to 20 minutes (Risk mitigation)."></textarea>
+    <div class="preset-row">
+      <button class="preset active" data-preset="A" onclick="applyPreset('A')">Option A &middot; Build Your Own</button>
+      <button class="preset" data-preset="B" onclick="applyPreset('B')">Option B &middot; Juno Baseline (seeded)</button>
+      <button class="preset airbnb" data-preset="C" onclick="applyPreset('C')">&#x1F4D6; Airbnb worked example</button>
     </div>
 
-    <div class="field"><label>2. The user / job <span class="badge" id="b2">empty</span></label>
-      <p class="hint">Who, doing what?</p>
-      <textarea id="f2" placeholder="RocketShip senior AI PMs triaging P0 escalations, drafting spec v0.1s, and prioritising weekly risk lists."></textarea>
+    <div class="section s1">
+      <div class="s-head"><div class="s-icon">&#x1F4DD;</div><div class="s-title">Problem &amp; Workflow</div><span class="badge" id="b1">empty</span></div>
+      <p class="q">Define the problem. What bad decision is Juno explicitly preventing?</p>
+      <textarea id="f1" placeholder="The Problem: ...\n\nPrevention: it explicitly prevents..."></textarea>
     </div>
 
-    <div class="field"><label>3. The mechanic <span class="badge" id="b3">empty</span></label>
-      <p class="hint">What does the product do? Non-PM-readable.</p>
-      <textarea id="f3" placeholder="Juno reads P0 threads, retrieves the RocketShip strategy corpus, and outputs a daily prioritised risk list with source IDs. On request it drafts a v0.1 PRD that the PM edits."></textarea>
+    <div class="section s2">
+      <div class="s-head"><div class="s-icon">&#x1F4CA;</div><div class="s-title">Target Metrics</div><span class="badge" id="b2">empty</span></div>
+      <p class="q">Define your KPIs as proof. Which metric makes leadership say &ldquo;don&rsquo;t touch it&rdquo;?</p>
+      <textarea id="f2" placeholder="Cycle time: ...\n\nLeadership proof: ..."></textarea>
     </div>
 
-    <div class="field"><label>4. The autonomy <span class="badge" id="b4">empty</span></label>
-      <select id="f4">
-        <option value="">Pick one…</option>
-        <option>Suggest — AI proposes, human decides</option>
-        <option>Draft — AI drafts v0.1, human edits + approves</option>
-        <option>Mixed — Synthesize=Execute, Draft=Draft, Prioritize=Suggest</option>
-        <option>Execute — AI acts, human reviews after</option>
-        <option>Operate — AI runs long horizons</option>
-      </select>
-      <p class="hint" style="margin-top:6px">For Juno, Mixed is the realistic answer. Lock the pillar mapping here.</p>
+    <div class="section s3">
+      <div class="s-head"><div class="s-icon">&#x1F39A;&#xFE0F;</div><div class="s-title">Autonomy Level</div><span class="badge" id="b3">empty</span></div>
+      <p class="q">Specify Assist / Copilot / Agent. State which level you would <em>not</em> choose, and why.</p>
+      <textarea id="f3" placeholder="Choice: Copilot. ...\n\nExplicitly avoiding: Agent. ..."></textarea>
     </div>
 
-    <div class="field"><label>5. The technical approach <span class="badge" id="b5">empty</span></label>
-      <p class="hint">Prompt / RAG / fine-tune / agent — cheapest first.</p>
-      <textarea id="f5" placeholder="V1: system prompt (M1) + RAG over RocketShip strategy + Slack/Notion/Jira corpora (M3). V2: bounded agent with explicit handoff rules (M5). No fine-tune."></textarea>
+    <div class="section s4">
+      <div class="s-head"><div class="s-icon">&#x1F5C2;&#xFE0F;</div><div class="s-title">Data &amp; Model Approach</div><span class="badge" id="b4">empty</span></div>
+      <p class="q">Buy (LLM) / Ground (RAG) / Refine (Fine-tune). Define the shortcut you are <em>not</em> taking.</p>
+      <textarea id="f4" placeholder="Approach: Ground (RAG). ...\n\nExplicitly avoiding: ..."></textarea>
     </div>
 
-    <div class="field"><label>6. The risk + guardrail <span class="badge" id="b6">empty</span></label>
-      <p class="hint">What can go wrong + how you block it.</p>
-      <textarea id="f6" placeholder="Risk: Juno hallucinates a customer ARR figure on a P0 risk. Guardrail: refuse to assert ARR without the ARR sheet; cite source IDs for every claim; hand off to PM if confidence <70%."></textarea>
+    <div class="section s5">
+      <div class="s-head"><div class="s-icon">&#x26A0;&#xFE0F;</div><div class="s-title">Risks &amp; Mitigations</div><span class="badge" id="b5">empty</span></div>
+      <p class="q">One scary &lsquo;one-way door&rsquo; risk + the specific guardrail that protects trust. Not a list - one risk.</p>
+      <textarea id="f5" placeholder="Risk: ...\n\nMitigation: ..."></textarea>
     </div>
 
-    <div class="field"><label>7. The success metric <span class="badge" id="b7">empty</span></label>
-      <p class="hint">Measurable in 30 days. Specific number.</p>
-      <textarea id="f7" placeholder="Median P0 triage time falls from 90 minutes to 20 minutes by Sprint 3. Sprint-over-sprint trend reported in #ai-pm-cohort."></textarea>
+    <div class="section s6">
+      <div class="s-head"><div class="s-icon">&#x1F6AA;</div><div class="s-title">V1 Scope</div><span class="badge" id="b6">empty</span></div>
+      <p class="q">In/Out boundaries. What the AI <em>won&rsquo;t</em> do is as critical as what it will. Two specific OUT items.</p>
+      <textarea id="f6" placeholder="In: ...\n\nOut: ..."></textarea>
     </div>
   </section>
 
-  <section class="panel right">
-    <label>Live preview — strategy-one-pager.md</label>
-    <p class="hint">Commit to <code>02-strategy/strategy-one-pager.md</code>.</p>
-    <div class="preview" id="preview"></div>
-
-    <div class="check">
-      <h3>Self-review checklist</h3>
-      <ul style="margin:6px 0 0;padding-left:18px">
-        <li id="c1">The bet is one sentence with a quantified outcome</li>
-        <li id="c2">The mechanic is non-PM-readable</li>
-        <li id="c3">The autonomy level is explicit</li>
-        <li id="c4">The tech approach ladders to prompt → RAG → fine-tune</li>
-        <li id="c5">The success metric is measurable in 30 days</li>
-      </ul>
+  <section class="panel right" style="position:sticky;top:0;align-self:flex-start;max-height:calc(100vh - 76px)">
+    <div class="tabs">
+      <button class="tab active" data-tab="md" onclick="switchTab('md')">Markdown for repo</button>
+      <button class="tab" data-tab="airbnb" onclick="switchTab('airbnb')">Airbnb worked example</button>
     </div>
 
-    <div class="check">
-      <h3>AI-review prompt</h3>
-      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your one-pager + this into ChatGPT, Claude, or Cursor:</p>
-      <div class="preview" style="font-size:12px">You are the CFO of RocketShip. Read this AI Strategy One-Pager and challenge it. (a) Is the success metric specific enough to defund the bet if missed? (b) Is the autonomy level appropriate for the risk? (c) Is the technical approach the cheapest path that works? (d) Which of the seven blocks is weakest? Reply in 5 short bullets.</div>
+    <div class="tabpanel active" id="tab-md">
+      <p style="color:var(--muted);font-size:11.5px;margin:0 0 8px">Copy this to <code>02-strategy/strategy-one-pager.md</code> in your <code>juno-pm/</code> repo.</p>
+      <div class="preview" id="preview"></div>
+
+      <div class="check">
+        <h3>Self-review checklist</h3>
+        <ul>
+          <li>Section 1 names a single bad decision Juno is preventing</li>
+          <li>Section 2 has a metric measurable in &le; 30 days</li>
+          <li>Section 3 names ONE level avoided + why</li>
+          <li>Section 4 names ONE shortcut not taken + why</li>
+          <li>Section 5 has ONE scary risk (not a list) + a specific mitigation</li>
+          <li>Section 6 has &ge; 2 specific OUT items</li>
+        </ul>
+      </div>
+
+      <div class="check">
+        <h3>AI-review prompt</h3>
+        <p style="margin:0 0 6px;font-size:12px;color:var(--muted)">Paste your one-pager + this into ChatGPT, Claude, or Cursor:</p>
+        <div class="preview" style="font-size:11px">You are a senior AI PM reviewer reading this one-pager as a CFO would. (1) Is the bad decision in section 1 specific enough that you can imagine it failing? (2) Is the metric in section 2 measurable in 30 days, or is it vague? (3) Does section 3 prove the PM resisted the urge to over-grant autonomy? (4) Does section 4 show the PM understood the trade-off, not just picked a tech? (5) Is the risk in section 5 a real one-way door, or theatre? (6) Are the OUT items in section 6 specific enough to prevent scope creep? End with one sentence: would you fund this bet, and why or why not.</div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="tab-airbnb">
+      <p style="color:var(--muted);font-size:11.5px;margin:0 0 8px"><strong style="color:#fbbf24">Airbnb Smart Dispute Mediator</strong> &mdash; the same six-section anatomy, fully filled. Use as inspiration for the &ldquo;explicitly avoiding&rdquo; phrasing.</p>
+      <div class="preview" style="font-size:11px;line-height:1.6" id="airbnb-preview"></div>
     </div>
   </section>
 </main>
 <div class="toast" id="toast">Copied</div>
 <script>
-  const ids=['f1','f2','f3','f4','f5','f6','f7'];
-  const KEY='m2-one-pager';
-  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);ids.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
-  function save(){const o={};ids.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
-  function val(id){return document.getElementById(id).value.trim()}
-  function setBadge(id,ok){const b=document.getElementById(id);b.textContent=ok?'filled':'empty';b.className='badge '+(ok?'ok':'warn')}
-  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
-  function md(){
-    const [a,b,c,d,e,f,g]=ids.map(val);
-    return `# Juno PM — AI Strategy One-Pager\n\n## 1. The bet\n\n${a||'_(missing)_'}\n\n## 2. The user / job\n\n${b||'_(missing)_'}\n\n## 3. The mechanic\n\n${c||'_(missing)_'}\n\n## 4. The autonomy\n\n${d||'_(missing)_'}\n\n## 5. The technical approach\n\n${e||'_(missing)_'}\n\n## 6. The risk + guardrail\n\n${f||'_(missing)_'}\n\n## 7. The success metric\n\n${g||'_(missing)_'}\n`;
+const KEY='m2-onepager-v2';
+const FIELDS=['f1','f2','f3','f4','f5','f6'];
+const PRESETS={
+  A: {f1:'',f2:'',f3:'',f4:'',f5:'',f6:''},
+  B: {
+    f1: "The Problem: roadmap discussions at RocketShip are driven by the loudest voice in Slack rather than customer evidence. Priorities reverse weekly; stakeholder trust is eroding.\n\nPrevention: Juno explicitly prevents 'opinion-driven prioritization' - the bad decision of moving a feature up the backlog because someone in #leadership posted strongly, instead of because the cited evidence outweighs the alternatives.",
+    f2: "Cycle time: reduce average weekly roadmap prioritization from 2 hours to 30 minutes (75% reduction).\n\nLeadership proof: under-10% rate of decisions reversed within 1 week, AND 90%+ of prioritised items have at least 2 cited sources from the corpus. Both metrics measurable in the first 30 days post-launch.",
+    f3: "Choice: Copilot. Juno drafts a ranked backlog with written reasoning + source citations; the PM reviews and clicks 'approve' before publish.\n\nExplicitly avoiding: Agent. Letting Juno move sprint priorities or shift live dates without a human approval step is a one-way trust-erosion door - a single wrong call lets stakeholders dismiss the system permanently.",
+    f4: "Approach: Ground (RAG). We will ground the model in the RocketShip corpus - Slack #escalations, support tickets, interview notes, Notion product pages, Jira tickets - so every priority cites a source ID.\n\nExplicitly avoiding: a generic LLM (Buy). Without RAG grounding, Juno would hallucinate plausible-sounding priorities and invent customer signals that don't exist - the failure mode that kills trust fastest.",
+    f5: "Risk: training data lag. Juno could over-weight whichever signal type was loudest in the past 60 days (e.g. enterprise escalations) and systematically under-weight quieter but more strategic signals (e.g. SMB churn). One quarter of skewed priorities and the roadmap drifts.\n\nMitigation: a hard 'evidence balance' eval gate - reject any priority list where less than 20% of cited sources come from any one source type. Run weekly; PM reviews.",
+    f6: "In: ranking the existing backlog with cited evidence; surfacing under-cited items; flagging conflicts between Slack escalations and Jira priorities.\n\nOut: (1) hiring or headcount decisions, (2) customer-facing comms about why a feature was deprioritised. Both stay 100% with the human PM."
+  },
+  C: 'AIRBNB'
+};
+const AIRBNB={
+  f1: "The Problem: resolving host-guest damage claims is slow, emotionally charged, and inconsistent across support agents.\n\nPrevention: explicitly prevents 'arbitrary settlement' - a human agent issuing a refund or charge based on gut feeling rather than a cross-referenced audit of house rules and check-in photos.",
+  f2: "Resolution Cycle Time: reduction in time-to-closed-claim from 72 hours to 15 minutes.\n\nLeadership proof: 20% reduction in appeal rates - both guests and hosts accept the AI's first decision more often than a human's, proving the logic is fairer and more defensible.",
+  f3: "Choice: Copilot. AI reviews evidence and drafts the decision letter with a recommended payout; a human supervisor must click 'approve' for any transaction over $500.\n\nExplicitly avoiding: Agent. We will not give AI end-to-end autonomy to move money out of user bank accounts without a safety valve - a single error in damage assessment is a trust-erosion event hard to undo.",
+  f4: "Approach: Ground (RAG). Ground the model in the specific house rules of that listing and the metadata from uploaded photos (timestamps/location) to verify when damage occurred.\n\nExplicitly avoiding: generic LLM (Buy). Using a general model without RAG grounding would lead to hallucinations of standard policies that might contradict the host's specific legal house rules.",
+  f5: "Risk: if the training data for past human settlements favoured Power Hosts, the AI might instinctively penalise new guests in any dispute - a 'one-way door' where guests stop using the platform and structural bias compounds.\n\nMitigation: a hard eval gate where 5% of all AI-mediated decisions are blind-reviewed by a third-party legal team to ensure parity between guest and host outcomes.",
+  f6: "In: claims under $1,000 involving physical property damage with photo evidence.\n\nOut: (1) personal injury claims, (2) disputes involving local noise ordinances. Both require human judgement that the model cannot reliably reproduce."
+};
+const DEF=()=>JSON.parse(JSON.stringify(PRESETS.A));
+function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):DEF()}
+function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+let state=load();
+function hydrate(){FIELDS.forEach(k=>{const el=document.getElementById(k);if(el)el.value=state[k]||''});updatePreview()}
+function applyPreset(p){
+  if(p==='C'){state=JSON.parse(JSON.stringify(AIRBNB));}
+  else{state=JSON.parse(JSON.stringify(PRESETS[p]));}
+  save(state);hydrate();
+  document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset===p));
+}
+FIELDS.forEach(k=>{const el=document.getElementById(k);if(el)el.addEventListener('input',e=>{state[k]=e.target.value;save(state);updatePreview()})});
+function md(){
+  const get=k=>state[k]||'_(missing)_';
+  return '# AI Strategy One-Pager - Juno Automated Prioritization\n\n## 1. Problem & Workflow\n\n'+get('f1')+
+    '\n\n## 2. Target Metrics\n\n'+get('f2')+
+    '\n\n## 3. Autonomy Level\n\n'+get('f3')+
+    '\n\n## 4. Data & Model Approach\n\n'+get('f4')+
+    '\n\n## 5. Risks & Mitigations\n\n'+get('f5')+
+    '\n\n## 6. V1 Scope\n\n'+get('f6')+'\n';
+}
+function airbnbMd(){
+  return '# AI Strategy One-Pager - Airbnb Smart Dispute Mediator\n\n## 1. Problem & Workflow\n\n'+AIRBNB.f1+
+    '\n\n## 2. Target Metrics\n\n'+AIRBNB.f2+
+    '\n\n## 3. Autonomy Level\n\n'+AIRBNB.f3+
+    '\n\n## 4. Data & Model Approach\n\n'+AIRBNB.f4+
+    '\n\n## 5. Risks & Mitigations\n\n'+AIRBNB.f5+
+    '\n\n## 6. V1 Scope\n\n'+AIRBNB.f6+'\n';
+}
+function updatePreview(){
+  document.getElementById('preview').textContent=md();
+  for(let i=1;i<=6;i++){
+    const v=(state['f'+i]||'').trim();
+    const filled=v.length>30;
+    const b=document.getElementById('b'+i);
+    b.className='badge'+(filled?' ok':'');
+    b.textContent=filled?'filled':'empty';
   }
-  function update(){
-    const [a,b,c,d,e,f,g]=ids.map(val);
-    setBadge('b1',!!a);setBadge('b2',!!b);setBadge('b3',!!c);setBadge('b4',!!d);setBadge('b5',!!e);setBadge('b6',!!f);setBadge('b7',!!g);
-    setCheck('c1',a.length>30 && /(cost|revenue|risk|delight|reduce|cut|save|gain|mitigate|grow|delight)/i.test(a) && /\d/.test(a));
-    setCheck('c2',c.length>30);
-    setCheck('c3',!!d);
-    setCheck('c4',e.length>0 && /(prompt|rag|fine.?tune|agent)/i.test(e));
-    setCheck('c5',g.length>0 && /\d/.test(g) && /(day|sprint|week|month|hour|minute|%|per)/i.test(g));
-    document.getElementById('preview').textContent=md();save();
-  }
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='strategy-one-pager.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Clear all fields?')){ids.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
-  ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
-  load();update();
+}
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.querySelectorAll('.tabpanel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+t));
+}
+function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
+function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='strategy-one-pager.md';a.click();URL.revokeObjectURL(u)}
+function reset(){if(confirm('Reset to Option A (empty)?')){state=DEF();save(state);hydrate();document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset==='A'))}}
+document.getElementById('airbnb-preview').textContent=airbnbMd();
+hydrate();
 </script>
 </body>
 </html>
