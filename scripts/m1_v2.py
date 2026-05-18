@@ -1020,10 +1020,10 @@ def resources_templates() -> str:
         <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">Final Project Brief &amp; Deliverables</div>
         <div style="font-size:13px; color:#8899bb;">&rarr; View resource</div>
       </div></a>
-      <a href="{TEMPLATE_REPO_URL}" target="_blank" rel="noopener" style="text-decoration:none;"><div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
-        <div style="font-size:11px; font-weight:800; color:#34d399; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Project Template Repo</div>
+      <a href="{TEMPLATE_USE_URL}" target="_blank" rel="noopener" style="text-decoration:none;"><div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.25); border-radius:14px; padding:22px; text-align:left; transition:all 0.3s; height:100%;">
+        <div style="font-size:11px; font-weight:800; color:#34d399; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">Project Template &middot; One-click</div>
         <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3;">ai-product-management-template</div>
-        <div style="font-size:13px; color:#8899bb;">&rarr; Use this template &uarr;</div>
+        <div style="font-size:13px; color:#8899bb;">&rarr; Create your fork now &uarr;</div>
       </div></a>
     </div>
   </div>
