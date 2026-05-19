@@ -647,50 +647,54 @@ def three_levers() -> str:
 def pm_execution_plan() -> str:
     """Source slide 18 - The PM Execution Plan.
 
-    Serpentine flow matching the source Google Slide layout:
-    Step 1 (top-left) -> arc over the top -> Step 2 (mid-right) ->
-    arc down-left -> Step 3 (bottom-left) -> straight right -> Step 4
-    (bottom-right). Each step: numbered ring + title pill + description
-    + key-decision bullet.
+    Serpentine flow matching the source Google Slide:
+    Step 1 (top-left) -> smooth arc over the top -> Step 2 (mid-right) ->
+    smooth S-curve down-left -> Step 3 (bottom-left) -> straight right ->
+    Step 4 (bottom-right).
 
-    Uses an SVG arrow layer with absolutely-positioned HTML content on
-    top (same technique as M5 react_pattern, but with a full canvas).
-    Colour-codes each step (blue/gold/green/purple) while keeping the
-    source's serpentine geometry.
+    Geometry: container is 1000x600 px (fixed). SVG viewBox matches 1:1
+    with preserveAspectRatio="none" so HTML step blocks (positioned via
+    left/top px) align exactly with the ring endpoints of each Bezier.
+
+    Coords (px == viewBox units):
+      ring 1: (95, 175)   ring 2: (515, 315)
+      ring 3: (95, 480)   ring 4: (515, 480)
     """
+    # Positioning in % of the 1000x600 viewBox so SVG arrows and HTML
+    # blocks stay aligned at any container width.
     steps = [
-        # (n, col, title, desc, decision, left, top, width)
+        # (n, col, title, desc, decision, left%, top%, width%)
         ("1", "#3b82f6", "Build Your Eval Plan",
          "Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.",
          "Speed vs. Certainty",
-         40, 50, 380),
+         "6.8%", "24.67%", "36%"),
         ("2", "#fbbf24", "Set Your Gatekeepers",
          "Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.",
          "Brand Protection vs. Hype",
-         570, 200, 380),
+         "48.8%", "48%", "44%"),
         ("3", "#34d399", "Add Production Guardrails",
          "Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.",
          "Safety vs. Utility",
-         40, 410, 380),
+         "6.8%", "75.5%", "36%"),
         ("4", "#bcb1ff", "Evolve Your Roadmap",
          "Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.",
          "Feature vs. Data",
-         570, 410, 380),
+         "48.8%", "75.5%", "40%"),
     ]
 
     step_blocks = []
     for n, col, title, desc, decision, left, top, width in steps:
-        step_blocks.append(f"""<div style="position:absolute; left:{left}px; top:{top}px; width:{width}px;">
-  <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
-    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid {col}; background:rgba(7,22,44,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(7,22,44,0.9), 0 0 12px {col}55;">
+        step_blocks.append(f"""<div style="position:absolute; left:{left}; top:{top}; width:{width}; z-index:2;">
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
+    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid {col}; background:#0a1f3d; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 5px #0a1f3d;">
       <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:{col}; line-height:1;">{n}</span>
     </div>
-    <div style="background:rgba(255,255,255,0.96); border-radius:999px; padding:7px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+    <div style="background:#ffffff; border-radius:999px; padding:8px 18px; box-shadow:0 4px 14px rgba(0,0,0,0.30);">
       <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">{title}</span>
     </div>
   </div>
-  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 66px; line-height:1.55; max-width:300px;">{desc}</p>
-  <div style="display:flex; align-items:baseline; gap:6px; margin-left:66px;">
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:300px;">{desc}</p>
+  <div style="display:flex; align-items:baseline; gap:6px; margin-left:68px;">
     <span style="color:{col}; font-size:14px; line-height:1;">&bull;</span>
     <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:{col};">Key Decision:</span>
     <span style="font-size:12.5px; color:#fff; font-weight:600;">{decision}</span>
@@ -698,22 +702,34 @@ def pm_execution_plan() -> str:
 </div>""")
     steps_html = "\n".join(step_blocks)
 
-    # Arrow geometry (viewBox 1000 x 580):
-    # 1->2: curve up-and-over from right of step 1 ring, arcing above to step 2 left side
-    # 2->3: curve down-and-around from left of step 2 ring, sweeping to step 3 right side
-    # 3->4: straight horizontal from right of step 3 to left of step 4
-    arrows_svg = """<svg viewBox="0 0 1000 580" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+    # Smooth Bezier curves matching the source Google Slide.
+    # Arrow 1 -> 2: graceful arc starting just past Step 1's title pill,
+    #   peaking high, arriving at Step 2's left ring edge from upper-right
+    #   so the head points down-left into the ring.
+    # Arrow 2 -> 3: smooth diagonal sweep from below Step 2's ring left
+    #   side down to top of Step 3's ring (head points straight down).
+    # Arrow 3 -> 4: straight horizontal between the ring edges.
+    arrows_svg = """<svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
   <defs>
-    <marker id="exArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <marker id="exArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
     </marker>
   </defs>
-  <!-- 1 -> 2: arc up and over the top -->
-  <path d="M 125 80 C 125 0, 700 0, 700 215" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
-  <!-- 2 -> 3: arc down and around to the left -->
-  <path d="M 645 270 C 380 270, 60 360, 60 405" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
-  <!-- 3 -> 4: straight right -->
-  <path d="M 130 440 L 645 440" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+  <!-- 1 -> 2: arc OVER the top, tangent at end angled down-left into ring 2 -->
+  <path d="M 360 175 C 600 30, 700 130, 488 315"
+        stroke="#79c0ff" stroke-width="1.6" fill="none"
+        marker-end="url(#exArrow)" opacity="0.9"
+        stroke-linecap="round"/>
+  <!-- 2 -> 3: smooth diagonal sweep down-left to top of ring 3 -->
+  <path d="M 488 350 C 360 360, 160 410, 95 450"
+        stroke="#79c0ff" stroke-width="1.6" fill="none"
+        marker-end="url(#exArrow)" opacity="0.9"
+        stroke-linecap="round"/>
+  <!-- 3 -> 4: straight right between rings -->
+  <path d="M 130 480 L 484 480"
+        stroke="#79c0ff" stroke-width="1.6" fill="none"
+        marker-end="url(#exArrow)" opacity="0.9"
+        stroke-linecap="round"/>
 </svg>"""
 
     return f"""<section data-title="The PM Execution Plan">
@@ -721,7 +737,7 @@ def pm_execution_plan() -> str:
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="position:relative; width:100%; max-width:1000px; height:580px; margin:18px auto 0;">
+    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/600; margin:18px auto 0;">
       {arrows_svg}
       {steps_html}
     </div>
