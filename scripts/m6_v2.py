@@ -518,28 +518,33 @@ JUNO_EVAL_STACK_LAB_BODY = """<div style="display:grid; grid-template-columns:1f
 def operationalize_risks() -> str:
     """Source slide 15 - Operationalizing and Measuring AI Risks.
 
-    Three M5 header-band cards. Measurement formula + example in the
-    sub-blocks (mirrors M5 control_panel pattern).
+    Four M5 header-band cards (Blocked Request Rate, Hallucination Rate,
+    Human Override Rate, Model Drift & Latency). Measurement formula +
+    example in the sub-blocks (mirrors M5 control_panel pattern).
     """
     cards = [
-        ("01", "#3b82f6", "&#x1F4CA;", "Hallucination Rate",
+        ("01", "#3b82f6", "&#x1F6AB;", "Blocked Request Rate",
+         "The frequency at which automated safety filters trigger to stop a response.",
+         "Total Denied Prompts / Total User Inputs",
+         "Finding that 15% of finance queries are being blocked, indicating your guardrails are too sensitive and hurting the UX."),
+        ("02", "#fbbf24", "&#x1F4CA;", "Hallucination Rate",
          "The percentage of responses containing factually incorrect or ungrounded claims.",
          "Total Hallucinations / Total Responses",
          "Monitoring if a medical bot&rsquo;s error rate rises above 1% triggers an immediate rollback to a previous version."),
-        ("02", "#fbbf24", "&#x270D;&#xFE0F;", "Human Override Rate",
+        ("03", "#34d399", "&#x270D;&#xFE0F;", "Human Override Rate",
          "The rate at which a human-in-the-loop must correct the AI before the user sees the output.",
          "Total Human Edits / Total AI Outputs",
          "A customer-service tool where experts rewrite 40% of AI drafts signals the model isn&rsquo;t saving time yet."),
-        ("03", "#34d399", "&#x1F4C9;", "Model Drift &amp; Latency",
+        ("04", "#bcb1ff", "&#x1F4C9;", "Model Drift &amp; Latency",
          "The monitoring of performance degradation and response speed over time.",
          "Change in Accuracy + P99 Latency",
          "Identifying that a model has become 10% less accurate or 5s slower after a vendor updated the underlying LLM."),
     ]
     cards_html = "".join(
         _m5_card(n, col, name,
-                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 body_html=f'<p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
                  sub_blocks=[
-                     ("Measurement", f'<code style="font-family:\'IBM Plex Mono\',monospace; color:#fff; font-size:11.5px;">{metric}</code>'),
+                     ("Measurement", f'<code style="font-family:\'IBM Plex Mono\',monospace; color:#fff; font-size:11px;">{metric}</code>'),
                      ("Example", example),
                  ],
                  icon=icon)
@@ -550,7 +555,7 @@ def operationalize_risks() -> str:
     <div class="demo-tag tag-framework">Framework</div>
     <h2>Operationalising and measuring AI risks</h2>
     <div class="subtitle">Use these performance signals as your dashboard to monitor live AI product quality and safety.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1120px; margin:22px auto 0;">
       {cards_html}
     </div>
   </div>

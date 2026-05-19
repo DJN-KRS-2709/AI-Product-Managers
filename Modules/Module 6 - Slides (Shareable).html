@@ -1014,59 +1014,77 @@ section.cameras-section .cameras-inner {
     <div class="demo-tag tag-framework">Framework</div>
     <h2>Operationalising and measuring AI risks</h2>
     <div class="subtitle">Use these performance signals as your dashboard to monitor live AI product quality and safety.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1120px; margin:22px auto 0;">
       <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
   <div style="padding:16px 20px; background:linear-gradient(135deg, #3b82f622 0%, transparent 70%); border-bottom:1px solid #3b82f630;">
     <div style="display:flex; align-items:center; gap:10px;">
       <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
-      <div style="font-size:22px; line-height:1;">&#x1F4CA;</div>
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Hallucination Rate</div>
+      <div style="font-size:22px; line-height:1;">&#x1F6AB;</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Blocked Request Rate</div>
     </div>
   </div>
   <div style="padding:13px 20px;">
-    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">The percentage of responses containing factually incorrect or ungrounded claims.</p>
+    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">The frequency at which automated safety filters trigger to stop a response.</p>
   </div>
   <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
   <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Measurement</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11.5px;">Total Hallucinations / Total Responses</code></p>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11px;">Total Denied Prompts / Total User Inputs</code></p>
 </div><div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
   <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Example</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">Monitoring if a medical bot&rsquo;s error rate rises above 1% triggers an immediate rollback to a previous version.</p>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">Finding that 15% of finance queries are being blocked, indicating your guardrails are too sensitive and hurting the UX.</p>
 </div>
 </div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
   <div style="padding:16px 20px; background:linear-gradient(135deg, #fbbf2422 0%, transparent 70%); border-bottom:1px solid #fbbf2430;">
     <div style="display:flex; align-items:center; gap:10px;">
       <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
-      <div style="font-size:22px; line-height:1;">&#x270D;&#xFE0F;</div>
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Human Override Rate</div>
+      <div style="font-size:22px; line-height:1;">&#x1F4CA;</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Hallucination Rate</div>
     </div>
   </div>
   <div style="padding:13px 20px;">
-    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">The rate at which a human-in-the-loop must correct the AI before the user sees the output.</p>
+    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">The percentage of responses containing factually incorrect or ungrounded claims.</p>
   </div>
   <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
   <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Measurement</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11.5px;">Total Human Edits / Total AI Outputs</code></p>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11px;">Total Hallucinations / Total Responses</code></p>
 </div><div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
   <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Example</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">A customer-service tool where experts rewrite 40% of AI drafts signals the model isn&rsquo;t saving time yet.</p>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">Monitoring if a medical bot&rsquo;s error rate rises above 1% triggers an immediate rollback to a previous version.</p>
 </div>
 </div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
   <div style="padding:16px 20px; background:linear-gradient(135deg, #34d39922 0%, transparent 70%); border-bottom:1px solid #34d39930;">
     <div style="display:flex; align-items:center; gap:10px;">
       <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#34d399; line-height:1;">03</div>
+      <div style="font-size:22px; line-height:1;">&#x270D;&#xFE0F;</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Human Override Rate</div>
+    </div>
+  </div>
+  <div style="padding:13px 20px;">
+    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">The rate at which a human-in-the-loop must correct the AI before the user sees the output.</p>
+  </div>
+  <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Measurement</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11px;">Total Human Edits / Total AI Outputs</code></p>
+</div><div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Example</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">A customer-service tool where experts rewrite 40% of AI drafts signals the model isn&rsquo;t saving time yet.</p>
+</div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #bcb1ff40; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
+  <div style="padding:16px 20px; background:linear-gradient(135deg, #bcb1ff22 0%, transparent 70%); border-bottom:1px solid #bcb1ff30;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#bcb1ff; line-height:1;">04</div>
       <div style="font-size:22px; line-height:1;">&#x1F4C9;</div>
       <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Model Drift &amp; Latency</div>
     </div>
   </div>
   <div style="padding:13px 20px;">
-    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">The monitoring of performance degradation and response speed over time.</p>
+    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">The monitoring of performance degradation and response speed over time.</p>
   </div>
   <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Measurement</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11.5px;">Change in Accuracy + P99 Latency</code></p>
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Measurement</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-family:'IBM Plex Mono',monospace; color:#fff; font-size:11px;">Change in Accuracy + P99 Latency</code></p>
 </div><div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Example</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Example</div>
   <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">Identifying that a model has become 10% less accurate or 5s slower after a vendor updated the underlying LLM.</p>
 </div>
 </div>
