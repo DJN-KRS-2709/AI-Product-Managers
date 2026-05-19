@@ -759,14 +759,15 @@ JUNO_FINAL_DELIVERABLES_LAB_BODY = """<div style="display:grid; grid-template-co
   <div style="background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
     <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Setup</div>
     <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-      Open the <strong style="color:#fff;">Final Project Deliverables Builder</strong>. The tool aggregates your six modules into one shareable README + executive page.
+      Open the <strong style="color:#fff;">Final Project Deliverables Builder</strong>. Fill once &mdash; it builds two shareable artefacts: a visual <code>pitch.html</code> and the repo <code>README.md</code>.
     </p>
   </div>
 
   <div style="background:rgba(251,191,36,0.05); border:1px solid rgba(251,191,36,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
-    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Output</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Outputs</div>
     <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-      &rarr; <code style="color:#fbbf24;">README.md</code> at the root of your <code>juno-pm</code> fork. The repo URL is your LMS submission.
+      &rarr; <code style="color:#fbbf24;">pitch.html</code> &mdash; a visual, presentable one-pager you can screen-share.<br>
+      &rarr; <code style="color:#fbbf24;">README.md</code> at the root of your <code>juno-pm</code> fork &mdash; the repo URL is your LMS submission.
     </p>
   </div>
 
@@ -782,7 +783,7 @@ JUNO_FINAL_DELIVERABLES_LAB_BODY = """<div style="display:grid; grid-template-co
       <li><strong style="color:#fff;">Build Insights</strong> &mdash; biggest strategic friction points and your &ldquo;aha&rdquo; moments.</li>
     </ol>
     <p style="font-size:11.5px; color:#bcb1ff; margin:10px 0 0; line-height:1.55;">
-      <strong style="color:#fff;">Solo course adaptation:</strong> there&rsquo;s no shared deck and no group-vs-individual copy split &mdash; the README of your fork is the deliverable. The optional 3-min Loom is encouraged but not required for certification.
+      <strong style="color:#fff;">Solo course adaptation:</strong> there&rsquo;s no shared deck and no group-vs-individual copy split &mdash; <code>pitch.html</code> is the presentation; <code>README.md</code> is the repo deliverable. The optional 3-min Loom is encouraged but not required for certification.
     </p>
   </div>
 

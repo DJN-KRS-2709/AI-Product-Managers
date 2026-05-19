@@ -80,17 +80,18 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-c
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 6 &middot; Capstone tool &middot; The README is the pitch</div><h1>Final Project Deliverables Builder</h1></div>
+  <div><div class="crumb">Module 6 &middot; Capstone tool &middot; Build your visual pitch + README</div><h1>Final Project Deliverables Builder</h1></div>
   <div class="row">
-    <button onclick="copyMd()">Copy as markdown</button>
+    <button onclick="downloadPitch()">&#x1F31F; Download pitch.html</button>
     <button class="secondary" onclick="downloadMd()">Download README.md</button>
+    <button class="secondary" onclick="copyMd()">Copy markdown</button>
     <button class="secondary" onclick="reset()">Reset</button>
   </div>
 </header>
 
 <main>
   <section class="panel left">
-    <p class="lead">Aggregate every M1&ndash;M6 artefact + your Build Insights into <strong>one polished README</strong> at the root of your <code>juno-pm</code> fork. The repo URL is your LMS submission &mdash; this README is the pitch.</p>
+    <p class="lead">Aggregate every M1&ndash;M6 artefact + your Build Insights into <strong>two shareable deliverables</strong>: a polished <code>pitch.html</code> you can present, and a clean <code>README.md</code> for your <code>juno-pm</code> fork. The repo URL is your LMS submission.</p>
 
     <div class="preset-bar">
       <button class="preset-btn" onclick="loadPreset('juno')">&#x1F4E5; Load Juno example</button>
@@ -209,13 +210,25 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-c
 
   <section class="panel">
     <div class="rtab-row">
-      <button class="rtab active" data-pane="tree" onclick="switchTab(this)">Repo tree</button>
+      <button class="rtab active" data-pane="pitch" onclick="switchTab(this)">&#x1F31F; Pitch (HTML)</button>
+      <button class="rtab" data-pane="tree" onclick="switchTab(this)">Repo tree</button>
       <button class="rtab" data-pane="md" onclick="switchTab(this)">README preview</button>
       <button class="rtab" data-pane="prompt" onclick="switchTab(this)">Pitch prompt</button>
       <button class="rtab" data-pane="checklist" onclick="switchTab(this)">Self-review</button>
     </div>
 
-    <div class="rtab-pane active" data-pane="tree">
+    <div class="rtab-pane active" data-pane="pitch">
+      <p class="lead">A presentable, shareable HTML page generated from every field on the left. <strong>Download it</strong> and open the file &mdash; you can screen-share it as a portfolio pitch.</p>
+      <div class="row" style="margin-bottom:10px">
+        <button onclick="downloadPitch()">&#x2B07; Download pitch.html</button>
+        <button class="secondary" onclick="openPitch()">&#x2197; Open in new tab</button>
+      </div>
+      <div style="position:relative;background:#0a1f3d;border:1px solid var(--line);border-radius:12px;overflow:hidden">
+        <iframe id="pitchFrame" style="width:100%;height:620px;border:0;display:block;background:#07162C"></iframe>
+      </div>
+    </div>
+
+    <div class="rtab-pane" data-pane="tree">
       <p class="lead">Visual snapshot of your <code>juno-pm</code> fork. Green = filled, red dim = still missing.</p>
       <div class="tree" id="tree"></div>
     </div>
@@ -395,6 +408,202 @@ function vizPromptText(){
     'README:\n\n[PASTE THE README HERE]';
 }
 
+function esc(s){return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function nl(s){return esc(s).replace(/\n/g,'<br>')}
+
+function pitchHTML(){
+  const title = esc(v('title')) || 'Juno PM';
+  const pitch = esc(v('pitch')) || 'An AI Associate PM that turns Slack/Notion/Jira chaos into a prioritised top-3 every morning.';
+  const who   = esc(v('who'))   || 'AI PM Cohort';
+  const repo  = esc(v('repo'));
+  const loom  = esc(v('loom'));
+
+  const linkTo = (path, isUrl) => {
+    if(!path) return '';
+    if(isUrl) return path;
+    if(repo){
+      const base = repo.replace(/\/$/, '');
+      return base + '/blob/main/' + path;
+    }
+    return path;
+  };
+
+  const moduleCard = (num, col, icon, name, links) => {
+    const linksHTML = links.map(([label, val, isUrl]) => {
+      if(!val) return '<div class="m-link missing"><span class="m-arrow">&middot;</span> '+label+': <em>missing</em></div>';
+      const href = esc(linkTo(val, isUrl));
+      return '<a class="m-link" href="'+href+'" target="_blank" rel="noopener"><span class="m-arrow">&rarr;</span> '+label+': <code>'+esc(val)+'</code></a>';
+    }).join('');
+    return '<div class="m-card" style="--col:'+col+'">'+
+      '<div class="m-head">'+
+        '<div class="m-num">'+num+' <span class="m-emoji">'+icon+'</span></div>'+
+        '<div class="m-name">'+name+'</div>'+
+      '</div>'+
+      '<div class="m-body">'+linksHTML+'</div>'+
+    '</div>';
+  };
+
+  const modulesHTML = [
+    moduleCard('M1','#3b82f6','&#x270D;&#xFE0F;','Prompting &amp; Toolkit', [
+      ['System prompt', v('m1a'), false],
+      ['Lovable prototype', v('m1b'), true]
+    ]),
+    moduleCard('M2','#fbbf24','&#x1F4CA;','Strategy', [
+      ['Decision matrix', v('m2a'), false],
+      ['Strategy one-pager', v('m2b'), false]
+    ]),
+    moduleCard('M3','#bcb1ff','&#x1F50D;','RAG / AI PRD', [
+      ['AI PRD', v('m3'), false]
+    ]),
+    moduleCard('M4','#34d399','&#x1F9CA;','AI-Native UX', [
+      ['User flow', v('m4a'), false],
+      ['Trust-gap mitigations', v('m4b'), false]
+    ]),
+    moduleCard('M5','#f472b6','&#x1F916;','Agentic Workflows', [
+      ['AWSpec', v('m5a'), false],
+      ['Agent Control Panel', v('m5b'), false]
+    ]),
+    moduleCard('M6','#79c0ff','&#x1F4CF;','Evals &amp; Guardrails', [
+      ['Eval stack', v('m6a'), false],
+      ['Human rubric', v('m6b'), false]
+    ]),
+  ].join('');
+
+  const repoBtn = repo ? '<a class="cta" href="'+repo+'" target="_blank" rel="noopener">View the repo &rarr;</a>' : '';
+  const loomBtn = loom ? '<a class="cta secondary" href="'+loom+'" target="_blank" rel="noopener">&#x1F4F9; 3-min walkthrough</a>' : '';
+  const loomSec = loom ? '<section class="loom-wrap"><a href="'+loom+'" target="_blank" rel="noopener">&#x1F4F9; Watch the async showcase &rarr;</a></section>' : '';
+
+  const execCard = (step, label, title, body) =>
+    '<div class="exec-card"><div class="exec-step">'+step+' &middot; '+label+'</div><h3>'+title+'</h3><div class="exec-body">'+(nl(body) || '<em>not provided</em>')+'</div></div>';
+
+  const execHTML =
+    execCard('01','Now','Where Juno is today',v('now')) +
+    execCard('02','Next','What ships next',v('next')) +
+    execCard('03','Watch','What I watch',v('watch')) +
+    execCard('04','Red lines','What blocks shipping',v('red')) +
+    execCard('05','Governance','How I keep it safe',v('gov'));
+
+  const insight = (border, color, ic, label, body) =>
+    '<div class="insight" style="border-color:'+border+'"><div class="ic-label" style="color:'+color+'">'+ic+' '+label+'</div><h3>'+(esc(body) || '<em>not provided</em>')+'</h3></div>';
+
+  const insightsHTML =
+    insight('rgba(248,113,113,0.40)','#f87171','&#x1F635;','Friction', v('fric')) +
+    insight('rgba(96,165,250,0.40)', '#60a5fa','&#x1F9E0;','Learning', v('learn')) +
+    insight('rgba(251,191,36,0.40)','#fbbf24','&#x1F4A1;','Aha',       v('aha'));
+
+  return '<!doctype html>\n'+
+'<html lang="en">\n'+
+'<head>\n'+
+'<meta charset="utf-8">\n'+
+'<meta name="viewport" content="width=device-width,initial-scale=1">\n'+
+'<title>'+title+' &mdash; Pitch</title>\n'+
+'<style>\n'+
+"@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');\n"+
+"@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');\n"+
+"@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');\n"+
+':root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--line:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.035)}\n'+
+'*{box-sizing:border-box}html,body{margin:0;padding:0}\n'+
+"body{background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;overflow-x:hidden;position:relative}\n"+
+"body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(96,165,250,0.10) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 90%,rgba(124,140,255,0.08) 0%,transparent 60%);pointer-events:none;z-index:0}\n"+
+'main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:80px 40px 0}\n'+
+"h1,h2,h3{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;margin:0}\n"+
+'a{color:var(--accent);text-decoration:none}\n'+
+"code{font-family:'IBM Plex Mono',monospace}\n"+
+'.hero{text-align:center;margin-bottom:100px}\n'+
+".hero .badge{display:inline-block;font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.30);border-radius:999px;padding:6px 14px;margin-bottom:26px}\n"+
+'.hero h1{font-size:clamp(42px,7vw,80px);font-weight:900;line-height:1.02;margin:0 0 22px;background:linear-gradient(135deg,#ffffff 0%,#79c0ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}\n'+
+'.hero .lead{font-size:clamp(18px,2.2vw,26px);color:#cdd5e3;max-width:760px;margin:0 auto 30px;line-height:1.5}\n'+
+".hero .meta{font-family:'Poppins',sans-serif;font-size:13.5px;color:var(--muted);letter-spacing:0.06em;margin:0 0 30px}\n"+
+'.hero .ctas{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center}\n'+
+".hero .cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:13px 28px;border-radius:999px;font-family:'Poppins',sans-serif;font-weight:800;font-size:14px;box-shadow:0 10px 30px rgba(96,165,250,0.30);transition:transform 0.15s,box-shadow 0.15s}\n"+
+'.hero .cta:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(96,165,250,0.40)}\n'+
+'.hero .cta.secondary{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}\n'+
+'section.block{margin-bottom:100px}\n'+
+".eyebrow{font-family:'Poppins',sans-serif;font-size:11px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}\n"+
+'.block h2{font-size:clamp(30px,4vw,46px);font-weight:800;margin:0 0 12px;color:#fff}\n'+
+'.block .lede{font-size:16px;color:var(--muted);margin:0 0 36px;max-width:680px;line-height:1.55}\n'+
+'.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}\n'+
+'.m-card{background:var(--card);border:1px solid color-mix(in srgb,var(--col) 40%,transparent);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}\n'+
+'.m-card .m-head{padding:18px 22px;background:linear-gradient(135deg,color-mix(in srgb,var(--col) 18%,transparent) 0%,transparent 70%);border-bottom:1px solid color-mix(in srgb,var(--col) 25%,transparent)}\n'+
+".m-card .m-num{font-family:'Poppins',sans-serif;font-size:26px;font-weight:900;line-height:1;color:var(--col);margin-bottom:5px}\n"+
+'.m-card .m-num .m-emoji{font-size:22px;margin-left:4px}\n'+
+".m-card .m-name{font-family:'Poppins',sans-serif;font-size:17px;font-weight:800;color:#fff}\n"+
+'.m-card .m-body{padding:14px 22px 18px}\n'+
+'.m-card .m-link{display:flex;align-items:center;gap:8px;font-size:13px;color:#cdd5e3;margin:8px 0;text-decoration:none}\n'+
+'.m-card .m-link code{font-size:11.5px;background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:6px;color:#cdd5e3}\n'+
+'.m-card .m-link:hover code{background:rgba(255,255,255,0.10);color:#fff}\n'+
+'.m-card .m-link.missing{opacity:0.42;font-style:italic}\n'+
+'.m-card .m-arrow{color:var(--col);font-weight:800}\n'+
+'.exec-rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}\n'+
+'.exec-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px}\n'+
+".exec-card .exec-step{display:inline-block;font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}\n"+
+'.exec-card h3{font-size:15px;font-weight:800;color:#fff;margin:0 0 12px}\n'+
+'.exec-card .exec-body{font-size:12.5px;color:#cdd5e3;line-height:1.6}\n'+
+'.exec-card .exec-body em{color:var(--muted)}\n'+
+'.insights-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}\n'+
+'.insight{background:var(--card);border:1px solid;border-radius:14px;padding:24px 26px}\n'+
+".insight .ic-label{font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:12px}\n"+
+'.insight h3{font-size:17px;font-weight:800;margin:0;color:#fff;line-height:1.45}\n'+
+'.loom-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px;text-align:center;margin-bottom:60px}\n'+
+".loom-wrap a{display:inline-flex;align-items:center;gap:10px;background:rgba(124,140,255,0.10);border:1px solid rgba(124,140,255,0.30);color:#bcb1ff;padding:13px 26px;border-radius:999px;font-family:'Poppins',sans-serif;font-weight:800;font-size:14px}\n"+
+'footer{text-align:center;color:var(--muted);font-size:12px;padding:40px 20px;border-top:1px solid var(--line);margin-top:60px;letter-spacing:0.04em}\n'+
+'@media(max-width:800px){.insights-row{grid-template-columns:1fr}main{padding:60px 24px 0}}\n'+
+'</style>\n'+
+'</head>\n'+
+'<body>\n'+
+'<main>\n'+
+'  <section class="hero">\n'+
+'    <span class="badge">AI Product Management Certification</span>\n'+
+'    <h1>'+title+'</h1>\n'+
+'    <p class="lead">'+pitch+'</p>\n'+
+'    <p class="meta">'+who+'</p>\n'+
+'    <div class="ctas">'+repoBtn+loomBtn+'</div>\n'+
+'  </section>\n'+
+'  <section class="block">\n'+
+'    <div class="eyebrow">Module artefacts</div>\n'+
+'    <h2>The 6 building blocks</h2>\n'+
+'    <p class="lede">Six modules. Six artefacts. One coherent body of work that turns Juno from a prompt into a production-ready AI copilot.</p>\n'+
+'    <div class="modules-grid">'+modulesHTML+'</div>\n'+
+'  </section>\n'+
+'  <section class="block">\n'+
+'    <div class="eyebrow">PM Execution Plan</div>\n'+
+"    <h2>How I'd ship Juno</h2>\n"+
+"    <p class=\"lede\">Where the work is today, what ships next, what I watch, and what would block a launch.</p>\n"+
+'    <div class="exec-rail">'+execHTML+'</div>\n'+
+'  </section>\n'+
+'  <section class="block">\n'+
+'    <div class="eyebrow">Build insights</div>\n'+
+'    <h2>What I learned</h2>\n'+
+'    <p class="lede">The honest three: where it hurt, what clicked, and the moment something changed.</p>\n'+
+'    <div class="insights-row">'+insightsHTML+'</div>\n'+
+'  </section>\n'+
+loomSec+'\n'+
+'  <footer>'+who+' &middot; Certification submission &middot; AI Product Management</footer>\n'+
+'</main>\n'+
+'</body>\n'+
+'</html>';
+}
+
+function refreshPitchFrame(){
+  const f=document.getElementById('pitchFrame');
+  if(!f) return;
+  f.srcdoc = pitchHTML();
+}
+
+function downloadPitch(){
+  const b=new Blob([pitchHTML()],{type:'text/html'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');
+  a.href=u; a.download='pitch.html'; a.click();
+  URL.revokeObjectURL(u);
+  toast('Pitch downloaded');
+}
+
+function openPitch(){
+  const w=window.open('','_blank');
+  if(w){w.document.open();w.document.write(pitchHTML());w.document.close()}
+}
+
 function treeRow(indent,name,filled,extra){
   const cls=filled?'filled':'missing';
   const dot=filled?'\u2713':'\u00b7';
@@ -455,6 +664,7 @@ function render(){
   document.getElementById('preview').textContent=md();
   document.getElementById('vizPrompt').textContent=vizPromptText();
   document.getElementById('tree').innerHTML=treeHTML();
+  refreshPitchFrame();
   save();
 }
 
