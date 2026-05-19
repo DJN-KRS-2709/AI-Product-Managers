@@ -604,22 +604,40 @@ def four_pillars() -> str:
 
 
 def user_flow_legend() -> str:
-    """The legend + 4-step process for building an AI User Flow."""
-    legend = [
-        ("&#x25EF;", "Signal", "Entry point", "#3b82f6"),
-        ("&#x2B22;", "Hidden Logic", "Major step (underwater)", "#bcb1ff"),
-        ("&#x25A0;", "Interaction", "Sub-step (surface maneuver)", "#fbbf24"),
-        ("&#x25C6;", "Data Flow", "Routing decision", "#34d399"),
-        ("&#x25B0;", "Generated Output", "AI result", "#f87171"),
+    """Source slide 17 - the Builder's Legend (5 shapes mapped to 4 pillars)
+    plus the 4-step process. The legend renders each shape AS ITSELF using
+    inline SVG so learners see the actual vocabulary they will use to draw
+    the flow in the lab + the HR Agent example next."""
+
+    # Each row: (inline SVG of the shape, name, description, pillar tag, pillar accent)
+    rows = [
+        # Signal - circle - THE TRIGGER
+        ("""<svg viewBox="0 0 60 50" width="60" height="50"><circle cx="30" cy="25" r="18" fill="rgba(207,229,255,0.95)" stroke="#79c0ff" stroke-width="2"/></svg>""",
+         "Signal", "Entry point", "The Trigger", "#79c0ff"),
+        # Hidden Logic - light-blue rectangle (large) - THE PROCESSING STATE
+        ("""<svg viewBox="0 0 60 50" width="60" height="50"><rect x="6" y="9" width="48" height="32" fill="#3b82f6" stroke="#79c0ff" stroke-width="2" rx="2"/></svg>""",
+         "Hidden Logic", "Major step &middot; underwater", "The Processing State", "#bcb1ff"),
+        # Interaction - dark-blue square (small) - THE PRESENTATION
+        ("""<svg viewBox="0 0 60 50" width="60" height="50"><rect x="18" y="13" width="24" height="24" fill="#1e3a8a" stroke="#79c0ff" stroke-width="2" rx="2"/></svg>""",
+         "Interaction", "Sub-step &middot; surface maneuver", "The Presentation", "#fbbf24"),
+        # Data Flow - black diamond - THE FEEDBACK LOOP (top half)
+        ("""<svg viewBox="0 0 60 50" width="60" height="50"><polygon points="30,7 51,25 30,43 9,25" fill="#0a1838" stroke="#94a3b8" stroke-width="1.5"/></svg>""",
+         "Data Flow", "Routing decision", "The Feedback Loop", "#34d399"),
+        # Generated Output - grey parallelogram - THE FEEDBACK LOOP (bottom half)
+        ("""<svg viewBox="0 0 60 50" width="60" height="50"><polygon points="14,11 54,11 46,39 6,39" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5"/></svg>""",
+         "Generated Output", "AI result", "The Feedback Loop", "#34d399"),
     ]
-    legend_html = "".join(
-        f'<div style="display:flex; align-items:center; gap:10px; padding:6px 10px; background:rgba(255,255,255,0.025); border:1px solid {col}40; border-radius:8px;">'
-        f'<div style="font-size:24px; color:{col}; line-height:1; width:30px; text-align:center;">{glyph}</div>'
-        f'<div style="text-align:left;">'
-        f'<div style="font-family:\'Poppins\',sans-serif; font-size:11.5px; font-weight:800; color:#fff;">{name}</div>'
-        f'<div style="font-size:10.5px; color:#8899bb;">{desc}</div>'
-        f'</div></div>'
-        for glyph, name, desc, col in legend
+
+    legend_rows = "".join(
+        f"""<div style="display:grid; grid-template-columns:60px 1fr auto; gap:12px; align-items:center; padding:7px 10px; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:9px;">
+  <div style="display:flex; align-items:center; justify-content:center;">{shape_svg}</div>
+  <div style="text-align:left;">
+    <div style="font-family:'Poppins',sans-serif; font-size:12px; font-weight:800; color:#fff; line-height:1.2;">{name}</div>
+    <div style="font-size:10.5px; color:#8899bb; line-height:1.3; margin-top:1px;">{desc}</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:8.5px; font-weight:900; color:{pillar_col}; letter-spacing:0.13em; text-transform:uppercase; padding:4px 9px; background:{pillar_col}1f; border:1px solid {pillar_col}66; border-radius:99px; white-space:nowrap;">{pillar}</div>
+</div>"""
+        for shape_svg, name, desc, pillar, pillar_col in rows
     )
 
     steps = [
@@ -637,23 +655,24 @@ def user_flow_legend() -> str:
         for n, title, desc, col in steps
     )
 
-    return f"""<section data-title="Building the AI User Flow">
+    return f"""<section data-title="How to Architect an AI User Flow">
   <div class="inner">
     <div class="demo-tag tag-build">Framework &middot; Builder&rsquo;s Legend</div>
-    <h2>How to build the AI user flow</h2>
-    <div class="subtitle">A small set of shapes + four steps. Used in the lab next.</div>
+    <h2>How to Architect an AI User Flow</h2>
+    <div class="subtitle">A small set of shapes maps to the four pillars. Use these to draw the flow in the lab next &mdash; and to read the HR Agent example coming up.</div>
 
-    <div style="display:grid; grid-template-columns:1.1fr 1.5fr; gap:18px; max-width:1080px; margin:18px auto 0; align-items:start;">
+    <div style="display:grid; grid-template-columns:1.25fr 1fr; gap:22px; max-width:1080px; margin:18px auto 0; align-items:start;">
+
       <div style="background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 18px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F9F1; Builder&rsquo;s legend</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px;">&#x1F9F1; Builder&rsquo;s legend &middot; shape &rarr; pillar</div>
         <div style="display:flex; flex-direction:column; gap:6px;">
-          {legend_html}
+          {legend_rows}
         </div>
       </div>
 
       <div>
         <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px; padding-left:4px;">&#x270D;&#xFE0F; Four steps to map a flow</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div style="display:flex; flex-direction:column; gap:8px;">
           {steps_html}
         </div>
       </div>
@@ -664,66 +683,180 @@ def user_flow_legend() -> str:
 
 
 def hr_agent_example() -> str:
-    """3-layer Iceberg case study: HR Agent."""
+    """Source slide 18 - HR Agent example flow.
+
+    Renders the actual user flow as a 3-layer SVG diagram with the shapes
+    from the legend (circle / rectangle / diamond / parallelogram) connected
+    by arrows. Surface = user experience. Handshake = router. Underwater =
+    AI workflow. Round-trip arrows return results back to the surface."""
+
     return """<section data-title="Example: HR Agent">
   <div class="inner">
     <div class="demo-tag tag-build">Case Study</div>
-    <h2>Example &mdash; HR Agent in three layers</h2>
-    <div class="subtitle">The same iceberg, spelled out for a real product. Read the rows top-down.</div>
+    <h2>Example &mdash; HR Agent flow</h2>
+    <div class="subtitle">The same shapes, connected with arrows. Follow the user from Surface, through the Handshake, into Underwater &mdash; and back up.</div>
 
-    <div style="max-width:1080px; margin:18px auto 0; border:1px solid rgba(255,255,255,0.10); border-radius:14px; overflow:hidden;">
+    <div style="max-width:1100px; margin:14px auto 0;">
+      <svg viewBox="0 0 1100 540" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+        <defs>
+          <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
+          </marker>
+          <marker id="arr-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+          </marker>
+          <marker id="arr-mint" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+          </marker>
+          <linearGradient id="surface-bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(96,165,250,0.18)"/>
+            <stop offset="100%" stop-color="rgba(96,165,250,0.06)"/>
+          </linearGradient>
+          <linearGradient id="handshake-bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(124,140,255,0.12)"/>
+            <stop offset="100%" stop-color="rgba(124,140,255,0.04)"/>
+          </linearGradient>
+          <linearGradient id="underwater-bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(7,22,44,0.55)"/>
+            <stop offset="100%" stop-color="rgba(7,22,44,0.85)"/>
+          </linearGradient>
+        </defs>
 
-      <!-- Surface Layer -->
-      <div style="background:rgba(96,165,250,0.10); padding:13px 18px; border-bottom:1px solid rgba(255,255,255,0.10);">
-        <div style="display:grid; grid-template-columns:140px 1fr; gap:18px; align-items:start;">
-          <div>
-            <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Surface</div>
-            <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">User experience</div>
-            <p style="font-size:11px; color:#8899bb; margin:4px 0 0; line-height:1.5;">What the employee touches.</p>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-            <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(96,165,250,0.4); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">SIGNAL</div><div style="font-size:11px; color:#fff; margin-top:2px;">User enters HR Agent</div></div>
-            <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(96,165,250,0.4); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">A &middot; Question</div><div style="font-size:11px; color:#fff; margin-top:2px;">AI answer + link to policy</div></div>
-            <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(96,165,250,0.4); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">B &middot; Action</div><div style="font-size:11px; color:#fff; margin-top:2px;">Confirmation + ticket fallback</div></div>
-          </div>
-        </div>
-      </div>
+        <!-- Layer bands -->
+        <rect x="0" y="0" width="1100" height="160" fill="url(#surface-bg)" rx="14"/>
+        <rect x="0" y="160" width="1100" height="180" fill="url(#handshake-bg)"/>
+        <rect x="0" y="340" width="1100" height="200" fill="url(#underwater-bg)" rx="14"/>
 
-      <!-- Handshake Layer -->
-      <div style="background:rgba(124,140,255,0.10); padding:13px 18px; border-bottom:1px solid rgba(255,255,255,0.10);">
-        <div style="display:grid; grid-template-columns:140px 1fr; gap:18px; align-items:start;">
-          <div>
-            <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Handshake</div>
-            <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Connection layer</div>
-            <p style="font-size:11px; color:#8899bb; margin:4px 0 0; line-height:1.5;">PM magic happens here.</p>
-          </div>
-          <div style="background:rgba(0,0,0,0.25); border:1px dashed rgba(124,140,255,0.4); border-radius:6px; padding:10px 14px;">
-            <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#bcb1ff; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:5px;">&#x1F500; Router Logic + Progress Breadcrumbs</div>
-            <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 4px; line-height:1.5;"><strong style="color:#fff;">Path A &rarr; Question:</strong> route to <em>RAG over HR knowledge base</em>.</p>
-            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">Path B &rarr; Task:</strong> route to <em>Workday API tool call</em>. Show &ldquo;Submitting to Workday&hellip;&rdquo; status.</p>
-          </div>
-        </div>
-      </div>
+        <!-- Layer dividers (water lines) -->
+        <line x1="0" y1="160" x2="1100" y2="160" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="5,4"/>
+        <line x1="0" y1="340" x2="1100" y2="340" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="5,4"/>
 
-      <!-- Underwater Workflow Layer -->
-      <div style="background:rgba(7,22,44,0.5); padding:13px 18px;">
-        <div style="display:grid; grid-template-columns:140px 1fr; gap:18px; align-items:start;">
-          <div>
-            <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x1F9CA; Underwater</div>
-            <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">AI workflow layer</div>
-            <p style="font-size:11px; color:#8899bb; margin:4px 0 0; line-height:1.5;">The heavy lifting.</p>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <div style="background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.30); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">RAG PATH</div><div style="font-size:11px; color:#cdd5e3; margin-top:2px;">Vector search over HR policy KB &rarr; grounded answer + citation</div></div>
-            <div style="background:rgba(217,142,34,0.10); border:1px solid rgba(217,142,34,0.30); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.1em;">TASK PATH</div><div style="font-size:11px; color:#cdd5e3; margin-top:2px;">Workday API call to enter vacation &rarr; AI-driven update + confirmation</div></div>
-          </div>
-        </div>
-      </div>
+        <!-- Layer labels (left edge) -->
+        <text x="18" y="62" fill="#79c0ff" font-family="Poppins, sans-serif" font-size="10" font-weight="900" letter-spacing="2.5">THE USER EXPERIENCE</text>
+        <text x="18" y="78" fill="#cdd5e3" font-family="Poppins, sans-serif" font-size="10.5" font-weight="700" font-style="italic">(Surface Layer)</text>
+
+        <text x="18" y="232" fill="#bcb1ff" font-family="Poppins, sans-serif" font-size="10" font-weight="900" letter-spacing="2.5">THE HANDSHAKE</text>
+        <text x="18" y="248" fill="#cdd5e3" font-family="Poppins, sans-serif" font-size="10.5" font-weight="700" font-style="italic">(Connection Layer)</text>
+
+        <text x="18" y="412" fill="#fbbf24" font-family="Poppins, sans-serif" font-size="10" font-weight="900" letter-spacing="2.5">THE AI WORKFLOW</text>
+        <text x="18" y="428" fill="#cdd5e3" font-family="Poppins, sans-serif" font-size="10.5" font-weight="700" font-style="italic">(Underwater Layer)</text>
+
+        <!-- ============ SURFACE NODES ============ -->
+        <!-- Signal circle (center entry) -->
+        <circle cx="540" cy="80" r="42" fill="rgba(207,229,255,0.95)" stroke="#79c0ff" stroke-width="2"/>
+        <text x="540" y="74" text-anchor="middle" fill="#0a1f44" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="1">SIGNAL</text>
+        <text x="540" y="88" text-anchor="middle" fill="#0a1f44" font-family="Poppins, sans-serif" font-size="8.5" font-weight="700">User enters</text>
+        <text x="540" y="100" text-anchor="middle" fill="#0a1f44" font-family="Poppins, sans-serif" font-size="8.5" font-weight="700">HR Agent</text>
+
+        <!-- Create support ticket (interaction) -->
+        <rect x="200" y="56" width="130" height="48" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3"/>
+        <text x="265" y="78" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="700">Create a</text>
+        <text x="265" y="92" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="700">support ticket</text>
+
+        <!-- Link to policy (interaction) -->
+        <rect x="350" y="56" width="120" height="48" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3"/>
+        <text x="410" y="84" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10.5" font-weight="700">Link to policy</text>
+
+        <!-- Link to new request on Workday (interaction) -->
+        <rect x="900" y="56" width="180" height="48" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3"/>
+        <text x="990" y="78" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="700">Link to new request</text>
+        <text x="990" y="92" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="700">on Workday</text>
+
+        <!-- ============ HANDSHAKE NODES ============ -->
+        <!-- Router Logic (top-center, hidden logic = light blue rectangle) -->
+        <rect x="430" y="178" width="220" height="62" fill="#3b82f6" stroke="#79c0ff" stroke-width="2" rx="4"/>
+        <text x="540" y="198" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="900" letter-spacing="0.5">Router Logic:</text>
+        <text x="540" y="214" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9" font-weight="600">Path A: Questions = RAG</text>
+        <text x="540" y="228" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9" font-weight="600">Path B: Task = Tools</text>
+
+        <!-- A: User asks a question (interaction = dark blue square-ish) -->
+        <rect x="290" y="280" width="180" height="44" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3"/>
+        <text x="380" y="307" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="700">A: User asks a question</text>
+
+        <!-- B: User asks to enter vacation time -->
+        <rect x="610" y="280" width="220" height="44" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3"/>
+        <text x="720" y="307" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="10" font-weight="700">B: User asks to enter vacation time</text>
+
+        <!-- ============ UNDERWATER NODES ============ -->
+        <!-- "RAG" path label -->
+        <text x="380" y="365" text-anchor="middle" fill="#79c0ff" font-family="Poppins, sans-serif" font-size="11" font-weight="900" letter-spacing="2">RAG</text>
+        <!-- "API CALL" path label -->
+        <text x="855" y="412" text-anchor="middle" fill="#fbbf24" font-family="Poppins, sans-serif" font-size="10" font-weight="900" letter-spacing="2">API CALL</text>
+
+        <!-- HR policy KB (data flow = diamond) -->
+        <polygon points="380,378 460,420 380,462 300,420" fill="#0a1838" stroke="#79c0ff" stroke-width="1.5"/>
+        <text x="380" y="416" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9" font-weight="700">HR policy</text>
+        <text x="380" y="429" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9" font-weight="700">knowledge base</text>
+
+        <!-- HR Backend Workday API (data flow = diamond) -->
+        <polygon points="720,378 810,420 720,462 630,420" fill="#0a1838" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="720" y="416" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9" font-weight="700">HR Backend</text>
+        <text x="720" y="429" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9" font-weight="700">Workday API</text>
+
+        <!-- AI-driven update of HR backend (hidden logic rectangle, parallel branch) -->
+        <rect x="850" y="392" width="160" height="56" fill="#3b82f6" stroke="#79c0ff" stroke-width="1.5" rx="3"/>
+        <text x="930" y="416" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9.5" font-weight="700">AI-driven update of</text>
+        <text x="930" y="430" text-anchor="middle" fill="#fff" font-family="Poppins, sans-serif" font-size="9.5" font-weight="700">the HR backend</text>
+
+        <!-- AI-generated answer (parallelogram = generated output) -->
+        <polygon points="318,488 478,488 466,520 306,520" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1"/>
+        <text x="392" y="508" text-anchor="middle" fill="#0a1838" font-family="Poppins, sans-serif" font-size="9.5" font-weight="700">AI-generated answer</text>
+
+        <!-- AI-generated confirmation (parallelogram) -->
+        <polygon points="600,488 820,488 808,520 588,520" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1"/>
+        <text x="704" y="508" text-anchor="middle" fill="#0a1838" font-family="Poppins, sans-serif" font-size="9.5" font-weight="700">AI-generated confirmation (or failure)</text>
+
+        <!-- ============ ARROWS ============ -->
+        <!-- DOWN: Signal -> Router -->
+        <path d="M 540 122 L 540 178" stroke="#79c0ff" stroke-width="2" fill="none" marker-end="url(#arr-blue)"/>
+
+        <!-- DOWN: Router -> A -->
+        <path d="M 480 240 L 380 280" stroke="#79c0ff" stroke-width="1.5" fill="none" marker-end="url(#arr-blue)"/>
+        <!-- DOWN: Router -> B -->
+        <path d="M 600 240 L 720 280" stroke="#79c0ff" stroke-width="1.5" fill="none" marker-end="url(#arr-blue)"/>
+
+        <!-- DOWN: A -> HR policy KB -->
+        <path d="M 380 324 L 380 378" stroke="#79c0ff" stroke-width="1.5" fill="none" marker-end="url(#arr-blue)"/>
+        <!-- DOWN: HR policy KB -> AI-generated answer -->
+        <path d="M 380 462 L 388 488" stroke="#79c0ff" stroke-width="1.5" fill="none" marker-end="url(#arr-blue)"/>
+
+        <!-- DOWN: B -> Workday API -->
+        <path d="M 720 324 L 720 378" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arr-amber)"/>
+        <!-- DOWN: Workday API -> AI-driven update (right branch) -->
+        <path d="M 810 420 L 850 420" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arr-amber)"/>
+        <!-- DOWN: Workday API -> AI-generated confirmation (left branch) -->
+        <path d="M 720 462 L 710 488" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arr-amber)"/>
+        <!-- DOWN: AI-driven update -> AI-generated confirmation (curve back-left) -->
+        <path d="M 850 448 C 820 470, 800 480, 770 488" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arr-amber)"/>
+
+        <!-- UP RETURN (mint, dashed): AI-gen answer -> Link to policy -->
+        <path d="M 312 504 C 180 504, 150 80, 350 80" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arr-mint)"/>
+        <!-- UP RETURN: AI-gen answer -> Create a support ticket (fallback path) -->
+        <path d="M 320 504 C 230 504, 220 80, 265 56" stroke="#34d399" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.7" marker-end="url(#arr-mint)"/>
+        <!-- UP RETURN: AI-gen confirmation -> Link to new request on Workday -->
+        <path d="M 815 504 C 980 504, 1000 80, 990 104" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arr-mint)"/>
+
+        <!-- Layer pillar tags (right edge of each layer) -->
+        <text x="1080" y="44" text-anchor="end" fill="#79c0ff" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="1.5" opacity="0.7">SURFACE = THE PRESENTATION</text>
+        <text x="1080" y="180" text-anchor="end" fill="#bcb1ff" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="1.5" opacity="0.7">HANDSHAKE = THE PROCESSING STATE</text>
+        <text x="1080" y="358" text-anchor="end" fill="#fbbf24" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="1.5" opacity="0.7">UNDERWATER = THE FEEDBACK LOOP</text>
+      </svg>
     </div>
 
-    <p style="font-size:12px; color:#cdd5e3; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(248,113,113,0.06); border-left:3px solid #f87171; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">Fail-safe rule:</strong> if the underwater workflow fails (no policy match, API error), the surface must always offer a clean human path &mdash; the &ldquo;Create support ticket&rdquo; option here.
-    </p>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; max-width:1080px; margin:10px auto 0;">
+      <div style="background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.30); border-radius:8px; padding:7px 11px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#79c0ff; font-weight:900; letter-spacing:0.13em; text-transform:uppercase;">&darr; Down arrows</div>
+        <div style="font-size:11px; color:#cdd5e3; line-height:1.45; margin-top:1px;">User signal sinks into hidden logic.</div>
+      </div>
+      <div style="background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.30); border-radius:8px; padding:7px 11px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#fbbf24; font-weight:900; letter-spacing:0.13em; text-transform:uppercase;">&loz; Diamonds</div>
+        <div style="font-size:11px; color:#cdd5e3; line-height:1.45; margin-top:1px;">Underwater data routing &mdash; KB or API.</div>
+      </div>
+      <div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.30); border-radius:8px; padding:7px 11px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#34d399; font-weight:900; letter-spacing:0.13em; text-transform:uppercase;">&uarr; Up arrows (dashed)</div>
+        <div style="font-size:11px; color:#cdd5e3; line-height:1.45; margin-top:1px;">Generated output surfaces back to user. Fallback always exists.</div>
+      </div>
+    </div>
   </div>
 </section>
 """
