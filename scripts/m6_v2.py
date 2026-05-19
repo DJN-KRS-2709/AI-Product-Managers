@@ -47,12 +47,16 @@ TEMPLATE_USE_URL = (
 # followed by a body section, with optional sub-blocks separated by horizontal
 # dividers. See m5_v2.evolution_of_value(), control_panel(), awspec_blueprint().
 
-def _m5_card(n, col, name, body_html, sub_blocks=None, icon=""):
+def _m5_card(n, col, name, body_html, sub_blocks=None, icon="", title_size="17px",
+             num_size="30px", padding="16px 20px"):
     """Card with colored gradient header (number + name) + body + optional sub-blocks.
 
     Mirrors the card pattern used across m5_v2.py (evolution_of_value,
     real_world_agents, control_panel, etc.) so M5 and M6 share one
     visual vocabulary.
+
+    `title_size`, `num_size` and `padding` let narrow-grid callers
+    (e.g. 5-column rubric_phases) shrink the header to avoid wrapping.
     """
     sub_html = "".join(
         f"""<div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
@@ -63,11 +67,11 @@ def _m5_card(n, col, name, body_html, sub_blocks=None, icon=""):
     )
     icon_html = f'<div style="font-size:22px; line-height:1;">{icon}</div>' if icon else ""
     return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
-  <div style="padding:16px 20px; background:linear-gradient(135deg, {col}22 0%, transparent 70%); border-bottom:1px solid {col}30;">
+  <div style="padding:{padding}; background:linear-gradient(135deg, {col}22 0%, transparent 70%); border-bottom:1px solid {col}30;">
     <div style="display:flex; align-items:center; gap:10px;">
-      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:{col}; line-height:1;">{n}</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:{num_size}; font-weight:900; color:{col}; line-height:1;">{n}</div>
       {icon_html}
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">{name}</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:{title_size}; font-weight:800; color:#fff; line-height:1.25;">{name}</div>
     </div>
   </div>
   <div style="padding:13px 20px;">
@@ -367,24 +371,25 @@ def rubric_phases() -> str:
     steps = [
         ("01", "#3b82f6", "Value Proposition",
          "Define the core user needs and product promises your AI must fulfil.",
-         "Phase 1 &middot; Create assessment"),
-        ("02", "#3b82f6", "Evaluation Criteria",
+         "Phase 1 &middot; Create"),
+        ("02", "#3b82f6", "Eval Criteria",
          "Define the specific dimensions &mdash; factuality, tone, logic &mdash; that measure those promises.",
-         "Phase 1 &middot; Create assessment"),
+         "Phase 1 &middot; Create"),
         ("03", "#3b82f6", "Scalable Questions",
          "Use binary yes/no or 1&ndash;5 scale questions to turn qualitative &ldquo;vibes&rdquo; into quantitative data.",
-         "Phase 1 &middot; Create assessment"),
+         "Phase 1 &middot; Create"),
         ("04", "#fbbf24", "Calibrate Reviewers",
          "Create prototypical assessments so all reviewers are trained on the same expectations.",
          "Phase 2 &middot; Calibrate"),
-        ("05", "#34d399", "Continually Validate",
+        ("05", "#34d399", "Validate &amp; Iterate",
          "Have reviewers justify their ratings to identify edge cases and rubric drift.",
          "Phase 3 &middot; Monitor"),
     ]
     cards_html = "".join(
         _m5_card(n, col, name,
-                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
-                 sub_blocks=[("Phase", phase)])
+                 body_html=f'<p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[("Phase", phase)],
+                 title_size="13px", num_size="22px", padding="12px 14px")
         for n, col, name, desc, phase in steps
     )
     return f"""<section data-title="How to Build a Human Eval Rubric">
