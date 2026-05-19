@@ -312,15 +312,21 @@ def rag_process_overview() -> str:
 
 
 def rag_in_practice_diagram() -> str:
-    """How RAG works in practice - data preparation + RAG pipeline diagram."""
+    """How RAG works in practice - data preparation + RAG pipeline diagram.
+
+    The Vector DB sits as the visual bridge: offline pipeline ends at it,
+    online pipeline starts from it. The "D" arrow makes the handoff explicit
+    (matches the original PowerPoint).
+    """
     return """<section data-title="How RAG Works In Practice">
   <div class="inner">
     <div class="demo-tag tag-debrief">Lecture &middot; Pipeline</div>
     <h2>How RAG works in practice</h2>
-    <div class="subtitle">Two distinct loops: an offline preparation pipeline + the online retrieve-augment-generate flow.</div>
+    <div class="subtitle">Offline preparation feeds the same Vector DB the online flow queries. The bridge is <strong style="color:#fff;">D</strong>.</div>
 
-    <div style="max-width:1080px; margin:18px auto 0; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 18px; text-align:left;">
-      <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F4E6; Step 0 &middot; Data Preparation (offline)</div>
+    <!-- OFFLINE PIPELINE -->
+    <div style="max-width:1080px; margin:18px auto 0; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px 18px; text-align:left;">
+      <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F4E6; Step 0 &middot; Data Preparation (offline, runs once + on refresh)</div>
       <div style="display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:8px; align-items:center;">
         <div style="background:rgba(124,140,255,0.10); border:1px solid rgba(124,140,255,0.4); border-radius:10px; padding:8px 10px; text-align:center;">
           <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#bcb1ff; letter-spacing:0.1em; margin-bottom:3px;">A</div>
@@ -342,14 +348,29 @@ def rag_in_practice_diagram() -> str:
         <div style="font-family:'Poppins',sans-serif; font-size:18px; color:#475569;">&rarr;</div>
         <div style="background:rgba(124,140,255,0.18); border:1px solid rgba(124,140,255,0.6); border-radius:10px; padding:8px 10px; text-align:center;">
           <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#bcb1ff; letter-spacing:0.1em; margin-bottom:3px;">D</div>
-          <div style="font-size:12px; color:#fff; font-weight:700;">Embed &amp; store</div>
-          <div style="font-size:10px; color:#cdd5e3; margin-top:2px;">Vector DB</div>
+          <div style="font-size:12px; color:#fff; font-weight:700;">Embed</div>
+          <div style="font-size:10px; color:#8899bb; margin-top:2px;">Convert chunks to vectors</div>
         </div>
       </div>
     </div>
 
-    <div style="max-width:1080px; margin:14px auto 0; background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.25); border-radius:14px; padding:14px 18px; text-align:left;">
-      <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F501; Online &middot; Retrieve &rarr; Augment &rarr; Generate</div>
+    <!-- D BRIDGE - explicit hand-off from offline to online (same as the original slide) -->
+    <div style="max-width:1080px; margin:8px auto 0; position:relative; height:46px;">
+      <svg viewBox="0 0 1080 46" preserveAspectRatio="none" style="width:100%; height:100%; display:block;" aria-hidden="true">
+        <defs>
+          <marker id="ragD-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#bcb1ff" />
+          </marker>
+        </defs>
+        <!-- Curve from D box (offline, ~88% across, top) down-and-left to Vector DB (online, ~32%) -->
+        <path d="M 945,0 C 945,28 280,18 280,40" stroke="#bcb1ff" stroke-width="2" fill="none" stroke-dasharray="0" marker-end="url(#ragD-arrow)" />
+      </svg>
+      <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(124,140,255,0.20); border:1px solid rgba(124,140,255,0.55); color:#fff; font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; letter-spacing:0.16em; padding:4px 14px; border-radius:99px; box-shadow:0 4px 12px rgba(7,22,44,0.6); white-space:nowrap;">D &middot; embedded chunks &rarr; Vector DB</div>
+    </div>
+
+    <!-- ONLINE FLOW - Vector DB is the same artifact created by D -->
+    <div style="max-width:1080px; margin:0 auto; background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.25); border-radius:14px; padding:12px 18px; text-align:left;">
+      <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F501; Online &middot; Retrieve &rarr; Augment &rarr; Generate (every user query)</div>
       <div style="display:grid; grid-template-columns:auto 1fr auto 1fr auto 1fr auto 1fr auto; gap:6px; align-items:center;">
         <div style="font-family:'Poppins',sans-serif; font-size:11px; color:#a0aec0; font-weight:900; letter-spacing:0.1em;">User</div>
         <div style="background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.5); border-radius:8px; padding:7px 10px; text-align:center;">
@@ -357,9 +378,10 @@ def rag_in_practice_diagram() -> str:
           <div style="font-size:11.5px; color:#fff; font-weight:700; margin-top:2px;">Query</div>
         </div>
         <div style="font-family:'Poppins',sans-serif; font-size:16px; color:#475569;">&rarr;</div>
-        <div style="background:rgba(124,140,255,0.18); border:1px solid rgba(124,140,255,0.6); border-radius:8px; padding:7px 10px; text-align:center;">
+        <div style="background:rgba(124,140,255,0.22); border:2px solid rgba(124,140,255,0.7); border-radius:8px; padding:7px 10px; text-align:center; box-shadow:0 0 0 3px rgba(124,140,255,0.10);">
           <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.1em;">2</div>
           <div style="font-size:11.5px; color:#fff; font-weight:700; margin-top:2px;">Vector DB</div>
+          <div style="font-size:9px; color:#bcb1ff; margin-top:1px; font-style:italic;">populated by D</div>
         </div>
         <div style="font-family:'Poppins',sans-serif; font-size:16px; color:#475569;">&rarr;</div>
         <div style="background:rgba(217,142,34,0.15); border:1px solid rgba(217,142,34,0.5); border-radius:8px; padding:7px 10px; text-align:center;">
