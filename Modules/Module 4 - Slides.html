@@ -802,35 +802,112 @@ section.cameras-section .cameras-inner {
   <div class="inner">
     <div class="demo-tag tag-build">Lecture &middot; Mental Model</div>
     <h2>Architecting the AI &ldquo;Iceberg&rdquo;</h2>
-    <div class="subtitle">The most magical products have the simplest UIs. Complexity didn&rsquo;t disappear &mdash; it moved underwater.</div>
 
-    <div style="max-width:1040px; margin:18px auto 0; position:relative;">
-      <!-- Iceberg illustration -->
-      <div style="background:linear-gradient(180deg, rgba(96,165,250,0.18) 0%, rgba(96,165,250,0.18) 30%, rgba(124,140,255,0.05) 30%, rgba(124,140,255,0.18) 100%); border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:0; overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1.2fr 0.95fr; gap:36px; max-width:1080px; margin:18px auto 0; align-items:stretch;">
 
-        <!-- Surface (Above water) -->
-        <div style="padding:18px 22px; border-bottom:2px solid rgba(255,255,255,0.18); position:relative;">
-          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F30A; Surface &middot; The user experience</div>
-          <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:6px;">What the user sees and clicks</div>
-          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Traditional mapping focuses here. <em>The few clicks, the visible UI, the confirmation toast.</em></p>
+      <!-- LEFT - source text content -->
+      <div style="text-align:left; display:flex; flex-direction:column; justify-content:center;">
+        <p style="font-size:15px; color:#fff; line-height:1.55; margin:0 0 18px; font-weight:600;">
+          Don&rsquo;t just map what the user <em>does</em>; map what the system <em>thinks</em>. The most powerful AI experiences are often the simplest UIs supported by the most complex background logic.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:12px; align-items:flex-start; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.10); border-radius:10px; padding:11px 14px;">
+            <div style="flex-shrink:0; width:38px; height:38px; border-radius:8px; background:rgba(96,165,250,0.18); border:1px solid rgba(96,165,250,0.4); display:flex; align-items:center; justify-content:center;">
+              <span style="font-size:18px;">&#x1F5B1;&#xFE0F;</span>
+            </div>
+            <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5; padding-top:5px;"><strong style="color:#fff;">Traditional mapping</strong> focuses on user clicks, screen navigation, and manual inputs.</p>
+          </div>
+
+          <div style="display:flex; gap:12px; align-items:flex-start; background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.30); border-radius:10px; padding:11px 14px;">
+            <div style="flex-shrink:0; width:38px; height:38px; border-radius:8px; background:rgba(124,140,255,0.20); border:1px solid rgba(124,140,255,0.5); display:flex; align-items:center; justify-content:center;">
+              <span style="font-size:18px;">&#x1F9E0;</span>
+            </div>
+            <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5; padding-top:5px;"><strong style="color:#fff;">AI-native mapping</strong> focuses on the background orchestration happening between a user&rsquo;s intent and the final output.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT - iceberg illustration with floating Top Tip -->
+      <div style="position:relative; min-height:380px;">
+
+        <!-- Top Tip floating callout - overlaps the iceberg sky -->
+        <div style="position:absolute; top:8px; left:50%; transform:translateX(-50%); width:88%; background:rgba(7,22,44,0.92); border:1px solid rgba(251,191,36,0.45); border-radius:12px; padding:11px 14px; backdrop-filter:blur(6px); z-index:2; box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+            <div style="width:24px; height:24px; border-radius:50%; background:rgba(251,191,36,0.18); border:1px solid rgba(251,191,36,0.5); display:flex; align-items:center; justify-content:center;">
+              <span style="font-size:13px;">&#x1F4A1;</span>
+            </div>
+            <span style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:#fbbf24; letter-spacing:0.16em; text-transform:uppercase;">Top Tip</span>
+          </div>
+          <p style="font-size:11.5px; color:#fff; line-height:1.5; margin:0; font-weight:600;">
+            You must decide what remains <em style="color:#79c0ff;">&ldquo;Invisible&rdquo;</em> to keep the experience effortless, and what needs to be <em style="color:#fbbf24;">&ldquo;Visible&rdquo;</em> to build user trust.
+          </p>
         </div>
 
-        <!-- Waterline label -->
-        <div style="text-align:center; padding:6px 22px; background:rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.10);">
-          <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#a0aec0; font-weight:800; letter-spacing:0.18em; text-transform:uppercase;">~&nbsp;&nbsp;~&nbsp;&nbsp;Waterline &mdash; the visible / invisible boundary&nbsp;&nbsp;~&nbsp;&nbsp;~</span>
-        </div>
+        <!-- Iceberg SVG -->
+        <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%; min-height:380px; border-radius:14px; display:block;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0a1f44" />
+              <stop offset="100%" stop-color="#15315a" />
+            </linearGradient>
+            <linearGradient id="water-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0a1838" />
+              <stop offset="100%" stop-color="#04091e" />
+            </linearGradient>
+            <linearGradient id="ice-above-grad" x1="0.3" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f0f7ff" />
+              <stop offset="55%" stop-color="#bcd5f5" />
+              <stop offset="100%" stop-color="#7da4d8" />
+            </linearGradient>
+            <linearGradient id="ice-below-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5b8ac8" stop-opacity="0.85" />
+              <stop offset="100%" stop-color="#1f3870" stop-opacity="0.65" />
+            </linearGradient>
+            <radialGradient id="glow" cx="0.7" cy="0.2" r="0.6">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+          </defs>
 
-        <!-- Underwater -->
-        <div style="padding:18px 22px; position:relative;">
-          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F9CA; Underwater &middot; The system logic</div>
-          <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:6px;">What the system <em>thinks</em></div>
-          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Background orchestration: signal interpretation, retrieval, reasoning, fail-safe routing. <strong style="color:#bcb1ff;">PM-owned.</strong></p>
-        </div>
+          <!-- Sky band -->
+          <rect x="0" y="0" width="400" height="170" fill="url(#sky-grad)" />
+          <!-- Subtle radial glow on sky -->
+          <rect x="0" y="0" width="400" height="170" fill="url(#glow)" />
+          <!-- Water band -->
+          <rect x="0" y="170" width="400" height="230" fill="url(#water-grad)" />
+
+          <!-- Iceberg peak (above water) -->
+          <polygon points="190,55 160,170 244,170 222,95 205,72" fill="url(#ice-above-grad)" />
+          <!-- Highlight facet on the peak -->
+          <polygon points="205,72 222,95 195,128 187,90" fill="#ffffff" opacity="0.35" />
+          <!-- Shadow facet -->
+          <polygon points="187,90 195,128 175,170 160,170" fill="#0a1f44" opacity="0.18" />
+
+          <!-- Iceberg body (underwater) - much larger than the peak -->
+          <polygon points="160,170 244,170 322,232 340,290 310,340 240,360 130,355 70,300 60,238" fill="url(#ice-below-grad)" />
+          <!-- Underwater facet highlights -->
+          <polygon points="244,170 322,232 270,210" fill="#ffffff" opacity="0.10" />
+          <polygon points="160,170 70,300 110,220" fill="#ffffff" opacity="0.06" />
+          <!-- Underwater shadow facets -->
+          <polygon points="240,360 310,340 280,300" fill="#000" opacity="0.20" />
+          <polygon points="60,238 70,300 95,260" fill="#000" opacity="0.15" />
+
+          <!-- Water surface line + shimmer -->
+          <line x1="0" y1="170" x2="400" y2="170" stroke="#79c0ff" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.45" />
+          <path d="M 0 167 Q 100 165 200 167 T 400 167" stroke="rgba(255,255,255,0.18)" stroke-width="0.6" fill="none" />
+          <path d="M 0 174 Q 80 176 160 173 T 400 174" stroke="rgba(255,255,255,0.10)" stroke-width="0.6" fill="none" />
+
+          <!-- "Surface" label - subtle, above water on the right -->
+          <text x="385" y="160" fill="#79c0ff" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="2" text-anchor="end" opacity="0.7">SURFACE</text>
+          <!-- "Underwater" label - subtle, below the iceberg waist on the right -->
+          <text x="385" y="380" fill="#bcb1ff" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="2" text-anchor="end" opacity="0.55">UNDERWATER</text>
+        </svg>
       </div>
     </div>
 
-    <p style="font-size:12.5px; color:#cdd5e3; max-width:880px; margin:18px auto 0; padding:11px 18px; background:rgba(217,142,34,0.06); border-left:3px solid #fbbf24; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">PM lever:</strong> decide what stays invisible (effortlessness) and what surfaces (verification). Show too much &rarr; cluttered. Show too little &rarr; lose trust.
+    <p style="font-size:12px; color:#cdd5e3; max-width:1040px; margin:14px auto 0; padding:9px 16px; background:rgba(217,142,34,0.06); border-left:3px solid #fbbf24; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM lever:</strong> show too much of the underwater logic &rarr; cluttered UX. Show too little &rarr; lose user trust. You&rsquo;re designing the balance between <em>invisible effortlessness</em> and <em>visible verification</em>.
     </p>
   </div>
 <div class="notes"><h4>Speaker Notes</h4><p>Mental model: simple UI on top, complex logic below. The PM&rsquo;s strategic lever is deciding the balance between effortlessness (invisible) and verification (visible).</p></div>
