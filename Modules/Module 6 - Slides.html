@@ -1258,30 +1258,30 @@ section.cameras-section .cameras-inner {
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/600; margin:18px auto 0;">
-      <svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/540; margin:22px auto 0;">
+      <svg viewBox="0 0 1000 540" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
   <defs>
     <marker id="exArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
     </marker>
   </defs>
-  <!-- 1 -> 2: arc OVER the top, tangent at end angled down-left into ring 2 -->
-  <path d="M 360 175 C 600 30, 700 130, 488 315"
-        stroke="#79c0ff" stroke-width="1.6" fill="none"
-        marker-end="url(#exArrow)" opacity="0.9"
+  <!-- 1 -> 2: arc OVER the top, head points DOWN into top of ring 2 -->
+  <path d="M 117 107 C 117 30, 550 30, 550 80"
+        stroke="#79c0ff" stroke-width="1.8" fill="none"
+        marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round"/>
-  <!-- 2 -> 3: smooth diagonal sweep down-left to top of ring 3 -->
-  <path d="M 488 350 C 360 360, 160 410, 95 450"
-        stroke="#79c0ff" stroke-width="1.6" fill="none"
-        marker-end="url(#exArrow)" opacity="0.9"
+  <!-- 2 -> 3: S-curve down through the middle gap, head DOWN into top of ring 3 -->
+  <path d="M 550 134 C 550 350, 90 250, 90 380"
+        stroke="#79c0ff" stroke-width="1.8" fill="none"
+        marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round"/>
-  <!-- 3 -> 4: straight right between rings -->
-  <path d="M 130 480 L 484 480"
-        stroke="#79c0ff" stroke-width="1.6" fill="none"
-        marker-end="url(#exArrow)" opacity="0.9"
+  <!-- 3 -> 4: straight right between the bottom rings -->
+  <path d="M 117 407 L 523 407"
+        stroke="#79c0ff" stroke-width="1.8" fill="none"
+        marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round"/>
 </svg>
-      <div style="position:absolute; left:6.8%; top:24.67%; width:36%; z-index:2;">
+      <div style="position:absolute; left:6.3%; top:14.8%; width:40%; z-index:2;">
   <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
     <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #3b82f6; background:#0a1f3d; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 5px #0a1f3d;">
       <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#3b82f6; line-height:1;">1</span>
@@ -1290,14 +1290,14 @@ section.cameras-section .cameras-inner {
       <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Build Your Eval Plan</span>
     </div>
   </div>
-  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:300px;">Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:320px;">Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.</p>
   <div style="display:flex; align-items:baseline; gap:6px; margin-left:68px;">
     <span style="color:#3b82f6; font-size:14px; line-height:1;">&bull;</span>
     <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#3b82f6;">Key Decision:</span>
     <span style="font-size:12.5px; color:#fff; font-weight:600;">Speed vs. Certainty</span>
   </div>
 </div>
-<div style="position:absolute; left:48.8%; top:48%; width:44%; z-index:2;">
+<div style="position:absolute; left:52.3%; top:14.8%; width:42%; z-index:2;">
   <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
     <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #fbbf24; background:#0a1f3d; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 5px #0a1f3d;">
       <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#fbbf24; line-height:1;">2</span>
@@ -1306,14 +1306,14 @@ section.cameras-section .cameras-inner {
       <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Set Your Gatekeepers</span>
     </div>
   </div>
-  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:300px;">Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:320px;">Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.</p>
   <div style="display:flex; align-items:baseline; gap:6px; margin-left:68px;">
     <span style="color:#fbbf24; font-size:14px; line-height:1;">&bull;</span>
     <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#fbbf24;">Key Decision:</span>
     <span style="font-size:12.5px; color:#fff; font-weight:600;">Brand Protection vs. Hype</span>
   </div>
 </div>
-<div style="position:absolute; left:6.8%; top:75.5%; width:36%; z-index:2;">
+<div style="position:absolute; left:6.3%; top:70.4%; width:40%; z-index:2;">
   <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
     <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #34d399; background:#0a1f3d; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 5px #0a1f3d;">
       <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#34d399; line-height:1;">3</span>
@@ -1322,14 +1322,14 @@ section.cameras-section .cameras-inner {
       <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Add Production Guardrails</span>
     </div>
   </div>
-  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:300px;">Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:320px;">Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.</p>
   <div style="display:flex; align-items:baseline; gap:6px; margin-left:68px;">
     <span style="color:#34d399; font-size:14px; line-height:1;">&bull;</span>
     <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#34d399;">Key Decision:</span>
     <span style="font-size:12.5px; color:#fff; font-weight:600;">Safety vs. Utility</span>
   </div>
 </div>
-<div style="position:absolute; left:48.8%; top:75.5%; width:40%; z-index:2;">
+<div style="position:absolute; left:52.3%; top:70.4%; width:42%; z-index:2;">
   <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px;">
     <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #bcb1ff; background:#0a1f3d; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 5px #0a1f3d;">
       <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#bcb1ff; line-height:1;">4</span>
@@ -1338,7 +1338,7 @@ section.cameras-section .cameras-inner {
       <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Evolve Your Roadmap</span>
     </div>
   </div>
-  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:300px;">Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:320px;">Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.</p>
   <div style="display:flex; align-items:baseline; gap:6px; margin-left:68px;">
     <span style="color:#bcb1ff; font-size:14px; line-height:1;">&bull;</span>
     <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#bcb1ff;">Key Decision:</span>

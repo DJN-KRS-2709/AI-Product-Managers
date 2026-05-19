@@ -652,39 +652,40 @@ def three_levers() -> str:
 def pm_execution_plan() -> str:
     """Source slide 18 - The PM Execution Plan.
 
-    Serpentine flow matching the source Google Slide:
-    Step 1 (top-left) -> smooth arc over the top -> Step 2 (mid-right) ->
-    smooth S-curve down-left -> Step 3 (bottom-left) -> straight right ->
-    Step 4 (bottom-right).
+    Roadmap-style layout: clean 2x2 grid (Step 1 top-left, Step 2 top-right,
+    Step 3 bottom-left, Step 4 bottom-right). Three smooth arrows route
+    AROUND the content blocks so they never cross any text:
 
-    Geometry: container is 1000x600 px (fixed). SVG viewBox matches 1:1
-    with preserveAspectRatio="none" so HTML step blocks (positioned via
-    left/top px) align exactly with the ring endpoints of each Bezier.
+      1 -> 2  arc OVER the top row (above the rings)
+      2 -> 3  smooth S-curve through the empty middle gap
+      3 -> 4  straight horizontal between the bottom rings
 
-    Coords (px == viewBox units):
-      ring 1: (95, 175)   ring 2: (515, 315)
-      ring 3: (95, 480)   ring 4: (515, 480)
+    Geometry uses a 1000 x 540 viewBox with preserveAspectRatio="none";
+    step blocks are positioned in %, so the SVG arrows and HTML rings
+    stay perfectly aligned at any container width.
+
+    Anchor points (px == viewBox units):
+      ring 1 (90, 107)   ring 2 (550, 107)
+      ring 3 (90, 407)   ring 4 (550, 407)
     """
-    # Positioning in % of the 1000x600 viewBox so SVG arrows and HTML
-    # blocks stay aligned at any container width.
     steps = [
         # (n, col, title, desc, decision, left%, top%, width%)
         ("1", "#3b82f6", "Build Your Eval Plan",
          "Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.",
          "Speed vs. Certainty",
-         "6.8%", "24.67%", "36%"),
+         "6.3%", "14.8%", "40%"),
         ("2", "#fbbf24", "Set Your Gatekeepers",
          "Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.",
          "Brand Protection vs. Hype",
-         "48.8%", "48%", "44%"),
+         "52.3%", "14.8%", "42%"),
         ("3", "#34d399", "Add Production Guardrails",
          "Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.",
          "Safety vs. Utility",
-         "6.8%", "75.5%", "36%"),
+         "6.3%", "70.4%", "40%"),
         ("4", "#bcb1ff", "Evolve Your Roadmap",
          "Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.",
          "Feature vs. Data",
-         "48.8%", "75.5%", "40%"),
+         "52.3%", "70.4%", "42%"),
     ]
 
     step_blocks = []
@@ -698,7 +699,7 @@ def pm_execution_plan() -> str:
       <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">{title}</span>
     </div>
   </div>
-  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:300px;">{desc}</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 68px; line-height:1.55; max-width:320px;">{desc}</p>
   <div style="display:flex; align-items:baseline; gap:6px; margin-left:68px;">
     <span style="color:{col}; font-size:14px; line-height:1;">&bull;</span>
     <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:{col};">Key Decision:</span>
@@ -707,33 +708,30 @@ def pm_execution_plan() -> str:
 </div>""")
     steps_html = "\n".join(step_blocks)
 
-    # Smooth Bezier curves matching the source Google Slide.
-    # Arrow 1 -> 2: graceful arc starting just past Step 1's title pill,
-    #   peaking high, arriving at Step 2's left ring edge from upper-right
-    #   so the head points down-left into the ring.
-    # Arrow 2 -> 3: smooth diagonal sweep from below Step 2's ring left
-    #   side down to top of Step 3's ring (head points straight down).
-    # Arrow 3 -> 4: straight horizontal between the ring edges.
-    arrows_svg = """<svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+    # Three clean arrows that route AROUND content (never cross text).
+    #   1 -> 2  arc OVER the top row (peak ~ y=30, well above the rings)
+    #   2 -> 3  vertical-tangent S-curve through the middle gap
+    #   3 -> 4  straight horizontal between the bottom rings
+    arrows_svg = """<svg viewBox="0 0 1000 540" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
   <defs>
     <marker id="exArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
     </marker>
   </defs>
-  <!-- 1 -> 2: arc OVER the top, tangent at end angled down-left into ring 2 -->
-  <path d="M 360 175 C 600 30, 700 130, 488 315"
-        stroke="#79c0ff" stroke-width="1.6" fill="none"
-        marker-end="url(#exArrow)" opacity="0.9"
+  <!-- 1 -> 2: arc OVER the top, head points DOWN into top of ring 2 -->
+  <path d="M 117 107 C 117 30, 550 30, 550 80"
+        stroke="#79c0ff" stroke-width="1.8" fill="none"
+        marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round"/>
-  <!-- 2 -> 3: smooth diagonal sweep down-left to top of ring 3 -->
-  <path d="M 488 350 C 360 360, 160 410, 95 450"
-        stroke="#79c0ff" stroke-width="1.6" fill="none"
-        marker-end="url(#exArrow)" opacity="0.9"
+  <!-- 2 -> 3: S-curve down through the middle gap, head DOWN into top of ring 3 -->
+  <path d="M 550 134 C 550 350, 90 250, 90 380"
+        stroke="#79c0ff" stroke-width="1.8" fill="none"
+        marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round"/>
-  <!-- 3 -> 4: straight right between rings -->
-  <path d="M 130 480 L 484 480"
-        stroke="#79c0ff" stroke-width="1.6" fill="none"
-        marker-end="url(#exArrow)" opacity="0.9"
+  <!-- 3 -> 4: straight right between the bottom rings -->
+  <path d="M 117 407 L 523 407"
+        stroke="#79c0ff" stroke-width="1.8" fill="none"
+        marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round"/>
 </svg>"""
 
@@ -742,7 +740,7 @@ def pm_execution_plan() -> str:
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/600; margin:18px auto 0;">
+    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/540; margin:22px auto 0;">
       {arrows_svg}
       {steps_html}
     </div>
