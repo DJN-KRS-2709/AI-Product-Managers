@@ -1353,53 +1353,307 @@ step 5 (9s) &rarr; total: 42s</pre>
     <div class="demo-tag tag-framework">Framework</div>
     <div style="font-family:'Poppins',sans-serif; font-size:10.5px; color:#fbbf24; font-weight:900; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:6px;">Balancing trade-offs</div>
     <h2>The PM Decision Triangle</h2>
-    <div class="subtitle">Three axes. Pick two to optimise &mdash; the third pays the bill.</div>
+    <div class="subtitle">Three axes. Pick two to optimise &mdash; the third pays the bill. Watch the dot, or drag it.</div>
 
-    <div style="max-width:1000px; margin:22px auto 0; background:rgba(7,22,44,0.55); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px;">
-      <svg viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
-        <defs>
-          <linearGradient id="triFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(96,165,250,0.18)"/><stop offset="100%" stop-color="rgba(124,140,255,0.05)"/></linearGradient>
-        </defs>
+    <div style="max-width:1080px; margin:18px auto 0;">
+      <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:16px; align-items:stretch;">
 
-        <polygon points="500,40 80,360 920,360" fill="url(#triFill)" stroke="#79c0ff" stroke-width="1.5"/>
+        <!-- Triangle + interactive dot -->
+        <div style="background:rgba(7,22,44,0.55); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px;">
+          <svg id="dt-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block; cursor:crosshair; user-select:none; touch-action:none;">
+            <defs>
+              <linearGradient id="dtFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(96,165,250,0.20)"/><stop offset="100%" stop-color="rgba(124,140,255,0.05)"/></linearGradient>
+              <radialGradient id="dtDot" cx="0.5" cy="0.5" r="0.5"><stop offset="0%" stop-color="#fff"/><stop offset="60%" stop-color="#79c0ff"/><stop offset="100%" stop-color="#1241B0"/></radialGradient>
+            </defs>
 
-        <circle cx="500" cy="40" r="9" fill="#3b82f6" stroke="#fff" stroke-width="2"/>
-        <text x="500" y="22" text-anchor="middle" fill="#3b82f6" font-family="Poppins,sans-serif" font-size="13" font-weight="900" letter-spacing="2">LATENCY</text>
-        <text x="500" y="-2" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11" dy="0">(Speed / UX)</text>
+            <!-- Latency lever tile (above the apex, OUTSIDE the triangle) -->
+            <rect x="290" y="12" width="220" height="76" rx="10" fill="rgba(59,130,246,0.10)" stroke="#3b82f6" stroke-width="1.4"/>
+            <text x="400" y="32" text-anchor="middle" fill="#3b82f6" font-family="Poppins,sans-serif" font-size="11" font-weight="900" letter-spacing="2.4">LATENCY</text>
+            <text x="400" y="46" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="9.5">(Speed / UX)</text>
+            <text x="400" y="64" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Single-pass routing</text>
+            <text x="400" y="80" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Smaller models on path</text>
 
-        <circle cx="80" cy="360" r="9" fill="#fbbf24" stroke="#fff" stroke-width="2"/>
-        <text x="80" y="385" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="13" font-weight="900" letter-spacing="2">COST</text>
-        <text x="80" y="404" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">(Efficiency / ROI)</text>
+            <!-- Triangle interior + outline -->
+            <polygon points="400,100 100,440 700,440" fill="url(#dtFill)" stroke="#79c0ff" stroke-width="1.5"/>
 
-        <circle cx="920" cy="360" r="9" fill="#34d399" stroke="#fff" stroke-width="2"/>
-        <text x="920" y="385" text-anchor="middle" fill="#34d399" font-family="Poppins,sans-serif" font-size="13" font-weight="900" letter-spacing="2">ACCURACY</text>
-        <text x="920" y="404" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">(Quality / Reasoning)</text>
+            <!-- Vertex markers -->
+            <circle cx="400" cy="100" r="9" fill="#3b82f6" stroke="#fff" stroke-width="2.5"/>
+            <circle cx="100" cy="440" r="9" fill="#fbbf24" stroke="#fff" stroke-width="2.5"/>
+            <circle cx="700" cy="440" r="9" fill="#34d399" stroke="#fff" stroke-width="2.5"/>
 
-        <g font-family="Lato,sans-serif" font-size="11.5">
-          <rect x="240" y="120" width="170" height="64" rx="10" fill="rgba(59,130,246,0.10)" stroke="#79c0ff" stroke-width="1"/>
-          <text x="325" y="142" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2">LATENCY LEVERS</text>
-          <text x="325" y="162" text-anchor="middle" fill="#fff">Single-pass routing</text>
-          <text x="325" y="178" text-anchor="middle" fill="#fff">Smaller models on path</text>
+            <!-- Connector lines from external tiles to vertices -->
+            <line x1="400" y1="88" x2="400" y2="92" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+            <line x1="190" y1="470" x2="100" y2="448" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+            <line x1="610" y1="470" x2="700" y2="448" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
 
-          <rect x="170" y="244" width="190" height="80" rx="10" fill="rgba(251,191,36,0.10)" stroke="#fbbf24" stroke-width="1"/>
-          <text x="265" y="266" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2">COST LEVERS</text>
-          <text x="265" y="286" text-anchor="middle" fill="#fff">Open-source models</text>
-          <text x="265" y="302" text-anchor="middle" fill="#fff">Prompt caching</text>
-          <text x="265" y="318" text-anchor="middle" fill="#fff">Slimmer context</text>
+            <!-- Edge mid-labels -->
+            <text id="dt-edge-LC" x="232" y="262" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Poppins,sans-serif" font-size="10" font-weight="800" letter-spacing="1.4" transform="rotate(-49 232 262)">FAST + CHEAP</text>
+            <text id="dt-edge-LA" x="568" y="262" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Poppins,sans-serif" font-size="10" font-weight="800" letter-spacing="1.4" transform="rotate(49 568 262)">FAST + ACCURATE</text>
+            <text id="dt-edge-CA" x="400" y="456" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Poppins,sans-serif" font-size="10" font-weight="800" letter-spacing="1.4">CHEAP + ACCURATE</text>
 
-          <rect x="640" y="244" width="190" height="80" rx="10" fill="rgba(52,211,153,0.10)" stroke="#34d399" stroke-width="1"/>
-          <text x="735" y="266" text-anchor="middle" fill="#34d399" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2">ACCURACY LEVERS</text>
-          <text x="735" y="286" text-anchor="middle" fill="#fff">Reflection loops</text>
-          <text x="735" y="302" text-anchor="middle" fill="#fff">Multi-step planning</text>
-          <text x="735" y="318" text-anchor="middle" fill="#fff">Verifier agents</text>
-        </g>
-      </svg>
+            <!-- Cost lever tile (bottom-left, OUTSIDE the triangle) -->
+            <rect x="10" y="470" width="220" height="120" rx="10" fill="rgba(251,191,36,0.10)" stroke="#fbbf24" stroke-width="1.4"/>
+            <text x="120" y="490" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="11" font-weight="900" letter-spacing="2.4">COST</text>
+            <text x="120" y="504" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="9.5">(Efficiency / ROI)</text>
+            <text x="120" y="524" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Open-source models</text>
+            <text x="120" y="540" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Prompt caching</text>
+            <text x="120" y="556" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Slimmer context</text>
+
+            <!-- Accuracy lever tile (bottom-right, OUTSIDE the triangle) -->
+            <rect x="570" y="470" width="220" height="120" rx="10" fill="rgba(52,211,153,0.10)" stroke="#34d399" stroke-width="1.4"/>
+            <text x="680" y="490" text-anchor="middle" fill="#34d399" font-family="Poppins,sans-serif" font-size="11" font-weight="900" letter-spacing="2.4">ACCURACY</text>
+            <text x="680" y="504" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="9.5">(Quality / Reasoning)</text>
+            <text x="680" y="524" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Reflection loops</text>
+            <text x="680" y="540" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Multi-step planning</text>
+            <text x="680" y="556" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="11">Verifier agents</text>
+
+            <!-- Interactive balance dot -->
+            <circle id="dt-dot" cx="400" cy="327" r="16" fill="url(#dtDot)" stroke="#fff" stroke-width="2.5" style="cursor:grab; filter:drop-shadow(0 0 14px rgba(96,165,250,0.7));"/>
+            <text id="dt-dot-label" x="400" y="331" text-anchor="middle" fill="#07162C" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="0.5" pointer-events="none">YOU</text>
+          </svg>
+        </div>
+
+        <!-- Live readout panel -->
+        <div style="background:rgba(7,22,44,0.55); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px 20px; display:flex; flex-direction:column; gap:14px;">
+
+          <div>
+            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:5px;">Live trade-off</div>
+            <div id="dt-call" style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.4;">Balanced &mdash; nothing wins, nothing loses.</div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:3px;"><span style="font-family:'Poppins',sans-serif; font-size:10px; color:#3b82f6; font-weight:900; letter-spacing:0.13em;">LATENCY</span><span id="dt-lat-val" style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff; font-weight:700;">33%</span></div>
+              <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;"><div id="dt-lat-bar" style="height:100%; background:#3b82f6; border-radius:3px; width:33%; transition:width 0.18s ease;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:3px;"><span style="font-family:'Poppins',sans-serif; font-size:10px; color:#fbbf24; font-weight:900; letter-spacing:0.13em;">COST</span><span id="dt-cost-val" style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff; font-weight:700;">33%</span></div>
+              <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;"><div id="dt-cost-bar" style="height:100%; background:#fbbf24; border-radius:3px; width:33%; transition:width 0.18s ease;"></div></div>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:3px;"><span style="font-family:'Poppins',sans-serif; font-size:10px; color:#34d399; font-weight:900; letter-spacing:0.13em;">ACCURACY</span><span id="dt-acc-val" style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff; font-weight:700;">33%</span></div>
+              <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;"><div id="dt-acc-bar" style="height:100%; background:#34d399; border-radius:3px; width:33%; transition:width 0.18s ease;"></div></div>
+            </div>
+          </div>
+
+          <div style="background:rgba(248,113,113,0.07); border:1px solid rgba(248,113,113,0.25); border-radius:8px; padding:8px 12px;">
+            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#f87171; font-weight:900; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:2px;">Sacrificing</div>
+            <div id="dt-sac" style="font-family:'Poppins',sans-serif; font-size:14px; color:#fff; font-weight:800;">&mdash; balanced</div>
+          </div>
+
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button id="dt-toggle" type="button" style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:800; padding:6px 14px; border-radius:99px; background:rgba(96,165,250,0.16); color:#79c0ff; border:1px solid rgba(96,165,250,0.40); cursor:pointer;">&#x23F8;&#xFE0F; Pause animation</button>
+            <span style="font-size:10.5px; color:#8899bb; font-style:italic;">click or drag inside the triangle</span>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
       <strong style="color:#fff;">PM rule:</strong> name the corner you&rsquo;re sacrificing in the AWSpec. &ldquo;We are buying accuracy at the cost of latency&rdquo; is a defensible decision. Silence isn&rsquo;t.
     </p>
   </div>
+
+  <script>
+  (function () {
+    const svg = document.getElementById('dt-svg');
+    const dot = document.getElementById('dt-dot');
+    const label = document.getElementById('dt-dot-label');
+    const toggle = document.getElementById('dt-toggle');
+    if (!svg || !dot || !toggle) return;
+
+    const VL = {x: 400, y: 100};
+    const VC = {x: 100, y: 440};
+    const VA = {x: 700, y: 440};
+    const CENTROID = {x: (VL.x + VC.x + VA.x) / 3, y: (VL.y + VC.y + VA.y) / 3};
+
+    const denom = (VC.y - VA.y) * (VL.x - VA.x) + (VA.x - VC.x) * (VL.y - VA.y);
+
+    function bary(px, py) {
+      const wL = ((VC.y - VA.y) * (px - VA.x) + (VA.x - VC.x) * (py - VA.y)) / denom;
+      const wC = ((VA.y - VL.y) * (px - VA.x) + (VL.x - VA.x) * (py - VA.y)) / denom;
+      const wA = 1 - wL - wC;
+      return {L: wL, C: wC, A: wA};
+    }
+
+    function clampInside(px, py) {
+      const w = bary(px, py);
+      let wL = Math.max(0, w.L), wC = Math.max(0, w.C), wA = Math.max(0, w.A);
+      const s = wL + wC + wA;
+      if (s === 0) return {x: CENTROID.x, y: CENTROID.y};
+      wL /= s; wC /= s; wA /= s;
+      return {
+        x: wL * VL.x + wC * VC.x + wA * VA.x,
+        y: wL * VL.y + wC * VC.y + wA * VA.y,
+      };
+    }
+
+    const callEl = document.getElementById('dt-call');
+    const sacEl = document.getElementById('dt-sac');
+    const latVal = document.getElementById('dt-lat-val');
+    const costVal = document.getElementById('dt-cost-val');
+    const accVal = document.getElementById('dt-acc-val');
+    const latBar = document.getElementById('dt-lat-bar');
+    const costBar = document.getElementById('dt-cost-bar');
+    const accBar = document.getElementById('dt-acc-bar');
+
+    function updateReadout(x, y) {
+      const w = bary(x, y);
+      const wL = Math.max(0, Math.min(1, w.L));
+      const wC = Math.max(0, Math.min(1, w.C));
+      const wA = Math.max(0, Math.min(1, w.A));
+      const total = wL + wC + wA || 1;
+      const pL = Math.round(wL / total * 100);
+      const pC = Math.round(wC / total * 100);
+      const pA = 100 - pL - pC;
+
+      latVal.textContent = pL + '%';
+      costVal.textContent = pC + '%';
+      accVal.textContent = pA + '%';
+      latBar.style.width = pL + '%';
+      costBar.style.width = pC + '%';
+      accBar.style.width = pA + '%';
+
+      const minVal = Math.min(pL, pC, pA);
+      const maxVal = Math.max(pL, pC, pA);
+      const spread = maxVal - minVal;
+
+      let call, sacrifice;
+      if (spread < 8) {
+        call = 'Balanced &mdash; nothing wins, nothing loses.';
+        sacrifice = '&mdash; balanced';
+      } else if (pL > 45 && pC > 30 && pA < 25) {
+        call = 'Fast + cheap &mdash; the cheapest, fastest path. <em>Accuracy pays the bill.</em>';
+        sacrifice = 'Accuracy &middot; the agent is wrong sometimes';
+      } else if (pL > 45 && pA > 30 && pC < 25) {
+        call = 'Fast + accurate &mdash; the &ldquo;just works&rdquo; experience. <em>Cost pays the bill.</em>';
+        sacrifice = 'Cost &middot; the agent is expensive to run';
+      } else if (pC > 45 && pA > 30 && pL < 25) {
+        call = 'Cheap + accurate &mdash; the long, careful loop. <em>Latency pays the bill.</em>';
+        sacrifice = 'Latency &middot; the agent is slow';
+      } else if (pL >= pC && pL >= pA) {
+        call = 'Optimising for <strong style="color:#3b82f6;">speed</strong>.';
+        sacrifice = (pC < pA ? 'Cost &middot; the agent is expensive to run' : 'Accuracy &middot; the agent is wrong sometimes');
+      } else if (pC >= pL && pC >= pA) {
+        call = 'Optimising for <strong style="color:#fbbf24;">cost</strong>.';
+        sacrifice = (pL < pA ? 'Latency &middot; the agent is slow' : 'Accuracy &middot; the agent is wrong sometimes');
+      } else {
+        call = 'Optimising for <strong style="color:#34d399;">accuracy</strong>.';
+        sacrifice = (pL < pC ? 'Latency &middot; the agent is slow' : 'Cost &middot; the agent is expensive to run');
+      }
+      callEl.innerHTML = call;
+      sacEl.innerHTML = sacrifice;
+    }
+
+    function setDot(rawX, rawY, skipReadout) {
+      const p = clampInside(rawX, rawY);
+      dot.setAttribute('cx', p.x);
+      dot.setAttribute('cy', p.y);
+      label.setAttribute('x', p.x);
+      label.setAttribute('y', p.y + 4);
+      if (!skipReadout) updateReadout(p.x, p.y);
+      return p;
+    }
+
+    function pointerToSvg(evt) {
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX;
+      pt.y = evt.clientY;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return {x: CENTROID.x, y: CENTROID.y};
+      const local = pt.matrixTransform(ctm.inverse());
+      return {x: local.x, y: local.y};
+    }
+
+    let dragging = false;
+    let animating = true;
+
+    function stopAnimating() {
+      if (!animating) return;
+      animating = false;
+      toggle.innerHTML = '▶️ Play animation';
+    }
+
+    dot.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      dragging = true;
+      stopAnimating();
+      try { dot.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    svg.addEventListener('pointerdown', function (e) {
+      if (e.target === dot) return;
+      stopAnimating();
+      const p = pointerToSvg(e);
+      setDot(p.x, p.y);
+    });
+
+    svg.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      const p = pointerToSvg(e);
+      setDot(p.x, p.y);
+    });
+
+    function endDrag() { dragging = false; }
+    svg.addEventListener('pointerup', endDrag);
+    svg.addEventListener('pointercancel', endDrag);
+    svg.addEventListener('pointerleave', endDrag);
+
+    toggle.addEventListener('click', function () {
+      animating = !animating;
+      if (animating) {
+        kfStart = performance.now();
+        toggle.innerHTML = '⏸️ Pause animation';
+      } else {
+        toggle.innerHTML = '▶️ Play animation';
+      }
+    });
+
+    const keyframes = [
+      {x: 400, y: 327},
+      {x: 400, y: 200},
+      {x: 250, y: 280},
+      {x: 175, y: 400},
+      {x: 400, y: 430},
+      {x: 625, y: 400},
+      {x: 550, y: 280},
+      {x: 400, y: 200},
+      {x: 400, y: 327},
+    ];
+    let kfIdx = 0;
+    let kfStart = performance.now();
+    const KF_DURATION = 2400;
+
+    let visible = true;
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        for (const ent of entries) visible = ent.isIntersecting;
+      }, {threshold: 0.25});
+      obs.observe(svg);
+    }
+
+    function tick(now) {
+      if (animating && visible) {
+        const t = Math.min(1, (now - kfStart) / KF_DURATION);
+        const a = keyframes[kfIdx];
+        const b = keyframes[(kfIdx + 1) % keyframes.length];
+        const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const x = a.x + (b.x - a.x) * e;
+        const y = a.y + (b.y - a.y) * e;
+        setDot(x, y);
+        if (t >= 1) {
+          kfIdx = (kfIdx + 1) % keyframes.length;
+          kfStart = now;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    setDot(CENTROID.x, CENTROID.y);
+  })();
+  </script>
 </section>
 
 
