@@ -37,90 +37,6 @@ TEMPLATE_USE_URL = (
 
 
 # ---------------------------------------------------------------------------
-# Recall + final-project bookkeeping
-# ---------------------------------------------------------------------------
-
-def m4_repo_recall() -> str:
-    """What's in the repo so far (M1-M3), and what M4 adds today."""
-    prior = [
-        ("01-prompting/system-prompt.md", "Juno&rsquo;s job description"),
-        ("01-prompting/lovable-prototype.md", "V1 dashboard URL"),
-        ("02-strategy/decision-matrix.md", "Three-Layer + autonomy"),
-        ("02-strategy/strategy-one-pager.md", "6-section strategy"),
-        ("03-rag-prd/prd.md", "AI PRD with RAG architecture"),
-    ]
-    today = [
-        ("04-ai-ux/user-flow.md", "Juno&rsquo;s AI-Native user flow"),
-        ("04-ai-ux/trust-gaps.md", "Trust-gap audit + mitigations <em style=\"color:#8899bb\">(optional post-class)</em>"),
-    ]
-    prior_html = "".join(
-        f'<li style="font-size:13px; color:#cdd5e3; padding:5px 0 5px 22px; position:relative; line-height:1.5;">'
-        f'<span style="position:absolute; left:0; top:7px; width:14px; height:14px; border-radius:50%; background:#34d399; color:#07162C; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:900;">&check;</span>'
-        f'<code style="font-size:0.92em; color:#79c0ff;">{p}</code> &mdash; {d}</li>'
-        for p, d in prior
-    )
-    today_html = "".join(
-        f'<li style="font-size:13px; color:#cdd5e3; padding:5px 0 5px 22px; position:relative; line-height:1.5;">'
-        f'<span style="position:absolute; left:0; top:7px; width:14px; height:14px; border-radius:50%; background:#d29922; color:#07162C; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:900;">&rarr;</span>'
-        f'<code style="font-size:0.92em; color:#fcd34d;">{p}</code> &mdash; {d}</li>'
-        for p, d in today
-    )
-    return f"""<section data-title="Recall &middot; Repo so far">
-  <div class="inner">
-    <div class="demo-tag tag-debrief">Recall</div>
-    <h2>What&rsquo;s in your <code>juno-pm</code> repo</h2>
-    <div class="subtitle">Five artefacts from M1&ndash;M3. M4 adds the surface design that makes the architecture trustworthy.</div>
-    <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:18px; max-width:920px; margin:24px auto 0;">
-      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.25); border-radius:14px; padding:18px 22px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px;">&check; M1&ndash;M3 &middot; Committed</div>
-        <ul style="margin:0; padding:0; list-style:none;">{prior_html}</ul>
-      </div>
-      <div style="background:rgba(217,142,34,0.06); border:1px solid rgba(217,142,34,0.3); border-radius:14px; padding:18px 22px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px;">&rarr; Module 4 &middot; Today</div>
-        <ul style="margin:0; padding:0; list-style:none;">{today_html}</ul>
-      </div>
-    </div>
-    <p style="font-size:13px; color:#8899bb; margin-top:18px; text-align:center;">M3 specced the engine. M4 designs the <em>surface</em> &mdash; the part the user actually trusts.</p>
-  </div>
-</section>
-"""
-
-
-def m4_final_project_progress() -> str:
-    """Final project progress card - 7 deliverables, M4 covers 1 (+1 optional)."""
-    deliv = [
-        ("M1", "system-prompt.md", "done", "#34d399"),
-        ("M1", "lovable-prototype.md", "done", "#34d399"),
-        ("M2", "decision-matrix.md", "done", "#34d399"),
-        ("M2", "strategy-one-pager.md", "done", "#34d399"),
-        ("M3", "prd.md", "done", "#34d399"),
-        ("M4", "user-flow.md", "today", "#fbbf24"),
-        ("M4", "trust-gaps.md (optional)", "today*", "#fbbf24"),
-        ("M5", "awspec.md + control-panel.md", "later", "#475569"),
-        ("M6", "eval-stack.md + human-rubric.md + final README", "later", "#475569"),
-    ]
-    rows = "".join(
-        f'<div style="display:flex; align-items:center; gap:12px; padding:6px 12px; background:rgba(255,255,255,0.025); border-left:2px solid {col}; border-radius:0 6px 6px 0;">'
-        f'<span style="font-family:\'Poppins\',sans-serif; font-size:10px; font-weight:900; color:{col}; letter-spacing:0.14em; min-width:24px;">{m}</span>'
-        f'<code style="font-size:11.5px; color:#cdd5e3; flex:1;">{p}</code>'
-        f'<span style="font-family:\'Poppins\',sans-serif; font-size:9.5px; font-weight:800; color:{col}; letter-spacing:0.14em; text-transform:uppercase; padding:2px 8px; background:{col}1a; border-radius:99px;">{s}</span></div>'
-        for m, p, s, col in deliv
-    )
-    return f"""<section data-title="Final-Project Progress">
-  <div class="inner">
-    <div class="demo-tag tag-build">Final Project &middot; Progress</div>
-    <h2>What you ship by the end of Module 4</h2>
-    <div class="subtitle">One required deliverable + one optional post-class build. Committed to <code>juno-pm/04-ai-ux/</code>.</div>
-    <div style="display:flex; flex-direction:column; gap:4px; max-width:680px; margin:18px auto 0;">
-      {rows}
-    </div>
-    <p style="font-size:12px; color:#8899bb; text-align:center; margin-top:14px;"><em>* Optional</em> trust-gap audit lifts the project from a spec into something you can defend at a design review.</p>
-  </div>
-</section>
-"""
-
-
-# ---------------------------------------------------------------------------
 # Syllabus visual + agenda
 # ---------------------------------------------------------------------------
 
@@ -219,28 +135,23 @@ def agenda_4_m4() -> str:
 # ---------------------------------------------------------------------------
 
 def clunky_aiux_solo_reflection() -> str:
-    """Solo reflection on lived AI-UX experiences (was instructor Q&A)."""
-    return """<section data-title="Solo Reflection &middot; Clunky AI-UX">
+    """Source slide 6 — instructor-led Q&A converted to solo reflection (per user mandate).
+    Mirrors source copy: same three questions, neutral framing."""
+    return """<section data-title="Your Experience With Clunky AI-UX">
   <div class="inner">
     <div class="demo-tag tag-debrief">Solo Reflection &middot; 5 min</div>
-    <h2>Your experience with &ldquo;clunky&rdquo; AI-UX</h2>
-    <div class="subtitle">The features you remember are usually broken or magical. Both teach you something.</div>
+    <h2>Your Experience With &ldquo;Clunky&rdquo; AI-UX</h2>
+    <div class="subtitle">To get you thinking about how you might reimagine the AI-UX of your own products and experiences, share your perspective on the questions below.</div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:880px; margin:22px auto 0;">
-      <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.3); border-radius:12px; padding:18px 22px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#f87171; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x274C; Prompt 1 &middot; The wrong</div>
-        <p style="font-size:14px; color:#fff; font-weight:600; line-height:1.45; margin:0;">A product where AI <em>technically works</em>, but the experience feels wrong, annoying, or pointless &mdash; what was it, and why?</p>
-      </div>
-      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:18px 22px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&check; Prompt 2 &middot; The right</div>
-        <p style="font-size:14px; color:#fff; font-weight:600; line-height:1.45; margin:0;">A product where AI <em>changed how you interact</em> &mdash; not just what it can do. Did it remove steps? Shift control? Feel proactive?</p>
-      </div>
-    </div>
+    <ol style="max-width:820px; margin:22px auto 0; padding:0 0 0 22px; text-align:left; color:#cdd5e3; font-size:14.5px; line-height:1.6;">
+      <li style="margin-bottom:10px;">What&rsquo;s a product you&rsquo;ve tried where AI <em>technically</em> works, but the experience feels wrong, annoying, or pointless?</li>
+      <li style="margin-bottom:10px;">On the flip side, where have you seen AI change <em>how</em> you interact with a product, not just <em>what</em> it can do?</li>
+      <li>Did it remove steps? Did it change who is &lsquo;in control&rsquo;? Did it make the product feel more proactive?</li>
+    </ol>
 
-    <div style="max-width:780px; margin:18px auto 0; padding:11px 18px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
-      <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase;">&#x1F4AC; Share</span>
-      <span style="font-size:13px; color:#cdd5e3;"> Drop one example for each in <code style="font-size:0.9em; color:#79c0ff;">#ai-pm-cohort</code>. The <em>contrast</em> is the lesson.</span>
-    </div>
+    <p style="font-size:13px; color:#8899bb; max-width:780px; margin:18px auto 0; text-align:center;">
+      Reflect on your own, then drop your answers async in <code style="font-size:0.92em; color:#79c0ff;">#ai-pm-cohort</code>.
+    </p>
   </div>
 </section>
 """
@@ -445,40 +356,31 @@ def ai_placement_3() -> str:
 
 
 def spot_the_friction_solo() -> str:
-    """Solo reflection - recruiter sidecar chat (was instructor Q&A)."""
-    return """<section data-title="Solo Reflection &middot; Spot the Friction">
+    """Source slide 12 - instructor-led Q&A converted to solo reflection.
+    Surfaces the speaker-note answer paths so solo learners can self-check."""
+    return """<section data-title="Spot the Friction">
   <div class="inner">
     <div class="demo-tag tag-debrief">Solo Reflection &middot; 5 min</div>
-    <h2>Spot the friction</h2>
-    <div class="subtitle">Read the scenario. Find the failure mode. Pivot it to AI-Native.</div>
+    <h2>Spot the Friction</h2>
+    <div class="subtitle">To make these AI-native principles tangible, look at the scenario and identify why it fails to deliver an effortless experience.</div>
 
-    <div style="max-width:880px; margin:18px auto 0; background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.30); border-radius:14px; padding:16px 22px; text-align:left;">
-      <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#f87171; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F6A8; The scenario</div>
-      <p style="font-size:14px; color:#fff; line-height:1.55; margin:0;">A recruiter opens a candidate&rsquo;s profile. A &ldquo;sidecar&rdquo; chat box pops up: <em>&ldquo;I have analyzed this profile. Ask me anything or tell me to write an outreach email.&rdquo;</em></p>
+    <div style="max-width:880px; margin:18px auto 0; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:16px 22px; text-align:left;">
+      <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Scenario</div>
+      <p style="font-size:14px; color:#fff; line-height:1.55; margin:0;">A recruiter opens a candidate&rsquo;s profile. A &ldquo;sidecar&rdquo; chat box pops up and says: <em>&ldquo;I have analyzed this profile. Ask me anything or tell me to write an outreach email.&rdquo;</em></p>
+      <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:8px 0 0;">Why is this <em>not</em> an AI-native &lsquo;invisible&rsquo; design, and what would you change to make it effortless?</p>
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:880px; margin:14px auto 0;">
-      <div style="background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.10); border-radius:12px; padding:14px 18px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#f87171; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x274C; Why this fails</div>
-        <ul style="font-size:12px; color:#cdd5e3; margin:0; padding-left:18px; line-height:1.55;">
-          <li><strong style="color:#fff;">Chatbot trap.</strong> A sidecar that makes the recruiter look-then-chat-then-paste.</li>
-          <li><strong style="color:#fff;">Reactive.</strong> Waits for a manual prompt instead of using &ldquo;profile open&rdquo; as the signal.</li>
-          <li><strong style="color:#fff;">Wrong role.</strong> Forces the user to be a creator, not a validator.</li>
-        </ul>
-      </div>
-      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&check; The AI-native pivot</div>
-        <ul style="font-size:12px; color:#cdd5e3; margin:0; padding-left:18px; line-height:1.55;">
-          <li><strong style="color:#fff;">Trigger:</strong> page load &rarr; AI starts work in the background.</li>
-          <li><strong style="color:#fff;">V1 draft:</strong> personalised outreach pre-written from candidate history + open role.</li>
-          <li><strong style="color:#fff;">Inline:</strong> draft lands directly in the messaging field. Recruiter edits, not writes.</li>
-        </ul>
-      </div>
-    </div>
-
-    <p style="font-size:12px; color:#8899bb; max-width:780px; margin:14px auto 0; text-align:center;">
-      <strong style="color:#bcb1ff;">Solo task:</strong> identify one product in <em>your</em> stack with the same anti-pattern. Drop it in <code style="font-size:0.92em; color:#79c0ff;">#ai-pm-cohort</code>.
+    <p style="font-size:12.5px; color:#8899bb; max-width:780px; margin:14px auto 0; text-align:center;">
+      Think on your own first. Then expand the answer below to self-check.
     </p>
+
+    <details style="max-width:880px; margin:12px auto 0; background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.25); border-radius:12px; padding:0 18px;">
+      <summary style="font-family:'Poppins',sans-serif; font-size:12px; font-weight:800; color:#79c0ff; letter-spacing:0.12em; text-transform:uppercase; padding:12px 0; cursor:pointer; list-style:none;">Reveal the AI-native pivot &rarr;</summary>
+      <div style="padding:0 0 14px; text-align:left;">
+        <p style="font-size:13px; color:#cdd5e3; line-height:1.6; margin:0 0 10px;"><strong style="color:#fff;">Why it fails:</strong> chatbot trap (sidecar that forces the recruiter to look, chat, copy-paste); reactive (waits for a manual prompt instead of using &ldquo;profile open&rdquo; as the signal); cognitive load (user becomes a creator, not a validator).</p>
+        <p style="font-size:13px; color:#cdd5e3; line-height:1.6; margin:0;"><strong style="color:#fff;">The AI-native pivot:</strong> trigger on page load; AI uses V1 drafting in the background to write a personalised message from the candidate&rsquo;s history + the open role; the draft lands inline in the messaging field. Recruiter edits, doesn&rsquo;t create.</p>
+      </div>
+    </details>
   </div>
 </section>
 """
@@ -999,35 +901,31 @@ def intelligence_tax_2() -> str:
 # Optional Post-Class Lab + Resources
 # ---------------------------------------------------------------------------
 
-def optional_post_class_lab() -> str:
-    """Optional post-class lab section divider + CTA card."""
-    return """<section data-title="Optional Post-Class &middot; AI-Native Juno">
+def optional_post_class_title() -> str:
+    """Source slide 32 - title card for the optional post-class lab."""
+    return """<section class="section-break" data-title="Optional Post-Class Hands-On Lab">
+  <div class="section-break-inner">
+    <div class="lab-title">Optional Post-Class &middot; Hands-On Lab</div>
+    <div class="lab-name">Reimagine Juno as an AI-Native Copilot</div>
+  </div>
+</section>
+"""
+
+
+def optional_post_class_outcome() -> str:
+    """Source slide 33 - outcome + walkthrough link."""
+    return """<section data-title="Reimagine Juno as an AI-Native Copilot">
   <div class="inner">
-    <div class="demo-tag tag-build">Optional &middot; Post-Class</div>
-    <h2>Reimagine Juno as an AI-Native Copilot</h2>
-    <div class="subtitle">Optional. Not required for course completion. Lifts Juno from a dashboard to a partner.</div>
+    <div class="demo-tag tag-build">Optional &middot; Post-Class Practice</div>
+    <h2>Reimagine Juno as an AI-Native Co-pilot</h2>
+    <div class="subtitle">Optional, on your own time. Not required for course completion.</div>
 
-    <div style="max-width:1040px; margin:18px auto 0; background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.3); border-radius:14px; padding:16px 22px; text-align:left;">
-      <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:0;">You&rsquo;ll move up the AI-UX Ladder &mdash; first <strong style="color:#79c0ff;">Functional Baseline</strong> (transparency), then <strong style="color:#fbbf24;">Reliability + Verification</strong> (human-in-the-loop edits), then <strong style="color:#34d399;">Magical Flow</strong> (invisible triggers). By the end, Juno transitions from a tool you <em>use</em> to a partner that <em>anticipates</em>.</p>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:1040px; margin:14px auto 0;">
-      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path 1 &middot; Strategic Trust Ladder</div>
-        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">Force Juno to <em>prove its work</em>. Source citations on insight cards &rarr; modular editable PRD blocks &rarr; live-sync listening UI.</p>
-      </div>
-      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path 2 &middot; Frictionless Architect</div>
-        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">Make Juno an <em>action launcher</em>. Visual logic-map highlights &rarr; Slack/Jira command modals &rarr; invisible AI Risk Watchdog.</p>
-      </div>
-    </div>
-
-    <div style="max-width:1040px; margin:14px auto 0;">
+    <div style="max-width:1040px; margin:22px auto 0;">
       <a href="../Modules/M4 - Juno AI-Native Lab.html" style="text-decoration:none;">
-        <div style="background:linear-gradient(135deg, rgba(124,140,255,0.18), rgba(96,165,250,0.10)); border:1px solid rgba(124,140,255,0.5); border-radius:12px; padding:14px 18px; text-align:left;">
-          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x270D;&#xFE0F; Tool &middot; Walkthrough</div>
-          <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff;">M4 &mdash; Juno AI-Native Lab</div>
-          <p style="font-size:11.5px; color:#cdd5e3; margin:4px 0 0; line-height:1.5;">Pick a path. All three Lovable prompts pre-loaded with copy buttons + the Sarah transcript ready to paste. Outputs commit to <code style="font-size:0.92em; color:#bcb1ff;">04-ai-ux/trust-gaps.md</code>.</p>
+        <div style="background:linear-gradient(135deg, rgba(124,140,255,0.18), rgba(96,165,250,0.10)); border:1px solid rgba(124,140,255,0.5); border-radius:14px; padding:16px 22px; text-align:left;">
+          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x270D;&#xFE0F; Lab Exercise Outcome</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; margin-bottom:6px;">Follow along and complete this lab with the walkthrough &rarr;</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><code style="font-size:0.92em; color:#bcb1ff;">M4 &mdash; Juno AI-Native Lab.html</code> &middot; pick Path 1 (Strategic Trust Ladder) or Path 2 (Frictionless Architect). Three levels each (Functional &rarr; Reliable &rarr; Magical). Pre-loaded Lovable prompts + the Sarah transcript.</p>
         </div>
       </a>
     </div>
@@ -1103,22 +1001,15 @@ def build_module_4():
 
     # 2. Class Expectations
     add(class_expectations(),
-        note="Set ground rules: cameras-on for live cohort sessions, async etiquette for solo learners. Solo course &mdash; all interactions go through #ai-pm-cohort.")
+        note="Source slide 2. Set ground rules: cameras-on for live cohort sessions, async etiquette for solo learners. Solo course &mdash; all interactions go through #ai-pm-cohort.")
 
-    # 3. Recall (M1-M3) + Final-project progress
-    add(m4_repo_recall(),
-        note="Surface what&rsquo;s already in the repo so the M4 deliverable feels like a continuation, not a fresh start. Five committed artefacts. M3 specced the engine; M4 designs the surface.")
-
-    add(m4_final_project_progress(),
-        note="Required: user-flow.md. Optional: trust-gaps.md (lifts a spec into a defensible design review).")
-
-    # 4. Syllabus
+    # 3. Syllabus
     add(syllabus_visual_m4(),
-        note="M5 = agents + workflows. M6 = evals + guardrails. Confirmed correct order.")
+        note="Source slide 3. AI Product Management Syllabus, M4 highlighted.")
 
-    # 5. Agenda
+    # 4. Agenda
     add(agenda_4_m4(),
-        note="Four numbered sections + an optional post-class Lovable lab. One in-class solo lab anchors the day.")
+        note="Source slide 4. Four numbered sections + an optional post-class Lovable lab. One in-class solo lab anchors the day.")
 
     # ----- Section 01 -----
     add(section_divider("01", "Intent-Driven AI Design Systems"),
@@ -1200,13 +1091,9 @@ def build_module_4():
         note="3-level hierarchy: Functional &rarr; Reliable &rarr; Magical. Don&rsquo;t skip floors. If you can&rsquo;t pass Level 2, ship a Level-2 UI &mdash; reliable validator &gt; magical liar.")
 
     add(intelligence_tax_2(),
-        note="Two inherent LLM costs the UI must mask: Latency (streaming + status breadcrumbs turn waiting into transparency) and Privacy (permission-first + opt-in memory).")
+        note="Source slide 27. Two inherent LLM costs the UI must mask: Latency (streaming + status breadcrumbs turn waiting into transparency) and Privacy (permission-first + opt-in memory).")
 
-    # Optional post-class
-    add(optional_post_class_lab(),
-        note="Optional &mdash; not required for course completion. Lifts Juno from a static dashboard to an AI-Native partner. Two paths: Trust Ladder or Frictionless Architect.")
-
-    # Wrap up
+    # Source slide 28 - Key Takeaways
     add(takeaways(
             "Design AI-Native User Experiences",
             [
@@ -1220,8 +1107,9 @@ def build_module_4():
                  "Source scaffolding, chain-of-thought visibility, one-click undo. Verifiable in &lt; 3 seconds or it doesn&rsquo;t ship."),
             ],
         ),
-        note="Recap. The four big moves of M4. Each one maps to a section of the deliverable in 04-ai-ux/.")
+        note="Source slide 28. Recap of the four big moves of M4.")
 
+    # Source slide 29 - Next Session + Extra Practice (combined slide in source)
     add(extra_practice(
             [
                 ("Audit for invisible-UI opportunities", "In your current product",
@@ -1231,12 +1119,22 @@ def build_module_4():
             ],
             "<strong>Next session: Module 5</strong> &mdash; <em>Deploy Agentic Systems and Workflows</em>. Configure reasoning paths and tool triggers to execute complex tasks with minimal human intervention.",
         ),
-        note="Extra practice for self-directed learners. Both exercises are optional &mdash; they take what we built today out of the Juno project and apply it to the learner&rsquo;s real product context.")
+        note="Source slide 29. Next-session preview + Extra Practice combined per the source.")
 
+    # Source slide 30 - Bonus Resources & Templates
     add(m4_resources_templates(),
-        note="Three M4 tools (User Flow Architect for Lab 1, Juno AI-Native Lab for the optional post-class, AI-UX Trust Gap Checker as a bonus audit) + the project repo template.")
+        note="Source slide 30. Bonus resources: AI User Flow Template + Module 4 Exercise Guide.")
 
+    # Source slide 31 - Q&A
     add(qa_section(),
-        note="Async-only Q&A. Park unresolved questions in #ai-pm-cohort. Instructor responds in-thread within ~5 days.")
+        note="Source slide 31. Async-only Q&A. Park unresolved questions in #ai-pm-cohort. Instructor responds in-thread within ~5 days.")
+
+    # Source slides 32 + 33 - Optional Post-Class Hands-On Lab (after Q&A in the source)
+    add(optional_post_class_title(),
+        note="Source slide 32. Title card for the optional post-class lab. Not required for course completion.")
+    add(optional_post_class_outcome(),
+        note="Source slide 33. Outcome + link to the walkthrough tool. Two paths in the tool: Trust Ladder or Frictionless Architect.")
+
+    # Source slide 34 (Thank you) - intentionally skipped per user instruction.
 
     return sections_inst, sections_share
