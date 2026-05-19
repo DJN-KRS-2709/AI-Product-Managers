@@ -41,6 +41,58 @@ TEMPLATE_USE_URL = (
 
 
 # ---------------------------------------------------------------------------
+# Shared visual primitives (mirror M5 vocabulary exactly).
+# ---------------------------------------------------------------------------
+# M5 cards have a colored gradient header band (number + optional icon + name)
+# followed by a body section, with optional sub-blocks separated by horizontal
+# dividers. See m5_v2.evolution_of_value(), control_panel(), awspec_blueprint().
+
+def _m5_card(n, col, name, body_html, sub_blocks=None, icon=""):
+    """Card with colored gradient header (number + name) + body + optional sub-blocks.
+
+    Mirrors the card pattern used across m5_v2.py (evolution_of_value,
+    real_world_agents, control_panel, etc.) so M5 and M6 share one
+    visual vocabulary.
+    """
+    sub_html = "".join(
+        f"""<div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">{label}</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{content}</p>
+</div>"""
+        for label, content in (sub_blocks or [])
+    )
+    icon_html = f'<div style="font-size:22px; line-height:1;">{icon}</div>' if icon else ""
+    return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
+  <div style="padding:16px 20px; background:linear-gradient(135deg, {col}22 0%, transparent 70%); border-bottom:1px solid {col}30;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:{col}; line-height:1;">{n}</div>
+      {icon_html}
+      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">{name}</div>
+    </div>
+  </div>
+  <div style="padding:13px 20px;">
+    {body_html}
+  </div>
+  {sub_html}
+</div>"""
+
+
+def _m5_annotation(col: str, label: str, body_html: str) -> str:
+    """Side annotation box like M5 react_pattern (Mechanism / Value / Cost)."""
+    return f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:12px; padding:14px 18px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:{col}; font-weight:900; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:6px;">{label}</div>
+  <p style="font-size:13px; color:#cdd5e3; margin:0; line-height:1.6;">{body_html}</p>
+</div>"""
+
+
+def _m5_callout(body_html: str) -> str:
+    """Bottom purple-tinted PM-rule callout used throughout M5."""
+    return f"""<p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:18px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+  {body_html}
+</p>"""
+
+
+# ---------------------------------------------------------------------------
 # Source slide 3 - Syllabus
 # ---------------------------------------------------------------------------
 
@@ -103,7 +155,9 @@ def syllabus_visual_m6() -> str:
 # ---------------------------------------------------------------------------
 
 def agenda_6() -> str:
-    """4 numbered sections — last is the individual showcase."""
+    """4 numbered sections — mirrors M5 agenda_5 visual rhythm (M5 colour-strip
+    cards). Source has 4 items; rendered as 2x2 to keep card breathing room
+    consistent with M5 (3 cards in a row at the same density)."""
     items = [
         ("01", "Production-Grade Evaluation Requirements",
          "Why vibe checks fail in production. The 95% accuracy trap. The gap between lab and reality.", "#3b82f6"),
@@ -115,10 +169,10 @@ def agenda_6() -> str:
          "Solo course adaptation: finalise your repo, record an optional Loom, submit URL to LMS within 7 days.", "#bcb1ff"),
     ]
     cards = "".join(
-        f'<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-left:4px solid {col}; border-radius:12px; padding:14px 18px; text-align:left;">'
-        f'<div style="font-family:\'Poppins\',sans-serif; font-size:28px; font-weight:900; color:{col}; line-height:1; margin-bottom:5px;">{n}</div>'
-        f'<div style="font-family:\'Poppins\',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:5px; line-height:1.3;">{title}</div>'
-        f'<p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>'
+        f'<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-left:4px solid {col}; border-radius:12px; padding:16px 22px; text-align:left;">'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:32px; font-weight:900; color:{col}; line-height:1; margin-bottom:6px;">{n}</div>'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:14.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">{title}</div>'
+        f'<p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>'
         f'</div>'
         for n, title, desc, col in items
     )
@@ -127,12 +181,10 @@ def agenda_6() -> str:
     <div class="demo-tag tag-debrief">Agenda</div>
     <h2>Today&rsquo;s flow</h2>
     <div class="subtitle">Two solo labs anchor the day &mdash; plan your Eval Stack, then finalise your project repo.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
       {cards}
     </div>
-    <p style="font-size:11.5px; color:#bcb1ff; max-width:780px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">Solo course adaptation:</strong> the &ldquo;group showcase&rdquo; in section 04 becomes an individual repo submission &mdash; an optional 3-min Loom recording is encouraged but not required.
-    </p>
+    {_m5_callout('<strong style="color:#fff;">Solo course adaptation:</strong> the &ldquo;group showcase&rdquo; in section 04 becomes an individual repo submission &mdash; an optional 3-min Loom recording is encouraged but not required.')}
   </div>
 </section>
 """
@@ -146,7 +198,8 @@ def agenda_6() -> str:
 def vibe_checks_fail() -> str:
     """Source slide 6 - Why "Vibe Checks" Fail in Production.
 
-    3-card layout: Invisible Failures, The Subjectivity Trap, The Performance Gap.
+    3-card layout mirroring M5 evolution_of_value: gradient header band
+    + body + sub-block per card.
     """
     cards = [
         ("01", "#3b82f6", "&#x1F4A1;", "Invisible Failures",
@@ -160,18 +213,11 @@ def vibe_checks_fail() -> str:
          "Not through a curated set of successful examples shown in a demo."),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:18px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
-  <div style="display:flex; align-items:baseline; gap:10px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:{col}; line-height:1;">{n}</div>
-    <div style="font-size:24px;">{icon}</div>
-  </div>
-  <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>
-  <div style="margin-top:auto; padding-top:8px; border-top:1px dashed {col}40;">
-    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55; font-style:italic;">{punch}</p>
-  </div>
-</div>"""
-        for n, col, icon, title, desc, punch in cards
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[("Why it hurts", punch)],
+                 icon=icon)
+        for n, col, icon, name, desc, punch in cards
     )
     return f"""<section data-title="Why Vibe Checks Fail">
   <div class="inner">
@@ -189,54 +235,38 @@ def vibe_checks_fail() -> str:
 def accuracy_trap() -> str:
     """Source slide 7 - The 95% Accuracy Trap.
 
-    Lab Metrics vs Evals comparison (two-column with VS divider).
+    Two-card comparison using M5 header-band card pattern. No "VS" badge
+    in the middle — M5 keeps comparisons clean with the colour contrast
+    alone (cf. m5_v2.evolution_of_value()).
     """
-    return """<section data-title="The 95% Accuracy Trap">
+    lab_body = """<p style="font-size:13px; color:#cdd5e3; margin:0 0 8px; line-height:1.6;">
+      Standard benchmarks are excellent for static datasets in controlled environments &mdash; but blind to the nuanced failures in user experience and trust.
+    </p>"""
+    eval_body = """<p style="font-size:13px; color:#cdd5e3; margin:0 0 8px; line-height:1.6;">
+      Evals look beyond lab scores to measure the specific friction &mdash; latency, bias, inconsistency &mdash; that leads to product failure and loss of trust.
+    </p>"""
+    cards_html = (
+        _m5_card("01", "#3b82f6", "Accuracy &middot; Precision &middot; Recall &middot; F1",
+                 body_html=lab_body,
+                 sub_blocks=[("Maths example",
+                              "<strong style=\"color:#fff;\">1,000 calls/day &times; 5% wrong = 50 wrong outputs/day.</strong> Some silent. One high-stakes wrong outweighs the other 950.")],
+                 icon="&#x1F9EA;")
+        + _m5_card("02", "#34d399", "User experience &middot; Trust &middot; Safety",
+                   body_html=eval_body,
+                   sub_blocks=[("Product example",
+                                "A &ldquo;95% accurate&rdquo; medical bot still fails if the 5% includes a wrong dosage recommendation.")],
+                   icon="&#x1F4DD;")
+    )
+    return f"""<section data-title="The 95% Accuracy Trap">
   <div class="inner">
     <div class="demo-tag tag-framework">Mental model</div>
     <div style="font-family:'Poppins',sans-serif; font-size:10.5px; color:#fbbf24; font-weight:900; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:6px;">The gap between lab and reality</div>
-    <h2>The 95% Accuracy Trap</h2>
-    <div class="subtitle">Academic metrics measure the model. Evals measure the product.</div>
-
-    <div style="max-width:1080px; margin:22px auto 0; display:grid; grid-template-columns:1fr auto 1fr; gap:18px; align-items:stretch;">
-
-      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(96,165,250,0.40); border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
-        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.16em; text-transform:uppercase;">&#x1F9EA; What lab metrics measure</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">Accuracy &middot; Precision &middot; Recall &middot; F1</div>
-        <p style="font-size:13px; color:#cdd5e3; margin:0; line-height:1.6;">
-          Standard benchmarks are excellent for static datasets in controlled environments &mdash; but blind to nuanced product failures.
-        </p>
-        <div style="background:rgba(96,165,250,0.08); border-left:3px solid #79c0ff; border-radius:0 8px 8px 0; padding:9px 12px; margin-top:auto;">
-          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#79c0ff;">Math example</div>
-          <p style="font-size:12.5px; color:#cdd5e3; margin:4px 0 0; line-height:1.55;">
-            <strong>1,000 calls/day &times; 5% wrong = 50 wrong outputs/day.</strong> Some silent. One high-stakes wrong outweighs the other 950.
-          </p>
-        </div>
-      </div>
-
-      <div style="display:flex; align-items:center; justify-content:center;">
-        <div style="font-family:'Poppins',sans-serif; font-size:32px; font-weight:900; color:#fbbf24; padding:8px 16px; border:2px dashed rgba(251,191,36,0.4); border-radius:50%; background:rgba(251,191,36,0.05);">VS</div>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(52,211,153,0.40); border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
-        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.16em; text-transform:uppercase;">&#x1F4DD; What evals capture</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">User experience &middot; Trust &middot; Safety</div>
-        <p style="font-size:13px; color:#cdd5e3; margin:0; line-height:1.6;">
-          Evals look beyond lab scores to measure the specific friction &mdash; latency, bias, inconsistency &mdash; that leads to product failure and loss of trust.
-        </p>
-        <div style="background:rgba(52,211,153,0.08); border-left:3px solid #34d399; border-radius:0 8px 8px 0; padding:9px 12px; margin-top:auto;">
-          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#34d399;">Product example</div>
-          <p style="font-size:12.5px; color:#cdd5e3; margin:4px 0 0; line-height:1.55;">
-            A &ldquo;95% accurate&rdquo; medical bot still fails if the 5% includes a wrong dosage recommendation.
-          </p>
-        </div>
-      </div>
-
+    <h2>The 95% accuracy trap</h2>
+    <div class="subtitle">Lab metrics measure the model. Evals measure the product.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1080px; margin:22px auto 0;">
+      {cards_html}
     </div>
-
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:18px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">PM rule:</strong> never quote model accuracy without quoting the eval bar next to it. &ldquo;95% accurate at extracting risks&rdquo; means nothing without the failure taxonomy of the missing 5%.
-    </p>
+    {_m5_callout('<strong style="color:#fff;">PM rule:</strong> never quote model accuracy without quoting the eval bar next to it. &ldquo;95% accurate at extracting risks&rdquo; means nothing without the failure taxonomy of the missing 5%.')}
   </div>
 </section>
 """
@@ -251,11 +281,18 @@ def eval_stack_visual() -> str:
     """Source slide 9 - The AI Eval Stack.
 
     Three-layer pyramid (Automated/Component, Human/System, User Feedback/Online).
-    Source order in PPT: 01 Automated · 02 Human · 03 User Feedback,
-    rendered top-to-bottom in our layout: User Feedback (online · highest volume)
-    on top, Human (system) in middle, Automated (component) at base.
+    SVG on the left, M5-style annotation column on the right (mirrors
+    m5_v2.react_pattern Mechanism / Value / Cost rhythm).
     """
-    return """<section data-title="The AI Eval Stack">
+    annotations = (
+        _m5_annotation("#79c0ff", "03 &middot; Online evals",
+                       "<strong style=\"color:#fff;\">User feedback.</strong> The final reality check &mdash; regeneration rates, task completion, thumbs &mdash; confirms the product is delivering value.")
+        + _m5_annotation("#fbbf24", "02 &middot; System-level evals",
+                         "<strong style=\"color:#fff;\">Human evals.</strong> Where experts use structured rubrics to judge nuance, tone, and helpfulness &mdash; and provide the calibration the rest of the system depends on.")
+        + _m5_annotation("#34d399", "01 &middot; Component-level evals",
+                         "<strong style=\"color:#fff;\">Automated assessment.</strong> Machine-detectable tests that filter obvious failures, check formatting, and measure speed and accuracy at scale.")
+    )
+    return f"""<section data-title="The AI Eval Stack">
   <div class="inner">
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The AI Eval Stack</h2>
@@ -304,37 +341,15 @@ def eval_stack_visual() -> str:
           </svg>
         </div>
 
-        <!-- Layer cards -->
+        <!-- Layer annotations (M5 react_pattern side-callout pattern) -->
         <div style="display:flex; flex-direction:column; gap:10px;">
-          <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:13px 16px; text-align:left;">
-            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">03 &middot; Online evals</div>
-            <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">User Feedback</div>
-            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-              The final reality check. Production data &mdash; regeneration rates, task completion, thumbs &mdash; confirms the product is delivering value.
-            </p>
-          </div>
-          <div style="background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.30); border-radius:12px; padding:13px 16px; text-align:left;">
-            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">02 &middot; System-level evals</div>
-            <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">Human Evals</div>
-            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-              Where experts use structured rubrics to judge nuance, tone, and helpfulness &mdash; and provide the calibration the rest of the system depends on.
-            </p>
-          </div>
-          <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:12px; padding:13px 16px; text-align:left;">
-            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">01 &middot; Component-level evals</div>
-            <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">Automated Assessment</div>
-            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-              Machine-detectable tests that filter obvious failures, check formatting, and measure technical metrics like speed and accuracy at scale.
-            </p>
-          </div>
+          {annotations}
         </div>
 
       </div>
     </div>
 
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">PM oversight:</strong> a multi-layered evaluation plan balances speed, cost, and depth of insight. Skip a layer and you skip a class of failure.
-    </p>
+    {_m5_callout('<strong style="color:#fff;">PM oversight:</strong> a multi-layered evaluation plan balances speed, cost, and depth of insight. Skip a layer and you skip a class of failure.')}
   </div>
 </section>
 """
@@ -344,48 +359,43 @@ def eval_stack_visual() -> str:
 def rubric_phases() -> str:
     """Source slide 10 - How to Build a Human Eval Rubric.
 
-    5 numbered phases grouped into 3 phase clusters: Create / Calibrate / Monitor.
+    5 numbered steps in M5 header-band card pattern, with a Phase tag
+    in the sub-block (Create / Calibrate / Monitor). This keeps the
+    phase information from the source slide without forcing an awkward
+    3-cluster grid.
     """
-    phases_html = []
-    phases = [
-        ("01", "#3b82f6", "Phase 1 &middot; Create assessment", [
-            ("①", "Value Proposition", "Define the core user needs and product promises your AI must fulfill."),
-            ("②", "Evaluation Criteria", "Define the specific dimensions &mdash; factuality, tone, logic &mdash; that measure those promises."),
-            ("③", "Scalable Questions", "Use binary yes/no or 1&ndash;5 scale questions to turn qualitative &ldquo;vibes&rdquo; into quantitative data."),
-        ]),
-        ("02", "#fbbf24", "Phase 2 &middot; Calibrate", [
-            ("④", "Calibrate Reviewers", "Create prototypical assessments so all reviewers are trained on the same expectations."),
-        ]),
-        ("03", "#34d399", "Phase 3 &middot; Monitor", [
-            ("⑤", "Continually Validate", "Have reviewers justify their ratings to identify edge cases and rubric drift."),
-        ]),
+    steps = [
+        ("01", "#3b82f6", "Value Proposition",
+         "Define the core user needs and product promises your AI must fulfil.",
+         "Phase 1 &middot; Create assessment"),
+        ("02", "#3b82f6", "Evaluation Criteria",
+         "Define the specific dimensions &mdash; factuality, tone, logic &mdash; that measure those promises.",
+         "Phase 1 &middot; Create assessment"),
+        ("03", "#3b82f6", "Scalable Questions",
+         "Use binary yes/no or 1&ndash;5 scale questions to turn qualitative &ldquo;vibes&rdquo; into quantitative data.",
+         "Phase 1 &middot; Create assessment"),
+        ("04", "#fbbf24", "Calibrate Reviewers",
+         "Create prototypical assessments so all reviewers are trained on the same expectations.",
+         "Phase 2 &middot; Calibrate"),
+        ("05", "#34d399", "Continually Validate",
+         "Have reviewers justify their ratings to identify edge cases and rubric drift.",
+         "Phase 3 &middot; Monitor"),
     ]
-    for phase_n, col, phase_label, steps in phases:
-        steps_html = "".join(
-            f"""<div style="background:rgba(255,255,255,0.03); border:1px solid {col}30; border-radius:10px; padding:11px 14px; margin-bottom:8px;">
-  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
-    <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:900; color:{col}; line-height:1;">{num}</span>
-    <span style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">{name}</span>
-  </div>
-  <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 0 26px; line-height:1.5;">{desc}</p>
-</div>"""
-            for num, name, desc in steps
-        )
-        phases_html.append(f"""<div style="background:rgba(255,255,255,0.025); border:1px solid {col}40; border-top:3px solid {col}; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column;">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">{phase_label}</div>
-  {steps_html}
-</div>""")
+    cards_html = "".join(
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[("Phase", phase)])
+        for n, col, name, desc, phase in steps
+    )
     return f"""<section data-title="How to Build a Human Eval Rubric">
   <div class="inner">
     <div class="demo-tag tag-framework">Step-by-step</div>
     <h2>How to build a human eval rubric</h2>
     <div class="subtitle">Convert subjective human judgement into an objective system-level signal.</div>
-    <div style="display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
-      {''.join(phases_html)}
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:10px; max-width:1100px; margin:22px auto 0;">
+      {cards_html}
     </div>
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">&#x270D;&#xFE0F; Build your own:</strong> the M6 &mdash; Human Evaluation Rubric tool walks you through all five steps and exports the result to <code>06-evals/human-rubric.md</code>.
-    </p>
+    {_m5_callout('<strong style="color:#fff;">&#x270D;&#xFE0F; Build your own:</strong> the M6 &mdash; Human Evaluation Rubric tool walks you through all five steps and exports the result to <code>06-evals/human-rubric.md</code>.')}
   </div>
 </section>
 """
@@ -394,31 +404,28 @@ def rubric_phases() -> str:
 def google_assistant_example() -> str:
     """Source slide 11 - Real-World Example: Human Evaluation at Google Assistant.
 
-    6 numbered cards: Context · Goal · Method · Training · Assessment · Outcome.
+    6 cards (Context · Goal · Method · Training · Assessment · Outcome)
+    in M5 header-band card pattern. Colour grouping signals the phase
+    (define / build / observe).
     """
     items = [
-        ("1️⃣", "#3b82f6", "Context",
-         "Google was building a human-in-the-loop personal assistant product that combined humans and AI to fulfill complex user tasks."),
-        ("2️⃣", "#3b82f6", "Goal",
-         "They needed to assess task fulfillment quality &mdash; quantify how the product delivered real-world value."),
-        ("3️⃣", "#fbbf24", "Method",
+        ("01", "#3b82f6", "Context",
+         "Google was building a human-in-the-loop personal assistant product that combined humans and AI to fulfil complex user tasks."),
+        ("02", "#3b82f6", "Goal",
+         "They needed to assess task-fulfilment quality &mdash; quantify how the product delivered real-world value."),
+        ("03", "#fbbf24", "Method",
          "The rubric consisted of 26 questions and included simple technical criteria, specific desired outcomes, and subjective human evaluations."),
-        ("4️⃣", "#fbbf24", "Training",
+        ("04", "#fbbf24", "Training",
          "The rubric was calibrated across Product, UX, and UXR &mdash; then used to train a dedicated team of manual reviewers."),
-        ("5️⃣", "#34d399", "Assessment",
+        ("05", "#34d399", "Assessment",
          "After each conversation, the transcript was sent to a reviewer to evaluate the system&rsquo;s end-to-end performance."),
-        ("6️⃣", "#34d399", "Outcome",
+        ("06", "#34d399", "Outcome",
          "The data identified specific failure modes, allowing the team to eliminate launch blockers and improve the experience."),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
-  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
-    <span style="font-size:16px;">{icon}</span>
-    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">{title}</span>
-  </div>
-  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>
-</div>"""
-        for icon, col, title, desc in items
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>')
+        for n, col, name, desc in items
     )
     return f"""<section data-title="Real-World Example">
   <div class="inner">
@@ -428,9 +435,7 @@ def google_assistant_example() -> str:
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
       {cards_html}
     </div>
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">PM lift-out:</strong> they ran human evals on every conversation &mdash; not a sample. For your scale, sample with stratification (high / mid / low confidence).
-    </p>
+    {_m5_callout('<strong style="color:#fff;">PM lift-out:</strong> they ran human evals on every conversation &mdash; not a sample. For your scale, sample with stratification (high / mid / low confidence).')}
   </div>
 </section>
 """
@@ -439,26 +444,25 @@ def google_assistant_example() -> str:
 def pm_role_evals() -> str:
     """Source slide 12 - The PM's Role in Evaluations.
 
-    3 numbered cards: Quality Definition · Pass Thresholds · Audit Judges.
+    3 M5 header-band cards with the ownership line in the sub-block.
     """
     cards = [
         ("01", "#3b82f6", "&#x1F4CB;", "Drafting the Definition of Quality",
-         "<strong style=\"color:#fff;\">You own the gold standard.</strong> Your primary deliverable isn&rsquo;t a feature spec &mdash; it&rsquo;s a rubric defining exactly what a &ldquo;perfect&rdquo; response looks like for your specific user."),
+         "Your primary deliverable isn&rsquo;t a feature spec &mdash; it&rsquo;s a rubric defining exactly what a &ldquo;perfect&rdquo; response looks like for your specific user.",
+         "You own the gold standard"),
         ("02", "#fbbf24", "&#x1F6A6;", "Setting the Pass Thresholds",
-         "<strong style=\"color:#fff;\">You decide the acceptability gap.</strong> You work with engineering to determine which failure modes are minor annoyances and which are launch blockers that stop a release."),
+         "You work with engineering to determine which failure modes are minor annoyances and which are launch blockers that stop a release.",
+         "You decide the acceptability gap"),
         ("03", "#34d399", "&#x2696;&#xFE0F;", "Auditing the Automated Judges",
-         "<strong style=\"color:#fff;\">You provide the ground truth.</strong> You periodically audit the automated and &ldquo;LLM-as-a-judge&rdquo; layers to ensure the machine&rsquo;s version of quality hasn&rsquo;t drifted away from human reality."),
+         "You periodically audit the automated and &ldquo;LLM-as-a-judge&rdquo; layers to ensure the machine&rsquo;s version of quality hasn&rsquo;t drifted away from human reality.",
+         "You provide the ground truth"),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
-  <div style="display:flex; align-items:baseline; gap:10px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:{col}; line-height:1;">{n}</div>
-    <div style="font-size:24px;">{icon}</div>
-  </div>
-  <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">{desc}</p>
-</div>"""
-        for n, col, icon, title, desc in cards
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">{desc}</p>',
+                 sub_blocks=[("PM ownership", own)],
+                 icon=icon)
+        for n, col, icon, name, desc, own in cards
     )
     return f"""<section data-title="The PM's Role in Evaluations">
   <div class="inner">
@@ -514,36 +518,32 @@ JUNO_EVAL_STACK_LAB_BODY = """<div style="display:grid; grid-template-columns:1f
 def operationalize_risks() -> str:
     """Source slide 15 - Operationalizing and Measuring AI Risks.
 
-    Three KPI cards: Hallucination Rate, Human Override Rate, Model Drift & Latency.
+    Three M5 header-band cards. Measurement formula + example in the
+    sub-blocks (mirrors M5 control_panel pattern).
     """
     cards = [
-        ("#3b82f6", "&#x1F4CA;", "Hallucination Rate",
+        ("01", "#3b82f6", "&#x1F4CA;", "Hallucination Rate",
          "The percentage of responses containing factually incorrect or ungrounded claims.",
          "Total Hallucinations / Total Responses",
-         "<em>E.g.</em> Monitoring if a medical bot&rsquo;s error rate rises above 1% triggers an immediate rollback to a previous version."),
-        ("#fbbf24", "&#x270D;&#xFE0F;", "Human Override Rate",
+         "Monitoring if a medical bot&rsquo;s error rate rises above 1% triggers an immediate rollback to a previous version."),
+        ("02", "#fbbf24", "&#x270D;&#xFE0F;", "Human Override Rate",
          "The rate at which a human-in-the-loop must correct the AI before the user sees the output.",
          "Total Human Edits / Total AI Outputs",
-         "<em>E.g.</em> A customer-service tool where experts have to rewrite 40% of AI drafts &mdash; signals the model isn&rsquo;t saving time yet."),
-        ("#34d399", "&#x1F4C9;", "Model Drift &amp; Latency",
+         "A customer-service tool where experts rewrite 40% of AI drafts signals the model isn&rsquo;t saving time yet."),
+        ("03", "#34d399", "&#x1F4C9;", "Model Drift &amp; Latency",
          "The monitoring of performance degradation and response speed over time.",
          "Change in Accuracy + P99 Latency",
-         "<em>E.g.</em> Identifying that a model has become 10% less accurate or 5s slower after a vendor updated the underlying LLM."),
+         "Identifying that a model has become 10% less accurate or 5s slower after a vendor updated the underlying LLM."),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:16px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
-  <div style="display:flex; align-items:baseline; gap:10px;">
-    <div style="font-size:24px;">{icon}</div>
-    <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">{name}</div>
-  </div>
-  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>
-  <div style="background:rgba(0,0,0,0.25); border:1px solid {col}40; border-radius:8px; padding:8px 12px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Measurement</div>
-    <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff;">{metric}</div>
-  </div>
-  <p style="font-size:11px; color:#bcb1ff; margin:0; line-height:1.55;">{example}</p>
-</div>"""
-        for col, icon, name, desc, metric, example in cards
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[
+                     ("Measurement", f'<code style="font-family:\'IBM Plex Mono\',monospace; color:#fff; font-size:11.5px;">{metric}</code>'),
+                     ("Example", example),
+                 ],
+                 icon=icon)
+        for n, col, icon, name, desc, metric, example in cards
     )
     return f"""<section data-title="Operationalizing AI Risks">
   <div class="inner">
@@ -561,7 +561,7 @@ def operationalize_risks() -> str:
 def governance_framework() -> str:
     """Source slide 16 - Strategic Logic / The Governance Framework.
 
-    Four numbered governance strategies with examples.
+    Four M5 header-band cards with example sub-block.
     """
     items = [
         ("01", "#3b82f6", "Hard vs. Soft Gates",
@@ -578,17 +578,9 @@ def governance_framework() -> str:
          "A severity vs. frequency map prioritises fixing hallucinations in vacation policies over minor &ldquo;off-brand&rdquo; tone issues."),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
-  <div style="display:flex; align-items:baseline; gap:10px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:{col}; line-height:1;">{n}</div>
-    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">{name}</div>
-  </div>
-  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>
-  <div style="background:rgba(0,0,0,0.25); border-left:3px solid {col}; border-radius:0 8px 8px 0; padding:8px 12px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
-    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">{example}</p>
-  </div>
-</div>"""
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[("Example", example)])
         for n, col, name, desc, example in items
     )
     return f"""<section data-title="The Governance Framework">
@@ -596,12 +588,10 @@ def governance_framework() -> str:
     <div class="demo-tag tag-framework">Strategic logic</div>
     <h2>The governance framework</h2>
     <div class="subtitle">Four governance strategies that turn evals into production guardrails.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
       {cards_html}
     </div>
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      Dive deeper into each governance strategy in Product School&rsquo;s <em>AI Evals Certification</em>.
-    </p>
+    {_m5_callout('Dive deeper into each governance strategy in Product School&rsquo;s <em>AI Evals Certification</em>.')}
   </div>
 </section>
 """
@@ -610,7 +600,9 @@ def governance_framework() -> str:
 def three_levers() -> str:
     """Source slide 17 - Three Levers to Optimize AI Product Performance.
 
-    Three columns: Prompt (Behavior & Logic) · Model (Intelligence & Cost) · Data (Knowledge & Accuracy).
+    Three M5 header-band cards. Tag (Behavior&Logic / Intelligence&Cost /
+    Knowledge&Accuracy) lives in the first sub-block; example in the
+    second. Mirrors M5 evolution_of_value (two-row sub-blocks).
     """
     cols = [
         ("01", "#3b82f6", "&#x270D;&#xFE0F;", "The Prompt", "Behavior &amp; Logic",
@@ -624,23 +616,13 @@ def three_levers() -> str:
          "Cleaning the RAG dataset, adding more diverse data points, or fine-tuning the model."),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
-  <div style="padding:16px 22px; background:linear-gradient(135deg, {col}22 0%, transparent 70%); border-bottom:1px solid {col}30;">
-    <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:5px;">
-      <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:{col}; line-height:1;">{n}</div>
-      <div style="font-size:24px;">{icon}</div>
-    </div>
-    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">{tag}</div>
-    <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">{name}</div>
-  </div>
-  <div style="padding:14px 22px; display:flex; flex-direction:column; gap:8px;">
-    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">{desc}</p>
-    <div style="background:rgba(0,0,0,0.25); border-radius:8px; padding:8px 12px; margin-top:auto;">
-      <div style="font-family:'Poppins',sans-serif; font-size:9px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Try</div>
-      <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">{example}</p>
-    </div>
-  </div>
-</div>"""
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">{desc}</p>',
+                 sub_blocks=[
+                     ("Trade-off axis", tag),
+                     ("Try", example),
+                 ],
+                 icon=icon)
         for n, col, icon, name, tag, desc, example in cols
     )
     return f"""<section data-title="Three Levers">
@@ -651,9 +633,7 @@ def three_levers() -> str:
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
       {cards_html}
     </div>
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">PM rule of thumb:</strong> try Prompt &rarr; Model &rarr; Data. Architecture last. Most teams reach for architecture first &mdash; it&rsquo;s the slowest and most expensive lever.
-    </p>
+    {_m5_callout('<strong style="color:#fff;">PM rule of thumb:</strong> try Prompt &rarr; Model &rarr; Data. Architecture last. Most teams reach for architecture first &mdash; it&rsquo;s the slowest and most expensive lever.')}
   </div>
 </section>
 """
@@ -662,7 +642,9 @@ def three_levers() -> str:
 def pm_execution_plan() -> str:
     """Source slide 18 - The PM Execution Plan.
 
-    Four numbered steps with key decision per step.
+    Four M5 header-band cards with key-decision sub-block. Matches M5
+    awspec_blueprint rhythm (4 cards in a row with a uniform secondary
+    block).
     """
     items = [
         ("01", "#3b82f6", "Build Your Eval Plan",
@@ -679,17 +661,9 @@ def pm_execution_plan() -> str:
          "Feature vs. Data"),
     ]
     cards_html = "".join(
-        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
-  <div style="display:flex; align-items:baseline; gap:10px;">
-    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:{col}; line-height:1;">{n}</div>
-    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">{name}</div>
-  </div>
-  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>
-  <div style="background:rgba(0,0,0,0.25); border:1px dashed {col}40; border-radius:8px; padding:7px 12px; margin-top:auto;">
-    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Key decision</div>
-    <p style="font-family:'Poppins',sans-serif; font-size:12px; color:#fff; margin:0; font-weight:700;">{decision}</p>
-  </div>
-</div>"""
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[("Key decision", f'<strong style="color:#fff;">{decision}</strong>')])
         for n, col, name, desc, decision in items
     )
     return f"""<section data-title="The PM Execution Plan">
@@ -697,7 +671,7 @@ def pm_execution_plan() -> str:
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1100px; margin:22px auto 0;">
       {cards_html}
     </div>
   </div>
@@ -853,46 +827,35 @@ def lms_reminder() -> str:
 # ---------------------------------------------------------------------------
 
 def presentation_kickoff() -> str:
-    return """<section data-title="Your Time to Shine">
+    """Three paths for the solo showcase. M5 header-band card pattern with
+    'Best when' as the sub-block."""
+    paths = [
+        ("01", "#3b82f6", "&#x1F39D;&#xFE0F;", "Volunteer to demo live",
+         "Cohorts have ~10-min demo slots. First-come, first-served via Slack. Get live, actionable feedback from peers and the instructor.",
+         "Path A &middot; live cohort &mdash; you want real-time sharpening."),
+        ("02", "#fbbf24", "&#x1F4F9;", "Record a 3-min Loom",
+         "Walk through your repo &mdash; bet, system prompt, user flow, AWSpec, eval stack. Post in <code>#ai-pm-cohort</code>; instructor responds in-thread within ~5 days.",
+         "Path B &middot; async &mdash; you want feedback you can replay."),
+        ("03", "#34d399", "&#x1F4DD;", "Just submit the URL",
+         "The README is enough. If a stranger can read it and understand Juno&rsquo;s bet, the bar, and the trade-offs &mdash; you&rsquo;ve passed.",
+         "Path C &middot; minimum &mdash; the README is the certificate."),
+    ]
+    cards_html = "".join(
+        _m5_card(n, col, name,
+                 body_html=f'<p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
+                 sub_blocks=[("Best when", when)],
+                 icon=icon)
+        for n, col, icon, name, desc, when in paths
+    )
+    return f"""<section data-title="Your Time to Shine">
   <div class="inner">
     <div class="demo-tag tag-debrief">Your time to shine</div>
     <h2>Present, record, or just submit &mdash; your call</h2>
     <div class="subtitle">Three paths, all valid for certification. Pick the one that fits your learning style.</div>
-
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
-
-      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(96,165,250,0.40); border-radius:14px; padding:16px 20px; text-align:left;">
-        <div style="font-size:32px; margin-bottom:6px;">&#x1F39D;&#xFE0F;</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path A &middot; live cohort</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:6px;">Volunteer to demo live</div>
-        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-          Cohorts have ~10-min demo slots. First-come, first-served via Slack. Get live, actionable feedback from peers and the instructor.
-        </p>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(251,191,36,0.40); border-radius:14px; padding:16px 20px; text-align:left;">
-        <div style="font-size:32px; margin-bottom:6px;">&#x1F4F9;</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path B &middot; async</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:6px;">Record a 3-min Loom</div>
-        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-          Walk through your repo &mdash; bet, system prompt, user flow, AWSpec, eval stack. Post in <code>#ai-pm-cohort</code>; instructor responds in-thread within ~5 days.
-        </p>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(52,211,153,0.40); border-radius:14px; padding:16px 20px; text-align:left;">
-        <div style="font-size:32px; margin-bottom:6px;">&#x1F4DD;</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path C &middot; minimum</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:6px;">Just submit the URL</div>
-        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
-          The README is enough. If a stranger can read it and understand Juno&rsquo;s bet, the bar, and the trade-offs &mdash; you&rsquo;ve passed.
-        </p>
-      </div>
-
+      {cards_html}
     </div>
-
-    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
-      <strong style="color:#fff;">Important:</strong> you have 7 days after course completion to submit. The repo URL is the certificate.
-    </p>
+    {_m5_callout('<strong style="color:#fff;">Important:</strong> you have 7 days after course completion to submit. The repo URL is the certificate.')}
   </div>
 </section>
 """
