@@ -2,33 +2,35 @@
 
 Commit two artifacts here:
 
-- `awspec.md` — from **M5 - Agent Workflow Spec Builder.html**
-- `control-panel.md` — from **M5 - Agent Control Panel.html**
+- `awspec.md` — Agent Workflow Spec, from **`M5 - Agent Workflow Spec Builder.html`**. The four pillars: Actors, Pattern Plan, Memory, Tools.
+- `agent-control-panel.md` — companion to AWSpec, from **`M5 - Agent Control Panel.html`**. Four levers + four rules of engagement.
 
 Plus one optional file we've provided:
 
 - `Juno Agent.json` — a starter Langflow export for the optional M5 post-class lab. Import into Langflow, plug in your OpenAI API key, and run it against a sample P0 thread.
 
-> **Tools:** `M5 - Agent Workflow Spec Builder.html`, `M5 - Agent Control Panel.html`.
+> **Tools:** `M5 - Agent Workflow Spec Builder.html`, `M5 - Agent Control Panel.html`, `M5 - Juno Langflow Walkthrough.html`.
 
 ## Self-review checklist (M5)
 
-- AWSpec has all 9 sections filled
-- Tools list scope (read-only / write) for each tool
-- Memory section names all 4 memory types (in or out)
-- ≥3 stop conditions including escalation
-- Handoff rule names a numeric confidence threshold
-- Eval hooks defined (this is what M6 wires up)
+- AWSpec covers all four pillars (Actors, Pattern Plan, Memory, Tools).
+- Trigger is a precise, testable condition.
+- Pattern is chosen with a reason (default: ReAct).
+- ≥ 3 stop conditions, including escalation.
+- Each memory type named (in-scope or out-of-scope).
+- Every tool lists scope (read-only / write) and a schema.
+- Read/write boundaries match the AI PRD (M3) access control.
+- Control panel names a numeric `max_steps`, confidence threshold, and a North Star sentence.
 
 ## AI-review prompt
 
-> *You are a staff engineer reviewing an Agent Workflow Spec. (a) Are the stop conditions precise enough to implement? (b) Is the handoff confidence threshold realistic, or is it aspirational? (c) Of the five common failure modes (hallucinated tool calls, memory poisoning, runaway loops, silent handoff failure, drift), which is the least defended in this spec? Reply in 4 short paragraphs.*
+> *You are a staff engineer reviewing an Agent Workflow Spec. (a) Are the stop conditions precise enough to implement? (b) Is the human-handoff threshold realistic, or aspirational? (c) Of the four common failure modes (silent failures, reasoning drift, infinite loops, latency tax), which is least defended in this spec? Quote the offending lines and propose tighter wording. Reply in 4 short paragraphs.*
 
-## Optional: run the Langflow lab
+## Optional post-class — Build Juno's workflow in Langflow
 
-1. Install [Langflow](https://docs.langflow.org/).
-2. Import `Juno Agent.json`.
-3. Add your `OPENAI_API_KEY` as a Langflow env variable (~$5 credit is enough).
-4. Replace the `RAG retriever (placeholder)` node with a real vector store.
-5. Run it against a sample P0 thread.
-6. Adjust the confidence threshold in the guardrail node based on your eval data (M6).
+Walkthrough: open `Modules/M5 - Juno Langflow Walkthrough.html` for a guided 6-step build. Two paths:
+
+- **Path 1 — Import** the starter `Juno Agent.json` (~15 min).
+- **Path 2 — Rebuild** the graph node-by-node from your AWSpec (~45 min).
+
+Either way, capture screenshots into `05-agentic-workflows/langflow-screenshots/` and a one-paragraph reflection in `05-agentic-workflows/langflow-notes.md` on what surprised you compared to your AWSpec.

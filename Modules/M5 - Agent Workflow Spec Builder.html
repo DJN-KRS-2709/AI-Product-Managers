@@ -3,149 +3,884 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M5 — Agent Workflow Spec Builder</title>
+<title>M5 - Agent Workflow Spec Builder</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}h1,h2,h3{font-family:'Poppins',sans-serif}header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%)}button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}button:hover{transform:translateY(-1px)}button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px}
-  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
-  @media(max-width:960px){main{grid-template-columns:1fr}}
-  .panel{padding:24px 32px;overflow:auto}
-  .panel.left{border-right:1px solid var(--line)}
-  .field{margin-bottom:16px}
-  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
-  .hint{color:var(--muted);font-size:13px;margin:0 0 8px}
-  textarea,input,select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px}
-  textarea{min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
-  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
-  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
-  .check li{margin:6px 0;font-size:14px}
-  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;margin-left:8px;background:#22293a;color:var(--muted)}
-  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
-  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#fbbf24;--c3:#bcb1ff;--c4:#34d399;--danger:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.preset-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.preset{font-size:12px;padding:6px 14px;border-radius:99px;background:transparent;color:var(--muted);border:1px solid var(--line);cursor:pointer;font-weight:600}
+.preset.active{background:rgba(96,165,250,0.12);color:var(--accent2);border-color:var(--accent)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 12px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:14px;border-left:4px solid var(--accent)}
+.section.s1{border-left-color:var(--c1)}
+.section.s2{border-left-color:var(--c2)}
+.section.s3{border-left-color:var(--c3)}
+.section.s4{border-left-color:var(--c4)}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.sec-icon{font-size:18px}
+.sec-tag{font-family:'Poppins',sans-serif;font-weight:900;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.section.s1 .sec-tag{color:var(--c1)}
+.section.s2 .sec-tag{color:var(--c2)}
+.section.s3 .sec-tag{color:var(--c3)}
+.section.s4 .sec-tag{color:var(--c4)}
+.sec-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:#fff;flex:1}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10.5px;background:#22293a;color:var(--muted);font-weight:600}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
+.field{margin-top:10px}
+.field label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:4px;font-weight:700}
+.field .hint{font-size:11px;color:var(--muted);margin:0 0 5px;font-style:italic}
+textarea,input,select{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+textarea{min-height:54px;resize:vertical}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:560px;overflow-y:auto}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:6px 0;font-size:13px;color:#cdd5e3}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+.tab-row{display:flex;gap:6px;margin-bottom:12px}
+.tab{font-size:12px;padding:6px 12px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);border:1px solid var(--line);border-bottom:0;cursor:pointer;font-weight:600}
+.tab.active{background:var(--card);color:var(--fg);border-color:var(--accent)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.example{background:rgba(96,165,250,0.05);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:14px 18px}
+.example h4{font-size:12px;color:var(--accent2);margin:0 0 8px;letter-spacing:.12em;text-transform:uppercase;font-weight:900}
+.example .pair{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.example .pair:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.example .pair .lbl{font-family:'Poppins',sans-serif;font-size:10.5px;color:#79c0ff;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:4px}
+.example .pair p{font-size:12px;color:#cdd5e3;line-height:1.5;margin:0 0 4px}
+.example .pair p strong{color:#fff}
+.legend-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legend-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--muted)}
+.legend-pill.actor{color:var(--c1);border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.06)}
+.legend-pill.pattern{color:var(--c2);border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.06)}
+.legend-pill.memory{color:var(--c3);border-color:rgba(188,177,255,0.4);background:rgba(188,177,255,0.06)}
+.legend-pill.tool{color:var(--c4);border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.06)}
+.flow-wrap{background:rgba(7,22,44,0.4);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:16px}
+.flow-svg{width:100%;height:auto;display:block}
+.rtab-row{display:flex;gap:6px;margin:6px 0 10px;border-bottom:1px solid var(--line)}
+.rtab{font-size:12px;padding:7px 14px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);border:1px solid var(--line);border-bottom:0;cursor:pointer;font-weight:700;font-family:'Poppins',sans-serif;letter-spacing:.04em}
+.rtab.active{background:var(--card);color:var(--fg);border-color:var(--accent);border-bottom:1px solid var(--card);position:relative;top:1px}
+.rtab-pane{display:none}
+.rtab-pane.active{display:block}
+.copy-prompt{margin-bottom:10px}
+.tool-btn{display:inline-block;background:var(--brand);color:#fff;text-decoration:none;border-radius:999px;padding:10px 22px;font-weight:700;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
 </style>
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 5 · Tool · Final-project deliverable</div><h1>Agent Workflow Spec Builder</h1></div>
+  <div><div class="crumb">Module 5 &middot; Lab &middot; Final-project deliverable</div><h1>Agent Workflow Spec Builder</h1></div>
   <div class="row">
     <button onclick="copyMd()">Copy as markdown</button>
     <button class="secondary" onclick="download()">Download .md</button>
     <button class="secondary" onclick="reset()">Reset</button>
   </div>
 </header>
+
+<div style="border-bottom:1px solid var(--line);padding:14px 32px;background:rgba(255,255,255,0.02)">
+  <div class="tab-row" style="margin-bottom:0">
+    <button class="tab active" data-tab="builder" onclick="switchTab('builder')">&#x270D;&#xFE0F; Build Yours</button>
+    <button class="tab" data-tab="example" onclick="switchTab('example')">&#x1F9E9; Worked Example &middot; HR Triage Agent</button>
+  </div>
+</div>
+
+<div id="tab-builder" class="tab-pane active">
 <main>
   <section class="panel left">
-    <p class="hint">Nine sections. All required. Take the Act node from your M4 user-flow and spec it.</p>
+    <p class="lead">Spec Juno&rsquo;s Agent Workflow as a one-page <strong>blueprint</strong>: who is in the loop, the reasoning pattern, what persists, and the tools it can call. Walk the four pillars below &mdash; the diagram on the right <strong>builds itself live</strong>, mirroring slide 9 of the source deck. Final deliverables: the diagram + <code>05-agentic-workflows/awspec.md</code>.</p>
 
-    <div class="field"><label>1. Goal <span class="badge" id="b1">empty</span></label>
-      <p class="hint">One sentence. Names the value frame.</p>
-      <textarea id="f1" placeholder="Triage P0 escalations into a daily prioritised top-3 risk list (Risk mitigation)."></textarea>
+    <div class="legend-row">
+      <span class="legend-pill actor">&#x25EF; Actor &middot; agent / human</span>
+      <span class="legend-pill pattern">&#x2B22; Pattern &middot; reasoning step</span>
+      <span class="legend-pill memory">&#x25A0; Memory &middot; what persists</span>
+      <span class="legend-pill tool">&#x25C6; Tool &middot; API / database</span>
     </div>
-    <div class="field"><label>2. Trigger <span class="badge" id="b2">empty</span></label>
-      <p class="hint">Precise, testable condition.</p>
-      <textarea id="f2" placeholder="New message in #escalations tagged P0 AND thread length ≥5 messages within 10 minutes."></textarea>
-    </div>
-    <div class="field"><label>3. Inputs <span class="badge" id="b3">empty</span></label>
-      <p class="hint">Required context for the run.</p>
-      <textarea id="f3" placeholder="- Slack thread ID + last 50 messages\n- Customer ID (if mentioned)\n- ARR (if accessible)\n- Linked Jira tickets"></textarea>
-    </div>
-    <div class="field"><label>4. Tools available <span class="badge" id="b4">empty</span></label>
-      <p class="hint">List each tool with its scope (read-only / write).</p>
-      <textarea id="f4" placeholder="- slack.read_thread(id) — read-only\n- corpus.retrieve(query, k=10) — read-only\n- jira.create_stub(payload) — write, requires confidence ≥80%\n- slack.post(channel, payload) — write, restricted to #pm-daily"></textarea>
-    </div>
-    <div class="field"><label>5. Memory <span class="badge" id="b5">empty</span></label>
-      <p class="hint">Each of the 4 types — in or out.</p>
-      <textarea id="f5" placeholder="- Short-term: tool results within run (in)\n- Long-term: do NOT persist customer-specific facts (out)\n- Episodic: 'PM previously suppressed risk X' (in, 30-day TTL)\n- Semantic: RocketShip product taxonomy (in, refreshed weekly)"></textarea>
-    </div>
-    <div class="field"><label>6. Pattern <span class="badge" id="b6">empty</span></label>
-      <select id="f6">
-        <option value="">Pick one…</option>
-        <option>ReAct (single-agent, sequential)</option>
-        <option>Planner-Executor (multi-agent, parallel)</option>
-        <option>Hybrid (ReAct inside Planner-Executor)</option>
-      </select>
-      <p class="hint" style="margin-top:6px">Default ReAct unless you have a specific reason.</p>
-    </div>
-    <div class="field"><label>7. Stop conditions <span class="badge" id="b7">empty</span></label>
-      <p class="hint">At least 3: success, failure, escalation, timeout.</p>
-      <textarea id="f7" placeholder="- Success: top-3 risk list posted to #pm-daily.\n- Failure: tool error rate >2 in a run → log and abort.\n- Escalation: confidence <70% on any P0 → hand to PM.\n- Timeout: 90s wall clock → abort with partial output."></textarea>
-    </div>
-    <div class="field"><label>8. Handoff rules <span class="badge" id="b8">empty</span></label>
-      <p class="hint">Name a confidence threshold. What does Juno do when it hands off?</p>
-      <textarea id="f8" placeholder="- If confidence <70%: post draft to #pm-juno-review and tag @on-call-pm.\n- If a tool call is denied by ACL: stop, post error reason, request PM action.\n- If thread contains contracts / legal language: refuse, escalate to legal channel."></textarea>
-    </div>
-    <div class="field"><label>9. Eval hooks <span class="badge" id="b9">empty</span></label>
-      <p class="hint">What gets logged for M6's eval stack.</p>
-      <textarea id="f9" placeholder="- Trace ID, trigger payload, retrieved chunks, tool calls, outputs\n- Confidence score per risk\n- PM accept / edit / suppress action\n- Latency p95\n- Cost per run (tokens × $/M)"></textarea>
-    </div>
-  </section>
 
-  <section class="panel right">
-    <label>Live preview — awspec.md</label>
-    <p class="hint">Commit to <code>05-agentic-workflows/awspec.md</code>.</p>
-    <div class="preview" id="preview"></div>
+    <div class="preset-row" style="margin-top:18px">
+      <button class="preset active" data-preset="A" onclick="applyPreset('A')">Option A &middot; Build Your Own</button>
+      <button class="preset" data-preset="B" onclick="applyPreset('B')">Option B &middot; Juno P0 Triage Agent</button>
+    </div>
+
+    <div class="section s1">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F465;</div>
+        <div class="sec-tag">Pillar 1 &middot; Actors</div>
+        <span class="badge" id="bA">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">Define which agents, tools, and humans are involved in the loop. Be explicit about who is the <em>pilot</em> driving the goal and exactly when control passes back.</p>
+
+      <div class="field">
+        <label>Goal &middot; one sentence</label>
+        <p class="hint">Names the value frame (cost / revenue / risk / delight) and the scope.</p>
+        <textarea id="actGoal" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Trigger &middot; precise, testable condition</label>
+        <p class="hint">When does the agent activate? e.g. &ldquo;New P0 thread + thread length &ge; 5 in 10 min.&rdquo;</p>
+        <textarea id="actTrigger" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Primary actor &middot; who pilots the goal?</label>
+        <select id="actPilot" onchange="render()">
+          <option value="">&mdash; choose &mdash;</option>
+          <option value="agent">Agent (autonomous)</option>
+          <option value="agent-hil">Agent + Human-in-the-loop</option>
+          <option value="human-co">Human + Agent co-pilot</option>
+          <option value="multi-agent">Planner + Executor agents</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Humans in the loop &middot; when does control pass back?</label>
+        <p class="hint">e.g. &ldquo;PM approves any P0 above $5k impact. PM reviews when confidence &lt; 70%.&rdquo;</p>
+        <textarea id="actHumans" oninput="render()"></textarea>
+      </div>
+    </div>
+
+    <div class="section s2">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F501;</div>
+        <div class="sec-tag">Pillar 2 &middot; Pattern Plan</div>
+        <span class="badge" id="bP">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">Identify which core agentic pattern(s) will be used. Map the key sequential steps the agent must take to transform the initial goal into outcomes.</p>
+
+      <div class="field">
+        <label>Pattern</label>
+        <select id="patPattern" onchange="render()">
+          <option value="">&mdash; choose a pattern &mdash;</option>
+          <option value="react">ReAct &middot; single-agent reason-act-observe loop</option>
+          <option value="planner">Planner-Executor &middot; multi-agent, parallel</option>
+          <option value="hybrid">Hybrid &middot; ReAct inside Planner-Executor</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sequential steps &middot; what does the agent actually do?</label>
+        <p class="hint">List 2&ndash;5 steps. Use action verbs. e.g. <em>&ldquo;1. Read thread, 2. Retrieve strategy KB, 3. Score risk, 4. Draft summary, 5. Post to #pm-daily.&rdquo;</em></p>
+        <textarea id="patSteps" oninput="render()" style="min-height:74px"></textarea>
+      </div>
+      <div class="field">
+        <label>Stop conditions &middot; when does the agent hand back?</label>
+        <p class="hint">At least 3: success, failure, escalation, timeout.</p>
+        <textarea id="patStop" oninput="render()" style="min-height:64px"></textarea>
+      </div>
+    </div>
+
+    <div class="section s3">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F9E0;</div>
+        <div class="sec-tag">Pillar 3 &middot; Memory</div>
+        <span class="badge" id="bM">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">Specify what information must persist across the session and define the scope. Determine what needs to be in working memory versus what can be retrieved.</p>
+
+      <div class="field">
+        <label>Episodic &middot; sequence of actions in this run</label>
+        <p class="hint">e.g. &ldquo;In-scope &mdash; tool results within run, lifetime: end of run.&rdquo;</p>
+        <textarea id="memEpisodic" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Semantic &middot; persistent behaviours / preferences</label>
+        <p class="hint">e.g. &ldquo;In-scope &mdash; PM&rsquo;s preferred risk format, lifetime: indefinite.&rdquo; OR &ldquo;Out of scope &mdash; do not persist customer-specific contracts.&rdquo;</p>
+        <textarea id="memSemantic" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Working / Contextual &middot; live, in-flight data</label>
+        <p class="hint">e.g. &ldquo;In-scope &mdash; current thread, customer ID, retrieved KB chunks.&rdquo;</p>
+        <textarea id="memWorking" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>External tools &middot; sources of truth via APIs</label>
+        <p class="hint">e.g. &ldquo;Slack thread API (read), Strategy KB (read), Jira (write &mdash; stub only).&rdquo;</p>
+        <textarea id="memExternal" oninput="render()"></textarea>
+      </div>
+    </div>
+
+    <div class="section s4">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F527;</div>
+        <div class="sec-tag">Pillar 4 &middot; Tools</div>
+        <span class="badge" id="bT">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">List the specific APIs and internal databases the agent is authorized to call. Define the required schemas and read / write boundaries.</p>
+
+      <div class="field">
+        <label>Tool inventory &middot; one per line, with scope</label>
+        <p class="hint">Format: <code>tool.method(args)</code> &mdash; <em>scope</em>. e.g. <code>slack.read_thread(id)</code> &mdash; read-only.</p>
+        <textarea id="toolList" oninput="render()" style="min-height:90px"></textarea>
+      </div>
+      <div class="field">
+        <label>Schemas &middot; what each tool returns</label>
+        <p class="hint">e.g. &ldquo;corpus.retrieve &rarr; <code>{chunks:[{text,source,score}]}</code>.&rdquo; Brief is fine.</p>
+        <textarea id="toolSchemas" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Read / write boundaries &middot; the spec</label>
+        <p class="hint">e.g. &ldquo;Agent can READ HR handbook + Slack threads. Can WRITE to <code>#pm-daily</code> only. CANNOT edit Workday or Jira.&rdquo;</p>
+        <textarea id="toolBoundaries" oninput="render()" style="min-height:64px"></textarea>
+      </div>
+    </div>
 
     <div class="check">
-      <h3>Self-review checklist</h3>
-      <ul style="margin:6px 0 0;padding-left:18px">
-        <li id="c1">Goal is one sentence and names the value frame</li>
-        <li id="c2">Trigger is a precise, testable condition</li>
-        <li id="c3">Tools listed with scope (read-only / write)</li>
-        <li id="c4">Memory section names all 4 types (in or out)</li>
-        <li id="c5">≥3 stop conditions, including escalation</li>
-        <li id="c6">Handoff rule names a confidence threshold</li>
+      <h3>Self-review &middot; before you commit</h3>
+      <ul>
+        <li>Goal is one sentence and names the value frame.</li>
+        <li>Trigger is a precise, testable condition (not &ldquo;when needed&rdquo;).</li>
+        <li>Pattern is chosen with a defensible reason &mdash; ReAct unless you really need Planner-Executor.</li>
+        <li>At least 3 stop conditions (success / failure / escalation, plus a timeout).</li>
+        <li>Each memory type is named &mdash; including the &ldquo;out of scope&rdquo; ones.</li>
+        <li>Every tool lists scope (read-only vs write) and a schema.</li>
+        <li>Read/write boundaries match the access control in your AI PRD (M3).</li>
       </ul>
     </div>
 
     <div class="check">
-      <h3>AI-review prompt</h3>
-      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your AWSpec + this into ChatGPT/Claude/Cursor:</p>
-      <div class="preview" style="font-size:12px">You are a staff engineer reviewing an Agent Workflow Spec. (a) Are the stop conditions precise enough to implement? (b) Is the handoff confidence threshold realistic, or is it aspirational? (c) Of the five common failure modes (hallucinated tool calls, memory poisoning, runaway loops, silent handoff failure, drift), which is the least defended in this spec? Reply in 4 short paragraphs.</div>
+      <h3>AI-review meta-prompt</h3>
+      <ul>
+        <li style="font-style:italic">&ldquo;You are a staff engineer reviewing an Agent Workflow Spec. (a) Are the stop conditions precise enough to implement? (b) Is the human-handoff threshold realistic? (c) Of the four common failure modes (silent failures, reasoning drift, infinite loops, latency tax), which is least defended in this spec? Quote the offending lines and propose tighter wording.&rdquo;</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <h3 class="section-h">Live agent diagram &middot; mirrors the AWSpec blueprint</h3>
+    <div class="flow-wrap">
+      <div id="flow-svg"></div>
+      <div class="legend-row" style="margin-top:8px;justify-content:center">
+        <span class="legend-pill actor">&#x25EF; Actor</span>
+        <span class="legend-pill pattern">&#x2B22; Pattern step</span>
+        <span class="legend-pill memory">&#x25A0; Memory</span>
+        <span class="legend-pill tool">&#x25C6; Tool</span>
+      </div>
+    </div>
+
+    <div class="rtab-row">
+      <button class="rtab active" data-rtab="md" onclick="rswitch('md')">&#x1F4DD; Markdown for repo</button>
+      <button class="rtab" data-rtab="prompt" onclick="rswitch('prompt')">&#x1F3A8; Visualize prompt</button>
+    </div>
+
+    <div id="rtab-md" class="rtab-pane active">
+      <div class="preview" id="preview">Pick a preset or start filling in Pillar 1&hellip;</div>
+    </div>
+
+    <div id="rtab-prompt" class="rtab-pane">
+      <p class="lead" style="margin:0 0 10px">Paste this into ChatGPT, Claude (Artifact), Lovable, or Excalidraw-AI to render a polished version of your agent graph &mdash; or to ask the model to spot gaps and propose a tighter wiring.</p>
+      <button class="copy-prompt" onclick="copyPrompt()">Copy visualize prompt</button>
+      <div class="preview" id="visPrompt">Fill in Pillar 1&hellip; the prompt will assemble itself.</div>
     </div>
   </section>
 </main>
-<div class="toast" id="toast">Copied</div>
+</div>
+
+<div id="tab-example" class="tab-pane">
+<main style="grid-template-columns:1fr">
+  <section class="panel" style="padding:30px 40px;max-width:980px;margin:0 auto">
+    <p class="lead">A complete AWSpec broken into the four pillars. Read each block top-to-bottom &mdash; the same shape works for any agent. The HR Triage Agent mirrors the source slide-9 anatomy.</p>
+
+    <div class="example">
+      <h4>HR Triage Agent &middot; Pillar 1 &mdash; Actors</h4>
+      <div class="pair">
+        <div class="lbl">Goal</div>
+        <p>Triage incoming HR requests into one of three lanes &mdash; <em>policy question</em>, <em>vacation entry</em>, <em>escalate to HR business partner</em> (Risk mitigation + cost reduction).</p>
+      </div>
+      <div class="pair">
+        <div class="lbl">Trigger</div>
+        <p>Page-load on <code>/hr-agent</code> with a session token, OR new message in <code>#hr-help</code> from an employee.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl">Primary actor</div>
+        <p><strong>Agent (autonomous)</strong> &mdash; the agent owns the routing decision. Employee is the user; HR business partner is the human-in-the-loop.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl">Humans in the loop</div>
+        <p>HRBP reviews any request the agent classifies as <em>escalation</em>. HRBP also reviews when classifier confidence &lt; 75%.</p>
+      </div>
+    </div>
+
+    <div class="example" style="margin-top:14px;border-color:rgba(251,191,36,0.25);background:rgba(251,191,36,0.05)">
+      <h4 style="color:#fbbf24">HR Triage Agent &middot; Pillar 2 &mdash; Pattern Plan</h4>
+      <div class="pair">
+        <div class="lbl" style="color:#fbbf24">Pattern</div>
+        <p><strong>ReAct</strong> &mdash; bounded sequential reasoning fits this scope; no parallel sub-tasks.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#fbbf24">Sequential steps</div>
+        <p>1. Classify intent &rarr; question / task / escalation.<br>2. If question &rarr; RAG retrieval over HR-policy KB &rarr; cite policy.<br>3. If task &rarr; tool call to Workday API &rarr; submit vacation request.<br>4. If escalation &rarr; route to HRBP queue.<br>5. Log outcome + confidence to eval store.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#fbbf24">Stop conditions</div>
+        <p>Success: response posted + confirmation rendered. Failure: 2 tool errors in a run &rarr; escalate. Confidence &lt; 75% &rarr; escalate to HRBP. Timeout: 60s wall clock &rarr; abort.</p>
+      </div>
+    </div>
+
+    <div class="example" style="margin-top:14px;border-color:rgba(188,177,255,0.25);background:rgba(188,177,255,0.05)">
+      <h4 style="color:#bcb1ff">HR Triage Agent &middot; Pillar 3 &mdash; Memory</h4>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">Episodic</div>
+        <p><strong>In-scope</strong> &mdash; tool results within a single conversation. Lifetime: end of session.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">Semantic</div>
+        <p><strong>In-scope</strong> &mdash; HR taxonomy + system prompt. <strong>Out of scope</strong> &mdash; do NOT persist employee-specific compensation data.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">Working / Contextual</div>
+        <p>Current request, user&rsquo;s role, retrieved KB chunks. Held in working context only.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">External tools</div>
+        <p>HR-policy KB (read), Workday API (write &mdash; vacation only), HRBP queue (write).</p>
+      </div>
+    </div>
+
+    <div class="example" style="margin-top:14px;border-color:rgba(52,211,153,0.25);background:rgba(52,211,153,0.05)">
+      <h4 style="color:#34d399">HR Triage Agent &middot; Pillar 4 &mdash; Tools</h4>
+      <div class="pair">
+        <div class="lbl" style="color:#34d399">Tool inventory</div>
+        <p><code>kb.retrieve(query, k=6)</code> &mdash; read-only.<br><code>workday.submit_vacation(payload)</code> &mdash; write, requires confidence &ge; 80%.<br><code>hrbp.escalate(payload)</code> &mdash; write, no confidence gate.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#34d399">Schemas</div>
+        <p><code>kb.retrieve &rarr; {chunks:[{text,source,section,score}]}</code>. <code>workday.submit_vacation &rarr; {request_id, status}</code>.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#34d399">Read / write boundaries</div>
+        <p>Agent can READ the HR handbook and KB. Agent can WRITE to Workday (vacation submissions) and HRBP queue. Agent CANNOT edit payroll, edit benefits, or read compensation data.</p>
+      </div>
+    </div>
+
+    <p class="lead" style="margin-top:18px;font-size:12.5px"><strong style="color:var(--accent2)">PM takeaway:</strong> the AWSpec is just four blocks. The rigour is in the specifics &mdash; precise triggers, named patterns, scoped tools. Apply the same template to Juno.</p>
+  </section>
+</main>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard.</div>
+
 <script>
-  const ids=['f1','f2','f3','f4','f5','f6','f7','f8','f9'];
-  const KEY='m5-awspec';
-  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);ids.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
-  function save(){const o={};ids.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
-  function v(id){return document.getElementById(id).value.trim()}
-  function setBadge(id,ok){const b=document.getElementById(id);b.textContent=ok?'filled':'empty';b.className='badge '+(ok?'ok':'warn')}
-  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
-  const HEAD=['1. Goal','2. Trigger','3. Inputs','4. Tools available','5. Memory','6. Pattern','7. Stop conditions','8. Handoff rules','9. Eval hooks'];
-  function md(){
-    let s='# Juno PM — Agent Workflow Spec (AWSpec)\n\n_Version 0.1 · committed to `05-agentic-workflows/awspec.md`_\n\n';
-    HEAD.forEach((h,i)=>{s+=`## ${h}\n\n${v(ids[i])||'_(missing)_'}\n\n`});
-    return s;
+const STORE = 'm5-awspec-v1';
+
+const PILOT_LABELS = {
+  'agent': 'Agent (autonomous)',
+  'agent-hil': 'Agent + Human-in-the-loop',
+  'human-co': 'Human + Agent co-pilot',
+  'multi-agent': 'Planner + Executor agents',
+};
+
+const PATTERN_LABELS = {
+  'react': 'ReAct (single-agent reason-act-observe loop)',
+  'planner': 'Planner-Executor (multi-agent, parallel)',
+  'hybrid': 'Hybrid (ReAct inside Planner-Executor)',
+};
+
+const PRESETS = {
+  A: {
+    actGoal: '',
+    actTrigger: '',
+    actPilot: '',
+    actHumans: '',
+    patPattern: '',
+    patSteps: '',
+    patStop: '',
+    memEpisodic: '',
+    memSemantic: '',
+    memWorking: '',
+    memExternal: '',
+    toolList: '',
+    toolSchemas: '',
+    toolBoundaries: '',
+  },
+  B: {
+    actGoal: 'Triage P0 escalations into a daily prioritised top-3 risk list, with a strategic-rationale citation per item (Risk mitigation).',
+    actTrigger: 'New message in #escalations tagged P0 AND thread length >= 5 messages within 10 minutes.',
+    actPilot: 'agent-hil',
+    actHumans: 'PM reviews any P0 with confidence < 70% before posting. Daily 8:55am: PM has a 5-min review window before the agent auto-posts to #pm-daily.',
+    patPattern: 'react',
+    patSteps: '1. Read the thread + retrieve customer ID and ARR if mentioned.\n2. RAG retrieval over the RocketShip Strategy One-Pager (M3 KB) — top-K = 6.\n3. Score risk + alignment vs strategic pillars; emit P0–P3 with rationale.\n4. Draft summary card (transcript quote + strategic citation).\n5. Post to #pm-daily OR route to PM review based on confidence threshold.',
+    patStop: '- Success: top-3 risk list posted to #pm-daily.\n- Failure: > 2 tool errors in a run → log + abort.\n- Escalation: confidence < 70% on any P0 → hand to PM.\n- Timeout: 90s wall clock → abort with partial output.',
+    memEpisodic: 'In-scope — tool results, retrieved chunks, intermediate scores. Lifetime: end of run.',
+    memSemantic: 'In-scope — RocketShip strategic taxonomy + Juno system prompt + PM preferences. Lifetime: indefinite, refreshed weekly. Out of scope — do NOT persist customer-specific contracts or PII.',
+    memWorking: 'In-scope — current thread, customer ID, ARR, retrieved KB chunks, current confidence score. Held in working context only.',
+    memExternal: 'Slack thread API (read), RocketShip Strategy KB (read), Salesforce ARR lookup (read), #pm-daily channel (write), Jira (write — stub creation only).',
+    toolList: '- slack.read_thread(id) — read-only\n- corpus.retrieve(query, k=6) — read-only\n- salesforce.lookup_arr(customer_id) — read-only\n- jira.create_stub(payload) — write, requires confidence >= 80%\n- slack.post(channel, payload) — write, restricted to #pm-daily',
+    toolSchemas: '- corpus.retrieve → {chunks:[{text,source,pillar,score}]}.\n- salesforce.lookup_arr → {arr_usd, contract_end, churn_risk}.\n- jira.create_stub → {ticket_id, url, status}.',
+    toolBoundaries: 'Agent can READ Slack #escalations + Strategy KB + Salesforce ARR. Agent can WRITE to #pm-daily and create Jira stubs. Agent CANNOT edit Salesforce records, edit Jira tickets after creation, or post outside #pm-daily.',
+  },
+};
+
+let cur = JSON.parse(localStorage.getItem(STORE) || 'null') || JSON.parse(JSON.stringify(PRESETS.A));
+
+const FIELDS = ['actGoal','actTrigger','actPilot','actHumans','patPattern','patSteps','patStop','memEpisodic','memSemantic','memWorking','memExternal','toolList','toolSchemas','toolBoundaries'];
+
+function applyPreset(p) {
+  cur = JSON.parse(JSON.stringify(PRESETS[p]));
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = cur[f] || '';
   }
-  function update(){
-    ids.forEach((id,i)=>setBadge('b'+(i+1),!!v(id)));
-    setCheck('c1',v('f1').length>15 && /(cost|revenue|risk|delight|mitigat|reduce|drive|grow|delight)/i.test(v('f1')));
-    setCheck('c2',v('f2').length>15 && /(when|if|new|trigger|tagged|received|=|≥|>)/i.test(v('f2')));
-    setCheck('c3',v('f4').length>10 && /(read|write|scope|only)/i.test(v('f4')));
-    const mem=v('f5'); setCheck('c4',mem.length>20 && /short|long|episod|semantic/i.test(mem) && /(in|out|yes|no|N\/A|TTL)/i.test(mem));
-    const stop=v('f7'); const sc=(stop.match(/^\s*[-*]/gm)||[]).length; setCheck('c5',sc>=3 && /escalat|hand/i.test(stop));
-    setCheck('c6',/(<\s*\d+%|confidence\s*<|threshold)/i.test(v('f8')));
-    document.getElementById('preview').textContent=md();save();
+  document.querySelectorAll('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === p));
+  render();
+}
+
+function reset() {
+  if (!confirm('Reset all sections?')) return;
+  applyPreset('A');
+  document.querySelectorAll('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === 'A'));
+}
+
+function save() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) cur[f] = el.value;
   }
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='awspec.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Clear all fields?')){ids.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
-  ids.forEach(i=>document.getElementById(i).addEventListener('input',update));
-  load();update();
+  localStorage.setItem(STORE, JSON.stringify(cur));
+}
+
+function badge(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val && String(val).trim()) {
+    el.textContent = 'specced';
+    el.classList.add('ok');
+  } else {
+    el.textContent = 'empty';
+    el.classList.remove('ok');
+  }
+}
+
+function escXml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function wrap(text, maxChars, maxLines) {
+  if (!text) return ['—'];
+  const words = String(text).replace(/\s+/g, ' ').trim().split(' ');
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    if ((line + ' ' + w).trim().length <= maxChars) {
+      line = (line + ' ' + w).trim();
+    } else {
+      if (line) lines.push(line);
+      line = w;
+      if (lines.length >= maxLines) break;
+    }
+  }
+  if (line && lines.length < maxLines) lines.push(line);
+  if (lines.length >= maxLines && words.join(' ').length > lines.join(' ').length) {
+    lines[maxLines - 1] = lines[maxLines - 1].slice(0, maxChars - 1) + '…';
+  }
+  return lines;
+}
+
+function tspans(x, yStart, lines, opts) {
+  const o = Object.assign({fill:'#fff', size:9.5, gap:11, weight:700, family:"Poppins,sans-serif"}, opts || {});
+  return lines.map((l, i) =>
+    `<text x="${x}" y="${yStart + i * o.gap}" text-anchor="middle" fill="${o.fill}" font-family="${o.family}" font-size="${o.size}" font-weight="${o.weight}">${escXml(l)}</text>`
+  ).join('');
+}
+
+function parseSteps(raw) {
+  if (!raw) return [];
+  return raw.split(/\n+/).map(s => s.replace(/^\s*[\d\.\-\*]+[\.\)]?\s*/, '').trim()).filter(Boolean).slice(0, 5);
+}
+
+function parseTools(raw) {
+  if (!raw) return [];
+  return raw.split(/\n+/).map(s => s.replace(/^\s*[-*]\s*/, '').trim()).filter(Boolean).slice(0, 5);
+}
+
+function renderFlowSVG() {
+  const goal = cur.actGoal || '(your goal)';
+  const trig = cur.actTrigger || '(trigger condition)';
+  const pilot = PILOT_LABELS[cur.actPilot] || '';
+  const humans = cur.actHumans || '(human-in-the-loop rules)';
+  const pattern = PATTERN_LABELS[cur.patPattern] || '';
+  const stop = cur.patStop || '(stop conditions)';
+  const steps = parseSteps(cur.patSteps);
+  const tools = parseTools(cur.toolList);
+
+  const memTypes = [
+    {name:'EPISODIC', text:cur.memEpisodic, set: !!cur.memEpisodic},
+    {name:'SEMANTIC', text:cur.memSemantic, set: !!cur.memSemantic},
+    {name:'WORKING', text:cur.memWorking, set: !!cur.memWorking},
+    {name:'EXTERNAL', text:cur.memExternal, set: !!cur.memExternal},
+  ];
+
+  const empty = !cur.actGoal && !cur.patSteps && !cur.toolList;
+  const W = 1000, H = 620;
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="flow-svg">
+    <defs>
+      <marker id="awA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/></marker>
+      <marker id="awY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/></marker>
+      <marker id="awP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#bcb1ff"/></marker>
+      <marker id="awG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/></marker>
+      <linearGradient id="awBrain" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(59,130,246,0.20)"/><stop offset="100%" stop-color="rgba(59,130,246,0.06)"/></linearGradient>
+      <linearGradient id="awGoalBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(52,211,153,0.18)"/><stop offset="100%" stop-color="rgba(52,211,153,0.04)"/></linearGradient>
+    </defs>`;
+
+  // Top band: User goal + trigger (Actors top)
+  svg += `<rect x="20" y="14" width="${W-40}" height="64" rx="10" fill="url(#awGoalBg)" stroke="#34d399" stroke-width="1" stroke-dasharray="4,4" opacity="0.95"/>
+    <text x="40" y="34" fill="#34d399" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2.4">USER GOAL &amp; TRIGGER</text>`;
+  const goalL = wrap(goal, 70, 1);
+  const trigL = wrap('Trigger: ' + trig, 80, 1);
+  svg += tspans(W/2, 52, goalL, {fill:'#fff', size:11.5, gap:0, weight:800});
+  svg += tspans(W/2, 70, trigL, {fill:'#cdd5e3', size:10.5, gap:0, weight:600, family:'Lato,sans-serif'});
+
+  // Layer label - actors row
+  svg += `<text x="20" y="100" fill="#3b82f6" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="2.2">PILLAR 1 · ACTORS</text>`;
+
+  // Actor: human (left), agent (center), HIL (right)
+  const actorY = 110, actorH = 70;
+  const opActor = (cur.actGoal || cur.actPilot) ? 1 : 0.5;
+  // Human user (left)
+  svg += `<circle cx="90" cy="${actorY + actorH/2}" r="32" fill="rgba(124,140,255,0.16)" stroke="#bcb1ff" stroke-width="1.6" opacity="${opActor}"/>
+    <text x="90" y="${actorY + actorH/2 - 4}" text-anchor="middle" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="1.5">HUMAN</text>
+    <text x="90" y="${actorY + actorH/2 + 10}" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="10" font-weight="700">User</text>`;
+
+  // Primary agent (center)
+  svg += `<rect x="380" y="${actorY}" width="240" height="${actorH}" rx="35" fill="url(#awBrain)" stroke="#79c0ff" stroke-width="2" opacity="${opActor}"/>
+    <text x="500" y="${actorY + 22}" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2">PRIMARY AGENT (BRAIN)</text>
+    <text x="500" y="${actorY + 42}" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="13" font-weight="800">${escXml(pilot || 'Pick a pilot')}</text>
+    <text x="500" y="${actorY + 60}" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">Reasoning + tool selection</text>`;
+
+  // Human-in-the-loop (right)
+  const opHIL = cur.actHumans ? 1 : 0.5;
+  svg += `<circle cx="910" cy="${actorY + actorH/2}" r="32" fill="rgba(248,113,113,0.16)" stroke="#f87171" stroke-width="1.6" opacity="${opHIL}"/>
+    <text x="910" y="${actorY + actorH/2 - 4}" text-anchor="middle" fill="#f87171" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="1.5">HIL</text>
+    <text x="910" y="${actorY + actorH/2 + 10}" text-anchor="middle" fill="#fff" font-family="Lato,sans-serif" font-size="10" font-weight="700">PM review</text>`;
+
+  // Connections actors -> agent
+  svg += `<path d="M 122 ${actorY + actorH/2} L 380 ${actorY + actorH/2}" stroke="#bcb1ff" stroke-width="1.6" fill="none" marker-end="url(#awP)"/>`;
+  svg += `<path d="M 620 ${actorY + actorH/2} L 878 ${actorY + actorH/2}" stroke="#f87171" stroke-width="1.6" fill="none" stroke-dasharray="6,4" marker-end="url(#awA)"/>`;
+
+  // Pillar 2 - Pattern Plan: ReAct loop or Planner-Executor sequence below the agent
+  const patY = 210;
+  svg += `<text x="20" y="${patY - 8}" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="2.2">PILLAR 2 · PATTERN PLAN</text>`;
+
+  // Pattern band container
+  svg += `<rect x="20" y="${patY}" width="${W-40}" height="160" rx="10" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4" opacity="0.85"/>`;
+
+  // Pattern banner top
+  svg += `<rect x="40" y="${patY + 12}" width="180" height="22" rx="11" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
+    <text x="130" y="${patY + 28}" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="1.5">${escXml((pattern || 'PICK A PATTERN').toUpperCase().split(' ')[0])}</text>`;
+
+  // Steps as connected nodes (ReAct or sequential)
+  const stepCount = Math.max(steps.length, 1);
+  const stepW = Math.min(170, (W - 100) / stepCount - 14);
+  const startX = (W - (stepCount * stepW + (stepCount - 1) * 22)) / 2;
+  const stepY = patY + 60;
+  for (let i = 0; i < stepCount; i++) {
+    const x = startX + i * (stepW + 22);
+    const txt = steps[i] || '(reasoning step ' + (i+1) + ')';
+    const op = steps[i] ? 1 : 0.5;
+    const lines = wrap(txt, 22, 3);
+    svg += `<rect x="${x}" y="${stepY}" width="${stepW}" height="78" rx="6" fill="rgba(255,255,255,0.04)" stroke="#fbbf24" stroke-width="1.4" opacity="${op}"/>
+      <text x="${x + stepW/2}" y="${stepY + 16}" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.3">STEP ${i + 1}</text>
+      ${tspans(x + stepW/2, stepY + 32, lines, {size:9, gap:11})}`;
+    if (i > 0) {
+      const fromX = startX + (i - 1) * (stepW + 22) + stepW;
+      const toX = x;
+      svg += `<path d="M ${fromX + 1} ${stepY + 39} L ${toX - 1} ${stepY + 39}" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#awY)"/>`;
+    }
+  }
+
+  // Stop conditions caption
+  const stopL = wrap('Stop: ' + stop, 110, 1);
+  svg += tspans(W/2, patY + 152, stopL, {fill:'#cdd5e3', size:10, gap:0, weight:600, family:'Lato,sans-serif'});
+
+  // Pillar 3 - Memory bank (left side)
+  const memY = 390;
+  svg += `<text x="20" y="${memY - 8}" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="2.2">PILLAR 3 · MEMORY</text>`;
+  for (let i = 0; i < 4; i++) {
+    const m = memTypes[i];
+    const mx = 30 + i * 122;
+    const op = m.set ? 1 : 0.5;
+    svg += `<rect x="${mx}" y="${memY}" width="110" height="68" rx="6" fill="rgba(124,140,255,0.10)" stroke="#bcb1ff" stroke-width="1.4" opacity="${op}"/>
+      <text x="${mx + 55}" y="${memY + 18}" text-anchor="middle" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.3">${m.name}</text>
+      ${tspans(mx + 55, memY + 36, wrap(m.text || '(not set)', 16, 3), {fill:'#fff', size:8.5, gap:10, weight:600, family:'Lato,sans-serif'})}`;
+  }
+
+  // Pillar 4 - Tools (right side)
+  svg += `<text x="540" y="${memY - 8}" fill="#34d399" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="2.2">PILLAR 4 · TOOLS</text>`;
+  const toolCount = Math.max(tools.length, 3);
+  const toolW = (W - 560) / Math.max(toolCount, 3) - 8;
+  for (let i = 0; i < Math.min(toolCount, 5); i++) {
+    const t = tools[i] || '';
+    const tx = 550 + i * (toolW + 8);
+    const op = t ? 1 : 0.5;
+    const tw = Math.min(toolW, 92);
+    // Diamond shape
+    const cx = tx + tw/2, cy = memY + 34;
+    svg += `<polygon points="${cx},${memY} ${tx + tw},${cy} ${cx},${memY + 68} ${tx},${cy}" fill="rgba(52,211,153,0.10)" stroke="#34d399" stroke-width="1.4" opacity="${op}"/>
+      <text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="8.5" font-weight="800">${escXml((t || '(tool ' + (i+1) + ')').slice(0,14))}</text>`;
+  }
+
+  // Connecting arrows: agent <-> memory + agent <-> tools
+  svg += `<path d="M 380 145 C 300 145, 200 360, 200 ${memY}" stroke="#bcb1ff" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#awP)"/>
+    <path d="M 200 ${memY} C 200 360, 300 145, 380 145" stroke="#bcb1ff" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0.7"/>`;
+  svg += `<path d="M 620 145 C 700 145, 800 360, 800 ${memY}" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#awG)"/>
+    <path d="M 800 ${memY} C 800 360, 700 145, 620 145" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0.7"/>`;
+
+  // Bottom: humans-in-the-loop spec
+  const hilY = 510;
+  svg += `<text x="20" y="${hilY - 8}" fill="#f87171" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="2.2">HUMAN HANDOFF SPEC</text>
+    <rect x="20" y="${hilY}" width="${W-40}" height="48" rx="8" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="1"/>
+    ${tspans(W/2, hilY + 28, wrap(humans, 110, 1), {fill:'#fff', size:11, gap:0, weight:600, family:'Lato,sans-serif'})}`;
+
+  // Empty-state hint
+  if (empty) {
+    svg += `<text x="${W / 2}" y="${H - 6}" text-anchor="middle" fill="#8899bb" font-family="Poppins,sans-serif" font-size="11" font-style="italic" font-weight="600">Pick Option B (or fill in Pillar 1) to populate the diagram.</text>`;
+  }
+
+  svg += `</svg>`;
+  document.getElementById('flow-svg').innerHTML = svg;
+}
+
+function buildMarkdown() {
+  const pilot = PILOT_LABELS[cur.actPilot] || '_(not set)_';
+  const pattern = PATTERN_LABELS[cur.patPattern] || '_(not set)_';
+
+  return `# Juno PM — Agent Workflow Spec (AWSpec)
+
+_Module 5 final-project deliverable. Generated by \`Modules/M5 - Agent Workflow Spec Builder.html\`._
+
+---
+
+## 0. Carry-over from prior modules
+
+- **Bet** _(from \`02-strategy/strategy-one-pager.md\`)_:
+- **AI PRD** _(from \`03-rag-prd/ai-prd.md\`)_:
+- **User flow** _(from \`04-ai-ux/user-flow.md\`)_:
+
+---
+
+## 1. Pillar 1 — Actors
+
+**Goal**
+
+${cur.actGoal || '_(one sentence; names the value frame)_'}
+
+**Trigger**
+
+${cur.actTrigger || '_(precise, testable condition)_'}
+
+**Primary actor:** ${pilot}
+
+**Humans in the loop**
+
+${cur.actHumans || '_(when does control pass back to a human?)_'}
+
+---
+
+## 2. Pillar 2 — Pattern Plan
+
+**Pattern:** ${pattern}
+
+**Sequential steps**
+
+${cur.patSteps || '_(2–5 steps; action verbs)_'}
+
+**Stop conditions**
+
+${cur.patStop || '_(success / failure / escalation / timeout)_'}
+
+---
+
+## 3. Pillar 3 — Memory
+
+**Episodic — sequence of actions in this run**
+
+${cur.memEpisodic || '_(in-scope or out-of-scope; lifetime)_'}
+
+**Semantic — persistent behaviours / preferences**
+
+${cur.memSemantic || '_(in-scope or out-of-scope; lifetime)_'}
+
+**Working / Contextual — live, in-flight data**
+
+${cur.memWorking || '_(what is held in working context only)_'}
+
+**External tools — sources of truth via APIs**
+
+${cur.memExternal || '_(which APIs / databases the agent reads from for ground truth)_'}
+
+---
+
+## 4. Pillar 4 — Tools
+
+**Tool inventory** (one per line, with scope)
+
+${cur.toolList || '_(- tool.method(args) — read-only / write)_'}
+
+**Schemas — what each tool returns**
+
+${cur.toolSchemas || '_(brief is fine; one shape per tool)_'}
+
+**Read / write boundaries**
+
+${cur.toolBoundaries || '_(what the agent CAN and CANNOT touch)_'}
+
+---
+
+## Self-review
+
+- [ ] Goal is one sentence and names the value frame.
+- [ ] Trigger is a precise, testable condition.
+- [ ] Pattern is chosen with a defensible reason.
+- [ ] At least 3 stop conditions, including escalation.
+- [ ] Each memory type named (in or out).
+- [ ] Every tool lists scope (read-only vs write) and a schema.
+- [ ] Read/write boundaries match the AI PRD (M3).
+
+## AI-review
+
+Paste this section + the meta-prompt from \`M5 - Agent Workflow Spec Builder.html\` into ChatGPT or Claude. Save the critique into a follow-up commit.
+`;
+}
+
+function buildVisualizePrompt() {
+  const pilot = PILOT_LABELS[cur.actPilot] || '_(not set)_';
+  const pattern = PATTERN_LABELS[cur.patPattern] || '_(not set)_';
+  const fb = (s, fallback) => (s && s.trim()) ? s.trim() : fallback;
+
+  return `# Render this Agent Workflow Spec as a one-page agent graph
+
+You are a senior AI engineer. Render the AWSpec below as a clean diagram, mirroring the **AWSpec one-page blueprint** from Module 5 of the AI Product Manager course. Use a tool of your choice (SVG, Mermaid, Excalidraw, Lovable, Figma) — the structure matters more than the medium.
+
+## Layout — four pillars stacked
+
+1. **Pillar 1 · Actors (top)** — Human user (left) → Primary agent (centre) → Human-in-the-loop (right). Show direction of control.
+2. **Pillar 2 · Pattern Plan (upper-middle)** — A horizontal sequence of reasoning steps (or a ReAct loop / Planner-Executor handoff depending on pattern).
+3. **Pillar 3 · Memory (lower-left)** — Four labeled blocks: Episodic, Semantic, Working, External. Mark each as in-scope or out-of-scope.
+4. **Pillar 4 · Tools (lower-right)** — Diamond shapes per tool with read/write scope tag.
+
+## Shape vocabulary (use exactly these)
+
+- **Circle** = Human actor.
+- **Pill / rectangle (rounded)** = Agent actor.
+- **Rectangle** = Pattern step.
+- **Square / box** = Memory store.
+- **Diamond** = Tool / API call.
+- **Dashed red arrow** = Human handoff path.
+- **Solid blue arrow** = User → Agent.
+- **Solid amber arrow** = Step → Step (pattern progression).
+- **Dashed lavender arrow** = Agent ↔ Memory.
+- **Dashed green arrow** = Agent ↔ Tools.
+
+---
+
+## The AWSpec to render
+
+### Pillar 1 · Actors
+
+- **Goal:** ${fb(cur.actGoal, '_(not set)_')}
+- **Trigger:** ${fb(cur.actTrigger, '_(not set)_')}
+- **Primary actor:** ${pilot}
+- **Humans in the loop:** ${fb(cur.actHumans, '_(not set)_')}
+
+### Pillar 2 · Pattern Plan
+
+- **Pattern:** ${pattern}
+- **Sequential steps:**
+${fb(cur.patSteps, '_(not set)_').split('\n').map(l => '  - ' + l).join('\n')}
+- **Stop conditions:** ${fb(cur.patStop, '_(not set)_')}
+
+### Pillar 3 · Memory
+
+- **Episodic:** ${fb(cur.memEpisodic, '_(not set)_')}
+- **Semantic:** ${fb(cur.memSemantic, '_(not set)_')}
+- **Working / Contextual:** ${fb(cur.memWorking, '_(not set)_')}
+- **External tools:** ${fb(cur.memExternal, '_(not set)_')}
+
+### Pillar 4 · Tools
+
+- **Inventory:**
+${fb(cur.toolList, '_(not set)_').split('\n').map(l => '  - ' + l).join('\n')}
+- **Schemas:** ${fb(cur.toolSchemas, '_(not set)_')}
+- **Boundaries:** ${fb(cur.toolBoundaries, '_(not set)_')}
+
+---
+
+## Output requirements
+
+1. Render the diagram exactly once. Use the four-pillar layout above.
+2. Place every node in the correct pillar with the correct shape.
+3. Show direction of control with the right arrow style.
+4. Add a short caption (≤ 2 sentences) summarising what the agent does in plain language.
+5. **Critique pass:** after the diagram, list the top 3 risks (silent failure, drift, infinite loop, latency, or boundary leak — name which) and propose a tighter wording for the riskiest pillar in 2–3 bullets.
+
+If any pillar is marked _(not set)_, render that node as a dotted/ghost shape and call it out in the critique.`;
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(buildVisualizePrompt()).then(() => toast('Visualize prompt copied — paste into ChatGPT, Claude, or Lovable.'));
+}
+
+function rswitch(t) {
+  document.querySelectorAll('.rtab').forEach(b => b.classList.toggle('active', b.dataset.rtab === t));
+  document.querySelectorAll('.rtab-pane').forEach(p => p.classList.toggle('active', p.id === 'rtab-' + t));
+}
+
+function render() {
+  save();
+  badge('bA', cur.actGoal || cur.actTrigger || cur.actPilot);
+  badge('bP', cur.patPattern || cur.patSteps);
+  badge('bM', cur.memEpisodic || cur.memSemantic || cur.memWorking || cur.memExternal);
+  badge('bT', cur.toolList || cur.toolBoundaries);
+  document.getElementById('preview').textContent = buildMarkdown();
+  document.getElementById('visPrompt').textContent = buildVisualizePrompt();
+  renderFlowSVG();
+}
+
+function copyMd() {
+  navigator.clipboard.writeText(buildMarkdown()).then(() => toast('Markdown copied — paste into 05-agentic-workflows/awspec.md'));
+}
+
+function download() {
+  const blob = new Blob([buildMarkdown()], {type: 'text/markdown'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'awspec.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
+}
+
+(function init() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = cur[f] || '';
+  }
+  render();
+})();
 </script>
 </body>
 </html>

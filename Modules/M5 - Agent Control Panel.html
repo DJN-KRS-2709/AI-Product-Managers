@@ -3,77 +3,410 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M5 — Agent Control Panel</title>
+<title>M5 - Agent Control Panel</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px}
-  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{max-width:1200px;margin:0 auto;padding:24px 32px}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  .lever{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:14px}
-  .lever h2{margin:0 0 4px;font-size:18px;color:var(--accent2)}
-  .lever p.q{margin:0 0 12px;color:var(--muted);font-size:14px}
-  textarea{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#fbbf24;--c3:#bcb1ff;--c4:#34d399;--danger:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 16px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+.section-h:first-child{margin-top:4px}
+.lever{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;border-left:4px solid var(--accent);display:flex;flex-direction:column;gap:8px}
+.lever.l1{border-left-color:var(--c1)}
+.lever.l2{border-left-color:var(--c2)}
+.lever.l3{border-left-color:var(--c3)}
+.lever.l4{border-left-color:var(--c4)}
+.lever-head{display:flex;align-items:center;gap:10px}
+.lever-icon{font-size:20px}
+.lever-name{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:#fff;flex:1}
+.lever-tag{font-family:'Poppins',sans-serif;font-weight:900;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase}
+.lever.l1 .lever-tag{color:var(--c1)}
+.lever.l2 .lever-tag{color:var(--c2)}
+.lever.l3 .lever-tag{color:var(--c3)}
+.lever.l4 .lever-tag{color:var(--c4)}
+.lever-q{font-size:11.5px;color:var(--muted);margin:0;font-style:italic}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10.5px;background:#22293a;color:var(--muted);font-weight:600}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
+textarea,input,select{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+textarea{min-height:54px;resize:vertical}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:560px;overflow-y:auto}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:6px 0;font-size:13px;color:#cdd5e3}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
+.legend-row{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+.legend-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--muted)}
+.legend-pill.l1{color:var(--c1);border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.06)}
+.legend-pill.l2{color:var(--c2);border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.06)}
+.legend-pill.l3{color:var(--c3);border-color:rgba(188,177,255,0.4);background:rgba(188,177,255,0.06)}
+.legend-pill.l4{color:var(--c4);border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.06)}
+.flow-wrap{background:rgba(7,22,44,0.4);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:16px}
+.flow-svg{width:100%;height:auto;display:block}
+.rtab-row{display:flex;gap:6px;margin:6px 0 10px;border-bottom:1px solid var(--line)}
+.rtab{font-size:12px;padding:7px 14px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);border:1px solid var(--line);border-bottom:0;cursor:pointer;font-weight:700;font-family:'Poppins',sans-serif;letter-spacing:.04em}
+.rtab.active{background:var(--card);color:var(--fg);border-color:var(--accent);border-bottom:1px solid var(--card);position:relative;top:1px}
+.rtab-pane{display:none}
+.rtab-pane.active{display:block}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.rule.r1{border-top:3px solid var(--c1)}
+.rule.r2{border-top:3px solid var(--c2)}
+.rule.r3{border-top:3px solid var(--c3)}
+.rule.r4{border-top:3px solid var(--c4)}
+.rule .rname{font-family:'Poppins',sans-serif;font-weight:800;font-size:12.5px;color:#fff}
+.rule .rname .icon{margin-right:6px}
+.rule .rdesc{font-size:11px;color:var(--muted);font-style:italic;margin:0}
+.rule textarea{font-size:12px;min-height:46px}
 </style>
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 5 · Tool</div><h1>Agent Control Panel</h1></div>
+  <div><div class="crumb">Module 5 &middot; Companion tool</div><h1>Agent Control Panel</h1></div>
   <div class="row">
     <button onclick="copyMd()">Copy as markdown</button>
     <button class="secondary" onclick="download()">Download .md</button>
     <button class="secondary" onclick="reset()">Reset</button>
   </div>
 </header>
+
 <main>
-  <p style="color:var(--muted);font-size:14px;margin-top:0">Five levers. Declare the minimum viable rule for each. Export to <code>05-agentic-workflows/agent-control-panel.md</code>.</p>
-  <div id="levers"></div>
-  <h2 style="margin-top:24px;font-size:16px;color:var(--accent2);letter-spacing:.14em;text-transform:uppercase">Preview</h2>
-  <div class="preview" id="preview"></div>
+  <section class="panel left">
+    <p class="lead">Companion to the AWSpec. Spec the four <strong>levers</strong> from the PM&rsquo;s Agent Control Panel + the four <strong>rules of engagement</strong>. The diagram on the right wires them together. Final deliverable: <code>05-agentic-workflows/agent-control-panel.md</code>.</p>
+
+    <div class="legend-row">
+      <span class="legend-pill l1">Stop Conditions</span>
+      <span class="legend-pill l2">Tool Outputs</span>
+      <span class="legend-pill l3">Confidence Thresholds</span>
+      <span class="legend-pill l4">North Star</span>
+    </div>
+
+    <div class="section-h">Four levers &middot; from logic to control</div>
+
+    <div class="lever l1">
+      <div class="lever-head">
+        <div class="lever-icon">&#x1F6D1;</div>
+        <div class="lever-tag">Lever 1</div>
+        <div class="lever-name">Define Stop Conditions</div>
+        <span class="badge" id="b1">empty</span>
+      </div>
+      <p class="lever-q">Set <code>max_steps</code> to prevent infinite loops and cost overruns. When does the agent abort?</p>
+      <textarea id="lvStop" oninput="render()" placeholder="max_steps: 8. Abort if same tool fails 2x in a row. Hard timeout: 90s wall clock."></textarea>
+    </div>
+
+    <div class="lever l2">
+      <div class="lever-head">
+        <div class="lever-icon">&#x1F4E4;</div>
+        <div class="lever-tag">Lever 2</div>
+        <div class="lever-name">Structure Tool Outputs</div>
+        <span class="badge" id="b2">empty</span>
+      </div>
+      <p class="lever-q">Partner with engineering to ensure APIs return clear observations and avoid hallucinations. What shape does each tool return?</p>
+      <textarea id="lvTools" oninput="render()" placeholder="corpus.retrieve → {chunks:[{text,source,score}], summary, confidence}. salesforce.lookup_arr → {arr_usd, contract_end, churn_risk}."></textarea>
+    </div>
+
+    <div class="lever l3">
+      <div class="lever-head">
+        <div class="lever-icon">&#x1F4CA;</div>
+        <div class="lever-tag">Lever 3</div>
+        <div class="lever-name">Set Confidence Thresholds</div>
+        <span class="badge" id="b3">empty</span>
+      </div>
+      <p class="lever-q">Define when the agent&rsquo;s thoughts trigger human-in-the-loop reviews. What confidence triggers what action?</p>
+      <textarea id="lvConfidence" oninput="render()" placeholder="≥ 80% → auto-post to #pm-daily. 70–79% → post to #pm-juno-review with @on-call-pm. < 70% → require PM approval."></textarea>
+    </div>
+
+    <div class="lever l4">
+      <div class="lever-head">
+        <div class="lever-icon">&#x2B50;</div>
+        <div class="lever-tag">Lever 4</div>
+        <div class="lever-name">Manage the North Star</div>
+        <span class="badge" id="b4">empty</span>
+      </div>
+      <p class="lever-q">Provide the system instructions an agent re-reads in every loop to prevent reasoning drift. What is the agent&rsquo;s prime directive?</p>
+      <textarea id="lvNorth" oninput="render()" placeholder="You are Juno. Your single goal is to surface the top-3 strategic risks from #escalations every weekday morning. Always cite a strategic pillar. Never invent customer names. Escalate ambiguity to the PM."></textarea>
+    </div>
+
+    <div class="section-h">Rules of engagement &middot; the contract</div>
+    <p class="lead">Per source slide 24. Four contracts the PM owns &mdash; one per axis of risk.</p>
+
+    <div class="rules-grid">
+      <div class="rule r1">
+        <div class="rname"><span class="icon">&#x1F510;</span>Agency Permission</div>
+        <p class="rdesc">Define the autonomy threshold. e.g. agent can <em>draft</em> a $5k quote but cannot hit Send.</p>
+        <textarea id="ruAgency" oninput="render()" placeholder="Agent can draft a P0 risk summary and Jira stub. Agent CANNOT auto-close threads or DM customers."></textarea>
+      </div>
+      <div class="rule r2">
+        <div class="rname"><span class="icon">&#x1F511;</span>Access Control</div>
+        <p class="rdesc">Identify the read/write boundaries for every tool and database.</p>
+        <textarea id="ruAccess" oninput="render()" placeholder="READ: Slack #escalations, Strategy KB, Salesforce ARR. WRITE: #pm-daily only, Jira stubs only. CANNOT edit Salesforce or post outside #pm-daily."></textarea>
+      </div>
+      <div class="rule r3">
+        <div class="rname"><span class="icon">&#x21A9;&#xFE0F;</span>Fallback Protocols</div>
+        <p class="rdesc">Specify the fallback experience when loops break or gates trigger.</p>
+        <textarea id="ruFallback" oninput="render()" placeholder="After 3 failed retrievals → degrade to 'cautious mode' (no priorities, just thread links). After 2 tool errors → escalate to PM with full trace."></textarea>
+      </div>
+      <div class="rule r4">
+        <div class="rname"><span class="icon">&#x1F6A8;</span>Checkpoints</div>
+        <p class="rdesc">Set red-zone triggers for human intervention based on risk, value, or ambiguity.</p>
+        <textarea id="ruCheckpoint" oninput="render()" placeholder="Any thread mentioning 'churn', 'legal', or 'security' → require PM approval. Any P0 with confidence < 70% → PM review."></textarea>
+      </div>
+    </div>
+
+    <div class="check">
+      <h3>Self-review &middot; before you commit</h3>
+      <ul>
+        <li>Stop conditions name a numeric <code>max_steps</code> + a wall-clock timeout.</li>
+        <li>Tool outputs include a confidence/score field for every retrieval-flavour tool.</li>
+        <li>Confidence thresholds map to <em>actions</em>, not just labels.</li>
+        <li>North Star is a single goal sentence the agent re-reads every loop.</li>
+        <li>Each rule of engagement names something the agent <em>cannot</em> do, not just what it can.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="panel right">
+    <h3 class="section-h" style="margin-top:0">Live control diagram</h3>
+    <div class="flow-wrap">
+      <div id="ctrl-svg"></div>
+    </div>
+
+    <div class="rtab-row">
+      <button class="rtab active" data-rtab="md" onclick="rswitch('md')">&#x1F4DD; Markdown for repo</button>
+    </div>
+    <div id="rtab-md" class="rtab-pane active">
+      <div class="preview" id="preview">Fill in any lever to start&hellip;</div>
+    </div>
+  </section>
 </main>
-<div class="toast" id="toast">Copied</div>
+
+<div class="toast" id="toast">Copied to clipboard.</div>
+
 <script>
-  const L=[
-    {id:'trig',name:'Triggers',q:'When does the agent activate?',ph:'On new P0-tagged thread in #escalations with ≥5 messages in 10 min.'},
-    {id:'tool',name:'Tools',q:'What can it call? Scope each.',ph:'slack.read (read-only), corpus.retrieve (read-only), jira.create_stub (write, ≥80% confidence), slack.post (write, #pm-daily only).'},
-    {id:'mem',name:'Memory scope',q:'What does it remember, for how long?',ph:'Short-term: yes. Long-term: no. Episodic: 30 days. Semantic: weekly refresh.'},
-    {id:'stop',name:'Stop conditions',q:'When does it hand back / shut down?',ph:'Success after top-3 posted; failure after 2 tool errors; escalate <70% confidence; timeout 90s.'},
-    {id:'obs',name:'Observability',q:'What logs, traces, eval surface?',ph:'Trace ID, retrieved chunks, tool calls, confidence, PM action, latency, cost.'},
-  ];
-  const KEY='m5-control-panel';
-  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):{}}
-  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
-  let state=load();
-  function render(){
-    const root=document.getElementById('levers');root.innerHTML='';
-    L.forEach(l=>{
-      const div=document.createElement('div');div.className='lever';
-      div.innerHTML=`<h2>${l.name}</h2><p class="q">${l.q}</p><textarea id="t_${l.id}" placeholder="${l.ph}">${state[l.id]||''}</textarea>`;
-      root.appendChild(div);
-      document.getElementById('t_'+l.id).addEventListener('input',e=>{state[l.id]=e.target.value;save(state);preview()});
-    });
-    preview();
+const STORE = 'm5-control-v2';
+
+const FIELDS = ['lvStop','lvTools','lvConfidence','lvNorth','ruAgency','ruAccess','ruFallback','ruCheckpoint'];
+
+let cur = JSON.parse(localStorage.getItem(STORE) || 'null') || {
+  lvStop: '',
+  lvTools: '',
+  lvConfidence: '',
+  lvNorth: '',
+  ruAgency: '',
+  ruAccess: '',
+  ruFallback: '',
+  ruCheckpoint: '',
+};
+
+function save() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) cur[f] = el.value;
   }
-  function md(){
-    let s='# Juno PM — Agent Control Panel\n\n_Companion to `awspec.md`. Committed to `05-agentic-workflows/agent-control-panel.md`._\n\n| Lever | Rule |\n|---|---|\n';
-    L.forEach(l=>{s+=`| ${l.name} | ${(state[l.id]||'_(missing)_').replace(/\|/g,'\\|').replace(/\n/g,' ')} |\n`});
-    return s;
+  localStorage.setItem(STORE, JSON.stringify(cur));
+}
+
+function reset() {
+  if (!confirm('Reset all fields?')) return;
+  for (const f of FIELDS) {
+    cur[f] = '';
+    const el = document.getElementById(f);
+    if (el) el.value = '';
   }
-  function preview(){document.getElementById('preview').textContent=md()}
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='agent-control-panel.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Clear all?')){state={};save(state);render()}}
+  save();
   render();
+}
+
+function badge(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val && String(val).trim()) {
+    el.textContent = 'specced';
+    el.classList.add('ok');
+  } else {
+    el.textContent = 'empty';
+    el.classList.remove('ok');
+  }
+}
+
+function escXml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function wrap(text, maxChars, maxLines) {
+  if (!text) return ['—'];
+  const words = String(text).replace(/\s+/g, ' ').trim().split(' ');
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    if ((line + ' ' + w).trim().length <= maxChars) {
+      line = (line + ' ' + w).trim();
+    } else {
+      if (line) lines.push(line);
+      line = w;
+      if (lines.length >= maxLines) break;
+    }
+  }
+  if (line && lines.length < maxLines) lines.push(line);
+  if (lines.length >= maxLines && words.join(' ').length > lines.join(' ').length) {
+    lines[maxLines - 1] = lines[maxLines - 1].slice(0, maxChars - 1) + '…';
+  }
+  return lines;
+}
+
+function tspans(x, yStart, lines, opts) {
+  const o = Object.assign({fill:'#fff', size:9.5, gap:11, weight:700, family:"Poppins,sans-serif"}, opts || {});
+  return lines.map((l, i) =>
+    `<text x="${x}" y="${yStart + i * o.gap}" text-anchor="middle" fill="${o.fill}" font-family="${o.family}" font-size="${o.size}" font-weight="${o.weight}">${escXml(l)}</text>`
+  ).join('');
+}
+
+function renderSVG() {
+  const W = 1000, H = 480;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="flow-svg">
+    <defs>
+      <marker id="cpA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/></marker>
+      <linearGradient id="cpBrain" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(59,130,246,0.18)"/><stop offset="100%" stop-color="rgba(59,130,246,0.06)"/></linearGradient>
+    </defs>`;
+
+  // Center: Agent
+  svg += `<rect x="370" y="180" width="260" height="100" rx="50" fill="url(#cpBrain)" stroke="#79c0ff" stroke-width="2"/>
+    <text x="500" y="216" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">AGENT &middot; UNDER CONTROL</text>
+    <text x="500" y="240" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="16" font-weight="800">Juno</text>
+    <text x="500" y="262" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">Reasons inside the contract</text>`;
+
+  // 4 levers around agent
+  const levers = [
+    {label:'STOP CONDITIONS', text: cur.lvStop, color: '#3b82f6', x: 60, y: 40, anchor: 'tl'},
+    {label:'TOOL OUTPUTS', text: cur.lvTools, color: '#fbbf24', x: 700, y: 40, anchor: 'tr'},
+    {label:'CONFIDENCE THRESHOLDS', text: cur.lvConfidence, color: '#bcb1ff', x: 60, y: 320, anchor: 'bl'},
+    {label:'NORTH STAR', text: cur.lvNorth, color: '#34d399', x: 700, y: 320, anchor: 'br'},
+  ];
+  for (const l of levers) {
+    const op = l.text ? 1 : 0.5;
+    const lines = wrap(l.text || '(not set)', 28, 4);
+    svg += `<rect x="${l.x}" y="${l.y}" width="240" height="120" rx="10" fill="rgba(255,255,255,0.04)" stroke="${l.color}" stroke-width="1.6" opacity="${op}"/>
+      <text x="${l.x + 120}" y="${l.y + 22}" text-anchor="middle" fill="${l.color}" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="1.6">${l.label}</text>
+      ${tspans(l.x + 120, l.y + 42, lines, {size:9.5, gap:11, weight:600, family:'Lato,sans-serif'})}`;
+  }
+
+  // Connecting arrows from each lever to agent
+  svg += `<path d="M 300 100 C 350 100, 380 150, 420 180" stroke="#3b82f6" stroke-width="1.6" fill="none" stroke-dasharray="5,4" marker-end="url(#cpA)"/>`;
+  svg += `<path d="M 700 100 C 650 100, 620 150, 580 180" stroke="#fbbf24" stroke-width="1.6" fill="none" stroke-dasharray="5,4" marker-end="url(#cpA)"/>`;
+  svg += `<path d="M 300 380 C 350 380, 380 320, 420 280" stroke="#bcb1ff" stroke-width="1.6" fill="none" stroke-dasharray="5,4" marker-end="url(#cpA)"/>`;
+  svg += `<path d="M 700 380 C 650 380, 620 320, 580 280" stroke="#34d399" stroke-width="1.6" fill="none" stroke-dasharray="5,4" marker-end="url(#cpA)"/>`;
+
+  svg += `</svg>`;
+  document.getElementById('ctrl-svg').innerHTML = svg;
+}
+
+function buildMarkdown() {
+  const fb = (s) => s && s.trim() ? s.trim() : '_(missing)_';
+  return `# Juno PM — Agent Control Panel
+
+_Companion to \`awspec.md\`. Module 5 deliverable. Generated by \`Modules/M5 - Agent Control Panel.html\`._
+
+---
+
+## Four levers
+
+### 1. Stop Conditions
+
+${fb(cur.lvStop)}
+
+### 2. Tool Outputs
+
+${fb(cur.lvTools)}
+
+### 3. Confidence Thresholds
+
+${fb(cur.lvConfidence)}
+
+### 4. North Star
+
+${fb(cur.lvNorth)}
+
+---
+
+## Rules of engagement
+
+| Rule | Spec |
+|---|---|
+| Agency Permission | ${fb(cur.ruAgency).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |
+| Access Control | ${fb(cur.ruAccess).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |
+| Fallback Protocols | ${fb(cur.ruFallback).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |
+| Checkpoints | ${fb(cur.ruCheckpoint).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |
+
+---
+
+## Self-review
+
+- [ ] Stop conditions include max_steps + wall-clock timeout.
+- [ ] Tool outputs include a confidence/score field per retrieval tool.
+- [ ] Confidence thresholds map to actions, not just labels.
+- [ ] North Star is one sentence, re-read every loop.
+- [ ] Each rule of engagement names something the agent CANNOT do.
+`;
+}
+
+function rswitch(t) {
+  document.querySelectorAll('.rtab').forEach(b => b.classList.toggle('active', b.dataset.rtab === t));
+  document.querySelectorAll('.rtab-pane').forEach(p => p.classList.toggle('active', p.id === 'rtab-' + t));
+}
+
+function render() {
+  save();
+  badge('b1', cur.lvStop);
+  badge('b2', cur.lvTools);
+  badge('b3', cur.lvConfidence);
+  badge('b4', cur.lvNorth);
+  document.getElementById('preview').textContent = buildMarkdown();
+  renderSVG();
+}
+
+function copyMd() {
+  navigator.clipboard.writeText(buildMarkdown()).then(() => toast('Markdown copied — paste into 05-agentic-workflows/agent-control-panel.md'));
+}
+
+function download() {
+  const blob = new Blob([buildMarkdown()], {type: 'text/markdown'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'agent-control-panel.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+(function init() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = cur[f] || '';
+  }
+  render();
+})();
 </script>
 </body>
 </html>
