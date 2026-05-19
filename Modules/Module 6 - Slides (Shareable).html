@@ -1242,67 +1242,83 @@ section.cameras-section .cameras-inner {
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1100px; margin:22px auto 0;">
-      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
-  <div style="padding:16px 20px; background:linear-gradient(135deg, #3b82f622 0%, transparent 70%); border-bottom:1px solid #3b82f630;">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
-      
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Build Your Eval Plan</div>
+    <div style="position:relative; width:100%; max-width:1000px; height:580px; margin:18px auto 0;">
+      <svg viewBox="0 0 1000 580" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+  <defs>
+    <marker id="exArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
+    </marker>
+  </defs>
+  <!-- 1 -> 2: arc up and over the top -->
+  <path d="M 125 80 C 125 0, 700 0, 700 215" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+  <!-- 2 -> 3: arc down and around to the left -->
+  <path d="M 645 270 C 380 270, 60 360, 60 405" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+  <!-- 3 -> 4: straight right -->
+  <path d="M 130 440 L 645 440" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+</svg>
+      <div style="position:absolute; left:40px; top:50px; width:380px;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #3b82f6; background:rgba(7,22,44,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(7,22,44,0.9), 0 0 12px #3b82f655;">
+      <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#3b82f6; line-height:1;">1</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.96); border-radius:999px; padding:7px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+      <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Build Your Eval Plan</span>
     </div>
   </div>
-  <div style="padding:13px 20px;">
-    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 66px; line-height:1.55; max-width:300px;">Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.</p>
+  <div style="display:flex; align-items:baseline; gap:6px; margin-left:66px;">
+    <span style="color:#3b82f6; font-size:14px; line-height:1;">&bull;</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#3b82f6;">Key Decision:</span>
+    <span style="font-size:12.5px; color:#fff; font-weight:600;">Speed vs. Certainty</span>
   </div>
-  <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Key decision</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><strong style="color:#fff;">Speed vs. Certainty</strong></p>
 </div>
-</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
-  <div style="padding:16px 20px; background:linear-gradient(135deg, #fbbf2422 0%, transparent 70%); border-bottom:1px solid #fbbf2430;">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
-      
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Set Your Gatekeepers</div>
+<div style="position:absolute; left:570px; top:200px; width:380px;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #fbbf24; background:rgba(7,22,44,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(7,22,44,0.9), 0 0 12px #fbbf2455;">
+      <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#fbbf24; line-height:1;">2</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.96); border-radius:999px; padding:7px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+      <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Set Your Gatekeepers</span>
     </div>
   </div>
-  <div style="padding:13px 20px;">
-    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 66px; line-height:1.55; max-width:300px;">Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.</p>
+  <div style="display:flex; align-items:baseline; gap:6px; margin-left:66px;">
+    <span style="color:#fbbf24; font-size:14px; line-height:1;">&bull;</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#fbbf24;">Key Decision:</span>
+    <span style="font-size:12.5px; color:#fff; font-weight:600;">Brand Protection vs. Hype</span>
   </div>
-  <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Key decision</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><strong style="color:#fff;">Brand Protection vs. Hype</strong></p>
 </div>
-</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
-  <div style="padding:16px 20px; background:linear-gradient(135deg, #34d39922 0%, transparent 70%); border-bottom:1px solid #34d39930;">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#34d399; line-height:1;">03</div>
-      
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Add Production Guardrails</div>
+<div style="position:absolute; left:40px; top:410px; width:380px;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #34d399; background:rgba(7,22,44,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(7,22,44,0.9), 0 0 12px #34d39955;">
+      <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#34d399; line-height:1;">3</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.96); border-radius:999px; padding:7px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+      <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Add Production Guardrails</span>
     </div>
   </div>
-  <div style="padding:13px 20px;">
-    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 66px; line-height:1.55; max-width:300px;">Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.</p>
+  <div style="display:flex; align-items:baseline; gap:6px; margin-left:66px;">
+    <span style="color:#34d399; font-size:14px; line-height:1;">&bull;</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#34d399;">Key Decision:</span>
+    <span style="font-size:12.5px; color:#fff; font-weight:600;">Safety vs. Utility</span>
   </div>
-  <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Key decision</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><strong style="color:#fff;">Safety vs. Utility</strong></p>
 </div>
-</div><div style="background:rgba(255,255,255,0.035); border:1px solid #bcb1ff40; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
-  <div style="padding:16px 20px; background:linear-gradient(135deg, #bcb1ff22 0%, transparent 70%); border-bottom:1px solid #bcb1ff30;">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#bcb1ff; line-height:1;">04</div>
-      
-      <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; line-height:1.3;">Evolve Your Roadmap</div>
+<div style="position:absolute; left:570px; top:410px; width:380px;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid #bcb1ff; background:rgba(7,22,44,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(7,22,44,0.9), 0 0 12px #bcb1ff55;">
+      <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#bcb1ff; line-height:1;">4</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.96); border-radius:999px; padding:7px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+      <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">Evolve Your Roadmap</span>
     </div>
   </div>
-  <div style="padding:13px 20px;">
-    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.</p>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 66px; line-height:1.55; max-width:300px;">Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.</p>
+  <div style="display:flex; align-items:baseline; gap:6px; margin-left:66px;">
+    <span style="color:#bcb1ff; font-size:14px; line-height:1;">&bull;</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#bcb1ff;">Key Decision:</span>
+    <span style="font-size:12.5px; color:#fff; font-weight:600;">Feature vs. Data</span>
   </div>
-  <div style="padding:13px 20px; border-top:1px solid rgba(255,255,255,0.06);">
-  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">Key decision</div>
-  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;"><strong style="color:#fff;">Feature vs. Data</strong></p>
-</div>
 </div>
     </div>
   </div>

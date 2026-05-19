@@ -647,37 +647,83 @@ def three_levers() -> str:
 def pm_execution_plan() -> str:
     """Source slide 18 - The PM Execution Plan.
 
-    Four M5 header-band cards with key-decision sub-block. Matches M5
-    awspec_blueprint rhythm (4 cards in a row with a uniform secondary
-    block).
+    Serpentine flow matching the source Google Slide layout:
+    Step 1 (top-left) -> arc over the top -> Step 2 (mid-right) ->
+    arc down-left -> Step 3 (bottom-left) -> straight right -> Step 4
+    (bottom-right). Each step: numbered ring + title pill + description
+    + key-decision bullet.
+
+    Uses an SVG arrow layer with absolutely-positioned HTML content on
+    top (same technique as M5 react_pattern, but with a full canvas).
+    Colour-codes each step (blue/gold/green/purple) while keeping the
+    source's serpentine geometry.
     """
-    items = [
-        ("01", "#3b82f6", "Build Your Eval Plan",
+    steps = [
+        # (n, col, title, desc, decision, left, top, width)
+        ("1", "#3b82f6", "Build Your Eval Plan",
          "Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.",
-         "Speed vs. Certainty"),
-        ("02", "#fbbf24", "Set Your Gatekeepers",
+         "Speed vs. Certainty",
+         40, 50, 380),
+        ("2", "#fbbf24", "Set Your Gatekeepers",
          "Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.",
-         "Brand Protection vs. Hype"),
-        ("03", "#34d399", "Add Production Guardrails",
+         "Brand Protection vs. Hype",
+         570, 200, 380),
+        ("3", "#34d399", "Add Production Guardrails",
          "Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.",
-         "Safety vs. Utility"),
-        ("04", "#bcb1ff", "Evolve Your Roadmap",
+         "Safety vs. Utility",
+         40, 410, 380),
+        ("4", "#bcb1ff", "Evolve Your Roadmap",
          "Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.",
-         "Feature vs. Data"),
+         "Feature vs. Data",
+         570, 410, 380),
     ]
-    cards_html = "".join(
-        _m5_card(n, col, name,
-                 body_html=f'<p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{desc}</p>',
-                 sub_blocks=[("Key decision", f'<strong style="color:#fff;">{decision}</strong>')])
-        for n, col, name, desc, decision in items
-    )
+
+    step_blocks = []
+    for n, col, title, desc, decision, left, top, width in steps:
+        step_blocks.append(f"""<div style="position:absolute; left:{left}px; top:{top}px; width:{width}px;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+    <div style="flex:0 0 auto; width:54px; height:54px; border-radius:50%; border:2.5px solid {col}; background:rgba(7,22,44,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 4px rgba(7,22,44,0.9), 0 0 12px {col}55;">
+      <span style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:{col}; line-height:1;">{n}</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.96); border-radius:999px; padding:7px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+      <span style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#0a2547; line-height:1;">{title}</span>
+    </div>
+  </div>
+  <p style="font-size:12.5px; color:#dbe5f2; margin:0 0 10px 66px; line-height:1.55; max-width:300px;">{desc}</p>
+  <div style="display:flex; align-items:baseline; gap:6px; margin-left:66px;">
+    <span style="color:{col}; font-size:14px; line-height:1;">&bull;</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:{col};">Key Decision:</span>
+    <span style="font-size:12.5px; color:#fff; font-weight:600;">{decision}</span>
+  </div>
+</div>""")
+    steps_html = "\n".join(step_blocks)
+
+    # Arrow geometry (viewBox 1000 x 580):
+    # 1->2: curve up-and-over from right of step 1 ring, arcing above to step 2 left side
+    # 2->3: curve down-and-around from left of step 2 ring, sweeping to step 3 right side
+    # 3->4: straight horizontal from right of step 3 to left of step 4
+    arrows_svg = """<svg viewBox="0 0 1000 580" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+  <defs>
+    <marker id="exArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
+    </marker>
+  </defs>
+  <!-- 1 -> 2: arc up and over the top -->
+  <path d="M 125 80 C 125 0, 700 0, 700 215" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+  <!-- 2 -> 3: arc down and around to the left -->
+  <path d="M 645 270 C 380 270, 60 360, 60 405" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+  <!-- 3 -> 4: straight right -->
+  <path d="M 130 440 L 645 440" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#exArrow)" opacity="0.7"/>
+</svg>"""
+
     return f"""<section data-title="The PM Execution Plan">
   <div class="inner">
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1100px; margin:22px auto 0;">
-      {cards_html}
+    <div style="position:relative; width:100%; max-width:1000px; height:580px; margin:18px auto 0;">
+      {arrows_svg}
+      {steps_html}
     </div>
   </div>
 </section>
