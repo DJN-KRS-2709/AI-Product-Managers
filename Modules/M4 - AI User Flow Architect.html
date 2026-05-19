@@ -721,12 +721,16 @@ function renderFlowSVG() {
   const lastIdx = stepCount - 1;
   const lastX = startX + lastIdx * (stepW + 28) + stepW / 2;
   svg += `<path d="M ${lastX} ${stepY + 70} C ${lastX} ${stepY + 100}, 450 ${stepY + 110}, 450 ${stepY + 130}" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#aA)"/>`;
-  // Generated output → Output landing on surface (up curve, mint dashed)
-  svg += `<path d="M 590 ${stepY + 145} C ${W - 30} ${stepY + 145}, ${W - 30} 89, 930 89" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#aM)"/>`;
-  // Surface response gets fed by signal (up-left short arrow)
-  svg += `<path d="M 460 89 L 260 89" stroke="#79c0ff" stroke-width="1.5" fill="none" stroke-dasharray="3,3" opacity="0.7" marker-end="url(#aB)"/>`;
-  // Fail-safe → Surface (up curve, red dashed) - lands near surface response (left fallback)
-  svg += `<path d="M 750 ${stepY + 130} C 750 200, 170 200, 170 118" stroke="#f87171" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.85" marker-end="url(#aR)"/>`;
+  // Generated output → Output landing on surface. Routes AROUND every tile:
+  // drops below underwater, sweeps up the right edge, drops onto target.
+  svg += `<path d="M 600 ${stepY + 145} L 600 548 L 996 548 L 996 30 L 830 30 L 830 60" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#aM)"/>`;
+  // Surface response gets fed by signal (short blue dashed arrow). Start at
+  // the signal circle's left edge so the line never sits inside the circle.
+  svg += `<path d="M 450 89 L 260 89" stroke="#79c0ff" stroke-width="1.5" fill="none" stroke-dasharray="3,3" opacity="0.7" marker-end="url(#aB)"/>`;
+  // Fail-safe → Surface response. Mirror image of the mint route: drops
+  // below underwater, sweeps up the left edge (different y so the two return
+  // corridors never overlap), drops onto target.
+  svg += `<path d="M 620 ${stepY + 168} L 620 562 L 4 562 L 4 30 L 170 30 L 170 60" stroke="#f87171" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.85" marker-end="url(#aR)"/>`;
 
   // Empty-state hint
   if (empty) {
