@@ -1266,12 +1266,19 @@ section.cameras-section .cameras-inner {
         <!-- DOWN: AI-driven update -> AI-generated confirmation (curve back-left) -->
         <path d="M 850 448 C 820 470, 800 480, 770 488" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arr-amber)"/>
 
-        <!-- UP RETURN (mint, dashed). Both arrows sweep around the OUTSIDE of
-             every tile. Same stroke-width and dash so neither dominates.
-             Left: AI-gen answer -> Link to policy.
-             Right: AI-gen confirmation -> Link to new request on Workday. -->
-        <path d="M 306 520 C 0 520, 100 -200, 410 56" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arr-mint)"/>
-        <path d="M 820 504 C 1300 520, 1000 -200, 990 56" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arr-mint)"/>
+        <!-- UP RETURN (mint, dashed). Each arrow takes the SHORTEST clean
+             orthogonal route to its target. None of them cross another tile,
+             and none of them cross each other.
+               1) AI-gen answer  -> Link to policy (primary, around the left).
+               2) AI-gen answer  -> Create a support ticket (fallback, dimmer
+                  + shorter dashes - direct lift through the corridor between
+                  the iceberg's left edge and the surface tiles).
+               3) AI-gen confirmation -> Link to new request on Workday (right
+                  side, lifts straight through the gap above Workday API and
+                  AI-driven update). -->
+        <path d="M 380 488 L 380 470 L 190 470 L 190 130 L 400 130 L 400 104" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arr-mint)"/>
+        <path d="M 340 488 L 340 478 L 270 478 L 270 104" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="3,3" opacity="0.75" marker-end="url(#arr-mint)"/>
+        <path d="M 820 488 L 820 350 L 900 350 L 900 104" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arr-mint)"/>
 
         <!-- Layer pillar tags (right edge of each layer) -->
         <text x="1080" y="44" text-anchor="end" fill="#79c0ff" font-family="Poppins, sans-serif" font-size="9" font-weight="900" letter-spacing="1.5" opacity="0.7">SURFACE = THE PRESENTATION</text>
@@ -1291,7 +1298,7 @@ section.cameras-section .cameras-inner {
       </div>
       <div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.30); border-radius:8px; padding:7px 11px; text-align:left;">
         <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#34d399; font-weight:900; letter-spacing:0.13em; text-transform:uppercase;">&uarr; Up arrows (dashed)</div>
-        <div style="font-size:11px; color:#cdd5e3; line-height:1.45; margin-top:1px;">Generated output surfaces back to the user.</div>
+        <div style="font-size:11px; color:#cdd5e3; line-height:1.45; margin-top:1px;">Generated output returns to the user. Fallback (dim) routes to the support-ticket failsafe.</div>
       </div>
     </div>
   </div>
