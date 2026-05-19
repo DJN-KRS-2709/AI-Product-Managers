@@ -771,37 +771,125 @@ def augmentation_considerations() -> str:
 
 
 def physics_of_rag() -> str:
-    """Tokens and Context Windows."""
-    return """<section data-title="The Physics of RAG">
+    """Tokens and Context Windows - tokenization visual + sliding window timeline.
+
+    Concrete visuals beat definitions. Left card shows a real sentence broken
+    into per-token pills (sub-word splits + punctuation in a hotter shade).
+    Right card shows a horizontal time-axis with conversation turns sliding
+    out of the model's short-term memory.
+    """
+    # Build the per-token pills programmatically. Each entry is (token, split?).
+    # `split=True` highlights word-splits and punctuation in lavender so learners
+    # see at a glance that "model's" is 2 tokens, not 1.
+    tokens = [
+        ("Context", False), ("windows", False), ("are", False),
+        ("the", False), ("model", False), ("'s", True), ("short", False),
+        ("-", True), ("term", False), ("memory", False),
+        ("&mdash;", True), ("they", False), ("forget", False), (".", True),
+    ]
+    chip_full = (
+        "display:inline-block; padding:3px 8px; margin:2px; border-radius:5px; "
+        "font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff;"
+    )
+    chip_word = (
+        chip_full
+        + "background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.30);"
+    )
+    chip_split = (
+        chip_full
+        + "background:rgba(124,140,255,0.22); border:1px solid rgba(124,140,255,0.55);"
+    )
+    chips_html = "".join(
+        f'<span style="{chip_split if split else chip_word}">{tok}</span>'
+        for tok, split in tokens
+    )
+
+    # Timeline block helper. `state` is "lost" (faded, dashed) or "in" (in window).
+    def _block(label: str, flex: float, state: str) -> str:
+        if state == "lost":
+            bg = "rgba(120,120,140,0.08)"
+            border = "1px dashed rgba(160,170,200,0.35)"
+            color = "#8899bb"
+            weight = "600"
+        else:
+            bg = (
+                "linear-gradient(180deg, rgba(96,165,250,0.32), rgba(96,165,250,0.18))"
+                if "Response" in label
+                else "rgba(96,165,250,0.18)"
+            )
+            border = "1px solid rgba(96,165,250,0.6)"
+            color = "#fff"
+            weight = "700"
+        return f'''<div style="position:relative; flex:{flex}; background:{bg}; border:{border}; border-radius:6px; min-width:0;">
+        <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-90deg); transform-origin:center center; white-space:nowrap; font-family:'Poppins',sans-serif; font-size:9.5px; color:{color}; font-weight:{weight}; letter-spacing:0.04em;">{label}</span>
+      </div>'''
+
+    timeline_blocks = (
+        _block("1st Prompt", 0.7, "lost")
+        + _block("1st Response", 1.1, "lost")
+        + '<div style="width:2px; align-self:stretch; background:linear-gradient(180deg, transparent, rgba(251,191,36,0.7), transparent); margin:0 4px;"></div>'
+        + _block("2nd Prompt", 0.7, "in")
+        + _block("2nd Response", 1.5, "in")
+        + _block("3rd Prompt", 0.6, "in")
+    )
+
+    return f"""<section data-title="The Physics of RAG">
   <div class="inner">
     <div class="demo-tag tag-build">Lecture &middot; Physics</div>
     <h2>The physics of RAG &mdash; tokens + context windows</h2>
-    <div class="subtitle">Every token costs money. Every byte in the context window competes for the model&rsquo;s attention.</div>
+    <div class="subtitle">Every token costs money. The window slides forward in time &mdash; older turns fall out of memory.</div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:1040px; margin:22px auto 0;">
+    <div style="display:grid; grid-template-columns:1fr 1.35fr; gap:14px; max-width:1080px; margin:18px auto 0;">
 
-      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:14px; padding:18px 22px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1FA99; Token</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:8px;">The fundamental unit of compute</div>
-        <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 10px;">A token is a word, part of a word, or punctuation. <strong>Roughly 1 token &asymp; 0.75 words.</strong></p>
-        <div style="background:rgba(0,0,0,0.28); border-radius:6px; padding:8px 12px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#79c0ff; line-height:1.55;">
-          <strong style="color:#cdd5e3;">Cost per query =</strong><br/>
-          tokens(prompt) + tokens(retrieved chunks) + tokens(response)
+      <!-- LEFT: TOKEN with tokenized sample -->
+      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:14px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1FA99; Token &middot; Unit of compute</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:10px;">Each pill is one token</div>
+        <div style="background:rgba(0,0,0,0.22); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:9px 10px; line-height:2;">
+          {chips_html}
+        </div>
+        <p style="font-size:11.5px; color:#cdd5e3; margin:8px 0 10px; line-height:1.5;">
+          <strong style="color:#fff;">14 tokens &asymp; 11 words.</strong> Word-splits + punctuation each count.
+          Roughly <strong>1 token &asymp; 0.75 words</strong>.
+        </p>
+        <div style="background:rgba(0,0,0,0.28); border-radius:6px; padding:8px 12px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#79c0ff; line-height:1.6;">
+          <strong style="color:#cdd5e3;">Cost / query</strong> = tokens(prompt) + tokens(retrieved) + tokens(response)
         </div>
       </div>
 
-      <div style="background:rgba(217,142,34,0.06); border:1px solid rgba(217,142,34,0.30); border-radius:14px; padding:18px 22px; text-align:left;">
-        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F9E0; Context Window</div>
-        <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:8px;">The model&rsquo;s short-term memory</div>
-        <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 10px;">Limit per session. Stuffing too much causes the <em>&ldquo;lost in the middle&rdquo;</em> problem &mdash; AI ignores key facts buried mid-prompt.</p>
-        <div style="background:rgba(0,0,0,0.28); border-radius:6px; padding:8px 12px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#fbbf24; line-height:1.55;">
-          <strong style="color:#cdd5e3;">Top-K constraint =</strong><br/>
-          your token budget &amp; speed lever per query
+      <!-- RIGHT: CONTEXT WINDOW with TIMELINE -->
+      <div style="background:rgba(217,142,34,0.06); border:1px solid rgba(217,142,34,0.30); border-radius:14px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F9E0; Context Window &middot; Short-term memory</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:10px;">A sliding limit on what the model can &ldquo;see&rdquo;</div>
+
+        <!-- Region labels above timeline -->
+        <div style="display:flex; align-items:flex-end; margin-bottom:5px; padding:0 4px; gap:4px;">
+          <div style="flex:1.8; font-family:'Poppins',sans-serif; font-size:9px; color:#f87171; font-weight:800; letter-spacing:0.13em; text-transform:uppercase;">&larr; Data lost (out of window)</div>
+          <div style="flex:2.8; font-family:'Poppins',sans-serif; font-size:9px; color:#fbbf24; font-weight:800; letter-spacing:0.13em; text-transform:uppercase; text-align:right;">Context window &middot; e.g. 8K tokens &rarr;</div>
         </div>
+
+        <!-- Timeline: blocks of varying widths, lost on left, in-window on right -->
+        <div style="display:flex; gap:3px; align-items:stretch; height:88px; padding:6px; background:linear-gradient(90deg, rgba(248,113,113,0.06) 0%, rgba(248,113,113,0.06) 38%, rgba(217,142,34,0.10) 38%, rgba(217,142,34,0.10) 100%); border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+          {timeline_blocks}
+        </div>
+
+        <!-- Time axis -->
+        <div style="display:flex; align-items:center; gap:8px; margin-top:8px; padding:0 4px;">
+          <span style="font-size:13px; color:#8899bb;">&larr;</span>
+          <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#a0aec0; font-weight:800; letter-spacing:0.16em;">EARLIER</span>
+          <div style="flex:1; height:1px; background:linear-gradient(90deg, rgba(248,113,113,0.4), rgba(255,255,255,0.10), rgba(251,191,36,0.5));"></div>
+          <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:800; letter-spacing:0.16em;">NOW</span>
+          <span style="font-size:13px; color:#fbbf24;">&rarr;</span>
+        </div>
+
+        <p style="font-size:11.5px; color:#cdd5e3; margin:8px 0 0; line-height:1.5;">
+          Older turns slide out as new ones arrive. Stuff too much in mid-prompt and the model hits the
+          <em style="color:#fbbf24;">&ldquo;lost in the middle&rdquo;</em> failure &mdash; key facts ignored.
+        </p>
       </div>
     </div>
 
-    <p style="font-size:12.5px; color:#cdd5e3; max-width:880px; margin:18px auto 0; padding:11px 18px; background:rgba(52,211,153,0.06); border-left:3px solid #34d399; border-radius:0 8px 8px 0; text-align:left;">
+    <p style="font-size:12.5px; color:#cdd5e3; max-width:880px; margin:14px auto 0; padding:10px 18px; background:rgba(52,211,153,0.06); border-left:3px solid #34d399; border-radius:0 8px 8px 0; text-align:left;">
       <strong style="color:#fff;">PM job:</strong> define the token ceiling in the PRD. Example: <em>&ldquo;This feature must resolve queries using fewer than 4,000 tokens to maintain our $0.05 per-query cost target.&rdquo;</em>
     </p>
   </div>
