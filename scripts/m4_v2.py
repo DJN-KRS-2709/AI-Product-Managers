@@ -933,21 +933,22 @@ JUNO_USER_FLOW_LAB_BODY = """
 # Section 04 - PM's Playbook for Closing AI Trust Gaps
 # ---------------------------------------------------------------------------
 
-def _trust_gap_card(num: str, name: str, problem: str, solutions: list, ex_label: str, ex_text: str, accent: str) -> str:
+def _trust_gap_card(num: str, name: str, problem: str, solutions: list, ex_label: str, ex_text: str, mockup_html: str, mockup_styles: str, accent: str) -> str:
     sol_html = "".join(
         f'<li style="font-size:11.5px; color:#cdd5e3; padding:3px 0 3px 0; line-height:1.5;"><strong style="color:#fff;">{title}:</strong> {detail}</li>'
         for title, detail in solutions
     )
     return f"""<section data-title="Trust Gap {num} &middot; {name}">
+  <style>{mockup_styles}</style>
   <div class="inner">
     <div class="demo-tag tag-debrief">Trust Gap {num}</div>
     <h2>The {name} Gap</h2>
     <div class="subtitle" style="max-width:840px;">{problem}</div>
 
-    <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:14px; max-width:1080px; margin:18px auto 0; align-items:stretch;">
+    <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:14px; max-width:1080px; margin:18px auto 0; align-items:stretch;">
 
-      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:14px; padding:14px 18px; text-align:left;">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:14px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; align-items:center; gap:8px;">
           <div style="font-size:18px;">&#x1F4A1;</div>
           <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase;">Solution &middot; Use explainable / controllable UI</div>
         </div>
@@ -956,13 +957,130 @@ def _trust_gap_card(num: str, name: str, problem: str, solutions: list, ex_label
         </ul>
       </div>
 
-      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:14px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:6px;">
+      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:14px; padding:14px 14px 14px; text-align:left; display:flex; flex-direction:column; gap:8px;">
         <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase;">&#x2728; Example &middot; {ex_label}</div>
-        <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{ex_text}</p>
+        {mockup_html}
+        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">{ex_text}</p>
       </div>
     </div>
   </div>
 </section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Mockups: small CSS-animated product previews, conveying the same "GIF"
+# energy as the source slides without bundling real screen recordings.
+# ---------------------------------------------------------------------------
+
+_MOCKUP_FRAME_BASE = """
+.mk-frame{background:#0a1f44;border:1px solid rgba(255,255,255,0.10);border-radius:10px;overflow:hidden;font-family:'Lato','Inter',-apple-system,sans-serif;}
+.mk-chrome{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.08);padding:5px 8px;}
+.mk-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.18);}
+.mk-addr{margin-left:6px;font-size:9px;color:#8899bb;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:0.04em;}
+.mk-body{padding:9px 10px;font-size:10.5px;color:#cdd5e3;line-height:1.5;}
+"""
+
+# ---- Black Box mockup: Perplexity-style citations + animated source chip ---
+_MOCKUP_BLACKBOX_STYLES = _MOCKUP_FRAME_BASE + """
+.mk-bb sup{display:inline-block;background:rgba(96,165,250,0.18);color:#79c0ff;padding:0 5px;border-radius:4px;font-size:8.5px;font-weight:800;margin:0 1px;animation:bbPulse 2.4s ease-in-out infinite;}
+.mk-bb sup:nth-child(2){animation-delay:0.6s;}
+.mk-bb sup:nth-child(3){animation-delay:1.2s;}
+@keyframes bbPulse{0%,80%,100%{background:rgba(96,165,250,0.18);color:#79c0ff;}40%{background:rgba(96,165,250,0.55);color:#fff;box-shadow:0 0 0 2px rgba(96,165,250,0.30);}}
+.mk-bb-sources{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.08);}
+.mk-bb-srcLabel{font-size:8.5px;color:#79c0ff;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;width:100%;margin-bottom:2px;}
+.mk-bb-src{font-size:8.5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:99px;padding:2px 7px;color:#cdd5e3;display:flex;align-items:center;gap:3px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+.mk-bb-src .num{color:#79c0ff;font-weight:800;}
+.mk-bb-src.hl{animation:bbHL 4.8s ease-in-out infinite;}
+.mk-bb-src.hl.d1{animation-delay:0s;} .mk-bb-src.hl.d2{animation-delay:1.6s;} .mk-bb-src.hl.d3{animation-delay:3.2s;}
+@keyframes bbHL{0%,12%,90%,100%{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);}20%,30%{background:rgba(96,165,250,0.20);border-color:#79c0ff;color:#fff;}}
+"""
+
+_MOCKUP_BLACKBOX_HTML = """
+<div class="mk-frame mk-bb">
+  <div class="mk-chrome"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-addr">perplexity.ai</span></div>
+  <div class="mk-body">
+    The Eiffel Tower is 330&nbsp;m tall<sup>1</sup> and was completed in 1889<sup>2</sup> after 2&nbsp;years of construction<sup>3</sup>.
+    <div class="mk-bb-sources">
+      <div class="mk-bb-srcLabel">&#x1F517; Sources</div>
+      <span class="mk-bb-src hl d1"><span class="num">1</span> wikipedia.org</span>
+      <span class="mk-bb-src hl d2"><span class="num">2</span> history.com</span>
+      <span class="mk-bb-src hl d3"><span class="num">3</span> paris.fr</span>
+    </div>
+  </div>
+</div>
+"""
+
+
+# ---- Hallucination mockup: Gemini-style draft chip + regenerate ----------
+_MOCKUP_HALLUC_STYLES = _MOCKUP_FRAME_BASE + """
+.mk-h-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,0.16);color:#fbbf24;border:1px solid rgba(251,191,36,0.45);border-radius:99px;padding:2px 8px;font-size:8.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;animation:hChip 2.6s ease-in-out infinite;}
+.mk-h-chip::before{content:"";width:6px;height:6px;border-radius:50%;background:#fbbf24;animation:hDot 1.4s ease-in-out infinite;}
+@keyframes hChip{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0);}50%{box-shadow:0 0 0 4px rgba(251,191,36,0.20);}}
+@keyframes hDot{0%,100%{opacity:0.4;}50%{opacity:1;}}
+.mk-h-text{margin-top:6px;color:#e8e8f0;border-bottom:1px dotted rgba(251,191,36,0.55);display:inline;padding-bottom:1px;}
+.mk-h-alts{display:flex;flex-direction:column;gap:3px;margin-top:8px;}
+.mk-h-alt{font-size:9.5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:3px 8px;color:#cdd5e3;display:flex;align-items:center;gap:5px;}
+.mk-h-alt.active{background:rgba(96,165,250,0.14);border-color:#79c0ff;color:#fff;}
+.mk-h-alt .pick{color:#79c0ff;font-weight:800;font-size:9px;}
+.mk-h-actions{display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.08);font-size:9.5px;color:#8899bb;}
+.mk-h-actions .pill{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:99px;padding:2px 8px;}
+.mk-h-actions .regen{color:#79c0ff;border-color:rgba(96,165,250,0.40);background:rgba(96,165,250,0.10);animation:hRegen 3s ease-in-out infinite;}
+@keyframes hRegen{0%,80%,100%{transform:rotate(0deg);}90%{transform:rotate(360deg);}}
+"""
+
+_MOCKUP_HALLUC_HTML = """
+<div class="mk-frame mk-h">
+  <div class="mk-chrome"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-addr">docs.google.com &middot; gemini</span></div>
+  <div class="mk-body">
+    <span class="mk-h-chip">Draft &middot; Low confidence</span>
+    <div style="margin-top:5px;">Q4 revenue was <span class="mk-h-text">approximately $4.2M</span> based on preliminary estimates.</div>
+    <div class="mk-h-alts">
+      <div class="mk-h-alt active"><span class="pick">&#9679;</span> &ldquo;approximately $4.2M&rdquo;</div>
+      <div class="mk-h-alt"><span class="pick">&#9675;</span> &ldquo;around $4M&rdquo;</div>
+      <div class="mk-h-alt"><span class="pick">&#9675;</span> &ldquo;in the $4&ndash;5M range&rdquo;</div>
+    </div>
+    <div class="mk-h-actions">
+      <span class="pill">&#x1F44D; &#x1F44E;</span>
+      <span class="pill regen">&#x21BB; Regenerate</span>
+    </div>
+  </div>
+</div>
+"""
+
+
+# ---- Control mockup: Midjourney-style Vary Region selection ---------------
+_MOCKUP_CONTROL_STYLES = _MOCKUP_FRAME_BASE + """
+.mk-c-canvas{position:relative;height:122px;border-radius:6px;background:linear-gradient(135deg,#243b78 0%,#1e3a8a 30%,#5b3aa3 65%,#854d9c 100%);overflow:hidden;}
+.mk-c-canvas::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 70%,rgba(255,200,140,0.30) 0%,transparent 50%),radial-gradient(circle at 80% 30%,rgba(120,180,255,0.30) 0%,transparent 50%);}
+.mk-c-sel{position:absolute;top:32px;left:54%;width:38%;height:48%;border:1.5px dashed #34d399;border-radius:3px;background:rgba(52,211,153,0.10);box-shadow:0 0 0 100vmax rgba(7,22,44,0.55);clip-path:inset(0);animation:cSel 3.2s ease-in-out infinite;}
+.mk-c-sel::before,.mk-c-sel::after,.mk-c-sel > .h,.mk-c-sel > .h::after{content:"";position:absolute;width:7px;height:7px;background:#34d399;border:1.5px solid #07162C;border-radius:1px;}
+.mk-c-sel::before{top:-4px;left:-4px;}
+.mk-c-sel::after{top:-4px;right:-4px;}
+.mk-c-sel .h{bottom:-4px;left:-4px;}
+.mk-c-sel .h::after{position:absolute;bottom:0;right:-4px;left:auto;}
+@keyframes cSel{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+.mk-c-tooltip{position:absolute;bottom:8px;right:8px;background:rgba(7,22,44,0.85);border:1px solid #34d399;border-radius:6px;padding:4px 10px;font-size:9.5px;color:#34d399;font-weight:800;letter-spacing:0.06em;display:flex;align-items:center;gap:5px;animation:cTip 3.2s ease-in-out infinite;}
+@keyframes cTip{0%,100%{transform:translateY(0);opacity:0.85;}50%{transform:translateY(-2px);opacity:1;}}
+.mk-c-actions{display:flex;gap:5px;margin-top:7px;}
+.mk-c-btn{flex:1;font-size:9.5px;font-weight:800;padding:5px 8px;border-radius:6px;text-align:center;background:rgba(52,211,153,0.18);color:#34d399;border:1px solid rgba(52,211,153,0.45);}
+.mk-c-btn.alt{background:rgba(255,255,255,0.04);color:#cdd5e3;border-color:rgba(255,255,255,0.12);}
+"""
+
+_MOCKUP_CONTROL_HTML = """
+<div class="mk-frame mk-c">
+  <div class="mk-chrome"><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-dot"></span><span class="mk-addr">midjourney.com &middot; image edit</span></div>
+  <div class="mk-body">
+    <div class="mk-c-canvas">
+      <div class="mk-c-sel"><span class="h"></span></div>
+      <div class="mk-c-tooltip">&#x2728; Vary Region</div>
+    </div>
+    <div class="mk-c-actions">
+      <div class="mk-c-btn">&#x270F;&#xFE0F; Vary Region</div>
+      <div class="mk-c-btn alt">&#x21B6; Undo</div>
+    </div>
+  </div>
+</div>
 """
 
 
@@ -976,7 +1094,9 @@ def trust_gap_blackbox() -> str:
             ("Chain-of-thought visibility", "Reveal reasoning steps for complex tasks &mdash; show files searched, rows extracted, decisions taken."),
         ],
         "Perplexity",
-        "Provides a dedicated sources row and numbered citations throughout the response, allowing users to verify outputs in a single click.",
+        "Dedicated <em>Sources</em> row + numbered citations throughout the answer &mdash; users verify any claim in a single click.",
+        _MOCKUP_BLACKBOX_HTML,
+        _MOCKUP_BLACKBOX_STYLES,
         "#fbbf24",
     )
 
@@ -990,8 +1110,10 @@ def trust_gap_hallucination() -> str:
             ("Visual metadata", "Use light-grey text, dotted underlines, or &ldquo;Draft&rdquo; watermarks where the model&rsquo;s confidence score is below threshold."),
             ("Proactive caveats", "Surface low-confidence warnings or alternative interpretations when the model is uncertain."),
         ],
-        "Gemini for Google Workspace",
-        "Lets users rate suggestions, regenerate alternatives, or refine the prompt in-context &mdash; turning probabilistic mistakes into a conversation.",
+        "Gemini for Workspace",
+        "Draft watermarks for low-confidence output, plus <em>rate / regenerate / pick another phrasing</em> &mdash; turning probabilistic mistakes into a conversation.",
+        _MOCKUP_HALLUC_HTML,
+        _MOCKUP_HALLUC_STYLES,
         "#fbbf24",
     )
 
@@ -1006,7 +1128,9 @@ def trust_gap_control() -> str:
             ("Direct-edit access", "Never present AI output read-only. Every V1 draft must be instantly editable without a new prompt."),
         ],
         "Midjourney &middot; Vary Region",
-        "Lets users select a specific part of an AI image and re-generate just that section &mdash; surgical control instead of all-or-nothing.",
+        "Select a specific part of the AI image and re-generate <em>just that section</em> &mdash; surgical control instead of all-or-nothing.",
+        _MOCKUP_CONTROL_HTML,
+        _MOCKUP_CONTROL_STYLES,
         "#fbbf24",
     )
 
