@@ -3,268 +3,475 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M6 — Final Project Deliverables Builder</title>
+<title>Final Project Deliverables Builder</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}h1,h2,h3{font-family:'Poppins',sans-serif}header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%)}button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}button:hover{transform:translateY(-1px)}button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px}
-  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
-  @media(max-width:960px){main{grid-template-columns:1fr}}
-  .panel{padding:24px 32px;overflow:auto}
-  .panel.left{border-right:1px solid var(--line)}
-  .group{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
-  .group h3{margin:0 0 6px;font-size:15px;color:var(--accent)}
-  .group .sub{color:var(--muted);font-size:13px;margin:0 0 10px}
-  .field{margin-bottom:10px}
-  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
-  .hint{color:var(--muted);font-size:12px;margin:0 0 6px}
-  textarea,input{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:14px}
-  textarea{min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus,input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea}
-  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
-  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
-  .check li{margin:6px 0;font-size:14px}
-  .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;margin-left:6px;background:#22293a;color:var(--muted)}
-  .badge.ok{background:rgba(52,211,153,.12);color:var(--ok)}
-  .badge.warn{background:rgba(251,191,36,.12);color:var(--warn)}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --m1:#3b82f6;--m2:#fbbf24;--m3:#bcb1ff;--m4:#34d399;--m5:#f472b6;--m6:#79c0ff;--danger:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(124,140,255,0.10) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1.05fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 16px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+.section-h:first-child{margin-top:4px}
+.preset-bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.preset-btn{font-size:11px;padding:6px 12px;border-radius:99px;background:rgba(96,165,250,0.10);color:var(--accent2);border:1px solid rgba(96,165,250,0.30);cursor:pointer;font-weight:700;font-family:'Poppins',sans-serif}
+.preset-btn:hover{background:rgba(96,165,250,0.18)}
+.group{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;border-left:4px solid var(--accent);display:flex;flex-direction:column;gap:8px}
+.group.m1{border-left-color:var(--m1)}
+.group.m2{border-left-color:var(--m2)}
+.group.m3{border-left-color:var(--m3)}
+.group.m4{border-left-color:var(--m4)}
+.group.m5{border-left-color:var(--m5)}
+.group.m6{border-left-color:var(--m6)}
+.group-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.group-icon{font-size:20px}
+.group-tag{font-family:'Poppins',sans-serif;font-weight:900;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase}
+.group.m1 .group-tag{color:var(--m1)}
+.group.m2 .group-tag{color:var(--m2)}
+.group.m3 .group-tag{color:var(--m3)}
+.group.m4 .group-tag{color:var(--m4)}
+.group.m5 .group-tag{color:var(--m5)}
+.group.m6 .group-tag{color:var(--m6)}
+.group-name{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:#fff;flex:1}
+.group-q{font-size:11.5px;color:var(--muted);margin:0;font-style:italic}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10.5px;background:#22293a;color:var(--muted);font-weight:600}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
+.badge.warn{background:rgba(251,191,36,.14);color:var(--warn)}
+.field{margin:0}
+.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--accent2);margin-bottom:5px;font-weight:700}
+textarea,input,select{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+textarea{min-height:54px;resize:vertical}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:620px;overflow-y:auto}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:6px 0;font-size:13px;color:#cdd5e3}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
+.rtab-row{display:flex;gap:6px;margin:6px 0 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.rtab{font-size:12px;padding:7px 14px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);border:1px solid var(--line);border-bottom:0;cursor:pointer;font-weight:700;font-family:'Poppins',sans-serif;letter-spacing:.04em}
+.rtab.active{background:var(--card);color:var(--fg);border-color:var(--accent);border-bottom:1px solid var(--card);position:relative;top:1px}
+.rtab-pane{display:none}
+.rtab-pane.active{display:block}
+.tree{background:rgba(7,22,44,0.55);border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.85;color:#cdd5e3}
+.tree .root{color:#fff;font-weight:800}
+.tree .folder{color:var(--accent2);font-weight:700}
+.tree .file{color:#cdd5e3}
+.tree .filled{color:var(--ok)}
+.tree .missing{color:var(--danger);opacity:0.55}
+.tree .url{color:var(--accent);font-size:11px;opacity:0.9}
+.tree .ind{display:inline-block;color:#445;margin-right:6px}
 </style>
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 6 · Final · Replaces Final Deliverables.pptx</div><h1>Final Project Deliverables Builder</h1></div>
+  <div><div class="crumb">Module 6 &middot; Capstone tool &middot; The README is the pitch</div><h1>Final Project Deliverables Builder</h1></div>
   <div class="row">
     <button onclick="copyMd()">Copy as markdown</button>
-    <button class="secondary" onclick="download()">Download README.md</button>
+    <button class="secondary" onclick="downloadMd()">Download README.md</button>
     <button class="secondary" onclick="reset()">Reset</button>
   </div>
 </header>
+
 <main>
   <section class="panel left">
-    <p class="hint">This produces the top-level <code>README.md</code> of your <code>juno-pm/</code> fork — the certification submission.</p>
+    <p class="lead">Aggregate every M1&ndash;M6 artefact + your Build Insights into <strong>one polished README</strong> at the root of your <code>juno-pm</code> fork. The repo URL is your LMS submission &mdash; this README is the pitch.</p>
 
-    <div class="group">
-      <h3>Title & framing <span class="badge" id="b0">empty</span></h3>
-      <p class="sub">Cover page of the README.</p>
-      <div class="field"><label>Working title</label><input id="title" placeholder="Juno PM — AI Copilot for RocketShip's Product Org" /></div>
-      <div class="field"><label>One-line pitch</label><input id="pitch" placeholder="An AI Associate PM that turns Slack/Notion/Jira chaos into a prioritised top-3 risk list every morning." /></div>
-      <div class="field"><label>Your name + cohort</label><input id="who" placeholder="Jane Doe · AI PM Cohort · May 2026" /></div>
+    <div class="preset-bar">
+      <button class="preset-btn" onclick="loadPreset('juno')">&#x1F4E5; Load Juno example</button>
+      <button class="preset-btn" onclick="loadPreset('blank')">&#x270F;&#xFE0F; Start blank</button>
     </div>
 
-    <div class="group">
-      <h3>M1 · Prompt & toolkit</h3>
-      <p class="sub">Path to system-prompt.md + Lovable prototype link.</p>
-      <div class="field"><label>System prompt path</label><input id="m1a" placeholder="01-prompting/system-prompt.md" /></div>
-      <div class="field"><label>Lovable prototype URL</label><input id="m1b" placeholder="https://lovable.app/share/..." /></div>
+    <div class="section-h">Title &amp; framing</div>
+
+    <div class="group" style="border-left-color:#bcb1ff;background:rgba(124,140,255,0.05)">
+      <div class="group-head">
+        <div class="group-icon">&#x1F4DA;</div>
+        <div class="group-tag" style="color:#bcb1ff">Cover</div>
+        <div class="group-name">Pitch surface</div>
+        <span class="badge" id="b0">empty</span>
+      </div>
+      <div class="field"><label>Working title</label><input id="title" oninput="render()" placeholder="Juno PM &mdash; AI Copilot for RocketShip&rsquo;s Product Org" /></div>
+      <div class="field"><label>One-line pitch</label><input id="pitch" oninput="render()" placeholder="An AI Associate PM that turns Slack/Notion/Jira chaos into a prioritised top-3 risk list every morning." /></div>
+      <div class="row two">
+        <div class="field"><label>Your name + cohort</label><input id="who" oninput="render()" placeholder="Jane Doe &middot; AI PM Cohort &middot; May 2026" /></div>
+        <div class="field"><label>Repo URL (LMS submission)</label><input id="repo" oninput="render()" placeholder="https://github.com/your-handle/juno-pm" /></div>
+      </div>
     </div>
 
-    <div class="group">
-      <h3>M2 · Strategy</h3>
-      <p class="sub">Two paths.</p>
-      <div class="field"><label>Decision matrix path</label><input id="m2a" placeholder="02-strategy/decision-matrix.md" /></div>
-      <div class="field"><label>Strategy one-pager path</label><input id="m2b" placeholder="02-strategy/strategy-one-pager.md" /></div>
+    <div class="section-h">Module artefacts &middot; M1 - M6</div>
+
+    <div class="group m1">
+      <div class="group-head"><div class="group-icon">&#x270D;&#xFE0F;</div><div class="group-tag">Module 1</div><div class="group-name">Prompting &amp; Toolkit</div><span class="badge" id="b1">empty</span></div>
+      <p class="group-q">System prompt + Lovable prototype.</p>
+      <div class="row two">
+        <div class="field"><label>System prompt path</label><input id="m1a" oninput="render()" placeholder="01-prompting/system-prompt.md" /></div>
+        <div class="field"><label>Lovable prototype URL</label><input id="m1b" oninput="render()" placeholder="https://lovable.dev/share/..." /></div>
+      </div>
     </div>
 
-    <div class="group">
-      <h3>M3 · RAG / AI PRD</h3>
-      <div class="field"><label>AI PRD path</label><input id="m3" placeholder="03-rag-prd/prd.md" /></div>
+    <div class="group m2">
+      <div class="group-head"><div class="group-icon">&#x1F4CA;</div><div class="group-tag">Module 2</div><div class="group-name">Strategy</div><span class="badge" id="b2">empty</span></div>
+      <p class="group-q">Decision matrix + AI strategy one-pager.</p>
+      <div class="row two">
+        <div class="field"><label>Decision matrix path</label><input id="m2a" oninput="render()" placeholder="02-strategy/decision-matrix.md" /></div>
+        <div class="field"><label>Strategy one-pager path</label><input id="m2b" oninput="render()" placeholder="02-strategy/strategy-one-pager.md" /></div>
+      </div>
     </div>
 
-    <div class="group">
-      <h3>M4 · UX</h3>
-      <div class="field"><label>AI user flow path</label><input id="m4a" placeholder="04-ai-ux/user-flow.md" /></div>
-      <div class="field"><label>Trust-gap mitigations path</label><input id="m4b" placeholder="04-ai-ux/trust-gaps.md" /></div>
+    <div class="group m3">
+      <div class="group-head"><div class="group-icon">&#x1F50D;</div><div class="group-tag">Module 3</div><div class="group-name">RAG / AI PRD</div><span class="badge" id="b3">empty</span></div>
+      <p class="group-q">AI PRD with retrieval requirements.</p>
+      <div class="field"><label>AI PRD path</label><input id="m3" oninput="render()" placeholder="03-rag-prd/prd.md" /></div>
     </div>
 
-    <div class="group">
-      <h3>M5 · Agentic</h3>
-      <div class="field"><label>AWSpec path</label><input id="m5a" placeholder="05-agentic-workflows/awspec.md" /></div>
-      <div class="field"><label>Agent Control Panel path</label><input id="m5b" placeholder="05-agentic-workflows/control-panel.md" /></div>
+    <div class="group m4">
+      <div class="group-head"><div class="group-icon">&#x1F9CA;</div><div class="group-tag">Module 4</div><div class="group-name">AI-Native UX</div><span class="badge" id="b4">empty</span></div>
+      <p class="group-q">User flow + trust-gap mitigations.</p>
+      <div class="row two">
+        <div class="field"><label>AI user flow path</label><input id="m4a" oninput="render()" placeholder="04-ai-ux/user-flow.md" /></div>
+        <div class="field"><label>Trust-gap mitigations path</label><input id="m4b" oninput="render()" placeholder="04-ai-ux/trust-gaps.md" /></div>
+      </div>
     </div>
 
-    <div class="group">
-      <h3>M6 · Evals</h3>
-      <div class="field"><label>Eval stack path</label><input id="m6a" placeholder="06-evals/eval-stack.md" /></div>
-      <div class="field"><label>Human rubric path</label><input id="m6b" placeholder="06-evals/human-rubric.md" /></div>
+    <div class="group m5">
+      <div class="group-head"><div class="group-icon">&#x1F916;</div><div class="group-tag">Module 5</div><div class="group-name">Agentic Workflows</div><span class="badge" id="b5">empty</span></div>
+      <p class="group-q">AWSpec + Agent Control Panel.</p>
+      <div class="row two">
+        <div class="field"><label>AWSpec path</label><input id="m5a" oninput="render()" placeholder="05-agentic-workflows/awspec.md" /></div>
+        <div class="field"><label>Agent Control Panel path</label><input id="m5b" oninput="render()" placeholder="05-agentic-workflows/agent-control-panel.md" /></div>
+      </div>
     </div>
 
-    <div class="group">
-      <h3>PM Execution Plan <span class="badge" id="bP">empty</span></h3>
-      <p class="sub">The closing surface. Where you are. What ships next. What you watch. What blocks shipping.</p>
+    <div class="group m6">
+      <div class="group-head"><div class="group-icon">&#x1F4CF;</div><div class="group-tag">Module 6</div><div class="group-name">Evals &amp; Guardrails</div><span class="badge" id="b6">empty</span></div>
+      <p class="group-q">Eval stack + human rubric.</p>
+      <div class="row two">
+        <div class="field"><label>Eval stack path</label><input id="m6a" oninput="render()" placeholder="06-evals/eval-stack.md" /></div>
+        <div class="field"><label>Human rubric path</label><input id="m6b" oninput="render()" placeholder="06-evals/human-rubric.md" /></div>
+      </div>
+    </div>
+
+    <div class="section-h">PM Execution Plan</div>
+
+    <div class="group" style="border-left-color:#bcb1ff;background:rgba(124,140,255,0.05)">
+      <div class="group-head"><div class="group-icon">&#x1F3AF;</div><div class="group-tag" style="color:#bcb1ff">Closing surface</div><div class="group-name">Where Juno is, what ships next, what blocks</div><span class="badge" id="bP">empty</span></div>
       <div class="field"><label>Where Juno is today</label>
-        <textarea id="now" placeholder="- M1–M5 specced and committed.\n- Lovable prototype validates the M1 flow.\n- Automated evals not yet wired (cron stub only). Human rubric drafted, not staffed."></textarea>
+        <textarea id="now" oninput="render()" placeholder="- M1-M6 specced and committed.&#10;- Lovable prototype validates the M1 flow.&#10;- Automated evals not yet wired (cron stub only). Human rubric drafted, not staffed."></textarea>
       </div>
       <div class="field"><label>What ships next (next 2 sprints)</label>
-        <textarea id="next" placeholder="- Sprint 1: ship the eval harness; staff 2 graders; wire Slack tool.\n- Sprint 2: open beta with 3 PMs; weekly review of rubric scores."></textarea>
+        <textarea id="next" oninput="render()" placeholder="- Sprint 1: ship the eval harness; staff 2 graders; wire Slack tool.&#10;- Sprint 2: open beta with 3 PMs; weekly review of rubric scores."></textarea>
       </div>
       <div class="field"><label>What you watch (dashboards)</label>
-        <textarea id="watch" placeholder="- Daily: thumbs-down rate, regen rate, hand-off rate.\n- Weekly: human-rubric mean per dimension; refusal hit-rate; cost per run.\n- Per release: golden-set accuracy."></textarea>
+        <textarea id="watch" oninput="render()" placeholder="- Daily: thumbs-down rate, regen rate, hand-off rate.&#10;- Weekly: human-rubric mean per dimension; refusal hit-rate; cost per run.&#10;- Per release: golden-set accuracy."></textarea>
       </div>
-      <div class="field"><label>Red lines (what blocks shipping)</label>
-        <textarea id="red" placeholder="- Any critical-safety fail in human eval.\n- &lt;90% golden-set accuracy.\n- Customer-name fabrication in last 30 days.\n- Cost &gt;$0.50 / run."></textarea>
+      <div class="field"><label>Red lines (what blocks shipping &mdash; numbers, not feelings)</label>
+        <textarea id="red" oninput="render()" placeholder="- Any critical-safety fail in human eval.&#10;- <90% golden-set accuracy.&#10;- Customer-name fabrication in last 30 days.&#10;- Cost >$0.50 / run."></textarea>
       </div>
       <div class="field"><label>Governance (compliance / safety / reliability / reputation)</label>
-        <textarea id="gov" placeholder="- Compliance: PII scrubber pre-LLM; GDPR DSR handler.\n- Safety: prompt-injection eval row; refusal on legal/contract content.\n- Reliability: 99.5% SLO; cached top-3 fallback if model is down.\n- Reputation: 2-hour incident-response playbook in /docs."></textarea>
+        <textarea id="gov" oninput="render()" placeholder="- Compliance: PII scrubber pre-LLM; GDPR DSR handler.&#10;- Safety: prompt-injection eval row; refusal on legal/contract content.&#10;- Reliability: 99.5% SLO; cached top-3 fallback if model is down.&#10;- Reputation: 2-hour incident-response playbook in /docs."></textarea>
       </div>
     </div>
 
-    <div class="group">
-      <h3>Build Insights <span class="badge" id="bI">empty</span></h3>
-      <p class="sub">Required. Three reflections.</p>
+    <div class="section-h">Build Insights (required) + showcase</div>
+
+    <div class="group" style="border-left-color:#34d399;background:rgba(52,211,153,0.05)">
+      <div class="group-head"><div class="group-icon">&#x1F4A1;</div><div class="group-tag" style="color:#34d399">Reflection</div><div class="group-name">One friction, one learning, one aha</div><span class="badge" id="bI">empty</span></div>
       <div class="field"><label>One friction point</label>
-        <input id="fric" placeholder="Retrieval quality was the bottleneck — chunking strategy mattered more than the model." />
+        <input id="fric" oninput="render()" placeholder="Retrieval quality was the bottleneck &mdash; chunking strategy mattered more than the model." />
       </div>
       <div class="field"><label>One key learning</label>
-        <input id="learn" placeholder="Eval rubrics force product decisions that PRDs hide." />
+        <input id="learn" oninput="render()" placeholder="Eval rubrics force product decisions that PRDs hide." />
       </div>
       <div class="field"><label>One aha moment</label>
-        <input id="aha" placeholder="The system prompt is the product — the UI is the wrapper." />
+        <input id="aha" oninput="render()" placeholder="The system prompt is the product &mdash; the UI is the wrapper." />
       </div>
-    </div>
-
-    <div class="group">
-      <h3>Async showcase (optional) <span class="badge" id="bS">empty</span></h3>
-      <p class="sub">Post your repo URL + Loom to <code>#ai-pm-cohort</code>.</p>
-      <div class="field"><label>Loom URL</label><input id="loom" placeholder="https://loom.com/share/..." /></div>
+      <div class="field"><label>Async showcase Loom (optional)</label>
+        <input id="loom" oninput="render()" placeholder="https://www.loom.com/share/..." />
+      </div>
     </div>
   </section>
 
-  <section class="panel right">
-    <label>Live preview — top-level README.md</label>
-    <p class="hint">This is the certification submission. Commit to the root of your <code>juno-pm/</code> fork.</p>
-    <div class="preview" id="preview"></div>
-
-    <div class="check">
-      <h3>Self-review checklist</h3>
-      <ul style="margin:6px 0 0;padding-left:18px">
-        <li id="c1">All 6 module artifacts linked</li>
-        <li id="c2">PM Execution Plan has all 4 sections</li>
-        <li id="c3">Build Insights filled in (friction / learning / aha)</li>
-        <li id="c4">Governance row included for each of the 4 buckets</li>
-        <li id="c5">Red lines stated as numbers, not feelings</li>
-        <li id="c6">Loom link added (or noted optional)</li>
-      </ul>
+  <section class="panel">
+    <div class="rtab-row">
+      <button class="rtab active" data-pane="tree" onclick="switchTab(this)">Repo tree</button>
+      <button class="rtab" data-pane="md" onclick="switchTab(this)">README preview</button>
+      <button class="rtab" data-pane="prompt" onclick="switchTab(this)">Pitch prompt</button>
+      <button class="rtab" data-pane="checklist" onclick="switchTab(this)">Self-review</button>
     </div>
 
-    <div class="check">
-      <h3>AI-review prompt</h3>
-      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste the rendered README + this into ChatGPT/Claude/Cursor:</p>
-      <div class="preview" style="font-size:12px">You are a VP of Product reading this AI PM's portfolio repo. (a) Could you fund this bet on the strength of this README alone? Cite the strongest paragraph and the weakest paragraph. (b) Where is the AI-PM thinking strongest — strategy, RAG, UX, agentic, or evals? Where is it weakest? (c) What single addition would move it from "good cohort submission" to "VP-fundable bet"? Reply in 3 short paragraphs.</div>
+    <div class="rtab-pane active" data-pane="tree">
+      <p class="lead">Visual snapshot of your <code>juno-pm</code> fork. Green = filled, red dim = still missing.</p>
+      <div class="tree" id="tree"></div>
+    </div>
+
+    <div class="rtab-pane" data-pane="md">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--accent2);margin-bottom:6px;display:block;font-weight:700">Live preview &mdash; top-level README.md</label>
+      <div class="preview" id="preview">_(start filling fields)_</div>
+    </div>
+
+    <div class="rtab-pane" data-pane="prompt">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--accent2);margin-bottom:6px;display:block;font-weight:700">Pitch prompt</label>
+      <p class="lead" style="margin-top:0">Paste this + your README into ChatGPT/Claude/Cursor to get a stranger-test of your pitch.</p>
+      <div class="preview" id="vizPrompt"></div>
+      <div class="row" style="margin-top:8px"><button class="secondary" onclick="copyViz()">Copy prompt</button></div>
+    </div>
+
+    <div class="rtab-pane" data-pane="checklist">
+      <div class="check">
+        <h3>Self-review checklist</h3>
+        <ul>
+          <li id="c1">All 6 module artefacts linked</li>
+          <li id="c2">PM Execution Plan has all 5 sections</li>
+          <li id="c3">Build Insights filled in (friction / learning / aha)</li>
+          <li id="c4">Governance covers all 4 buckets</li>
+          <li id="c5">Red lines stated as numbers, not feelings</li>
+          <li id="c6">Repo URL recorded for LMS</li>
+        </ul>
+      </div>
+      <div class="check">
+        <h3>AI-review prompt</h3>
+        <p style="margin:0 0 8px;font-size:13px;color:var(--muted)">Paste the rendered README + this into ChatGPT/Claude/Cursor:</p>
+        <div class="preview" style="font-size:12px">You are a VP of Product reading this AI PM's portfolio repo. (a) Could you fund this bet on the strength of this README alone? Cite the strongest paragraph and the weakest paragraph. (b) Where is the AI-PM thinking strongest &mdash; strategy, RAG, UX, agentic, or evals? Where is it weakest? (c) What single addition would move it from "good cohort submission" to "VP-fundable bet"? Reply in 3 short paragraphs.</div>
+      </div>
     </div>
   </section>
 </main>
+
 <div class="toast" id="toast">Copied</div>
+
 <script>
-  const fields=['title','pitch','who','m1a','m1b','m2a','m2b','m3','m4a','m4b','m5a','m5b','m6a','m6b','now','next','watch','red','gov','fric','learn','aha','loom'];
-  const KEY='m6-final-readme';
-  function v(id){return document.getElementById(id).value.trim()}
-  function load(){const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);fields.forEach(i=>{if(o[i])document.getElementById(i).value=o[i]})}
-  function save(){const o={};fields.forEach(i=>o[i]=document.getElementById(i).value);localStorage.setItem(KEY,JSON.stringify(o))}
-  function setBadge(id,filled){const b=document.getElementById(id);if(!b)return;b.textContent=filled?'filled':'empty';b.className='badge '+(filled?'ok':'warn')}
-  function setCheck(id,ok){const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')}
-  function md(){
-    const link=(label,path)=>path?`- **${label}** — [\`${path}\`](${path})`:`- **${label}** — _(missing)_`;
-    return `# ${v('title')||'Juno PM'}
+const fields=['title','pitch','who','repo','m1a','m1b','m2a','m2b','m3','m4a','m4b','m5a','m5b','m6a','m6b','now','next','watch','red','gov','fric','learn','aha','loom'];
+const KEY='m6-final-readme-v2';
+function v(id){const el=document.getElementById(id);return el?el.value.trim():''}
+function set(id,val){const el=document.getElementById(id);if(el)el.value=val||''}
 
-> ${v('pitch')||'_(one-line pitch goes here)_'}
+const PRESETS={
+  juno:{
+    title:'Juno PM \u2014 AI Copilot for RocketShip\u2019s Product Org',
+    pitch:'An AI Associate PM that turns Slack/Notion/Jira chaos into a prioritised top-3 risk list every morning.',
+    who:'Jane Doe \u00b7 AI PM Cohort \u00b7 May 2026',
+    repo:'https://github.com/your-handle/juno-pm',
+    m1a:'01-prompting/system-prompt.md',
+    m1b:'https://lovable.dev/share/your-juno-prototype',
+    m2a:'02-strategy/decision-matrix.md',
+    m2b:'02-strategy/strategy-one-pager.md',
+    m3:'03-rag-prd/prd.md',
+    m4a:'04-ai-ux/user-flow.md',
+    m4b:'04-ai-ux/trust-gaps.md',
+    m5a:'05-agentic-workflows/awspec.md',
+    m5b:'05-agentic-workflows/agent-control-panel.md',
+    m6a:'06-evals/eval-stack.md',
+    m6b:'06-evals/human-rubric.md',
+    now:'- M1\u2013M6 specced and committed.\n- Lovable prototype validates the M1 flow with the team.\n- Automated evals: 200-item golden set drafted, judge prompt validated against 30 items; not yet wired to CI.\n- Human rubric drafted; 2 grader candidates lined up; no calibration round yet.',
+    next:'- Sprint 1: wire the eval harness to CI; staff and calibrate 2 graders; ship the Slack triage tool.\n- Sprint 2: open closed beta with 3 PMs (1 RocketShip, 2 customers); weekly rubric review; instrument abandon-rate.',
+    watch:'- Daily: thumbs-down rate, regen rate, hand-off rate.\n- Weekly: human-rubric mean per dimension; refusal hit-rate; cost per run.\n- Per release: golden-set accuracy; format/citation/refusal pass rate.',
+    red:'- Any critical-safety fail (any "1" on safety dimension in human eval).\n- <90% golden-set accuracy on automated layer.\n- Customer-name fabrication in last 30 days.\n- Cost >$0.50 per run.\n- P99 latency >5s on triage flow.',
+    gov:'- Compliance: PII scrubber pre-LLM; GDPR DSR handler in /docs/dsr-runbook.md.\n- Safety: prompt-injection eval row in golden set; refusal on legal/contract content.\n- Reliability: 99.5% SLO; cached top-3 fallback if model is down.\n- Reputation: 2-hour incident-response playbook in /docs; canary deploys for every model swap.',
+    fric:'Retrieval quality was the bottleneck \u2014 chunking strategy mattered more than the model.',
+    learn:'Eval rubrics force the product decisions that PRDs let you hide.',
+    aha:'The system prompt is the product \u2014 the UI is the wrapper.',
+    loom:'',
+  },
+  blank:Object.fromEntries(fields.map(f=>[f,''])),
+};
 
-_${v('who')||'_(your name · cohort · date)_'}_
+function loadPreset(key){
+  const p=PRESETS[key]||PRESETS.blank;
+  fields.forEach(f=>set(f,p[f]||''));
+  render();
+}
 
-This repo is my final project for the AI Product Management Certification — Juno PM, an AI copilot for RocketShip's product org. Each module's artifact lives in its own folder; this README is the dashboard and the pitch.
+function load(){const s=localStorage.getItem(KEY);if(!s)return false;try{const o=JSON.parse(s);fields.forEach(i=>{if(o[i])set(i,o[i])});return true}catch(e){return false}}
+function save(){const o={};fields.forEach(i=>o[i]=v(i));localStorage.setItem(KEY,JSON.stringify(o))}
 
----
+function setBadge(id,filled){const b=document.getElementById(id);if(!b)return;b.textContent=filled?'filled':'empty';b.className='badge '+(filled?'ok':'warn')}
+function setCheck(id,ok){const el=document.getElementById(id);if(!el)return;el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;const txt=el.firstChild&&el.firstChild.nodeValue?el.firstChild.nodeValue.replace(/^[\u2713\u2022]\s*/,''):el.textContent;el.firstChild.nodeValue=(ok?'\u2713 ':'\u2022 ')+txt}
 
-## Module artifacts
-
-### M1 · Prompting
-${link('System prompt', v('m1a'))}
-${v('m1b')?`- **Lovable prototype** — ${v('m1b')}`:'- **Lovable prototype** — _(missing)_'}
-
-### M2 · Strategy
-${link('AI Solution Decision Matrix', v('m2a'))}
-${link('AI Strategy One-Pager', v('m2b'))}
-
-### M3 · RAG / AI PRD
-${link('AI PRD', v('m3'))}
-
-### M4 · AI-UX
-${link('AI user flow', v('m4a'))}
-${link('Trust-gap mitigations', v('m4b'))}
-
-### M5 · Agentic
-${link('Agent Workflow Spec (AWSpec)', v('m5a'))}
-${link('Agent Control Panel', v('m5b'))}
-
-### M6 · Evals
-${link('Eval stack', v('m6a'))}
-${link('Human evaluation rubric', v('m6b'))}
-
----
-
-## PM Execution Plan
-
-### Where Juno is today
-${v('now')||'_(missing)_'}
-
-### What ships next (next 2 sprints)
-${v('next')||'_(missing)_'}
-
-### What I watch (dashboards)
-${v('watch')||'_(missing)_'}
-
-### Red lines (what blocks shipping)
-${v('red')||'_(missing)_'}
-
-### Governance
-${v('gov')||'_(missing)_'}
-
----
-
-## Build Insights
-
-- **Friction point.** ${v('fric')||'_(missing)_'}
-- **Key learning.** ${v('learn')||'_(missing)_'}
-- **Aha moment.** ${v('aha')||'_(missing)_'}
-
----
-
-## Async showcase
-
-${v('loom')?`3-minute walkthrough: ${v('loom')}`:'_(optional Loom — post in #ai-pm-cohort)_'}
-
----
-
-_Certification submission — AI Product Management Certification._
-`;
+function md(){
+  const link=(label,path)=>path?'- **'+label+'** \u2014 [`'+path+'`]('+path+')':'- **'+label+'** \u2014 _(missing)_';
+  const urlLink=(label,url)=>url?'- **'+label+'** \u2014 '+url:'- **'+label+'** \u2014 _(missing)_';
+  const lines=[];
+  lines.push('# '+(v('title')||'Juno PM'));
+  lines.push('');
+  lines.push('> '+(v('pitch')||'_(one-line pitch goes here)_'));
+  lines.push('');
+  lines.push('_'+(v('who')||'_(your name \u00b7 cohort \u00b7 date)_')+'_');
+  if(v('repo')){lines.push('');lines.push('Repo: '+v('repo'))}
+  lines.push('');
+  lines.push('This repo is my final project for the AI Product Management Certification \u2014 '+(v('title')?'**'+v('title').split('\u2014')[0].trim()+'**':'Juno PM')+'. Each module\u2019s artefact lives in its own folder; this README is the dashboard and the pitch.');
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+  lines.push('## Module artefacts');
+  lines.push('');
+  lines.push('### M1 \u00b7 Prompting');
+  lines.push(link('System prompt', v('m1a')));
+  lines.push(urlLink('Lovable prototype', v('m1b')));
+  lines.push('');
+  lines.push('### M2 \u00b7 Strategy');
+  lines.push(link('Decision matrix', v('m2a')));
+  lines.push(link('AI Strategy one-pager', v('m2b')));
+  lines.push('');
+  lines.push('### M3 \u00b7 RAG / AI PRD');
+  lines.push(link('AI PRD', v('m3')));
+  lines.push('');
+  lines.push('### M4 \u00b7 AI-Native UX');
+  lines.push(link('AI user flow', v('m4a')));
+  lines.push(link('Trust-gap mitigations', v('m4b')));
+  lines.push('');
+  lines.push('### M5 \u00b7 Agentic Workflows');
+  lines.push(link('Agent Workflow Spec (AWSpec)', v('m5a')));
+  lines.push(link('Agent Control Panel', v('m5b')));
+  lines.push('');
+  lines.push('### M6 \u00b7 Evals &amp; Guardrails');
+  lines.push(link('Eval stack', v('m6a')));
+  lines.push(link('Human evaluation rubric', v('m6b')));
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+  lines.push('## PM Execution Plan');
+  lines.push('');
+  lines.push('### Where Juno is today');
+  lines.push(v('now')||'_(missing)_');
+  lines.push('');
+  lines.push('### What ships next (next 2 sprints)');
+  lines.push(v('next')||'_(missing)_');
+  lines.push('');
+  lines.push('### What I watch (dashboards)');
+  lines.push(v('watch')||'_(missing)_');
+  lines.push('');
+  lines.push('### Red lines (what blocks shipping)');
+  lines.push(v('red')||'_(missing)_');
+  lines.push('');
+  lines.push('### Governance');
+  lines.push(v('gov')||'_(missing)_');
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+  lines.push('## Build Insights');
+  lines.push('');
+  lines.push('- **Friction point.** '+(v('fric')||'_(missing)_'));
+  lines.push('- **Key learning.** '+(v('learn')||'_(missing)_'));
+  lines.push('- **Aha moment.** '+(v('aha')||'_(missing)_'));
+  lines.push('');
+  if(v('loom')){
+    lines.push('---');
+    lines.push('');
+    lines.push('## Async showcase');
+    lines.push('');
+    lines.push('3-minute walkthrough: '+v('loom'));
+    lines.push('');
   }
-  function update(){
-    setBadge('b0', v('title')&&v('pitch'));
-    setBadge('bP', v('now')&&v('next')&&v('watch')&&v('red'));
-    setBadge('bI', v('fric')&&v('learn')&&v('aha'));
-    setBadge('bS', !!v('loom'));
-    const modulesFilled = v('m1a')&&v('m2a')&&v('m2b')&&v('m3')&&v('m4a')&&v('m5a')&&v('m6a')&&v('m6b');
-    setCheck('c1', modulesFilled);
-    setCheck('c2', v('now')&&v('next')&&v('watch')&&v('red'));
-    setCheck('c3', v('fric')&&v('learn')&&v('aha'));
-    setCheck('c4', /(compl|gdpr|legal)/i.test(v('gov')) && /(safet|injection|misuse)/i.test(v('gov')) && /(reliab|uptime|slo|fallback)/i.test(v('gov')) && /(reput|public|incident|playbook)/i.test(v('gov')));
-    setCheck('c5', /[\d]/.test(v('red')));
-    setCheck('c6', v('loom').length>0);
-    document.getElementById('preview').textContent=md();save();
-  }
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='README.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Clear all fields?')){fields.forEach(i=>document.getElementById(i).value='');localStorage.removeItem(KEY);update()}}
-  fields.forEach(i=>document.getElementById(i).addEventListener('input',update));
-  load();update();
+  lines.push('---');
+  lines.push('');
+  lines.push('_Certification submission \u2014 AI Product Management Certification._');
+  lines.push('');
+  return lines.join('\n');
+}
+
+function vizPromptText(){
+  return 'You are a VP of Product getting the URL of an AI PM\u2019s cohort project repo. You have 90 seconds to decide if you would fund the bet. Read the README below and answer:\n\n'+
+    '1. Could you fund this bet? Yes / No / Need more, in one sentence.\n'+
+    '2. Strongest paragraph (quote it). Why is it strongest?\n'+
+    '3. Weakest paragraph (quote it). What\u2019s missing?\n'+
+    '4. If you had to choose one of (a) strategy, (b) RAG, (c) UX, (d) agentic, (e) evals \u2014 which is the strongest piece of AI-PM thinking, and which is the weakest?\n'+
+    '5. Single addition that would move this from "good cohort submission" to "VP-fundable bet"?\n\n'+
+    'README:\n\n[PASTE THE README HERE]';
+}
+
+function treeRow(indent,name,filled,extra){
+  const cls=filled?'filled':'missing';
+  const dot=filled?'\u2713':'\u00b7';
+  return '<div><span class="ind">'+'\u00a0\u00a0'.repeat(indent)+dot+'</span> <span class="'+cls+'">'+name+'</span>'+(extra?' <span class="url">&larr; '+extra+'</span>':'')+'</div>';
+}
+
+function treeHTML(){
+  const out=[];
+  const repoLabel=v('title')?v('title').split('\u2014')[0].trim():'juno-pm';
+  out.push('<div class="root">'+repoLabel+'/</div>');
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">README.md</span> <span class="url">&larr; '+(v('title')&&v('pitch')?'this tool':'_(unfilled)_')+'</span></div>');
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">01-prompting/</span></div>');
+  out.push(treeRow(2,v('m1a')||'system-prompt.md',!!v('m1a'),v('m1b')||''));
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">02-strategy/</span></div>');
+  out.push(treeRow(2,v('m2a')||'decision-matrix.md',!!v('m2a')));
+  out.push(treeRow(2,v('m2b')||'strategy-one-pager.md',!!v('m2b')));
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">03-rag-prd/</span></div>');
+  out.push(treeRow(2,v('m3')||'prd.md',!!v('m3')));
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">04-ai-ux/</span></div>');
+  out.push(treeRow(2,v('m4a')||'user-flow.md',!!v('m4a')));
+  out.push(treeRow(2,v('m4b')||'trust-gaps.md',!!v('m4b')));
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">05-agentic-workflows/</span></div>');
+  out.push(treeRow(2,v('m5a')||'awspec.md',!!v('m5a')));
+  out.push(treeRow(2,v('m5b')||'agent-control-panel.md',!!v('m5b')));
+  out.push('<div><span class="ind">\u00a0\u00a0</span> <span class="folder">06-evals/</span></div>');
+  out.push(treeRow(2,v('m6a')||'eval-stack.md',!!v('m6a')));
+  out.push(treeRow(2,v('m6b')||'human-rubric.md',!!v('m6b')));
+  out.push('<div style="margin-top:12px;color:var(--muted);font-size:11px;">PM Execution Plan in README.md:</div>');
+  out.push(treeRow(1,'Where Juno is today',!!v('now')));
+  out.push(treeRow(1,'What ships next',!!v('next')));
+  out.push(treeRow(1,'What I watch',!!v('watch')));
+  out.push(treeRow(1,'Red lines (numeric)',!!v('red')));
+  out.push(treeRow(1,'Governance (4 buckets)',!!v('gov')));
+  out.push('<div style="margin-top:12px;color:var(--muted);font-size:11px;">Build Insights:</div>');
+  out.push(treeRow(1,'Friction',!!v('fric')));
+  out.push(treeRow(1,'Learning',!!v('learn')));
+  out.push(treeRow(1,'Aha',!!v('aha')));
+  return out.join('');
+}
+
+function render(){
+  setBadge('b0', !!(v('title')&&v('pitch')&&v('who')));
+  setBadge('b1', !!v('m1a'));
+  setBadge('b2', !!(v('m2a')&&v('m2b')));
+  setBadge('b3', !!v('m3'));
+  setBadge('b4', !!(v('m4a')&&v('m4b')));
+  setBadge('b5', !!(v('m5a')&&v('m5b')));
+  setBadge('b6', !!(v('m6a')&&v('m6b')));
+  setBadge('bP', !!(v('now')&&v('next')&&v('watch')&&v('red')&&v('gov')));
+  setBadge('bI', !!(v('fric')&&v('learn')&&v('aha')));
+  const modulesFilled = v('m1a')&&v('m2a')&&v('m2b')&&v('m3')&&v('m4a')&&v('m5a')&&v('m6a')&&v('m6b');
+  setCheck('c1', !!modulesFilled);
+  setCheck('c2', !!(v('now')&&v('next')&&v('watch')&&v('red')&&v('gov')));
+  setCheck('c3', !!(v('fric')&&v('learn')&&v('aha')));
+  setCheck('c4', /(compl|gdpr|legal)/i.test(v('gov')) && /(safet|injection|misuse)/i.test(v('gov')) && /(reliab|uptime|slo|fallback)/i.test(v('gov')) && /(reput|public|incident|playbook)/i.test(v('gov')));
+  setCheck('c5', /\d/.test(v('red')));
+  setCheck('c6', !!v('repo'));
+  document.getElementById('preview').textContent=md();
+  document.getElementById('vizPrompt').textContent=vizPromptText();
+  document.getElementById('tree').innerHTML=treeHTML();
+  save();
+}
+
+function switchTab(btn){
+  document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.rtab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelector('.rtab-pane[data-pane="'+btn.dataset.pane+'"]').classList.add('active');
+}
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)}
+function copyMd(){navigator.clipboard.writeText(md()).then(()=>toast('Markdown copied'))}
+function copyViz(){navigator.clipboard.writeText(vizPromptText()).then(()=>toast('Pitch prompt copied'))}
+function downloadMd(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='README.md';a.click();URL.revokeObjectURL(u)}
+function reset(){if(confirm('Clear all fields?')){fields.forEach(i=>set(i,''));localStorage.removeItem(KEY);render()}}
+
+if(!load()){loadPreset('juno')}else{render()}
 </script>
 </body>
 </html>

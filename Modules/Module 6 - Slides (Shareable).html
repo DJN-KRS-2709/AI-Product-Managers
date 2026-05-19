@@ -428,166 +428,789 @@ section.cameras-section .cameras-inner {
 <div class="progress-bar" id="progressBar"></div>
 <nav class="nav-dots" id="navDots"></nav>
 
-<section class="hero" data-title="Measure AI Quality with Evals & Guardrails">
+<section class="hero" data-title="Measure AI Quality with Evals and Guardrails">
   <div class="hero-logo"><img src="../Design/Minimalist shield with glowing _P_.png" alt="Product School logo"/></div>
   <div class="section-label">Module 6 &mdash; AI Product Management Certification</div>
-  <h1>Measure AI Quality with <span>Evals & Guardrails</span></h1>
-  <p class="subtitle">95% accuracy is a 5% production disaster waiting to happen.</p>
+  <h1>Measure AI Quality with <span>Evals and Guardrails</span></h1>
+  <p class="subtitle">Module 6 &middot; AI Product Management Certification</p>
   <div class="waypoints" style="max-width:640px;">
-  <div class="waypoint"><div class="waypoint-num">1</div><div class="waypoint-text"><div class="wt-title">Stack</div><div class="wt-desc">Three eval layers — always all three.</div></div></div>
-  <div class="waypoint"><div class="waypoint-num">2</div><div class="waypoint-text"><div class="wt-title">Rubric</div><div class="wt-desc">Human eval rubric · anchors · disagreement protocol.</div></div></div>
-  <div class="waypoint"><div class="waypoint-num">3</div><div class="waypoint-text"><div class="wt-title">Ship</div><div class="wt-desc">PM Execution Plan — your README is the pitch.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">1</div><div class="waypoint-text"><div class="wt-title">Production-Grade Evaluation Requirements</div><div class="wt-desc">Why vibe checks fail. The 95% accuracy trap.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">2</div><div class="waypoint-text"><div class="wt-title">Measuring AI-Powered Product Outputs</div><div class="wt-desc">The AI Eval Stack &middot; human rubric &middot; PM&rsquo;s role.</div></div></div>
+  <div class="waypoint"><div class="waypoint-num">3</div><div class="waypoint-text"><div class="wt-title">AI Levers for Output Optimization</div><div class="wt-desc">Risks &middot; governance &middot; three levers &middot; PM execution plan.</div></div></div>
   </div>
-  <p style="font-size:15px; color:#8899bb; margin-top:8px;">Out: folder 06-evals/ · eval-stack.md · human-rubric.md · finalised README.md.</p>
+  <p style="font-size:15px; color:#8899bb; margin-top:8px;">You finish Module 6 with the final deliverables: <code>06-evals/eval-stack.md</code>, <code>06-evals/human-rubric.md</code>, and the polished <code>README.md</code> of your <code>juno-pm</code> fork.</p>
   <div class="scroll-hint">Scroll to explore<span>&#8595;</span></div>
 </section>
 
 
-<section class="centered" data-title="How This Module Runs">
+<section class="centered" data-title="Class Expectations">
   <div class="inner">
     <div class="section-label">Ground Rules</div>
-    <h2>How This Module Runs</h2>
+    <h2>Class Expectations</h2>
     <div class="expect-grid">
-      <div class="expect-card"><div class="expect-icon">⏱</div><div class="expect-title">~2 hours, async-friendly</div><div class="expect-desc">Self-paced. Each module builds one repo artifact.</div></div>
-      <div class="expect-card"><div class="expect-icon">👤</div><div class="expect-title">100% individual</div><div class="expect-desc">No groups. No partner work. You own every deliverable.</div></div>
-      <div class="expect-card"><div class="expect-icon">🛠</div><div class="expect-title">Open the tool</div><div class="expect-desc">Each exercise points at a single-file HTML tool you fill in.</div></div>
-      <div class="expect-card"><div class="expect-icon">✅</div><div class="expect-title">Self-review</div><div class="expect-desc">Each tool ships with a 4–6 item checklist. Do it before you commit.</div></div>
-      <div class="expect-card"><div class="expect-icon">🤖</div><div class="expect-title">AI-review</div><div class="expect-desc">Paste your artifact + the verbatim prompt into ChatGPT or Claude.</div></div>
-      <div class="expect-card"><div class="expect-icon">📂</div><div class="expect-title">Async share</div><div class="expect-desc">Commit to your <code>juno-pm/</code> fork. Optional Loom in <code>#ai-pm-cohort</code>.</div></div>
+      <div class="expect-card"><div class="expect-icon" style="font-size:36px;">📹</div><div class="expect-title">Cameras On (live cohort)</div><div class="expect-desc">Be present and visible if you join the optional live session — keeps interaction valuable.</div></div>
+      <div class="expect-card"><div class="expect-icon" style="font-size:36px;">⏰</div><div class="expect-title">Arrive On Time</div><div class="expect-desc">Respect everyone's time. Sessions start and end on schedule.</div></div>
+      <div class="expect-card"><div class="expect-icon" style="font-size:36px;">🤝</div><div class="expect-title">Engage Async to Network</div><div class="expect-desc">Post in <code>#ai-pm-cohort</code>. Build your professional learning network on Slack.</div></div>
+      <div class="expect-card"><div class="expect-icon" style="font-size:36px;">🛠️</div><div class="expect-title">Tool Readiness</div><div class="expect-desc">Lovable + ChatGPT/Claude accounts active before module 1. We will not stop or restart for setup.</div></div>
+      <div class="expect-card"><div class="expect-icon" style="font-size:36px;">🎓</div><div class="expect-title">Use Slack</div><div class="expect-desc">All cohort communication runs through <code>#ai-pm-cohort</code>. Keeps questions and answers organised.</div></div>
+      <div class="expect-card"><div class="expect-icon" style="font-size:36px;">🚦</div><div class="expect-title">Class Momentum</div><div class="expect-desc">Individual or deep-dive questions are handled async, in-thread, within ~5 days.</div></div>
     </div>
   </div>
 </section>
 
 
-<section class="centered" data-title="Course Arc">
+<section data-title="Syllabus">
   <div class="inner">
-    <div class="section-label">The Course Arc</div>
-    <h2>Six Modules. One Living Copilot.</h2>
-    <div class="arc-flow"><div class="arc-node"><div class="ad-num">M1</div>Prompting</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M2</div>Strategy</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M3</div>RAG / PRD</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M4</div>AI-UX</div><div class="arc-arrow">→</div><div class="arc-node"><div class="ad-num">M5</div>Agentic</div><div class="arc-arrow">→</div><div class="arc-node active-node"><div class="ad-num">M6</div>Evals</div></div>
-    <div class="artifact-preview" style="max-width:680px; margin:20px auto;">
-      <div class="ap-title">Your Throughline — Juno PM, in a Repo You Build Across 6 Modules</div>
-      <p style="font-size:15px; color:#8899bb; line-height:1.5;">Not a deck. Not a Notion page. A <strong>GitHub repo</strong> — version-controlled, shareable, alive. One folder per module, one artifact each. <strong>Today &rarr; folder <code>06-evals/</code>.</strong></p>
+    <div class="demo-tag tag-debrief">Syllabus</div>
+    <h2>AI Product Management Certification</h2>
+    <div class="subtitle">Five modules done. Today &mdash; build the trust architecture that turns prototype into product.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1040px; margin:24px auto 0;">
+      <div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.25); border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#34d399; letter-spacing:0.16em; text-transform:uppercase;">Module 1</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:#34d399; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">&check; Done</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">Drive AI-First Execution with Prompting</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Master systematic context, parameters, and prompt engineering to guide AI behavior with precision.</p>
+</div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.25); border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#34d399; letter-spacing:0.16em; text-transform:uppercase;">Module 2</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:#34d399; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">&check; Done</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">Validate AI Opportunities and Technical Feasibility</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Evaluate feasibility and viability to prioritize features that ship and move business metrics.</p>
+</div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.25); border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#34d399; letter-spacing:0.16em; text-transform:uppercase;">Module 3</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:#34d399; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">&check; Done</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">Improve AI Product Requirements with RAG Architecture</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Bridge product specs and RAG systems. Define embeddings, vector stores, and retrieval logic.</p>
+</div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.25); border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#34d399; letter-spacing:0.16em; text-transform:uppercase;">Module 4</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:#34d399; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">&check; Done</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">Design AI-Native User Experiences</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Design seamless flows that unlock new ways for users to interact. Prototype to validate.</p>
+</div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.25); border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#34d399; letter-spacing:0.16em; text-transform:uppercase;">Module 5</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:#34d399; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">&check; Done</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">Deploy Agentic Systems and Workflows</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">From single prompts to autonomous agents and multi-step workflows. Configure reasoning paths and tool triggers.</p>
+</div><div style="background:rgba(217,142,34,0.10); border:1px solid rgba(217,142,34,0.5); border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#fbbf24; letter-spacing:0.16em; text-transform:uppercase;">Module 6</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:#fbbf24; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">&rarr; Today</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">Measure AI Quality with Evals and Guardrails</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Replace vibe checks with eval harnesses, golden sets, and safety guardrails to ship production-grade AI.</p>
+</div>
     </div>
   </div>
 </section>
 
 
-<section data-title="Recall">
+<section data-title="Agenda">
   <div class="inner">
-    <div class="demo-tag tag-recall">Recall from Module 5</div>
-    <h2>What You Brought Today</h2>
-    <div class="waypoints">
-      <div class="waypoint"><div class="waypoint-num" style="background:#059669;">✓</div><div class="waypoint-text"><div class="wt-title">05-agentic-workflows/awspec.md</div><div class="wt-desc">Nine-section spec · the rules of engagement</div></div></div>
-      <div class="waypoint"><div class="waypoint-num" style="background:#059669;">✓</div><div class="waypoint-text"><div class="wt-title">05-agentic-workflows/agent-control-panel.md</div><div class="wt-desc">Five levers · minimum-viable rules</div></div></div>
-      <div class="waypoint"><div class="waypoint-num" style="background:#059669;">✓</div><div class="waypoint-text"><div class="wt-title">Eval hooks (in AWSpec)</div><div class="wt-desc">What gets logged — M6's input</div></div></div>
+    <div class="demo-tag tag-debrief">Agenda</div>
+    <h2>Today&rsquo;s flow</h2>
+    <div class="subtitle">Two solo labs anchor the day &mdash; plan your Eval Stack, then finalise your project repo.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-left:4px solid #3b82f6; border-radius:12px; padding:14px 18px; text-align:left;"><div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#3b82f6; line-height:1; margin-bottom:5px;">01</div><div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:5px; line-height:1.3;">Production-Grade Evaluation Requirements</div><p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Why vibe checks fail in production. The 95% accuracy trap. The gap between lab and reality.</p></div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-left:4px solid #fbbf24; border-radius:12px; padding:14px 18px; text-align:left;"><div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#fbbf24; line-height:1; margin-bottom:5px;">02</div><div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:5px; line-height:1.3;">Measuring AI-Powered Product Outputs</div><p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">The AI Eval Stack. Build a Human Eval Rubric. Real-world example: Google Assistant.</p></div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-left:4px solid #34d399; border-radius:12px; padding:14px 18px; text-align:left;"><div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#34d399; line-height:1; margin-bottom:5px;">03</div><div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:5px; line-height:1.3;">AI Levers for Output Optimization</div><p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Operationalising AI risks. Governance framework. Three levers: Prompt &middot; Model &middot; Data.</p></div><div style="background:rgba(255,255,255,0.035); border:1px solid #bcb1ff40; border-left:4px solid #bcb1ff; border-radius:12px; padding:14px 18px; text-align:left;"><div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#bcb1ff; line-height:1; margin-bottom:5px;">04</div><div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:5px; line-height:1.3;">Final Project Showcase: Demo Your Juno Copilot</div><p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">Solo course adaptation: finalise your repo, record an optional Loom, submit URL to LMS within 7 days.</p></div>
     </div>
-    <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.15); border-radius:10px; padding:16px; margin-top:16px; text-align:center;">
-      <p style="font-size:15px; font-weight:700; color:#fca5a5;">Five components built. M6 makes the whole stack shippable.</p>
-    </div>
+    <p style="font-size:11.5px; color:#bcb1ff; max-width:780px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">Solo course adaptation:</strong> the &ldquo;group showcase&rdquo; in section 04 becomes an individual repo submission &mdash; an optional 3-min Loom recording is encouraged but not required.
+    </p>
   </div>
 </section>
 
 
-<section data-title="Provocation">
-  <div class="inner">
-    <div class="demo-tag tag-provocation">Provocation</div>
-    <h2>Vibe checks fail in production.<br>The 95% pass rate is a 5% liability surface.</h2>
-    <div class="subtitle">Vote, then unpack.</div>
-    <div class="tf-grid">
-      <div class="tf-item tf-true"><div class="tf-verdict">TRUE</div><div class="tf-body"><div class="tf-claim">"Most teams ship one eval layer. Two if mature."</div><div class="tf-why">Three is what shippable AI products do. <em>Google Assistant</em> samples ~50 utterances/week per intent across 4 dimensions.</div></div></div>
-      <div class="tf-item tf-true"><div class="tf-verdict">TRUE</div><div class="tf-body"><div class="tf-claim">"PMs own the eval bar — not QA."</div><div class="tf-why">If you delegate evals to QA, you've outsourced the product surface. Engineers run them. PMs own the bar.</div></div></div>
-      <div class="tf-item tf-false"><div class="tf-verdict">FALSE</div><div class="tf-body"><div class="tf-claim">"95% accuracy means it's safe to ship."</div><div class="tf-why">Do the math: 1,000 calls/day × 5% = 50 wrong outputs/day. Some silently. One high-stakes wrong outweighs the other 950.</div></div></div>
-    </div>
-  </div>
-</section>
-
-
-<section data-title="AI Evals Stack">
-  <div class="inner">
-    <div class="demo-tag tag-lecture">Framework</div>
-    <h2>AI Evals Stack</h2>
-    <div class="subtitle">You need all three. They answer different questions.</div>
-    <table class="ref-table">
-      <thead><tr><th>Layer</th><th>Volume</th><th>Fidelity</th><th>What it tells you</th></tr></thead>
-      <tbody>
-<tr><td>User feedback</td><td>Highest</td><td>Lowest</td><td>What users do (thumbs · regen · abandon)</td></tr>
-<tr><td>Human evaluation</td><td>Mid</td><td>High</td><td>What graders think (rubric scores)</td></tr>
-<tr><td>Automated evals</td><td>Highest</td><td>Mid</td><td>What an LLM-judge or regression suite measures</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;"><em>Real-world:</em> Google Assistant samples ~50 utterances/week per intent across 4 dimensions.</p>
-  </div>
-</section>
-
-
-<section data-title="Build a Human Eval Rubric">
-  <div class="inner">
-    <div class="demo-tag tag-lecture">Framework</div>
-    <h2>Build a Human Eval Rubric</h2>
-    <div class="subtitle">A contract between the PM and the graders.</div>
-    <div class="cards-grid">
-      <div class="card-item"><div class="card-icon">①</div><div class="card-title">Dimensions</div><div class="card-desc">Accuracy · tone · completeness · safety · citation correctness.</div></div>
-      <div class="card-item"><div class="card-icon">②</div><div class="card-title">Scale</div><div class="card-desc">1–5 or pass/fail — with anchor descriptions per scale point.</div></div>
-      <div class="card-item"><div class="card-icon">③</div><div class="card-title">Examples</div><div class="card-desc">One example per scale point. Non-negotiable.</div></div>
-      <div class="card-item"><div class="card-icon">④</div><div class="card-title">Disagreement</div><div class="card-desc">Protocol for when graders disagree.</div></div>
-      <div class="card-item"><div class="card-icon">⑤</div><div class="card-title">Cadence</div><div class="card-desc">How often, how many. Weekly · ~50/intent · etc.</div></div>
-    </div>
-    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Anchors per scale point are the difference between a rubric and a vibe check.</p>
-  </div>
-</section>
-
-
-<section data-title="Human Evaluation Rubric">
-  <div class="lab-timer">⏰ 12 min</div>
-  <div class="inner">
-    <div class="demo-tag tag-exercise">Applied Work</div>
-    <h2>Human Evaluation Rubric</h2>
-    <div class="subtitle">Spec 3–5 dimensions · anchors per scale point · disagreement protocol · sampling cadence.</div>
-    <ol style="text-align:left; max-width:720px; margin:0 auto;">
-      <li>Open <code>M6 - Human Evaluation Rubric.html</code>.</li>
-      <li>Spec 3–5 dimensions for Juno's risk lists.</li>
-      <li>Write anchor descriptions for each scale point.</li>
-      <li>Pick a sampling cadence + disagreement protocol.</li>
-      <li>Copy as markdown &rarr; <code>06-evals/human-rubric.md</code>.</li>
-    </ol>
-    <div style="text-align:center; margin-top:18px;">
-      <a class="tool-btn" href="M6 - Human Evaluation Rubric.html" target="_blank" rel="noopener">Open the tool ↗</a>
-      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Build the rubric · anchors required · disagreement protocol · markdown export.</div>
-    </div>
-
-    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>06-evals/human-rubric.md</code></p>
-  </div>
-</section>
-
-
-<section class="section-break" data-title="Plan Juno's Eval Stack">
+<section class="section-break" data-title="Section 01 &middot; Production-Grade Evaluation Requirements">
   <div class="section-break-inner">
-    <div class="lab-title">Hands-On Lab · 25 min · Final-Project Deliverable</div>
-    <div class="lab-name">Plan Juno's Eval Stack</div>
-    <div class="lab-desc">Three layers. For each: signals · cadence · pass bar · who acts on it.</div>
+    <div class="lab-title">Section 01</div>
+    <div class="lab-name">Production-Grade Evaluation Requirements</div>
   </div>
 </section>
 
 
-<section data-title="Eval Stack Designer">
+<section data-title="Why Vibe Checks Fail">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Framework</div>
+    <h2>Why &ldquo;vibe checks&rdquo; fail in production</h2>
+    <div class="subtitle">A successful demo is not a quality bar. Three reasons evals are non-negotiable.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:14px; padding:18px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
+    <div style="font-size:24px;">&#x1F4A1;</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; line-height:1.3;">Invisible Failures</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">A single successful output proves an AI <em>can</em> perform a task &mdash; not that it <em>will</em> reliably across 1,000 different intents.</p>
+  <div style="margin-top:auto; padding-top:8px; border-top:1px dashed #3b82f640;">
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55; font-style:italic;">Without systematic measurement, high-stakes hallucinations and edge cases stay invisible until they reach the end user.</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:14px; padding:18px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
+    <div style="font-size:24px;">&#x1F441;&#xFE0F;</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; line-height:1.3;">The Subjectivity Trap</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">Relying on &ldquo;does this look good?&rdquo; creates a vibe-check culture that can&rsquo;t scale or provide objective data.</p>
+  <div style="margin-top:auto; padding-top:8px; border-top:1px dashed #fbbf2440;">
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55; font-style:italic;">There&rsquo;s no defensible Go / No-Go signal &mdash; just opinions in a meeting room.</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:14px; padding:18px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#34d399; line-height:1;">03</div>
+    <div style="font-size:24px;">&#x1F30A;</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; line-height:1.3;">The Performance Gap</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">Trust is earned through consistent, measurable performance in a live environment.</p>
+  <div style="margin-top:auto; padding-top:8px; border-top:1px dashed #34d39940;">
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55; font-style:italic;">Not through a curated set of successful examples shown in a demo.</p>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+
+<section data-title="The 95% Accuracy Trap">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Mental model</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:10.5px; color:#fbbf24; font-weight:900; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:6px;">The gap between lab and reality</div>
+    <h2>The 95% Accuracy Trap</h2>
+    <div class="subtitle">Academic metrics measure the model. Evals measure the product.</div>
+
+    <div style="max-width:1080px; margin:22px auto 0; display:grid; grid-template-columns:1fr auto 1fr; gap:18px; align-items:stretch;">
+
+      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(96,165,250,0.40); border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
+        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.16em; text-transform:uppercase;">&#x1F9EA; What lab metrics measure</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">Accuracy &middot; Precision &middot; Recall &middot; F1</div>
+        <p style="font-size:13px; color:#cdd5e3; margin:0; line-height:1.6;">
+          Standard benchmarks are excellent for static datasets in controlled environments &mdash; but blind to nuanced product failures.
+        </p>
+        <div style="background:rgba(96,165,250,0.08); border-left:3px solid #79c0ff; border-radius:0 8px 8px 0; padding:9px 12px; margin-top:auto;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#79c0ff;">Math example</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:4px 0 0; line-height:1.55;">
+            <strong>1,000 calls/day &times; 5% wrong = 50 wrong outputs/day.</strong> Some silent. One high-stakes wrong outweighs the other 950.
+          </p>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:center;">
+        <div style="font-family:'Poppins',sans-serif; font-size:32px; font-weight:900; color:#fbbf24; padding:8px 16px; border:2px dashed rgba(251,191,36,0.4); border-radius:50%; background:rgba(251,191,36,0.05);">VS</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(52,211,153,0.40); border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
+        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.16em; text-transform:uppercase;">&#x1F4DD; What evals capture</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">User experience &middot; Trust &middot; Safety</div>
+        <p style="font-size:13px; color:#cdd5e3; margin:0; line-height:1.6;">
+          Evals look beyond lab scores to measure the specific friction &mdash; latency, bias, inconsistency &mdash; that leads to product failure and loss of trust.
+        </p>
+        <div style="background:rgba(52,211,153,0.08); border-left:3px solid #34d399; border-radius:0 8px 8px 0; padding:9px 12px; margin-top:auto;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#34d399;">Product example</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:4px 0 0; line-height:1.55;">
+            A &ldquo;95% accurate&rdquo; medical bot still fails if the 5% includes a wrong dosage recommendation.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:18px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM rule:</strong> never quote model accuracy without quoting the eval bar next to it. &ldquo;95% accurate at extracting risks&rdquo; means nothing without the failure taxonomy of the missing 5%.
+    </p>
+  </div>
+</section>
+
+
+<section class="section-break" data-title="Section 02 &middot; Measuring AI-Powered Product Outputs">
+  <div class="section-break-inner">
+    <div class="lab-title">Section 02</div>
+    <div class="lab-name">Measuring AI-Powered Product Outputs</div>
+  </div>
+</section>
+
+
+<section data-title="The AI Eval Stack">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Framework</div>
+    <h2>The AI Eval Stack</h2>
+    <div class="subtitle">Three layers. Always all three. They answer different questions.</div>
+
+    <div style="max-width:1080px; margin:18px auto 0;">
+      <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:18px; align-items:stretch;">
+
+        <!-- Pyramid SVG -->
+        <div style="background:rgba(7,22,44,0.55); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px;">
+          <svg viewBox="0 0 460 360" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+            <defs>
+              <linearGradient id="evalUF" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(96,165,250,0.30)"/><stop offset="100%" stop-color="rgba(96,165,250,0.10)"/></linearGradient>
+              <linearGradient id="evalHE" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(251,191,36,0.30)"/><stop offset="100%" stop-color="rgba(251,191,36,0.10)"/></linearGradient>
+              <linearGradient id="evalAU" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(52,211,153,0.30)"/><stop offset="100%" stop-color="rgba(52,211,153,0.10)"/></linearGradient>
+            </defs>
+
+            <!-- Layer 1 (top): User Feedback -->
+            <polygon points="180,20 280,20 320,90 140,90" fill="url(#evalUF)" stroke="#79c0ff" stroke-width="1.6"/>
+            <text x="230" y="46" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="13" font-weight="900">USER FEEDBACK</text>
+            <text x="230" y="62" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="9" font-weight="800" letter-spacing="2.2">ONLINE EVALS</text>
+            <text x="230" y="78" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">What do users do?</text>
+
+            <!-- Layer 2 (middle): Human Evals -->
+            <polygon points="140,98 320,98 365,190 95,190" fill="url(#evalHE)" stroke="#fbbf24" stroke-width="1.6"/>
+            <text x="230" y="128" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="13" font-weight="900">HUMAN EVALUATION</text>
+            <text x="230" y="144" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="9" font-weight="800" letter-spacing="2.2">SYSTEM-LEVEL EVALS</text>
+            <text x="230" y="162" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">What do graders think?</text>
+            <text x="230" y="180" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">Calibrated rubric scores</text>
+
+            <!-- Layer 3 (base): Automated Assessment -->
+            <polygon points="95,198 365,198 420,330 40,330" fill="url(#evalAU)" stroke="#34d399" stroke-width="1.6"/>
+            <text x="230" y="232" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="13" font-weight="900">AUTOMATED ASSESSMENT</text>
+            <text x="230" y="248" text-anchor="middle" fill="#34d399" font-family="Poppins,sans-serif" font-size="9" font-weight="800" letter-spacing="2.2">COMPONENT-LEVEL EVALS</text>
+            <text x="230" y="270" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">Did this change regress anything?</text>
+            <text x="230" y="288" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">LLM-as-judge &middot; format checks</text>
+            <text x="230" y="306" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="10">Speed &amp; accuracy at scale</text>
+
+            <!-- Volume / fidelity axes -->
+            <text x="430" y="34" text-anchor="end" fill="#8899bb" font-family="Poppins,sans-serif" font-size="8" font-weight="800" letter-spacing="1.5">HIGHEST</text>
+            <text x="430" y="46" text-anchor="end" fill="#8899bb" font-family="Poppins,sans-serif" font-size="8" letter-spacing="1.5">VOLUME</text>
+            <text x="430" y="312" text-anchor="end" fill="#8899bb" font-family="Poppins,sans-serif" font-size="8" font-weight="800" letter-spacing="1.5">HIGHEST</text>
+            <text x="430" y="324" text-anchor="end" fill="#8899bb" font-family="Poppins,sans-serif" font-size="8" letter-spacing="1.5">FIDELITY</text>
+            <line x1="430" y1="60" x2="430" y2="290" stroke="#8899bb" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.5"/>
+            <polygon points="427,290 433,290 430,298" fill="#8899bb" opacity="0.5"/>
+          </svg>
+        </div>
+
+        <!-- Layer cards -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:13px 16px; text-align:left;">
+            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">03 &middot; Online evals</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">User Feedback</div>
+            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+              The final reality check. Production data &mdash; regeneration rates, task completion, thumbs &mdash; confirms the product is delivering value.
+            </p>
+          </div>
+          <div style="background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.30); border-radius:12px; padding:13px 16px; text-align:left;">
+            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">02 &middot; System-level evals</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">Human Evals</div>
+            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+              Where experts use structured rubrics to judge nuance, tone, and helpfulness &mdash; and provide the calibration the rest of the system depends on.
+            </p>
+          </div>
+          <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:12px; padding:13px 16px; text-align:left;">
+            <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">01 &middot; Component-level evals</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px;">Automated Assessment</div>
+            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+              Machine-detectable tests that filter obvious failures, check formatting, and measure technical metrics like speed and accuracy at scale.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM oversight:</strong> a multi-layered evaluation plan balances speed, cost, and depth of insight. Skip a layer and you skip a class of failure.
+    </p>
+  </div>
+</section>
+
+
+<section data-title="How to Build a Human Eval Rubric">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Step-by-step</div>
+    <h2>How to build a human eval rubric</h2>
+    <div class="subtitle">Convert subjective human judgement into an objective system-level signal.</div>
+    <div style="display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.025); border:1px solid #3b82f640; border-top:3px solid #3b82f6; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column;">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">Phase 1 &middot; Create assessment</div>
+  <div style="background:rgba(255,255,255,0.03); border:1px solid #3b82f630; border-radius:10px; padding:11px 14px; margin-bottom:8px;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:900; color:#3b82f6; line-height:1;">①</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Value Proposition</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 0 26px; line-height:1.5;">Define the core user needs and product promises your AI must fulfill.</p>
+</div><div style="background:rgba(255,255,255,0.03); border:1px solid #3b82f630; border-radius:10px; padding:11px 14px; margin-bottom:8px;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:900; color:#3b82f6; line-height:1;">②</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Evaluation Criteria</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 0 26px; line-height:1.5;">Define the specific dimensions &mdash; factuality, tone, logic &mdash; that measure those promises.</p>
+</div><div style="background:rgba(255,255,255,0.03); border:1px solid #3b82f630; border-radius:10px; padding:11px 14px; margin-bottom:8px;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:900; color:#3b82f6; line-height:1;">③</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Scalable Questions</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 0 26px; line-height:1.5;">Use binary yes/no or 1&ndash;5 scale questions to turn qualitative &ldquo;vibes&rdquo; into quantitative data.</p>
+</div>
+</div><div style="background:rgba(255,255,255,0.025); border:1px solid #fbbf2440; border-top:3px solid #fbbf24; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column;">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">Phase 2 &middot; Calibrate</div>
+  <div style="background:rgba(255,255,255,0.03); border:1px solid #fbbf2430; border-radius:10px; padding:11px 14px; margin-bottom:8px;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:900; color:#fbbf24; line-height:1;">④</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Calibrate Reviewers</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 0 26px; line-height:1.5;">Create prototypical assessments so all reviewers are trained on the same expectations.</p>
+</div>
+</div><div style="background:rgba(255,255,255,0.025); border:1px solid #34d39940; border-top:3px solid #34d399; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column;">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">Phase 3 &middot; Monitor</div>
+  <div style="background:rgba(255,255,255,0.03); border:1px solid #34d39930; border-radius:10px; padding:11px 14px; margin-bottom:8px;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:4px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:900; color:#34d399; line-height:1;">⑤</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Continually Validate</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 0 26px; line-height:1.5;">Have reviewers justify their ratings to identify edge cases and rubric drift.</p>
+</div>
+</div>
+    </div>
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">&#x270D;&#xFE0F; Build your own:</strong> the M6 &mdash; Human Evaluation Rubric tool walks you through all five steps and exports the result to <code>06-evals/human-rubric.md</code>.
+    </p>
+  </div>
+</section>
+
+
+<section data-title="Real-World Example">
+  <div class="inner">
+    <div class="demo-tag tag-realworld">Real-world example</div>
+    <h2>Human evaluation at Google Assistant</h2>
+    <div class="subtitle">A concrete reference implementation of the AI Eval Stack&rsquo;s human-eval layer.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+    <span style="font-size:16px;">1️⃣</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">Context</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">Google was building a human-in-the-loop personal assistant product that combined humans and AI to fulfill complex user tasks.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+    <span style="font-size:16px;">2️⃣</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">Goal</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">They needed to assess task fulfillment quality &mdash; quantify how the product delivered real-world value.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+    <span style="font-size:16px;">3️⃣</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">Method</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The rubric consisted of 26 questions and included simple technical criteria, specific desired outcomes, and subjective human evaluations.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+    <span style="font-size:16px;">4️⃣</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">Training</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The rubric was calibrated across Product, UX, and UXR &mdash; then used to train a dedicated team of manual reviewers.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+    <span style="font-size:16px;">5️⃣</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">Assessment</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">After each conversation, the transcript was sent to a reviewer to evaluate the system&rsquo;s end-to-end performance.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:12px; padding:13px 16px; text-align:left; display:flex; flex-direction:column;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+    <span style="font-size:16px;">6️⃣</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">Outcome</span>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The data identified specific failure modes, allowing the team to eliminate launch blockers and improve the experience.</p>
+</div>
+    </div>
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM lift-out:</strong> they ran human evals on every conversation &mdash; not a sample. For your scale, sample with stratification (high / mid / low confidence).
+    </p>
+  </div>
+</section>
+
+
+<section data-title="The PM's Role in Evaluations">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Framework</div>
+    <h2>The PM&rsquo;s role in evaluations</h2>
+    <div class="subtitle">PMs own the bar. Engineering runs the harness. QA can&rsquo;t.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
+    <div style="font-size:24px;">&#x1F4CB;</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">Drafting the Definition of Quality</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;"><strong style="color:#fff;">You own the gold standard.</strong> Your primary deliverable isn&rsquo;t a feature spec &mdash; it&rsquo;s a rubric defining exactly what a &ldquo;perfect&rdquo; response looks like for your specific user.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
+    <div style="font-size:24px;">&#x1F6A6;</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">Setting the Pass Thresholds</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;"><strong style="color:#fff;">You decide the acceptability gap.</strong> You work with engineering to determine which failure modes are minor annoyances and which are launch blockers that stop a release.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:14px; padding:18px 22px; text-align:left; display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:#34d399; line-height:1;">03</div>
+    <div style="font-size:24px;">&#x2696;&#xFE0F;</div>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">Auditing the Automated Judges</div>
+  <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;"><strong style="color:#fff;">You provide the ground truth.</strong> You periodically audit the automated and &ldquo;LLM-as-a-judge&rdquo; layers to ensure the machine&rsquo;s version of quality hasn&rsquo;t drifted away from human reality.</p>
+</div>
+    </div>
+  </div>
+</section>
+
+
+<section data-title="Plan Your Eval Stack for Juno">
   <div class="lab-timer">⏰ 25 min</div>
   <div class="inner">
     <div class="demo-tag tag-exercise">Applied Work</div>
-    <h2>Eval Stack Designer</h2>
-    <div class="subtitle">Plan all three layers — user feedback · human · automated.</div>
-    <ol style="text-align:left; max-width:720px; margin:0 auto;">
-      <li>Open <code>M6 - Eval Stack Designer.html</code>.</li>
-      <li>Plan all three layers: user feedback · human eval · automated.</li>
-      <li>For each: signals · cadence · pass bar · who acts on it.</li>
-      <li>Copy as markdown &rarr; <code>06-evals/eval-stack.md</code>.</li>
-      <li>Self-review · AI-review · commit · share.</li>
+    <h2>Plan Your Eval Stack for Juno</h2>
+    <div class="subtitle">Build the trust architecture required to scale your judgement and move Juno from a prototype to a reliable product. Plan all three eval layers &mdash; user feedback, human evaluation, and automated assessment.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1040px; margin:0 auto;">
+
+  <div style="background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Setup</div>
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.55;">
+      Open the <strong style="color:#fff;">M6 &mdash; Eval Stack Designer</strong> tool. Treat Juno as the whole product you&rsquo;ve built across M1&ndash;M5. Pre-loaded with a Juno P0 Triage starter you can adapt.
+    </p>
+  </div>
+
+  <div style="background:rgba(251,191,36,0.05); border:1px solid rgba(251,191,36,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Output</div>
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.55;">
+      &rarr; <code style="color:#fbbf24;">06-evals/eval-stack.md</code> &mdash; three layers, each with signals, cadence, pass bar, and owner.
+    </p>
+  </div>
+
+  <div style="grid-column:span 2; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 18px;">
+    <ol style="text-align:left; max-width:920px; margin:0; padding-left:20px; font-size:12.5px; color:#cdd5e3; line-height:1.7;">
+      <li><strong style="color:#fff;">Start with User Feedback (online).</strong> Define <em>two</em> mechanisms &mdash; one active (e.g. thumbs / regenerate / suppress) and one passive (e.g. abandon rate, time-on-result).</li>
+      <li><strong style="color:#fff;">Move to Human Evaluation (system-level).</strong> Spec 3 rubric questions a Senior PM would use to grade Juno&rsquo;s output. Anchors per scale point are non-negotiable.</li>
+      <li><strong style="color:#fff;">Finish with Automated Assessment (component-level).</strong> Identify <em>one</em> binary metric to automate via a script or LLM-as-a-judge &mdash; e.g. format check, citation check, refusal trigger.</li>
+      <li>Add cadence + numeric pass bar + named owner for each layer.</li>
+      <li>Copy as markdown &rarr; commit to <code style="color:#34d399;">06-evals/eval-stack.md</code>. Add the link to your final deliverables README.</li>
     </ol>
+  </div>
+
+</div>
     <div style="text-align:center; margin-top:18px;">
-      <a class="tool-btn" href="M6 - Eval Stack Designer.html" target="_blank" rel="noopener">Open the tool ↗</a>
-      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Plan three eval layers · self + AI review · markdown export.</div>
+      <a class="tool-btn" href="../Modules/M6%20-%20Eval%20Stack%20Designer.html" target="_blank" rel="noopener">Open the tool ↗</a>
+      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Three-layer planner with live SVG stack visualisation. Pre-loaded with a Juno P0 Triage starter. Exports straight to <code>06-evals/eval-stack.md</code>.</div>
     </div>
 
-    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>06-evals/eval-stack.md</code></p>
+    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>juno-pm/06-evals/eval-stack.md</code></p>
+  </div>
+</section>
+
+
+<section class="section-break" data-title="Section 03 &middot; AI Levers for Output Optimization">
+  <div class="section-break-inner">
+    <div class="lab-title">Section 03</div>
+    <div class="lab-name">AI Levers for Output Optimization</div>
+  </div>
+</section>
+
+
+<section data-title="Operationalizing AI Risks">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Framework</div>
+    <h2>Operationalising and measuring AI risks</h2>
+    <div class="subtitle">Use these performance signals as your dashboard to monitor live AI product quality and safety.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:14px; padding:16px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-size:24px;">&#x1F4CA;</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">Hallucination Rate</div>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The percentage of responses containing factually incorrect or ungrounded claims.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px solid #3b82f640; border-radius:8px; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Measurement</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff;">Total Hallucinations / Total Responses</div>
+  </div>
+  <p style="font-size:11px; color:#bcb1ff; margin:0; line-height:1.55;"><em>E.g.</em> Monitoring if a medical bot&rsquo;s error rate rises above 1% triggers an immediate rollback to a previous version.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:14px; padding:16px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-size:24px;">&#x270D;&#xFE0F;</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">Human Override Rate</div>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The rate at which a human-in-the-loop must correct the AI before the user sees the output.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px solid #fbbf2440; border-radius:8px; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Measurement</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff;">Total Human Edits / Total AI Outputs</div>
+  </div>
+  <p style="font-size:11px; color:#bcb1ff; margin:0; line-height:1.55;"><em>E.g.</em> A customer-service tool where experts have to rewrite 40% of AI drafts &mdash; signals the model isn&rsquo;t saving time yet.</p>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:14px; padding:16px 20px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-size:24px;">&#x1F4C9;</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">Model Drift &amp; Latency</div>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The monitoring of performance degradation and response speed over time.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px solid #34d39940; border-radius:8px; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Measurement</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff;">Change in Accuracy + P99 Latency</div>
+  </div>
+  <p style="font-size:11px; color:#bcb1ff; margin:0; line-height:1.55;"><em>E.g.</em> Identifying that a model has become 10% less accurate or 5s slower after a vendor updated the underlying LLM.</p>
+</div>
+    </div>
+  </div>
+</section>
+
+
+<section data-title="The Governance Framework">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Strategic logic</div>
+    <h2>The governance framework</h2>
+    <div class="subtitle">Four governance strategies that turn evals into production guardrails.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Hard vs. Soft Gates</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Determine which failures must <em>automatically</em> block a release versus those that only require a manual PM sign-off.</p>
+  <div style="background:rgba(0,0,0,0.25); border-left:3px solid #3b82f6; border-radius:0 8px 8px 0; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">A safety failure triggers an automatic block; high latency only requires a PM justification to release.</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Zero-Tolerance Metrics</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">For hard gates, establish the specific numerical thresholds that trigger an immediate production block.</p>
+  <div style="background:rgba(0,0,0,0.25); border-left:3px solid #fbbf24; border-radius:0 8px 8px 0; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">0% PII leakage to ensure the system never reveals sensitive data like employee salaries.</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#34d399; line-height:1;">03</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Grounding for Trust</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Define specific output requirements that provide users with evidence of the AI&rsquo;s reasoning.</p>
+  <div style="background:rgba(0,0,0,0.25); border-left:3px solid #34d399; border-radius:0 8px 8px 0; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">The model must provide direct citations or links to the HR policy it used to answer the question.</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #bcb1ff40; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#bcb1ff; line-height:1;">04</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Build a Failure Taxonomy</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Categorise potential AI failures into a clear document to align technical and business stakeholders on risk priority.</p>
+  <div style="background:rgba(0,0,0,0.25); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
+    <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">A severity vs. frequency map prioritises fixing hallucinations in vacation policies over minor &ldquo;off-brand&rdquo; tone issues.</p>
+  </div>
+</div>
+    </div>
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      Dive deeper into each governance strategy in Product School&rsquo;s <em>AI Evals Certification</em>.
+    </p>
+  </div>
+</section>
+
+
+<section data-title="Three Levers">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Framework</div>
+    <h2>Three levers to optimise AI product performance</h2>
+    <div class="subtitle">When evaluations signal a quality gap, these are the three levers you pull.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
+  <div style="padding:16px 22px; background:linear-gradient(135deg, #3b82f622 0%, transparent 70%); border-bottom:1px solid #3b82f630;">
+    <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:5px;">
+      <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
+      <div style="font-size:24px;">&#x270D;&#xFE0F;</div>
+    </div>
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Behavior &amp; Logic</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">The Prompt</div>
+  </div>
+  <div style="padding:14px 22px; display:flex; flex-direction:column; gap:8px;">
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">Adjust the instructions or formatting to influence the AI&rsquo;s output.</p>
+    <div style="background:rgba(0,0,0,0.25); border-radius:8px; padding:8px 12px; margin-top:auto;">
+      <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Try</div>
+      <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">Few-shot, chain-of-thought prompting, or adding delimiters to structure your data.</p>
+    </div>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
+  <div style="padding:16px 22px; background:linear-gradient(135deg, #fbbf2422 0%, transparent 70%); border-bottom:1px solid #fbbf2430;">
+    <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:5px;">
+      <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
+      <div style="font-size:24px;">&#x1F916;</div>
+    </div>
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Intelligence &amp; Cost</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">The Model</div>
+  </div>
+  <div style="padding:14px 22px; display:flex; flex-direction:column; gap:8px;">
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">Swap models or versions to find the best balance of quality, speed, and price.</p>
+    <div style="background:rgba(0,0,0,0.25); border-radius:8px; padding:8px 12px; margin-top:auto;">
+      <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Try</div>
+      <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">Comparing Gemini Pro vs. Flash for different task types or adjusting hyperparameters.</p>
+    </div>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:14px; overflow:hidden; text-align:left; display:flex; flex-direction:column;">
+  <div style="padding:16px 22px; background:linear-gradient(135deg, #34d39922 0%, transparent 70%); border-bottom:1px solid #34d39930;">
+    <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:5px;">
+      <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#34d399; line-height:1;">03</div>
+      <div style="font-size:24px;">&#x1F4DA;</div>
+    </div>
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Knowledge &amp; Accuracy</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1.3;">The Data</div>
+  </div>
+  <div style="padding:14px 22px; display:flex; flex-direction:column; gap:8px;">
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.6;">Refine the information the AI accesses to ensure relevant and accurate responses.</p>
+    <div style="background:rgba(0,0,0,0.25); border-radius:8px; padding:8px 12px; margin-top:auto;">
+      <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Try</div>
+      <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">Cleaning the RAG dataset, adding more diverse data points, or fine-tuning the model.</p>
+    </div>
+  </div>
+</div>
+    </div>
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM rule of thumb:</strong> try Prompt &rarr; Model &rarr; Data. Architecture last. Most teams reach for architecture first &mdash; it&rsquo;s the slowest and most expensive lever.
+    </p>
+  </div>
+</section>
+
+
+<section data-title="The PM Execution Plan">
+  <div class="inner">
+    <div class="demo-tag tag-framework">Framework</div>
+    <h2>The PM execution plan</h2>
+    <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+      <div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#3b82f6; line-height:1;">01</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Build Your Eval Plan</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px dashed #3b82f640; border-radius:8px; padding:7px 12px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Key decision</div>
+    <p style="font-family:'Poppins',sans-serif; font-size:12px; color:#fff; margin:0; font-weight:700;">Speed vs. Certainty</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#fbbf24; line-height:1;">02</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Set Your Gatekeepers</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px dashed #fbbf2440; border-radius:8px; padding:7px 12px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Key decision</div>
+    <p style="font-family:'Poppins',sans-serif; font-size:12px; color:#fff; margin:0; font-weight:700;">Brand Protection vs. Hype</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#34d399; line-height:1;">03</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Add Production Guardrails</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px dashed #34d39940; border-radius:8px; padding:7px 12px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Key decision</div>
+    <p style="font-family:'Poppins',sans-serif; font-size:12px; color:#fff; margin:0; font-weight:700;">Safety vs. Utility</p>
+  </div>
+</div><div style="background:rgba(255,255,255,0.035); border:1px solid #bcb1ff40; border-radius:12px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:28px; font-weight:900; color:#bcb1ff; line-height:1;">04</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; line-height:1.3;">Evolve Your Roadmap</div>
+  </div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.</p>
+  <div style="background:rgba(0,0,0,0.25); border:1px dashed #bcb1ff40; border-radius:8px; padding:7px 12px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Key decision</div>
+    <p style="font-family:'Poppins',sans-serif; font-size:12px; color:#fff; margin:0; font-weight:700;">Feature vs. Data</p>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+
+<section data-title="Prepare &amp; Finalise Your Project Deliverables">
+  <div class="lab-timer">⏰ 20 min</div>
+  <div class="inner">
+    <div class="demo-tag tag-exercise">Applied Work</div>
+    <h2>Prepare &amp; Finalise Your Project Deliverables</h2>
+    <div class="subtitle">Pull every artefact from M1&ndash;M6 into one polished <code>README.md</code> at the root of your <code>juno-pm</code> fork. The repo URL is your LMS submission &mdash; the README is the pitch.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1040px; margin:0 auto;">
+
+  <div style="background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Setup</div>
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+      Open the <strong style="color:#fff;">Final Project Deliverables Builder</strong>. The tool aggregates your six modules into one shareable README + executive page.
+    </p>
+  </div>
+
+  <div style="background:rgba(251,191,36,0.05); border:1px solid rgba(251,191,36,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Output</div>
+    <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+      &rarr; <code style="color:#fbbf24;">README.md</code> at the root of your <code>juno-pm</code> fork. The repo URL is your LMS submission.
+    </p>
+  </div>
+
+  <div style="grid-column:span 2; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px 18px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">Source-slide checklist (slides 5&ndash;11 of the original deliverables deck)</div>
+    <ol style="text-align:left; max-width:920px; margin:0; padding-left:20px; font-size:12px; color:#cdd5e3; line-height:1.7;">
+      <li><strong style="color:#fff;">Final System Message</strong> &mdash; from M1, including few-shot examples.</li>
+      <li><strong style="color:#fff;">AI Strategy One-Pager</strong> &mdash; high-level overview + shareable link to the full artifact.</li>
+      <li><strong style="color:#fff;">RAG Architecture &amp; Data Strategy</strong> &mdash; how Juno is grounded in RocketShip data.</li>
+      <li><strong style="color:#fff;">Juno UX Design</strong> &mdash; 1&ndash;2 high-fidelity screenshots of the Lovable interface.</li>
+      <li><strong style="color:#fff;">Agentic Workflow (AWSpec)</strong> &mdash; high-level overview + shareable link to the full artifact.</li>
+      <li><strong style="color:#fff;">Eval Stack Plan</strong> &mdash; human rubric questions + the automated hard-gate threshold.</li>
+      <li><strong style="color:#fff;">Build Insights</strong> &mdash; biggest strategic friction points and your &ldquo;aha&rdquo; moments.</li>
+    </ol>
+    <p style="font-size:11.5px; color:#bcb1ff; margin:10px 0 0; line-height:1.55;">
+      <strong style="color:#fff;">Solo course adaptation:</strong> there&rsquo;s no shared deck and no group-vs-individual copy split &mdash; the README of your fork is the deliverable. The optional 3-min Loom is encouraged but not required for certification.
+    </p>
+  </div>
+
+</div>
+    <div style="text-align:center; margin-top:18px;">
+      <a class="tool-btn" href="../Modules/Final%20Project%20Deliverables%20Builder.html" target="_blank" rel="noopener">Open the tool ↗</a>
+      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Aggregates the seven source-slide sections + your Build Insights reflection into one polished README. Exports to the repo root.</div>
+    </div>
+
+    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>juno-pm/README.md</code></p>
+  </div>
+</section>
+
+
+<section data-title="Learner Journey">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Course recap</div>
+    <h2>Your learner journey</h2>
+    <div class="subtitle">Six mindset shifts. Six wins. One coherent body of work in your fork.</div>
+    <div style="display:flex; flex-direction:column; gap:8px; max-width:1080px; margin:18px auto 0;">
+      <div style="display:grid; grid-template-columns:auto 1fr 2fr 2fr; gap:14px; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.025); border:1px solid #3b82f630; border-left:3px solid #3b82f6; border-radius:10px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#3b82f6; line-height:1; padding-right:6px;">01</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#fff; line-height:1.3;">Drive AI-First Execution with Prompting</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The mindset shift:</strong> moving from deterministic rules to governing probabilistic systems.</p>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The win:</strong> mastering prompt anatomy to move beyond basic chat and establish reliable, system-level logic for AI-native features.</p>
+</div><div style="display:grid; grid-template-columns:auto 1fr 2fr 2fr; gap:14px; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.025); border:1px solid #3b82f630; border-left:3px solid #3b82f6; border-radius:10px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#3b82f6; line-height:1; padding-right:6px;">02</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#fff; line-height:1.3;">Validate AI Opportunities and Technical Feasibility</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The strategic lens:</strong> shifting from shiny distractions to boring killer features that prioritise business scale.</p>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The win:</strong> writing the AI strategy one-pager to bridge technical feasibility and business impact &mdash; forcing a rigorous defence of every bet.</p>
+</div><div style="display:grid; grid-template-columns:auto 1fr 2fr 2fr; gap:14px; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.025); border:1px solid #fbbf2430; border-left:3px solid #fbbf24; border-radius:10px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#fbbf24; line-height:1; padding-right:6px;">03</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#fff; line-height:1.3;">Improve AI Product Requirements with RAG Architecture</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The context shift:</strong> moving from stateless prompts to context-aware systems that ground AI outputs in verifiable data.</p>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The win:</strong> defining an AI PRD to specify needs and own technical trade-offs through precise retrieval requirements.</p>
+</div><div style="display:grid; grid-template-columns:auto 1fr 2fr 2fr; gap:14px; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.025); border:1px solid #fbbf2430; border-left:3px solid #fbbf24; border-radius:10px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#fbbf24; line-height:1; padding-right:6px;">04</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#fff; line-height:1.3;">Design AI-Native User Experiences</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The interface evolution:</strong> moving from static menus to invisible UIs that proactively surface tools based on needs.</p>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The win:</strong> architecting the AI iceberg flow &mdash; mapping hidden logic and system triggers to build magical experiences that maintain trust through transparency.</p>
+</div><div style="display:grid; grid-template-columns:auto 1fr 2fr 2fr; gap:14px; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.025); border:1px solid #34d39930; border-left:3px solid #34d399; border-radius:10px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#34d399; line-height:1; padding-right:6px;">05</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#fff; line-height:1.3;">Deploy Agentic Systems and Workflows</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The autonomy dial:</strong> moving from reactive to autonomous systems that interpret intent, make decisions, and execute multi-step tasks.</p>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The win:</strong> developing the AWSpec to scale product judgement with reasoning patterns for resilient, goal-driven systems.</p>
+</div><div style="display:grid; grid-template-columns:auto 1fr 2fr 2fr; gap:14px; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.025); border:1px solid #bcb1ff30; border-left:3px solid #bcb1ff; border-radius:10px;">
+  <div style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:900; color:#bcb1ff; line-height:1; padding-right:6px;">06</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#fff; line-height:1.3;">Measure AI Quality with Evals and Guardrails</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The validation shift:</strong> replacing subjective vibe checks with systematic evaluation for reliability at scale.</p>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">The win:</strong> engineering a multi-layered eval stack to establish hard-gate thresholds that protect and maintain trust in a live environment.</p>
+</div>
+    </div>
   </div>
 </section>
 
@@ -601,99 +1224,105 @@ section.cameras-section .cameras-inner {
 </section>
 
 
-<section data-title="Three Optimisation Levers">
-  <div class="inner">
-    <div class="demo-tag tag-lecture">Framework</div>
-    <h2>Three Optimisation Levers</h2>
-    <div class="subtitle">When eval scores miss the bar — model · data · architecture. In that order.</div>
-    <table class="ref-table">
-      <thead><tr><th>Lever</th><th>Try first</th><th>Cost</th></tr></thead>
-      <tbody>
-<tr><td><strong>Model</strong></td><td>Swap · upgrade · fine-tune</td><td>Low (swap) → high (fine-tune)</td></tr>
-<tr><td><strong>Data</strong></td><td>Improve corpus · clean inputs · expand context</td><td>Mid — your time + ops</td></tr>
-<tr><td><strong>Architecture</strong></td><td>Add RAG · decompose agents · add guardrails</td><td>High — engineering time</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Most teams reach for architecture first. It's the slowest and most expensive.</p>
+<section class="cameras-section" data-title="Cameras On">
+  <div class="cameras-inner">
+    <div class="cameras-layout">
+      <div class="cameras-left">
+        <img class="cameras-logo" src="../Design/cameras-on-logo.png" alt="Logo"/>
+        <div class="cameras-card">
+          <h2>Reminder! 🎒</h2>
+          <div class="cameras-arrow">&rarr; Cameras On</div>
+          <p>It&rsquo;s always better to see your smiling face! Be present and visible to stay engaged and keep interactions valuable.</p>
+        </div>
+      </div>
+      <div class="cameras-photo-strip">
+        <img src="../Design/cameras-on-photo.png" alt="Cameras On"/>
+      </div>
+    </div>
   </div>
 </section>
 
 
-<section data-title="Operationalise Risk — Four Buckets">
+<section class="centered" data-title="Final Project Showcase">
   <div class="inner">
-    <div class="demo-tag tag-lecture">Framework</div>
-    <h2>Operationalise Risk — Four Buckets</h2>
-    <div class="subtitle">Each bucket gets a row in your PM Execution Plan.</div>
-    <div class="cards-grid">
-      <div class="card-item"><div class="card-icon">⚖️</div><div class="card-title">Compliance</div><div class="card-desc">Regulatory (GDPR · EU AI Act).</div></div>
-      <div class="card-item"><div class="card-icon">🛑</div><div class="card-title">Safety</div><div class="card-desc">Content · prompt injection · misuse.</div></div>
-      <div class="card-item"><div class="card-icon">🔁</div><div class="card-title">Reliability</div><div class="card-desc">Uptime · fallback paths · graceful degradation.</div></div>
-      <div class="card-item"><div class="card-icon">📣</div><div class="card-title">Reputation</div><div class="card-desc">Public failure scenarios + response playbook.</div></div>
-    </div>
-    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Same framework as M2. Difference: now you operationalise it with metrics + owners.</p>
+    <div class="demo-tag tag-debrief">Final project</div>
+    <h2 style="font-size:46px; margin-top:8px;">Final Project Showcase</h2>
+    <p style="font-family:'Poppins',sans-serif; font-size:24px; font-weight:800; color:#fbbf24; margin-top:14px;">Demo Your Juno Copilot</p>
+    <p style="font-size:14px; color:#cdd5e3; max-width:720px; margin:18px auto 0; line-height:1.65;">
+      Solo course adaptation: instead of a group demo, you ship the repo. Your <code>juno-pm</code> fork &mdash; with its README polished &mdash; <em>is</em> the demo.
+    </p>
   </div>
 </section>
 
 
-<section class="section-break" data-title="Finalise Your Project README">
-  <div class="section-break-inner">
-    <div class="lab-title">Hands-On Lab · 20 min · The Final Artifact</div>
-    <div class="lab-name">Finalise Your Project README</div>
-    <div class="lab-desc">Pull every artifact together. Your README is the pitch.</div>
+<section data-title="Important Reminder">
+  <div class="inner">
+    <div class="demo-tag tag-recall">Important reminder</div>
+    <h2>Submit to qualify for certification</h2>
+    <div class="subtitle">Upload your own copy of the final project deliverables in the LMS within 7 days of course completion.</div>
+
+    <div style="max-width:880px; margin:24px auto 0; background:rgba(7,22,44,0.55); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:24px 28px;">
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:center;">
+        <div style="font-size:48px;">&#x1F680;</div>
+        <div style="text-align:left;">
+          <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px;">What to submit</div>
+          <p style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:700; color:#fff; margin:0 0 8px; line-height:1.4;">
+            The URL of your finalised <code style="color:#34d399;">juno-pm</code> fork (with the polished README) &mdash; pasted into the LMS upload field.
+          </p>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+            No deck. No video required. Just a repo URL that a stranger could open and &ldquo;get&rdquo; what you built.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:18px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">Window:</strong> 7 days post-course. Late submissions don&rsquo;t qualify for certification &mdash; the artifacts in your fork are still yours forever.
+    </p>
   </div>
 </section>
 
 
-<section data-title="Final Project Deliverables Builder">
-  <div class="lab-timer">⏰ 20 min</div>
+<section data-title="Your Time to Shine">
   <div class="inner">
-    <div class="demo-tag tag-exercise">Applied Work</div>
-    <h2>Final Project Deliverables Builder</h2>
-    <div class="subtitle">One structured page · every M1–M6 artifact · Build Insights reflection.</div>
-    <ol style="text-align:left; max-width:720px; margin:0 auto;">
-      <li>Open <code>Final Project Deliverables Builder.html</code>.</li>
-      <li>The tool pulls together: system prompt · strategy one-pager · AI PRD · user flow + trust gaps · AWSpec · eval stack.</li>
-      <li>Add your <strong>Build Insights</strong> reflection: 1 friction · 1 learning · 1 aha.</li>
-      <li>Copy as markdown &rarr; top-level <code>README.md</code> of your <code>juno-pm/</code> fork.</li>
-      <li>Commit. Push. Done.</li>
-    </ol>
-    <div style="text-align:center; margin-top:18px;">
-      <a class="tool-btn" href="Final Project Deliverables Builder.html" target="_blank" rel="noopener">Open the tool ↗</a>
-      <div style="font-size:12px; color:#8899bb; margin-top:6px;">Pulls every M1–M6 artifact into one README · Build Insights · optional Loom.</div>
+    <div class="demo-tag tag-debrief">Your time to shine</div>
+    <h2>Present, record, or just submit &mdash; your call</h2>
+    <div class="subtitle">Three paths, all valid for certification. Pick the one that fits your learning style.</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; max-width:1080px; margin:22px auto 0;">
+
+      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(96,165,250,0.40); border-radius:14px; padding:16px 20px; text-align:left;">
+        <div style="font-size:32px; margin-bottom:6px;">&#x1F39D;&#xFE0F;</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path A &middot; live cohort</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:6px;">Volunteer to demo live</div>
+        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+          Cohorts have ~10-min demo slots. First-come, first-served via Slack. Get live, actionable feedback from peers and the instructor.
+        </p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(251,191,36,0.40); border-radius:14px; padding:16px 20px; text-align:left;">
+        <div style="font-size:32px; margin-bottom:6px;">&#x1F4F9;</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path B &middot; async</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:6px;">Record a 3-min Loom</div>
+        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+          Walk through your repo &mdash; bet, system prompt, user flow, AWSpec, eval stack. Post in <code>#ai-pm-cohort</code>; instructor responds in-thread within ~5 days.
+        </p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(52,211,153,0.40); border-radius:14px; padding:16px 20px; text-align:left;">
+        <div style="font-size:32px; margin-bottom:6px;">&#x1F4DD;</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path C &middot; minimum</div>
+        <div style="font-family:'Poppins',sans-serif; font-size:14.5px; font-weight:800; color:#fff; margin-bottom:6px;">Just submit the URL</div>
+        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.55;">
+          The README is enough. If a stranger can read it and understand Juno&rsquo;s bet, the bar, and the trade-offs &mdash; you&rsquo;ve passed.
+        </p>
+      </div>
+
     </div>
 
-    <p class="repo-cta"><span style="color:#34d399;">📂</span> <strong>Go to your repo &rarr;</strong> <code>README.md (top-level of your juno-pm/ fork)</code></p>
-  </div>
-</section>
-
-
-<section data-title="Certification — What You Submit">
-  <div class="inner">
-    <div class="demo-tag tag-lecture">Framework</div>
-    <h2>Certification — What You Submit</h2>
-    <div class="subtitle">Submit: the URL of your finalised <code>juno-pm/</code> fork. Window: 7 days post-cohort.</div>
-    <div class="cards-grid">
-      <div class="card-item"><div class="card-icon">📋</div><div class="card-title">Application of Concepts</div><div class="card-desc">How well M1–M6 frameworks land in your artifacts.</div></div>
-      <div class="card-item"><div class="card-icon">🧠</div><div class="card-title">Credibility & Reasoning</div><div class="card-desc">Whether your decisions hold up to scrutiny.</div></div>
-      <div class="card-item"><div class="card-icon">✏️</div><div class="card-title">Clarity</div><div class="card-desc">Whether a stranger could read your README and "get" Juno.</div></div>
-      <div class="card-item"><div class="card-icon">🎯</div><div class="card-title">Strategic Thinking</div><div class="card-desc">Whether the bet, the bar, and the trade-offs are coherent.</div></div>
-    </div>
-    <p style="font-size:13px; color:#8899bb; margin-top:14px; text-align:center;">Scale: 1 — Poor (0–49) · 2 — Sufficient (50–79) · 3 — Excellent (80–100). No live demo required.</p>
-  </div>
-</section>
-
-
-<section class="centered" data-title="Synthesis">
-  <div class="inner">
-    <div class="section-label">Synthesis</div>
-    <h2>Your Repo After Today</h2>
-    <p class="subtitle">6 of 6 components committed.</p>
-    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:24px 0;">
-      <div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">01-prompting/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">02-strategy/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">03-rag-prd/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">04-ai-ux/ ✓</div></div><div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.12); border-radius:10px; padding:16px 20px; min-width:140px; text-align:left; opacity:0.55;"><div style="font-size:13px; font-weight:800; color:#34d399;">05-agentic-workflows/ ✓</div></div><div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); border-radius:10px; padding:18px 22px; min-width:220px; text-align:left;"><div style="font-size:13px; font-weight:800; color:#34d399; margin-bottom:6px;">06-evals/ ✓</div><div style="font-size:12px; color:#d8def0;">eval-stack.md</div><div style="font-size:12px; color:#7a7a9a; margin-top:2px;">Three layers · cadence · pass bar · owner per layer</div><div style="font-size:12px; color:#d8def0;">human-rubric.md</div><div style="font-size:12px; color:#7a7a9a; margin-top:2px;">Dimensions · anchors · disagreement protocol</div><div style="font-size:12px; color:#d8def0;">README.md (root)</div><div style="font-size:12px; color:#7a7a9a; margin-top:2px;">PM Execution Plan · finalised pitch</div></div>
-    </div>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:820px; margin:0 auto;">
-      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;"><div style="font-size:12px; font-weight:800; color:#6ee7b7; margin-bottom:6px;">eval-stack.md</div><div style="font-size:12px; color:#8899bb; line-height:1.45;">Three layers · cadence · pass bar · owner per layer</div></div><div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;"><div style="font-size:12px; font-weight:800; color:#6ee7b7; margin-bottom:6px;">human-rubric.md</div><div style="font-size:12px; color:#8899bb; line-height:1.45;">Dimensions · anchors · disagreement protocol</div></div><div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;"><div style="font-size:12px; font-weight:800; color:#6ee7b7; margin-bottom:6px;">README.md (root)</div><div style="font-size:12px; color:#8899bb; line-height:1.45;">PM Execution Plan · finalised pitch</div></div>
-    </div>
+    <p style="font-size:12px; color:#bcb1ff; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">Important:</strong> you have 7 days after course completion to submit. The repo URL is the certificate.
+    </p>
   </div>
 </section>
 
@@ -701,29 +1330,24 @@ section.cameras-section .cameras-inner {
 <section data-title="Takeaways">
   <div class="inner">
     <div class="section-label">Key Takeaways</div>
-    <h2>Measure AI Quality with Evals & Guardrails</h2>
+    <h2>Measure AI Quality with Evals and Guardrails</h2>
     <div class="takeaway-list">
-      <div class="takeaway-item"><p><strong>Vibe checks fail in production.</strong> A handful of successful prompts is not a quality bar.</p></div>
-      <div class="takeaway-item"><p><strong>AI Evals Stack: three layers, always all three.</strong> User feedback · human eval · automated. They answer different questions.</p></div>
-      <div class="takeaway-item"><p><strong>Human eval needs anchors.</strong> Without anchor descriptions per scale point, graders drift. Disagreement protocol non-negotiable.</p></div>
-      <div class="takeaway-item"><p><strong>Optimise model → data → architecture.</strong> Most teams architecture-first. It's the slowest, most expensive lever.</p></div>
-      <div class="takeaway-item"><p><strong>Eval is product surface. PMs own the bar.</strong> Engineers can run evals. Only PMs can decide what's good enough to ship.</p></div>
-      <div class="takeaway-item"><p><strong>Your README is the pitch.</strong> Not a deck. Not a doc. The front page of a repo you're proud to submit.</p></div>
+      <div class="takeaway-item"><p><strong>Replace vibe checks with systematic evaluation harnesses.</strong> PMs catch invisible failures and make objective, data-driven launch decisions across diverse user intents.</p></div>
+      <div class="takeaway-item"><p><strong>Define hard gates with zero-tolerance metrics + a failure taxonomy.</strong> Establishing sensitivity thresholds protects the brand by balancing safety against necessary product utility.</p></div>
+      <div class="takeaway-item"><p><strong>Implement an evaluation stack with all three layers.</strong> Automated checks, human evals, and real-time user feedback ensure technical accuracy, nuanced tone, and value delivery are all measured for production.</p></div>
+      <div class="takeaway-item"><p><strong>Optimise via three levers: Prompt, Model, Data.</strong> Identify whether to refine instructions, swap models, or clean RAG datasets &mdash; targeted system improvement, in that order.</p></div>
     </div>
   </div>
 </section>
 
 
-<section data-title="Extra Practice">
+<section data-title="Resources &amp; Templates">
   <div class="inner">
-    <div class="section-label">Extra Practice</div>
-    <h2>Optional: Go Deeper</h2>
-    <div class="evidence-cards" style="margin:24px 0;">
-      <div class="evidence-card"><div class="ec-label">Practice 1</div><div class="ec-company">Optional Async Showcase</div><div class="ec-text">Record a 3-min Loom of your <code>juno-pm/</code> walkthrough — bet · system prompt · user flow · AWSpec · eval stack. Post in <code>#ai-pm-cohort</code> with the repo URL. Instructor responds in-thread within ~5 days.</div></div>
-      <div class="evidence-card"><div class="ec-label">Practice 2</div><div class="ec-company">Re-Run M6 Reviews on Your Next Bet</div><div class="ec-text">The eval-stack template + human-rubric template are reusable forever. Re-run them on the next AI bet on your roadmap.</div></div>
-    </div>
-    <div class="artifact-preview">
-      <div class="ap-title">Next: After the cohort: submit your repo within 7 days for certification.</div>
+    <div class="demo-tag tag-debrief">Resources &amp; templates</div>
+    <h2>Resources &amp; templates</h2>
+    <div class="subtitle">All M6 tools live in <code>/Modules/</code>. Deliverables commit to <code>06-evals/</code> &mdash; final README at the repo root.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:1040px; margin:22px auto 0;">
+      <a href="../Modules/M6 - Eval Stack Designer.html" target="_blank" style="text-decoration:none;"><div style="background:rgba(255,255,255,0.035); border:1px solid #3b82f640; border-radius:12px; padding:14px 16px; text-align:left; height:100%; display:flex; flex-direction:column;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#3b82f6; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">&#x270D;&#xFE0F; In-Class Lab Tool</div><div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; line-height:1.3;">Plan Juno&rsquo;s Eval Stack</div><p style="font-size:11.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.5;">Three-layer eval planner. User feedback &middot; Human eval &middot; Automated. Live SVG stack + JSON / markdown export to <code style="font-size:0.9em; color:#3b82f6;">06-evals/eval-stack.md</code>.</p><div style="margin-top:auto; padding-top:6px; border-top:1px dashed #3b82f640; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#3b82f6;">&rarr; M6 &mdash; Eval Stack Designer</div></div></a><a href="../Modules/M6 - Human Evaluation Rubric.html" target="_blank" style="text-decoration:none;"><div style="background:rgba(255,255,255,0.035); border:1px solid #fbbf2440; border-radius:12px; padding:14px 16px; text-align:left; height:100%; display:flex; flex-direction:column;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">&#x1F4DD; Companion Tool</div><div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; line-height:1.3;">Build Juno&rsquo;s Human Eval Rubric</div><p style="font-size:11.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.5;">Dimensions, anchors per scale point, sampling cadence, and disagreement protocol. Exports to <code style="font-size:0.9em; color:#fbbf24;">06-evals/human-rubric.md</code>.</p><div style="margin-top:auto; padding-top:6px; border-top:1px dashed #fbbf2440; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#fbbf24;">&rarr; M6 &mdash; Human Evaluation Rubric</div></div></a><a href="../Modules/Final Project Deliverables Builder.html" target="_blank" style="text-decoration:none;"><div style="background:rgba(255,255,255,0.035); border:1px solid #34d39940; border-radius:12px; padding:14px 16px; text-align:left; height:100%; display:flex; flex-direction:column;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#34d399; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">&#x1F680; Final Lab Tool</div><div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; line-height:1.3;">Finalise the Project Deliverables</div><p style="font-size:11.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.5;">Aggregates M1&ndash;M6 artefacts into one polished <code style="font-size:0.9em; color:#34d399;">README.md</code> + Build Insights reflection.</p><div style="margin-top:auto; padding-top:6px; border-top:1px dashed #34d39940; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#34d399;">&rarr; Final Project Deliverables Builder</div></div></a><a href="https://github.com/new?template_name=ai-product-management-template&template_owner=DJN-KRS-2709" target="_blank" style="text-decoration:none;"><div style="background:rgba(255,255,255,0.035); border:1px solid #bcb1ff40; border-radius:12px; padding:14px 16px; text-align:left; height:100%; display:flex; flex-direction:column;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#bcb1ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">&#x1F4DA; Project Repo Template</div><div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; line-height:1.3;">Use the <code style="font-size:0.9em; color:#bcb1ff;">juno-pm</code> template</div><p style="font-size:11.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.5;">One-click create your project fork (if you haven&rsquo;t already).</p><div style="margin-top:auto; padding-top:6px; border-top:1px dashed #bcb1ff40; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#bcb1ff;">&rarr; ai-product-management-template</div></div></a>
     </div>
   </div>
 </section>

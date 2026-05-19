@@ -2453,6 +2453,7 @@ def main():
     from m3_v2 import build_module_3 as build_module_3_v2
     from m4_v2 import build_module_4 as build_module_4_v2
     from m5_v2 import build_module_5 as build_module_5_v2
+    from m6_v2 import build_module_6 as build_module_6_v2
 
     builders = {
         1: build_module_1_v2,
@@ -2460,7 +2461,7 @@ def main():
         3: build_module_3_v2,
         4: build_module_4_v2,
         5: build_module_5_v2,
-        6: build_module_6,
+        6: build_module_6_v2,
     }
     for n, _, _, full_title, _, _ in MODULES_META:
         sections_inst, sections_share = builders[n]()

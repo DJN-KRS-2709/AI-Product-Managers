@@ -29,7 +29,7 @@ This template gives you one folder per module. Each module pushes a real artifac
 | **M2 — Strategy** | `02-strategy/` | `decision-matrix.md` + `strategy-one-pager.md` |
 | **M3 — RAG / AI PRD** | `03-rag-prd/` | `prd.md` (with RAG architecture decisions) |
 | **M4 — AI-UX** | `04-ai-ux/` | `user-flow.md` + `trust-gaps.md` |
-| **M5 — Agentic** | `05-agentic-workflows/` | `awspec.md` + `control-panel.md` (+ optional `Juno Agent.json` Langflow lab) |
+| **M5 — Agentic** | `05-agentic-workflows/` | `awspec.md` + `agent-control-panel.md` (+ optional `Juno Agent.json` Langflow lab) |
 | **M6 — Evals** | `06-evals/` | `eval-stack.md` + `human-rubric.md` |
 
 Every module's tools have a "Copy as markdown" button. Paste the output into the file path above. Self-review. Run the AI-review prompt. Commit. Push.
@@ -63,7 +63,7 @@ juno-pm/
 │   └── trust-gaps.md                      # M4 deliverable
 ├── 05-agentic-workflows/
 │   ├── awspec.md                          # M5 deliverable
-│   ├── control-panel.md                   # M5 deliverable
+│   ├── agent-control-panel.md             # M5 deliverable
 │   └── Juno Agent.json                    # M5 optional Langflow starter (provided)
 └── 06-evals/
     ├── eval-stack.md                      # M6 deliverable
