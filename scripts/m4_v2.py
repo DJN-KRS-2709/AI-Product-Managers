@@ -139,7 +139,7 @@ def clunky_aiux_solo_reflection() -> str:
     Mirrors source copy: same three questions, neutral framing."""
     return """<section data-title="Your Experience With Clunky AI-UX">
   <div class="inner">
-    <div class="demo-tag tag-debrief">Solo Reflection &middot; 5 min</div>
+    <div class="demo-tag tag-debrief">Reflection &middot; 5 min</div>
     <h2>Your Experience With &ldquo;Clunky&rdquo; AI-UX</h2>
     <div class="subtitle">To get you thinking about how you might reimagine the AI-UX of your own products and experiences, share your perspective on the questions below.</div>
 
@@ -360,7 +360,7 @@ def spot_the_friction_solo() -> str:
     Surfaces the speaker-note answer paths so solo learners can self-check."""
     return """<section data-title="Spot the Friction">
   <div class="inner">
-    <div class="demo-tag tag-debrief">Solo Reflection &middot; 5 min</div>
+    <div class="demo-tag tag-debrief">Reflection &middot; 5 min</div>
     <h2>Spot the Friction</h2>
     <div class="subtitle">To make these AI-native principles tangible, look at the scenario and identify why it fails to deliver an effortless experience.</div>
 
