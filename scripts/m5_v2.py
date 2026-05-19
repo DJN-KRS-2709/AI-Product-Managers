@@ -262,69 +262,71 @@ def agent_anatomy() -> str:
     <div class="subtitle">Three layers + a brain. Memory carries context, the brain decides, tools act.</div>
 
     <div style="max-width:1100px; margin:18px auto 0;">
-      <svg viewBox="0 0 1100 460" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+      <svg viewBox="0 0 1100 480" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
         <defs>
           <marker id="anaA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/></marker>
           <marker id="anaG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/></marker>
+          <marker id="anaY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/></marker>
           <linearGradient id="brainBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="100%" stop-color="#0c2244"/></linearGradient>
           <linearGradient id="strategyBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(124,140,255,0.18)"/><stop offset="100%" stop-color="rgba(124,140,255,0.05)"/></linearGradient>
           <linearGradient id="actionBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(251,191,36,0.16)"/><stop offset="100%" stop-color="rgba(251,191,36,0.04)"/></linearGradient>
           <linearGradient id="contextBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(52,211,153,0.16)"/><stop offset="100%" stop-color="rgba(52,211,153,0.04)"/></linearGradient>
         </defs>
 
-        <rect x="40" y="20" width="1020" height="80" rx="14" fill="url(#strategyBg)" stroke="#bcb1ff" stroke-width="1" stroke-dasharray="4,4" opacity="0.9"/>
-        <text x="60" y="42" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">STRATEGY LAYER &middot; HOW</text>
-        <text x="60" y="64" fill="#fff" font-family="Poppins,sans-serif" font-size="13" font-weight="800">Planning</text>
-        <text x="60" y="84" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11.5">Decomposes the user&#39;s goal into ordered steps. Re-plans on failure.</text>
+        <rect x="40" y="14" width="1020" height="70" rx="14" fill="url(#strategyBg)" stroke="#bcb1ff" stroke-width="1" stroke-dasharray="4,4" opacity="0.9"/>
+        <text x="60" y="34" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">STRATEGY LAYER &middot; HOW</text>
+        <text x="60" y="54" fill="#fff" font-family="Poppins,sans-serif" font-size="13" font-weight="800">Planning</text>
+        <text x="60" y="74" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11.5">Decomposes the user&#39;s goal into ordered steps. Re-plans on failure.</text>
 
-        <rect x="40" y="120" width="1020" height="190" rx="14" fill="rgba(7,22,44,0.55)" stroke="#79c0ff" stroke-width="1" opacity="0.9"/>
-        <text x="60" y="142" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">REASONING ENGINE &middot; WHY</text>
+        <g>
+          <rect x="380" y="96" width="340" height="24" rx="12" fill="rgba(52,211,153,0.16)" stroke="#34d399" stroke-width="1"/>
+          <text x="550" y="113" text-anchor="middle" fill="#34d399" font-family="Poppins,sans-serif" font-size="11" font-weight="900" letter-spacing="2">USER GOAL: &ldquo;PLAN A TRIP&rdquo;</text>
+          <path d="M 550 120 L 550 158" stroke="#34d399" stroke-width="1.6" fill="none" marker-end="url(#anaG)"/>
+        </g>
 
-        <rect x="430" y="158" width="240" height="130" rx="60" fill="url(#brainBg)" stroke="#79c0ff" stroke-width="2"/>
-        <text x="550" y="195" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="18" font-weight="900">The Brain</text>
-        <text x="550" y="220" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="12" font-weight="700" letter-spacing="2">LLM</text>
+        <rect x="40" y="134" width="1020" height="170" rx="14" fill="rgba(7,22,44,0.55)" stroke="#79c0ff" stroke-width="1" opacity="0.9"/>
+        <text x="60" y="156" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">REASONING ENGINE &middot; WHY</text>
+
+        <rect x="430" y="166" width="240" height="124" rx="60" fill="url(#brainBg)" stroke="#79c0ff" stroke-width="2"/>
+        <text x="550" y="200" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="18" font-weight="900">The Brain</text>
+        <text x="550" y="222" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="12" font-weight="700" letter-spacing="2">LLM</text>
         <text x="550" y="248" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">Interprets intent. Picks the next step.</text>
         <text x="550" y="266" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">Asks tools. Reads results.</text>
 
-        <rect x="80" y="170" width="270" height="110" rx="10" fill="rgba(255,255,255,0.04)" stroke="#bcb1ff" stroke-width="1.5"/>
-        <text x="215" y="195" text-anchor="middle" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">MEMORY</text>
-        <text x="215" y="216" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="14" font-weight="800">Past results</text>
-        <text x="215" y="240" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">What the agent has learned</text>
-        <text x="215" y="256" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">across this run + prior runs.</text>
+        <rect x="80" y="178" width="270" height="100" rx="10" fill="rgba(255,255,255,0.04)" stroke="#bcb1ff" stroke-width="1.5"/>
+        <text x="215" y="200" text-anchor="middle" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">MEMORY</text>
+        <text x="215" y="220" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="14" font-weight="800">Past results</text>
+        <text x="215" y="244" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">What the agent has learned</text>
+        <text x="215" y="260" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">across this run + prior runs.</text>
 
-        <rect x="750" y="170" width="270" height="110" rx="10" fill="rgba(255,255,255,0.04)" stroke="#fbbf24" stroke-width="1.5"/>
-        <text x="885" y="195" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">ARMS</text>
-        <text x="885" y="216" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="14" font-weight="800">Tools</text>
-        <text x="885" y="240" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">APIs, databases, automations</text>
-        <text x="885" y="256" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">the brain can call into.</text>
+        <rect x="750" y="178" width="270" height="100" rx="10" fill="rgba(255,255,255,0.04)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="885" y="200" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">ARMS</text>
+        <text x="885" y="220" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="14" font-weight="800">Tools</text>
+        <text x="885" y="244" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">APIs, databases, automations</text>
+        <text x="885" y="260" text-anchor="middle" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">the brain can call into.</text>
 
-        <path d="M 350 225 L 430 225" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#anaA)"/>
-        <path d="M 670 225 L 750 225" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#anaA)"/>
+        <path d="M 350 228 L 430 228" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#anaA)"/>
+        <path d="M 670 228 L 750 228" stroke="#79c0ff" stroke-width="1.8" fill="none" marker-end="url(#anaA)"/>
 
-        <rect x="40" y="330" width="1020" height="60" rx="14" fill="url(#actionBg)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4" opacity="0.9"/>
-        <text x="60" y="354" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">ACTION LAYER &middot; WHAT</text>
-        <text x="60" y="376" fill="#fff" font-family="Lato,sans-serif" font-size="11.5">The brain triggers tools. Tools change state in the world: searches, files, payments, posts, drafts.</text>
+        <rect x="40" y="320" width="1020" height="80" rx="14" fill="url(#actionBg)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4" opacity="0.9"/>
+        <text x="60" y="342" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">ACTION LAYER &middot; WHAT</text>
+        <text x="60" y="362" fill="#fff" font-family="Lato,sans-serif" font-size="11.5">The brain triggers tools.</text>
+        <text x="60" y="384" fill="#cdd5e3" font-family="Lato,sans-serif" font-size="11">Tools change state in the world: searches, files, payments, posts, drafts.</text>
 
-        <rect x="40" y="402" width="1020" height="48" rx="14" fill="url(#contextBg)" stroke="#34d399" stroke-width="1" stroke-dasharray="4,4" opacity="0.9"/>
-        <text x="60" y="424" fill="#34d399" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">CONTEXT LAYER &middot; WHEN</text>
-        <text x="60" y="442" fill="#fff" font-family="Lato,sans-serif" font-size="11.5">Goal &middot; Memory &middot; Environment. The conditions the agent runs inside.</text>
-
-        <rect x="40" y="100" width="180" height="20" rx="0" fill="none"/>
-
-        <g>
-          <rect x="380" y="95" width="340" height="22" rx="11" fill="rgba(52,211,153,0.16)" stroke="#34d399" stroke-width="1"/>
-          <text x="550" y="111" text-anchor="middle" fill="#34d399" font-family="Poppins,sans-serif" font-size="11" font-weight="900" letter-spacing="2">USER GOAL: &ldquo;PLAN A TRIP&rdquo;</text>
-          <path d="M 550 117 L 550 154" stroke="#34d399" stroke-width="1.6" fill="none" marker-end="url(#anaG)"/>
-        </g>
+        <path d="M 885 278 L 885 348" stroke="#fbbf24" stroke-width="1.4" fill="none" stroke-dasharray="4,4" opacity="0.7" marker-end="url(#anaY)"/>
 
         <g font-family="Poppins,sans-serif" font-size="11" font-weight="800">
-          <rect x="780" y="305" width="68" height="22" rx="11" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
-          <text x="814" y="320" text-anchor="middle" fill="#fbbf24">SEARCH</text>
-          <rect x="858" y="305" width="68" height="22" rx="11" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
-          <text x="892" y="320" text-anchor="middle" fill="#fbbf24">COMPARE</text>
-          <rect x="936" y="305" width="68" height="22" rx="11" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
-          <text x="970" y="320" text-anchor="middle" fill="#fbbf24">BOOK</text>
+          <rect x="700" y="358" width="78" height="26" rx="13" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
+          <text x="739" y="375" text-anchor="middle" fill="#fbbf24">SEARCH</text>
+          <rect x="788" y="358" width="86" height="26" rx="13" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
+          <text x="831" y="375" text-anchor="middle" fill="#fbbf24">COMPARE</text>
+          <rect x="884" y="358" width="68" height="26" rx="13" fill="rgba(251,191,36,0.18)" stroke="#fbbf24" stroke-width="1"/>
+          <text x="918" y="375" text-anchor="middle" fill="#fbbf24">BOOK</text>
         </g>
+
+        <rect x="40" y="416" width="1020" height="50" rx="14" fill="url(#contextBg)" stroke="#34d399" stroke-width="1" stroke-dasharray="4,4" opacity="0.9"/>
+        <text x="60" y="438" fill="#34d399" font-family="Poppins,sans-serif" font-size="10" font-weight="900" letter-spacing="2">CONTEXT LAYER &middot; WHEN</text>
+        <text x="60" y="458" fill="#fff" font-family="Lato,sans-serif" font-size="11.5">Goal &middot; Memory &middot; Environment. The conditions the agent runs inside.</text>
       </svg>
     </div>
 
