@@ -653,40 +653,45 @@ def pm_execution_plan() -> str:
     """Source slide 18 - The PM Execution Plan.
 
     Roadmap-style layout: clean 2x2 grid (Step 1 top-left, Step 2 top-right,
-    Step 3 bottom-left, Step 4 bottom-right). One long flowing arrow snakes
-    through 1 -> 2 -> 3, and a short horizontal arrow finishes 3 -> 4:
+    Step 3 bottom-left, Step 4 bottom-right). ONE single flowing snake
+    arrow weaves around all four tiles with three horizontal passes:
 
-      1 -> (over) -> end of 'Set Your Gatekeepers' title -> round DOWN ->
-      across the middle gap (between the rows) -> round DOWN into ring 3
-      3 -> 4  straight horizontal between the bottom rings
+      1. Top pass    - above row 1 (over steps 1 & 2), goes LEFT -> RIGHT
+      2. Middle pass - between the rows, goes RIGHT -> LEFT
+      3. Bottom pass - below row 2 (under steps 3 & 4), goes LEFT -> RIGHT
 
-    Geometry uses a 1000 x 540 viewBox with preserveAspectRatio="none";
-    step blocks are positioned in %, so the SVG arrows and HTML rings
-    stay perfectly aligned at any container width.
+    The two passes are joined by smooth U-curves (cubic Beziers) on the
+    right and left margins so the arrow never crosses any tile, ring,
+    pill, or description.  Arrowhead lands on the bottom-right.
+
+    Geometry uses a 1000 x 600 viewBox (60px taller than the rings need,
+    to make room for the bottom pass below row 2 without overlapping text)
+    with preserveAspectRatio="none"; step blocks are positioned in %, so
+    the SVG path and HTML rings stay perfectly aligned at any width.
 
     Anchor points (px == viewBox units):
       ring 1 (90, 107)   ring 2 (550, 107)
       ring 3 (90, 407)   ring 4 (550, 407)
-      end of step 2 title pill ~ (792, 107)
+      top pass y=40 | middle pass y=305 | bottom pass y=560
     """
     steps = [
         # (n, col, title, desc, decision, left%, top%, width%)
         ("1", "#3b82f6", "Build Your Eval Plan",
          "Define exactly what to measure, how often to test, and assign a clear quality owner for the final score.",
          "Speed vs. Certainty",
-         "6.3%", "14.8%", "40%"),
+         "6.3%", "13.33%", "40%"),
         ("2", "#fbbf24", "Set Your Gatekeepers",
          "Compare systematic results against your gold standard. Reject any launch based on a &ldquo;good demo&rdquo; if the data fails the bar.",
          "Brand Protection vs. Hype",
-         "52.3%", "14.8%", "42%"),
+         "52.3%", "13.33%", "42%"),
         ("3", "#34d399", "Add Production Guardrails",
          "Determine when the system must block a response, degrade to a safe script, or escalate to a human reviewer.",
          "Safety vs. Utility",
-         "6.3%", "70.4%", "40%"),
+         "6.3%", "63.33%", "40%"),
         ("4", "#bcb1ff", "Evolve Your Roadmap",
          "Use performance gaps to decide whether to pivot your strategy or update your roadmap with new goals.",
          "Feature vs. Data",
-         "52.3%", "70.4%", "42%"),
+         "52.3%", "63.33%", "42%"),
     ]
 
     step_blocks = []
@@ -709,38 +714,32 @@ def pm_execution_plan() -> str:
 </div>""")
     steps_html = "\n".join(step_blocks)
 
-    # Two arrows that route AROUND content (never cross any text):
-    #   1 -> 2 -> 3   single flowing path: arc OVER step 2, lands at the
-    #                  right end of the 'Set Your Gatekeepers' title pill,
-    #                  rounds DOWN on the right, runs horizontally through
-    #                  the middle gap, then rounds DOWN into ring 3.
-    #   3 -> 4        straight horizontal between the bottom rings.
-    arrows_svg = """<svg viewBox="0 0 1000 540" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+    # ONE single snake path that flows around all four tiles without ever
+    # touching them.  Cubic Beziers form the two U-curves (right side &
+    # left side); each L join inherits a tangent that matches the previous
+    # curve's tangent, so every corner is C1-continuous (no visible kinks).
+    #
+    #   M 90 40          start above ring 1
+    #   L 920 40         top pass: above row 1, going RIGHT
+    #   C 980 40, 980 305, 920 305    right U-turn: down
+    #   L 80 305         middle pass: between rows, going LEFT
+    #   C 20 305, 20 560, 80 560      left U-turn: down
+    #   L 920 560        bottom pass: below row 2, going RIGHT
+    arrows_svg = """<svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
   <defs>
     <marker id="exArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
     </marker>
   </defs>
-  <!-- 1 -> 2 -> 3: snake path. Arcs OVER step 2 to the right edge of the
-       'Set Your Gatekeepers' title pill (792, 107), then rounds DOWN on
-       the right, runs horizontally through the middle gap, and rounds DOWN
-       into the top of ring 3. Arrowhead lands on ring 3 pointing down. -->
-  <path d="M 117 107
-           C 117 30, 792 30, 792 107
-           C 920 107, 960 130, 960 175
-           L 960 245
-           C 960 285, 920 285, 860 285
-           L 200 285
-           C 130 285, 90 305, 90 345
-           L 90 380"
+  <path d="M 90 40
+           L 920 40
+           C 980 40, 980 305, 920 305
+           L 80 305
+           C 20 305, 20 560, 80 560
+           L 920 560"
         stroke="#79c0ff" stroke-width="1.8" fill="none"
         marker-end="url(#exArrow)" opacity="0.95"
         stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- 3 -> 4: straight right between the bottom rings -->
-  <path d="M 117 407 L 523 407"
-        stroke="#79c0ff" stroke-width="1.8" fill="none"
-        marker-end="url(#exArrow)" opacity="0.95"
-        stroke-linecap="round"/>
 </svg>"""
 
     return f"""<section data-title="The PM Execution Plan">
@@ -748,7 +747,7 @@ def pm_execution_plan() -> str:
     <div class="demo-tag tag-framework">Framework</div>
     <h2>The PM execution plan</h2>
     <div class="subtitle">Four steps that turn evals into a production decision &mdash; with the trade-off named on each one.</div>
-    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/540; margin:22px auto 0;">
+    <div style="position:relative; width:100%; max-width:1000px; aspect-ratio:1000/600; margin:16px auto 0;">
       {arrows_svg}
       {steps_html}
     </div>
