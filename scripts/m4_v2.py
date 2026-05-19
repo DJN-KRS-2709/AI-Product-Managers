@@ -134,14 +134,16 @@ def agenda_4_m4() -> str:
 # Section 01 - Intent-Driven AI Design Systems
 # ---------------------------------------------------------------------------
 
-def clunky_aiux_solo_reflection() -> str:
-    """Source slide 6 — instructor-led Q&A converted to solo reflection (per user mandate).
-    Mirrors source copy: same three questions, neutral framing."""
+def clunky_aiux_qa() -> str:
+    """Source slide 6 - Instructor-Led Q&A. Same three discussion questions
+    from the source. Speaker notes (`add(...)` `note=`) carry the
+    instructor cues. Async cohort learners can post their answer in
+    `#ai-pm-cohort`."""
     return """<section data-title="Your Experience With Clunky AI-UX">
   <div class="inner">
-    <div class="demo-tag tag-debrief">Reflection &middot; 5 min</div>
+    <div class="demo-tag tag-debrief">Instructor-Led Q&amp;A &middot; 5 min</div>
     <h2>Your Experience With &ldquo;Clunky&rdquo; AI-UX</h2>
-    <div class="subtitle">To get you thinking about how you might reimagine the AI-UX of your own products and experiences, share your perspective on the questions below.</div>
+    <div class="subtitle">To get you started thinking about how you might reimagine the AI-UX of your own products and experiences, share your perspective on the questions below.</div>
 
     <ol style="max-width:820px; margin:22px auto 0; padding:0 0 0 22px; text-align:left; color:#cdd5e3; font-size:14.5px; line-height:1.6;">
       <li style="margin-bottom:10px;">What&rsquo;s a product you&rsquo;ve tried where AI <em>technically</em> works, but the experience feels wrong, annoying, or pointless?</li>
@@ -150,7 +152,7 @@ def clunky_aiux_solo_reflection() -> str:
     </ol>
 
     <p style="font-size:13px; color:#8899bb; max-width:780px; margin:18px auto 0; text-align:center;">
-      Reflect on your own, then drop your answers async in <code style="font-size:0.92em; color:#79c0ff;">#ai-pm-cohort</code>.
+      Feel free to unmute and share, or post your thoughts in the chat. Async learners: post in <code style="font-size:0.92em; color:#79c0ff;">#ai-pm-cohort</code>.
     </p>
   </div>
 </section>
@@ -355,14 +357,15 @@ def ai_placement_3() -> str:
 """
 
 
-def spot_the_friction_solo() -> str:
-    """Source slide 12 - instructor-led Q&A converted to solo reflection.
-    Surfaces the speaker-note answer paths so solo learners can self-check."""
+def spot_the_friction_qa() -> str:
+    """Source slide 12 - Instructor-Led Q&A. Source timer = 10 minutes.
+    Speaker notes (passed via `note=` on the `add(...)` call) carry the
+    answer paths and instructor cues."""
     return """<section data-title="Spot the Friction">
   <div class="inner">
-    <div class="demo-tag tag-debrief">Reflection &middot; 5 min</div>
+    <div class="demo-tag tag-debrief">Instructor-Led Q&amp;A &middot; 10 min</div>
     <h2>Spot the Friction</h2>
-    <div class="subtitle">To make these AI-native principles tangible, look at the scenario and identify why it fails to deliver an effortless experience.</div>
+    <div class="subtitle">To make these AI-native principles tangible, let&rsquo;s analyze how they apply to a real-world product scenario.</div>
 
     <div style="max-width:880px; margin:18px auto 0; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:16px 22px; text-align:left;">
       <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">Scenario</div>
@@ -371,16 +374,8 @@ def spot_the_friction_solo() -> str:
     </div>
 
     <p style="font-size:12.5px; color:#8899bb; max-width:780px; margin:14px auto 0; text-align:center;">
-      Think on your own first. Then expand the answer below to self-check.
+      Look at the scenario and identify why it fails to deliver an effortless experience. Be ready to share your reasoning.
     </p>
-
-    <details style="max-width:880px; margin:12px auto 0; background:rgba(96,165,250,0.05); border:1px solid rgba(96,165,250,0.25); border-radius:12px; padding:0 18px;">
-      <summary style="font-family:'Poppins',sans-serif; font-size:12px; font-weight:800; color:#79c0ff; letter-spacing:0.12em; text-transform:uppercase; padding:12px 0; cursor:pointer; list-style:none;">Reveal the AI-native pivot &rarr;</summary>
-      <div style="padding:0 0 14px; text-align:left;">
-        <p style="font-size:13px; color:#cdd5e3; line-height:1.6; margin:0 0 10px;"><strong style="color:#fff;">Why it fails:</strong> chatbot trap (sidecar that forces the recruiter to look, chat, copy-paste); reactive (waits for a manual prompt instead of using &ldquo;profile open&rdquo; as the signal); cognitive load (user becomes a creator, not a validator).</p>
-        <p style="font-size:13px; color:#cdd5e3; line-height:1.6; margin:0;"><strong style="color:#fff;">The AI-native pivot:</strong> trigger on page load; AI uses V1 drafting in the background to write a personalised message from the candidate&rsquo;s history + the open role; the draft lands inline in the messaging field. Recruiter edits, doesn&rsquo;t create.</p>
-      </div>
-    </details>
   </div>
 </section>
 """
@@ -1015,8 +1010,8 @@ def build_module_4():
     add(section_divider("01", "Intent-Driven AI Design Systems"),
         note="Section 1 &mdash; why &lsquo;clean sheet&rsquo; AI products feel different from AI-layered legacy products.")
 
-    add(clunky_aiux_solo_reflection(),
-        note="Solo, 5 min. Original was instructor-led Q&A. Drop two examples (one bad, one good) in #ai-pm-cohort. The contrast is the lesson.")
+    add(clunky_aiux_qa(),
+        note="Source slide 6. Instructor-Led Q&A &middot; 5 min. Read out the questions, give learners a few minutes to think, then take 2-3 examples live. Async cohort learners post their answer in #ai-pm-cohort.")
 
     add(ai_ux_implementations(),
         note="Bing = traditional. Perplexity = AI-native. Both ship; one scales differently. The model isn't a feature in AI-native &mdash; it's the engine.")
@@ -1034,8 +1029,15 @@ def build_module_4():
     add(ai_placement_3(),
         note="Three placements: Inline (Google Docs), Floating (Figma AI), Full-Page Canvas (Gamma/Canva). Choose by complexity of the AI output.")
 
-    add(spot_the_friction_solo(),
-        note="Solo reflection (was instructor Q&A). Recruiter sidecar = chatbot trap. The pivot: page-load triggers a V1 outreach inline in the messaging field.")
+    add(spot_the_friction_qa(),
+        note=(
+            "Source slide 12. Instructor-Led Q&A &middot; 10 min. Read the scenario, give learners a few minutes to think, then take answers live. "
+            "<br><br><strong>Possible answers (from source speaker notes):</strong>"
+            "<br>&middot; <em>Chatbot trap</em> &mdash; sidecar UI that makes the recruiter look-then-chat-then-copy-paste."
+            "<br>&middot; <em>Reactive</em> &mdash; waits for a manual prompt instead of using &lsquo;profile open&rsquo; as the signal."
+            "<br>&middot; <em>Cognitive load</em> &mdash; forces the user to be a Creator (thinking of what to say) rather than a Validator (reacting to a draft)."
+            "<br><br><strong>Possible AI-native pivot:</strong> the moment the page loads, the AI starts work in the background. V1 drafting creates a personalised message from the candidate&rsquo;s history and the open role. Put that draft inline directly in the messaging field of the platform."
+        ))
 
     add(value_to_ux_4(),
         note="Decision logic: Automation &rarr; Full-Page Canvas. Augmentation &rarr; Inline. Insights and Personalization &rarr; Floating &amp; Contextual.")
