@@ -3,102 +3,322 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M4 — AI-UX Trust Gap Checker</title>
+<title>M4 - AI-UX Trust Gap Checker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px}
-  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{max-width:1100px;margin:0 auto;padding:24px 32px}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  .gap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:14px}
-  .gap h2{margin:0 0 4px;font-size:18px;color:var(--accent)}
-  .gap p.q{margin:0 0 12px;color:var(--muted);font-size:14px}
-  .score-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 10px}
-  .slider{width:100%;-webkit-appearance:none;appearance:none;background:transparent;margin:0}
-  .slider::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,#f87171,#fbbf24,#34d399);border-radius:99px}
-  .slider::-moz-range-track{height:6px;background:linear-gradient(90deg,#f87171,#fbbf24,#34d399);border-radius:99px}
-  .slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--fg);margin-top:-6px;cursor:pointer;border:2px solid var(--accent)}
-  .slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--fg);cursor:pointer;border:2px solid var(--accent)}
-  .score{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--accent2);min-width:48px;text-align:right}
-  textarea{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:14px;min-height:60px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  label.lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin:8px 0 4px;font-weight:600}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#fbbf24;--c3:#34d399;--danger:#f87171;--pp:#bcb1ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(251,191,36,0.10) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.preset-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.preset{font-size:12px;padding:6px 14px;border-radius:99px;background:transparent;color:var(--muted);border:1px solid var(--line);cursor:pointer;font-weight:600}
+.preset.active{background:rgba(96,165,250,0.12);color:var(--accent2);border-color:var(--accent)}
+.field-row{margin-bottom:14px}
+.field-row label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:5px;font-weight:700}
+.field-row input{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.field-row input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.gap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:14px;border-left:4px solid var(--accent)}
+.gap.bb{border-left-color:var(--c1)}
+.gap.hl{border-left-color:var(--c2)}
+.gap.ct{border-left-color:var(--pp)}
+.gap.tx{border-left-color:var(--c3)}
+.gap-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.gap-icon{font-size:20px}
+.gap-tag{font-family:'Poppins',sans-serif;font-weight:900;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.gap.bb .gap-tag{color:var(--c1)}
+.gap.hl .gap-tag{color:var(--c2)}
+.gap.ct .gap-tag{color:var(--pp)}
+.gap.tx .gap-tag{color:var(--c3)}
+.gap h3{margin:0;font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:#fff;flex:1}
+.gap .question{font-style:italic;color:var(--muted);font-size:12.5px;margin:4px 0 12px;line-height:1.55}
+.score-row{display:flex;align-items:center;gap:14px;margin:8px 0 12px}
+.slider-wrap{flex:1;position:relative}
+.slider{width:100%;-webkit-appearance:none;appearance:none;background:transparent;margin:0}
+.slider::-webkit-slider-runnable-track{height:8px;background:linear-gradient(90deg,#f87171 0%,#fbbf24 50%,#34d399 100%);border-radius:99px}
+.slider::-moz-range-track{height:8px;background:linear-gradient(90deg,#f87171 0%,#fbbf24 50%,#34d399 100%);border-radius:99px}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;margin-top:-6px;cursor:pointer;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+.slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;cursor:pointer;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+.score-badge{font-family:'Poppins',sans-serif;font-weight:900;font-size:14px;padding:4px 12px;border-radius:99px;min-width:54px;text-align:center;background:rgba(255,255,255,0.06);border:1px solid var(--line)}
+.score-badge.s1{background:rgba(248,113,113,0.18);color:var(--danger);border-color:rgba(248,113,113,0.4)}
+.score-badge.s2{background:rgba(248,113,113,0.12);color:#fca5a5;border-color:rgba(248,113,113,0.3)}
+.score-badge.s3{background:rgba(251,191,36,0.18);color:var(--c2);border-color:rgba(251,191,36,0.4)}
+.score-badge.s4{background:rgba(52,211,153,0.12);color:#86efac;border-color:rgba(52,211,153,0.3)}
+.score-badge.s5{background:rgba(52,211,153,0.18);color:var(--c3);border-color:rgba(52,211,153,0.5)}
+.tick-row{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);margin:6px 4px 0;letter-spacing:.05em}
+.field{margin-top:10px}
+.field label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:4px;font-weight:700}
+.field .hint{font-size:11px;color:var(--muted);margin:0 0 5px;font-style:italic}
+textarea{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;min-height:54px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.example-box{background:rgba(96,165,250,0.05);border:1px dashed rgba(96,165,250,0.25);border-radius:7px;padding:7px 11px;margin-top:8px;font-size:11px;color:#cdd5e3;line-height:1.55}
+.example-box strong{color:#79c0ff;font-family:'Poppins',sans-serif;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:900}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:560px;overflow-y:auto}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+.verdict{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:13px;line-height:1.55}
+.verdict.ship{background:rgba(52,211,153,0.10);border:1px solid rgba(52,211,153,0.4);color:#86efac}
+.verdict.hold{background:rgba(251,191,36,0.10);border:1px solid rgba(251,191,36,0.4);color:#fcd34d}
+.verdict.unsafe{background:rgba(248,113,113,0.10);border:1px solid rgba(248,113,113,0.4);color:#fca5a5}
+.verdict strong{display:block;font-family:'Poppins',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;margin-bottom:4px}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
 </style>
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 4 · Tool</div><h1>AI-UX Trust Gap Checker</h1></div>
-  <div class="row">
+  <div><div class="crumb">Module 4 &middot; Bonus Tool</div><h1>AI-UX Trust Gap Checker</h1></div>
+  <div class="row" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <button onclick="copyMd()">Copy as markdown</button>
     <button class="secondary" onclick="download()">Download .md</button>
     <button class="secondary" onclick="reset()">Reset</button>
   </div>
 </header>
 <main>
-  <p style="color:var(--muted);font-size:14px;margin-top:0">Score Juno on each of the three trust gaps (1 = wide open, 5 = closed). Write the mitigation in product terms. Add an intelligence-tax row. Export to <code>04-ai-ux/trust-gaps.md</code>.</p>
+  <section class="panel left">
+    <p class="lead">Score any AI feature on the three trust gaps + the intelligence tax. <strong>1 = wide open, 5 = closed.</strong> Write the mitigation in product terms. Output goes to <code>04-ai-ux/trust-gaps.md</code>.</p>
 
-  <div id="gaps"></div>
+    <div class="preset-row">
+      <button class="preset active" data-preset="A" onclick="applyPreset('A')">Audit your real product</button>
+      <button class="preset" data-preset="B" onclick="applyPreset('B')">Audit Juno (M1 baseline)</button>
+    </div>
 
-  <h2 style="margin-top:24px;font-size:16px;color:var(--accent2);letter-spacing:.14em;text-transform:uppercase">Preview</h2>
-  <div class="preview" id="preview"></div>
+    <div class="field-row">
+      <label>Feature being audited</label>
+      <input id="featureName" placeholder="e.g. Juno PM dashboard, Notion AI summary, GitHub Copilot inline chat" oninput="render()" />
+    </div>
+
+    <div id="gaps"></div>
+
+    <div class="verdict" id="verdict"></div>
+  </section>
+
+  <section class="panel right">
+    <h3 class="section-h">Live preview &middot; <code>04-ai-ux/trust-gaps.md</code></h3>
+    <div class="preview" id="preview">Pick a preset or score a gap to see the markdown&hellip;</div>
+  </section>
 </main>
-<div class="toast" id="toast">Copied</div>
+<div class="toast" id="toast">Copied to clipboard.</div>
 <script>
-  const GAPS=[
-    {id:'blackbox',name:'Black-box gap',q:'Can the user see *why* the AI decided?',mit:'Reasoning, citations, "show your work"'},
-    {id:'halluc',name:'Hallucination gap',q:'Could this confidently be wrong?',mit:'Confidence cues, source links, escape hatches'},
-    {id:'control',name:'Control gap',q:'Can the user steer or stop?',mit:'Undo, edit, regenerate, "don’t suggest this again"'},
-    {id:'tax',name:'Intelligence tax',q:'Extra latency or cognitive load — is the value worth it?',mit:'p95 cap, streaming on/off, "Juno is reasoning…" indicator'},
-  ];
-  const KEY='m4-trust-gaps';
-  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):Object.fromEntries(GAPS.map(g=>[g.id,{score:3,mit:''}]))}
-  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
-  let state=load();
-  function render(){
-    const root=document.getElementById('gaps');root.innerHTML='';
-    GAPS.forEach(g=>{
-      const s=state[g.id]||{score:3,mit:''};
-      const div=document.createElement('div');div.className='gap';
-      div.innerHTML=`
-        <h2>${g.name}</h2>
-        <p class="q">${g.q}</p>
-        <div class="score-row">
-          <input type="range" min="1" max="5" step="1" class="slider" id="s_${g.id}" value="${s.score}" />
-          <span class="score" id="sc_${g.id}">${s.score}/5</span>
+const STORE = 'm4-trust-gaps-v2';
+
+const GAPS = [
+  {
+    id: 'blackbox', cls: 'bb', icon: '&#x1F50D;',
+    tag: 'Trust Gap 1',
+    name: 'The Black-box Gap',
+    question: 'Can the user see <em>why</em> the AI decided?',
+    examples: 'Source citations, chain-of-thought visibility, hover-to-show-source, confidence meter, "show your work" expand panel.',
+  },
+  {
+    id: 'halluc', cls: 'hl', icon: '&#x26A0;&#xFE0F;',
+    tag: 'Trust Gap 2',
+    name: 'The Hallucination Gap',
+    question: 'Could this confidently be <em>wrong</em>?',
+    examples: 'Confidence thresholds, "Draft" watermarks on low-confidence answers, regenerate button, alternative interpretations.',
+  },
+  {
+    id: 'control', cls: 'ct', icon: '&#x1F39B;&#xFE0F;',
+    tag: 'Trust Gap 3',
+    name: 'The Control Gap',
+    question: 'Can the user <em>steer or stop</em>?',
+    examples: 'One-click undo, manual override, direct edit on AI output, "don\'t suggest this again," scoped re-generation.',
+  },
+  {
+    id: 'tax', cls: 'tx', icon: '&#x1F4B0;',
+    tag: 'Reality Check',
+    name: 'The Intelligence Tax',
+    question: 'Is the latency / privacy / cognitive load <em>worth the value</em>?',
+    examples: 'Streaming responses, "Juno is reasoning&hellip;" status breadcrumbs, p95 latency cap, opt-in memory, privacy badge.',
+  },
+];
+
+const PRESETS = {
+  A: {
+    feature: '',
+    blackbox: { score: 3, mit: '' },
+    halluc: { score: 3, mit: '' },
+    control: { score: 3, mit: '' },
+    tax: { score: 3, mit: '' },
+  },
+  B: {
+    feature: 'Juno PM v1 (M1 Lovable prototype, no RAG yet)',
+    blackbox: { score: 1, mit: 'Add a "Why this priority?" expand panel on every Insight Card showing the 1–2 source sentences from the transcript + the strategic pillar matched. Reduce cost of verification under 3 seconds.' },
+    halluc: { score: 2, mit: 'Tag any Insight Card without strategic-pillar match as "low confidence" with a dotted border. Add a Regenerate button per PRD section so users can retry without losing the rest.' },
+    control: { score: 2, mit: 'Make every PRD section an EditableBlock with one-click revert. Manual P0–P3 override on every priority card. Never present AI output read-only.' },
+    tax: { score: 3, mit: 'Stream the PRD draft character-by-character. Show "Juno is scanning Strategy…" breadcrumb during retrieval. Cap end-to-end at p95 < 3s.' },
+  },
+};
+
+let cur = JSON.parse(localStorage.getItem(STORE) || 'null') || JSON.parse(JSON.stringify(PRESETS.A));
+
+function applyPreset(p) {
+  cur = JSON.parse(JSON.stringify(PRESETS[p]));
+  document.querySelectorAll('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === p));
+  document.getElementById('featureName').value = cur.feature || '';
+  render();
+}
+
+function reset() {
+  if (!confirm('Reset all scores and notes?')) return;
+  applyPreset('A');
+}
+
+function save() {
+  cur.feature = document.getElementById('featureName').value;
+  GAPS.forEach(g => {
+    const slider = document.getElementById('s_' + g.id);
+    const text = document.getElementById('m_' + g.id);
+    if (slider && text) {
+      cur[g.id] = { score: Number(slider.value), mit: text.value };
+    }
+  });
+  localStorage.setItem(STORE, JSON.stringify(cur));
+}
+
+function renderGaps() {
+  const root = document.getElementById('gaps');
+  root.innerHTML = '';
+  GAPS.forEach(g => {
+    const s = cur[g.id] || { score: 3, mit: '' };
+    const div = document.createElement('div');
+    div.className = 'gap ' + g.cls;
+    div.innerHTML = `
+      <div class="gap-head">
+        <div class="gap-icon">${g.icon}</div>
+        <div>
+          <div class="gap-tag">${g.tag}</div>
+          <h3>${g.name}</h3>
         </div>
-        <label class="lbl">Your mitigation for Juno</label>
-        <textarea id="m_${g.id}" placeholder="${g.mit}">${s.mit||''}</textarea>
-      `;
-      root.appendChild(div);
-      document.getElementById('s_'+g.id).addEventListener('input',e=>{state[g.id]={...state[g.id],score:Number(e.target.value)};document.getElementById('sc_'+g.id).textContent=e.target.value+'/5';save(state);preview()});
-      document.getElementById('m_'+g.id).addEventListener('input',e=>{state[g.id]={...state[g.id],mit:e.target.value};save(state);preview()});
+      </div>
+      <p class="question">${g.question}</p>
+      <div class="score-row">
+        <div class="slider-wrap">
+          <input type="range" min="1" max="5" step="1" class="slider" id="s_${g.id}" value="${s.score}" />
+          <div class="tick-row"><span>Wide open</span><span></span><span></span><span></span><span>Closed</span></div>
+        </div>
+        <span class="score-badge s${s.score}" id="sc_${g.id}">${s.score}/5</span>
+      </div>
+      <div class="field">
+        <label>Mitigation in product terms</label>
+        <p class="hint">What ships to close this gap? Be specific to the feature.</p>
+        <textarea id="m_${g.id}" placeholder="Specific UI / UX / logic changes&hellip;">${s.mit || ''}</textarea>
+      </div>
+      <div class="example-box"><strong>&#x1F4A1; Examples:</strong> ${g.examples}</div>
+    `;
+    root.appendChild(div);
+    document.getElementById('s_' + g.id).addEventListener('input', e => {
+      const v = Number(e.target.value);
+      const badge = document.getElementById('sc_' + g.id);
+      badge.textContent = v + '/5';
+      badge.className = 'score-badge s' + v;
+      cur[g.id].score = v;
+      save();
+      renderPreview();
     });
+    document.getElementById('m_' + g.id).addEventListener('input', e => {
+      cur[g.id].mit = e.target.value;
+      save();
+      renderPreview();
+    });
+  });
+}
+
+function buildMarkdown() {
+  const feature = cur.feature || '_(name the feature)_';
+  let md = `# AI-UX Trust Gap Audit — ${feature}\n\n_Generated by \`Modules/M4 - AI-UX Trust Gap Checker.html\`. Optional supplementary deliverable for Module 4._\n\n---\n\n`;
+
+  md += `| Gap | Score | Mitigation |\n|---|---|---|\n`;
+  GAPS.forEach(g => {
+    const x = cur[g.id] || {};
+    const mit = (x.mit || '_(not yet specified)_').replace(/\|/g, '\\|').replace(/\n/g, ' ');
+    md += `| **${g.name}** | ${x.score || 1}/5 | ${mit} |\n`;
+  });
+
+  const scores = GAPS.map(g => cur[g.id]?.score || 1);
+  const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
+  const min = Math.min(...scores);
+
+  md += `\n**Average score:** ${avg} / 5`;
+  md += `\n**Lowest gap:** ${min} / 5\n\n`;
+
+  md += `## Verdict\n\n`;
+  if (min >= 4) {
+    md += `**Shippable.** Trust posture passes the M4 readiness check. Confirm with eval data in M6 (golden set + guardrails).\n`;
+  } else if (min >= 2) {
+    md += `**Hold.** At least one gap is still open. Close before shipping or down-scope the feature to a Level-2 (validator UI) until the gap is closed.\n`;
+  } else {
+    md += `**Unsafe.** Do not ship. At least one trust gap is wide open — users will lose confidence in the entire product after a single failure. Re-spec from the AI-UX Readiness Checklist Level 1.\n`;
   }
-  function md(){
-    let s='# AI-UX Trust Gaps — Juno PM\n\n| Gap | Score | Mitigation |\n|---|---|---|\n';
-    GAPS.forEach(g=>{const x=state[g.id]||{};s+=`| ${g.name} | ${x.score||1}/5 | ${(x.mit||'_(missing)_').replace(/\|/g,'\\|').replace(/\n/g,' ')} |\n`});
-    const avg=(GAPS.reduce((a,g)=>a+(state[g.id]?.score||1),0)/GAPS.length).toFixed(2);
-    s+=`\n**Average:** ${avg}/5\n`;
-    const min=Math.min(...GAPS.map(g=>state[g.id]?.score||1));
-    if(min>=4) s+='**Verdict:** Trust posture is shippable. Confirm with eval data in M6.\n';
-    else if(min>=2) s+='**Verdict:** One or more gaps still wide. Close before shipping.\n';
-    else s+='**Verdict:** Trust posture is unsafe. Do not ship.\n';
-    return s;
+
+  md += `\n## Mitigation details\n\n`;
+  GAPS.forEach(g => {
+    const x = cur[g.id] || {};
+    md += `### ${g.name} — ${x.score || 1}/5\n\n${x.mit || '_(no mitigation captured yet)_'}\n\n`;
+  });
+
+  return md;
+}
+
+function renderPreview() {
+  document.getElementById('preview').textContent = buildMarkdown();
+  const scores = GAPS.map(g => cur[g.id]?.score || 1);
+  const min = Math.min(...scores);
+  const v = document.getElementById('verdict');
+  if (min >= 4) {
+    v.className = 'verdict ship';
+    v.innerHTML = '<strong>Shippable</strong>Trust posture passes. Confirm with M6 eval data.';
+  } else if (min >= 2) {
+    v.className = 'verdict hold';
+    v.innerHTML = '<strong>Hold</strong>At least one gap still open. Close it or down-scope the feature.';
+  } else {
+    v.className = 'verdict unsafe';
+    v.innerHTML = '<strong>Unsafe</strong>Do not ship. Re-spec from the AI-UX Readiness Checklist Level 1.';
   }
-  function preview(){document.getElementById('preview').textContent=md()}
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='trust-gaps.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Reset?')){localStorage.removeItem(KEY);state=load();render();preview()}}
-  render();preview();
+}
+
+function render() {
+  save();
+  renderGaps();
+  renderPreview();
+}
+
+function copyMd() {
+  navigator.clipboard.writeText(buildMarkdown()).then(() => toast('Markdown copied — paste into 04-ai-ux/trust-gaps.md'));
+}
+
+function download() {
+  const blob = new Blob([buildMarkdown()], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'trust-gaps.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+(function init() {
+  document.getElementById('featureName').value = cur.feature || '';
+  render();
+})();
 </script>
 </body>
 </html>

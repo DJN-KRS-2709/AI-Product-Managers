@@ -3,152 +3,562 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>M4 — AI User Flow Architect</title>
+<title>M4 - AI User Flow Architect</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
-  header{padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{margin:0;font-size:22px}
-  .crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-  main{display:grid;grid-template-columns:1.3fr 1fr;gap:0;min-height:calc(100vh - 76px)}
-  @media(max-width:960px){main{grid-template-columns:1fr}}
-  .panel{padding:24px 32px;overflow:auto}
-  .panel.left{border-right:1px solid var(--line)}
-  .field{margin-bottom:14px}
-  label{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:6px;font-weight:600}
-  input,textarea,select{width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:14px}
-  textarea{min-height:46px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32)}
-  button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  .node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;border-left:4px solid var(--tip)}
-  .node.underwater{border-left-color:var(--under)}
-  .node-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-  .node-head h3{margin:0;font-size:15px}
-  .tag{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(124,140,255,.15);color:var(--tip);text-transform:uppercase;letter-spacing:.14em;font-weight:600}
-  .tag.under{background:rgba(34,211,238,.15);color:var(--under)}
-  .preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;margin-top:12px}
-  .check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:18px}
-  .check h3{margin:0 0 8px;font-size:14px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em}
-  .toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
-  .toast.show{display:block}
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#bcb1ff;--c3:#fbbf24;--c4:#34d399;--danger:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.preset-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.preset{font-size:12px;padding:6px 14px;border-radius:99px;background:transparent;color:var(--muted);border:1px solid var(--line);cursor:pointer;font-weight:600}
+.preset.active{background:rgba(96,165,250,0.12);color:var(--accent2);border-color:var(--accent)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 12px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:14px;border-left:4px solid var(--accent)}
+.section.s1{border-left-color:var(--c1)}
+.section.s2{border-left-color:var(--c2)}
+.section.s3{border-left-color:var(--c3)}
+.section.s4{border-left-color:var(--c4)}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.sec-icon{font-size:18px}
+.sec-tag{font-family:'Poppins',sans-serif;font-weight:900;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.section.s1 .sec-tag{color:var(--c1)}
+.section.s2 .sec-tag{color:var(--c2)}
+.section.s3 .sec-tag{color:var(--c3)}
+.section.s4 .sec-tag{color:var(--c4)}
+.sec-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:#fff;flex:1}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10.5px;background:#22293a;color:var(--muted);font-weight:600}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
+.field{margin-top:10px}
+.field label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:4px;font-weight:700}
+.field .hint{font-size:11px;color:var(--muted);margin:0 0 5px;font-style:italic}
+textarea,input,select{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+textarea{min-height:54px;resize:vertical}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:560px;overflow-y:auto}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:6px 0;font-size:13px;color:#cdd5e3}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+.tab-row{display:flex;gap:6px;margin-bottom:12px}
+.tab{font-size:12px;padding:6px 12px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);border:1px solid var(--line);border-bottom:0;cursor:pointer;font-weight:600}
+.tab.active{background:var(--card);color:var(--fg);border-color:var(--accent)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.example{background:rgba(96,165,250,0.05);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:14px 18px}
+.example h4{font-size:12px;color:var(--accent2);margin:0 0 8px;letter-spacing:.12em;text-transform:uppercase;font-weight:900}
+.example .pair{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.example .pair:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.example .pair .lbl{font-family:'Poppins',sans-serif;font-size:10.5px;color:#79c0ff;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin-bottom:4px}
+.example .pair p{font-size:12px;color:#cdd5e3;line-height:1.5;margin:0 0 4px}
+.example .pair p strong{color:#fff}
+.legend-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legend-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--muted)}
+.legend-pill.surface{color:var(--c1);border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.06)}
+.legend-pill.handshake{color:var(--c2);border-color:rgba(188,177,255,0.4);background:rgba(188,177,255,0.06)}
+.legend-pill.under{color:var(--c3);border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.06)}
+.legend-pill.fail{color:var(--c4);border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.06)}
 </style>
 </head>
 <body>
 <header>
-  <div><div class="crumb">Module 4 · Tool · Final-project deliverable</div><h1>AI User Flow Architect</h1></div>
+  <div><div class="crumb">Module 4 &middot; Lab 1 &middot; Final-project deliverable</div><h1>AI User Flow Architect</h1></div>
   <div class="row">
     <button onclick="copyMd()">Copy as markdown</button>
     <button class="secondary" onclick="download()">Download .md</button>
     <button class="secondary" onclick="reset()">Reset</button>
   </div>
 </header>
+
+<div style="border-bottom:1px solid var(--line);padding:14px 32px;background:rgba(255,255,255,0.02)">
+  <div class="tab-row" style="margin-bottom:0">
+    <button class="tab active" data-tab="builder" onclick="switchTab('builder')">&#x270D;&#xFE0F; Build Yours</button>
+    <button class="tab" data-tab="example" onclick="switchTab('example')">&#x1F9E9; Worked Example &middot; HR Agent</button>
+  </div>
+</div>
+
+<div id="tab-builder" class="tab-pane active">
 <main>
   <section class="panel left">
-    <div class="field"><label>Flow name (Juno pillar)</label>
-      <select id="pillar">
-        <option>Prioritize Risks</option>
-        <option>Synthesize Insights</option>
-        <option>Draft Specs</option>
-      </select>
-    </div>
-    <div class="field"><label>Value frame (from M2)</label>
-      <select id="vf">
-        <option>Risk mitigation</option>
-        <option>Cost reduction</option>
-        <option>Revenue generation</option>
-        <option>User delight</option>
-      </select>
-    </div>
-    <div class="field"><label>UX treatment (auto-mapped from value frame; edit if you disagree)</label>
-      <input id="ux" />
+    <p class="lead">Architect Juno&rsquo;s strategic-alignment flow as an <strong>iceberg</strong>: the simple surface, the handshake layer, and the underwater logic. Walk the four pillars below. Each maps to a deliverable section in <code>04-ai-ux/user-flow.md</code>.</p>
+
+    <div class="legend-row">
+      <span class="legend-pill surface">&#x25EF; Signal &middot; entry point</span>
+      <span class="legend-pill handshake">&#x2B22; Hidden logic &middot; major step</span>
+      <span class="legend-pill under">&#x25A0; Maneuver &middot; sub-step</span>
+      <span class="legend-pill fail">&#x25C6; Feedback loop &middot; kill switch</span>
     </div>
 
-    <h3 style="margin-top:24px;font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:.14em;border-bottom:1px solid var(--line);padding-bottom:6px">The seven nodes</h3>
-    <div id="nodes"></div>
-  </section>
-  <section class="panel right">
-    <label>Live preview — user-flow.md</label>
-    <p style="color:var(--muted);font-size:13px;margin:0 0 8px">Commit to <code>04-ai-ux/user-flow.md</code>.</p>
-    <div class="preview" id="preview"></div>
+    <div class="preset-row" style="margin-top:18px">
+      <button class="preset active" data-preset="A" onclick="applyPreset('A')">Option A &middot; Build Your Own</button>
+      <button class="preset" data-preset="B" onclick="applyPreset('B')">Option B &middot; Juno Strategic-Alignment Flow</button>
+    </div>
+
+    <!-- ============ Pillar 1: Trigger ============ -->
+    <div class="section s1">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F50C;</div>
+        <div class="sec-tag">Pillar 1 &middot; The Trigger</div>
+        <span class="badge" id="bT">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">The earliest possible intent signal. Find the moment <em>data enters the system</em>, not when the user clicks &ldquo;Start AI.&rdquo;</p>
+
+      <div class="field">
+        <label>Signal type</label>
+        <select id="sigType" onchange="render()">
+          <option value="">&mdash; choose a signal type &mdash;</option>
+          <option value="file-upload">File / document uploaded</option>
+          <option value="message-received">New message / transcript received</option>
+          <option value="page-load">Page or view opened</option>
+          <option value="meeting-end">Meeting / call ended</option>
+          <option value="time-trigger">Scheduled / time-based event</option>
+          <option value="user-action">Specific user action (button, selection)</option>
+          <option value="threshold">Threshold crossed (e.g. count, score, latency)</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Specific signal in your product</label>
+        <p class="hint">e.g. &ldquo;A new P0 transcript is uploaded to the Raw Input column.&rdquo;</p>
+        <textarea id="sigDetail" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Surface response &mdash; what the user sees instantly</label>
+        <p class="hint">Before the model finishes. e.g. &ldquo;&lsquo;Juno is reading your transcript&hellip;&rsquo; status badge appears.&rdquo;</p>
+        <textarea id="sigSurface" oninput="render()"></textarea>
+      </div>
+    </div>
+
+    <!-- ============ Pillar 2: Processing State ============ -->
+    <div class="section s2">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F501;</div>
+        <div class="sec-tag">Pillar 2 &middot; The Processing State</div>
+        <span class="badge" id="bP">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">The handshake. Use the wait to <em>build trust</em>, not just spin a wheel. Connect to the AI PRD logic from M3.</p>
+
+      <div class="field">
+        <label>Hidden logic &middot; major underwater steps</label>
+        <p class="hint">List 2&ndash;4 steps. e.g. <em>RAG retrieval over Strategy Doc &rarr; comparison logic &rarr; risk + alignment scoring.</em></p>
+        <textarea id="logicSteps" oninput="render()" style="min-height:64px"></textarea>
+      </div>
+      <div class="field">
+        <label>Handshake breadcrumbs &middot; status messages on the surface</label>
+        <p class="hint">e.g. &ldquo;Scanning Strategy One-Pager&hellip;&rdquo; &rarr; &ldquo;Cross-referencing 23 transcripts&hellip;&rdquo; &rarr; &ldquo;Synthesising priorities&hellip;&rdquo;</p>
+        <textarea id="breadcrumbs" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Router decision &middot; if your flow has multiple paths</label>
+        <p class="hint">e.g. <em>Path A (question) &rarr; RAG over KB. Path B (task) &rarr; tool/API call.</em> Skip if single-path.</p>
+        <textarea id="router" oninput="render()"></textarea>
+      </div>
+    </div>
+
+    <!-- ============ Pillar 3: Presentation ============ -->
+    <div class="section s3">
+      <div class="sec-head">
+        <div class="sec-icon">&#x1F3AF;</div>
+        <div class="sec-tag">Pillar 3 &middot; The Presentation</div>
+        <span class="badge" id="bM">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">The maneuver. Choose the placement that fits the <em>value</em> &mdash; Automation/Augmentation/Insights/Personalization &rarr; Inline/Floating/Full-Page.</p>
+
+      <div class="field">
+        <label>Placement maneuver</label>
+        <select id="placement" onchange="render()">
+          <option value="">&mdash; choose a placement &mdash;</option>
+          <option value="inline">Inline &amp; Embedded &middot; in flow with the data</option>
+          <option value="floating">Floating &amp; Contextual &middot; appears on selection</option>
+          <option value="canvas">Full-Page Canvas &middot; dedicated review space</option>
+          <option value="hybrid">Hybrid &middot; multiple placements at once</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Generated output &middot; what the user actually sees on the surface</label>
+        <p class="hint">Be specific. e.g. &ldquo;P0&ndash;P3 priority cards in the Insights column with strategic-rationale citations.&rdquo;</p>
+        <textarea id="output" oninput="render()" style="min-height:64px"></textarea>
+      </div>
+      <div class="field">
+        <label>Why this maneuver &middot; the <em>value</em> it&rsquo;s wrapping</label>
+        <p class="hint">Link the choice back to the value prop. e.g. &ldquo;Augmentation &rarr; user reviews + edits, not creates from blank.&rdquo;</p>
+        <textarea id="maneuverWhy" oninput="render()"></textarea>
+      </div>
+    </div>
+
+    <!-- ============ Pillar 4: Feedback Loop ============ -->
+    <div class="section s4">
+      <div class="sec-head">
+        <div class="sec-icon">&#x267B;&#xFE0F;</div>
+        <div class="sec-tag">Pillar 4 &middot; The Feedback Loop</div>
+        <span class="badge" id="bF">empty</span>
+      </div>
+      <p class="hint" style="margin:0 0 4px;font-size:11.5px;font-style:italic;color:var(--muted)">The kill switch + the learning channel. Every accept / edit / reject is a training signal. There is always a path back to a human.</p>
+
+      <div class="field">
+        <label>Kill switch &middot; how the user overrides Juno</label>
+        <p class="hint">e.g. &ldquo;Manual Override button on every priority card &rarr; lets the PM force-promote or downgrade.&rdquo;</p>
+        <textarea id="killSwitch" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Captured training signal &middot; what gets logged back</label>
+        <p class="hint">e.g. &ldquo;Manual demote &rarr; logged as &lsquo;strategic-alignment correction&rsquo; &rarr; tightens future scoring.&rdquo;</p>
+        <textarea id="trainingSignal" oninput="render()"></textarea>
+      </div>
+      <div class="field">
+        <label>Fail-safe &middot; what happens when underwater logic fails</label>
+        <p class="hint">e.g. &ldquo;If Strategy Doc missing &rarr; Juno surfaces &lsquo;cautious mode&rsquo; warning + drops priority confidence to N/A.&rdquo;</p>
+        <textarea id="failSafe" oninput="render()"></textarea>
+      </div>
+    </div>
 
     <div class="check">
-      <h3>Self-review checklist</h3>
-      <ul style="margin:6px 0 0;padding-left:18px;font-size:14px">
-        <li id="c1">Trigger is specific and testable</li>
-        <li id="c2">Each node has one concrete line</li>
-        <li id="c3">Tip vs. underwater is marked per node</li>
-        <li id="c4">Act node names specific tool calls</li>
-        <li id="c5">Surface node specifies the channel/page/block</li>
+      <h3>Self-review &middot; before you commit</h3>
+      <ul>
+        <li>Trigger sits as <em>early</em> as possible &mdash; before any manual click.</li>
+        <li>At least one breadcrumb message turns latency into transparency.</li>
+        <li>Maneuver matches the value prop you committed in M2.</li>
+        <li>A kill switch exists for every automated decision.</li>
+        <li>Fail-safe path is explicit &mdash; no dead end with a bad AI result.</li>
+        <li>Logic steps reference your M3 PRD (Top-K, latency target, knowledge base).</li>
       </ul>
     </div>
 
     <div class="check">
-      <h3>AI-review prompt</h3>
-      <p style="margin:0 0 8px;font-size:14px;color:var(--muted)">Paste your user-flow + this into ChatGPT/Claude/Cursor:</p>
-      <div class="preview" style="font-size:12px">You are an AI-UX designer. Read this AI user flow for Juno PM. (a) Is the trigger specific enough to test? (b) Are the underwater nodes specced thinly enough that engineering knows what to build, but not so thickly that the PM is doing eng's job? (c) Which node creates the most user trust risk, and what would you add? Reply in 4 short paragraphs.</div>
+      <h3>AI-review meta-prompt</h3>
+      <ul>
+        <li style="font-style:italic">&ldquo;You are a senior AI design lead. Critique this user flow against the AI Iceberg model. Where is the trigger too late? Where would a real user feel a black-box, hallucination, or control gap? Quote the exact text and propose a tighter version.&rdquo;</li>
+      </ul>
     </div>
   </section>
+
+  <section class="panel right">
+    <h3 class="section-h">Live preview &middot; <code>04-ai-ux/user-flow.md</code></h3>
+    <div class="preview" id="preview">Pick a preset or start filling in Pillar 1&hellip;</div>
+  </section>
 </main>
-<div class="toast" id="toast">Copied</div>
+</div>
+
+<!-- ============ Worked Example tab ============ -->
+<div id="tab-example" class="tab-pane">
+<main style="grid-template-columns:1fr">
+  <section class="panel" style="padding:30px 40px;max-width:980px;margin:0 auto">
+    <p class="lead">A complete AI user flow, broken into the four pillars. Read each row top-to-bottom &mdash; <em>HR Agent</em> mirrors the same logic Juno uses, just in a different domain.</p>
+
+    <div class="example">
+      <h4>HR Agent &middot; Pillar 1 &mdash; Trigger</h4>
+      <div class="pair">
+        <div class="lbl">Signal type</div>
+        <p><strong>User action</strong> &middot; employee opens the HR Agent app or clicks a vacation-related notification.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl">Specific signal</div>
+        <p>Page load on <code>/hr-agent</code> with the user&rsquo;s session token. The agent doesn&rsquo;t wait for them to type.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl">Surface response</div>
+        <p>Agent welcome card appears with two suggested intents: <strong>Ask a question</strong> and <strong>Enter vacation</strong>. Status: &ldquo;Loaded your team&rsquo;s policy in 0.4s.&rdquo;</p>
+      </div>
+    </div>
+
+    <div class="example" style="margin-top:14px;border-color:rgba(188,177,255,0.25);background:rgba(188,177,255,0.05)">
+      <h4 style="color:#bcb1ff">HR Agent &middot; Pillar 2 &mdash; Processing State</h4>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">Hidden logic</div>
+        <p>1. Classify intent &rarr; <em>question</em> or <em>task</em>.<br>2. <strong>Path A (Question):</strong> RAG retrieval over HR-policy KB &rarr; cite policy doc.<br>3. <strong>Path B (Task):</strong> tool call to Workday API &rarr; submit vacation request.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">Handshake breadcrumbs</div>
+        <p>&ldquo;Scanning policy docs&hellip;&rdquo; (Path A) or &ldquo;Submitting to Workday&hellip;&rdquo; (Path B). Each runs &lt; 2s.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#bcb1ff">Router decision</div>
+        <p>Question intent &rarr; RAG. Task intent &rarr; Tool/API. Confidence &lt; 70% &rarr; route to clarification step.</p>
+      </div>
+    </div>
+
+    <div class="example" style="margin-top:14px;border-color:rgba(251,191,36,0.25);background:rgba(251,191,36,0.05)">
+      <h4 style="color:#fbbf24">HR Agent &middot; Pillar 3 &mdash; Presentation</h4>
+      <div class="pair">
+        <div class="lbl" style="color:#fbbf24">Placement maneuver</div>
+        <p><strong>Inline &amp; Embedded</strong> for both paths &mdash; the answer or confirmation lands directly in the agent chat surface.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#fbbf24">Generated output</div>
+        <p>Path A: AI-generated answer + a clickable <em>&ldquo;Source: 2024 Policy &sect;3.2&rdquo;</em> link. Path B: confirmation card + link to the new Workday request + 1-click cancel.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#fbbf24">Why this maneuver</div>
+        <p>Value = automation. The user wanted an answer or an action, not a UI to navigate. Inline keeps them in flow.</p>
+      </div>
+    </div>
+
+    <div class="example" style="margin-top:14px;border-color:rgba(52,211,153,0.25);background:rgba(52,211,153,0.05)">
+      <h4 style="color:#34d399">HR Agent &middot; Pillar 4 &mdash; Feedback Loop</h4>
+      <div class="pair">
+        <div class="lbl" style="color:#34d399">Kill switch</div>
+        <p>Every confirmation card has a one-click <em>&ldquo;Cancel request&rdquo;</em> + <em>&ldquo;Talk to a human&rdquo;</em> escalation that opens a support ticket.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#34d399">Training signal</div>
+        <p>Cancel within 30s &rarr; logged as <code>low_confidence_action</code>. Five within a week &rarr; route this employee&rsquo;s intents through clarification by default.</p>
+      </div>
+      <div class="pair">
+        <div class="lbl" style="color:#34d399">Fail-safe</div>
+        <p>RAG returns no policy match &rarr; agent says &ldquo;I couldn&rsquo;t find a policy that matches this exactly. Want me to open a ticket with HR?&rdquo; Never invents a policy.</p>
+      </div>
+    </div>
+
+    <p class="lead" style="margin-top:18px;font-size:12.5px"><strong style="color:var(--accent2)">PM takeaway:</strong> the surface (chat agent) is simple. The 4-pillar structure underneath is what makes it trustworthy. Apply the same structure to Juno.</p>
+  </section>
+</main>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard.</div>
+
 <script>
-  const NODES=[
-    {id:'trigger',name:'1. Trigger',hint:'What initiates the flow? Be specific.',layer:'tip',ph:'New P0 tagged in #escalations and ≥5 messages within 10 minutes'},
-    {id:'capture',name:'2. Capture',hint:'What context the system gathers.',layer:'under',ph:'Thread metadata, customer ID, last 50 messages, ARR if available'},
-    {id:'retrieve',name:'3. Retrieve',hint:'What data is pulled in.',layer:'under',ph:'Top-10 RAG chunks from Strategy + Notion + similar past P0s; hybrid retrieval; rerank on'},
-    {id:'reason',name:'4. Reason',hint:'What the model decides.',layer:'under',ph:'LLM call: classify risk type, score severity 1–5, draft 1-line rationale, list 2 mitigations'},
-    {id:'act',name:'5. Act',hint:'What happens in the world (tool calls, writes).',layer:'under',ph:'Append to #pm-daily top-3 panel; create Jira ROCKET stub if score ≥4; log to eval pipeline'},
-    {id:'surface',name:'6. Surface',hint:'What the user sees and where.',layer:'tip',ph:'Slack message in #pm-daily: emoji + risk title + confidence + 2 mitigations + 1-click "Open" button'},
-    {id:'confirm',name:'7. Confirm / Correct',hint:'How the user steers, accepts, overrides.',layer:'tip',ph:'Buttons: "Open thread" / "Accept and assign" / "Edit" / "Suppress this pattern" / "Why this?"'},
-  ];
-  const KEY='m4-user-flow';
-  const UX_MAP={'Cost reduction':'Background automation with audit trail','Revenue generation':'Inline assist at the moment of decision','Risk mitigation':'Proactive flag + reason + one-click action','User delight':'Anticipatory suggestion, dismissible without friction'};
-  function load(){const s=localStorage.getItem(KEY);return s?JSON.parse(s):{pillar:'Prioritize Risks',vf:'Risk mitigation',ux:UX_MAP['Risk mitigation'],nodes:Object.fromEntries(NODES.map(n=>[n.id,{layer:n.layer,text:''}]))}}
-  function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
-  let state=load();
-  document.getElementById('pillar').value=state.pillar;
-  document.getElementById('vf').value=state.vf;
-  document.getElementById('ux').value=state.ux;
-  function renderNodes(){
-    const root=document.getElementById('nodes');root.innerHTML='';
-    NODES.forEach(n=>{
-      const s=state.nodes[n.id]||{layer:n.layer,text:''};
-      const div=document.createElement('div');div.className='node'+(s.layer==='under'?' underwater':'');
-      div.innerHTML=`<div class="node-head"><h3>${n.name}</h3><span class="tag ${s.layer==='under'?'under':''}">${s.layer==='under'?'Underwater':'Tip'}</span></div>
-        <p style="margin:0 0 8px;color:var(--muted);font-size:13px">${n.hint}</p>
-        <textarea id="t_${n.id}" placeholder="${n.ph}">${s.text||''}</textarea>
-        <div style="margin-top:8px"><label style="display:inline-flex;align-items:center;gap:8px;font-size:12px;text-transform:none;letter-spacing:0;color:var(--muted)"><input type="checkbox" id="u_${n.id}" ${s.layer==='under'?'checked':''}> Underwater (invisible to user)</label></div>`;
-      root.appendChild(div);
-      document.getElementById('t_'+n.id).addEventListener('input',e=>{state.nodes[n.id]={...state.nodes[n.id],text:e.target.value};save(state);preview();});
-      document.getElementById('u_'+n.id).addEventListener('change',e=>{state.nodes[n.id]={...state.nodes[n.id],layer:e.target.checked?'under':'tip'};save(state);renderNodes();preview();});
-    });
+const STORE = 'm4-flow-v1';
+
+const SIGNAL_LABELS = {
+  'file-upload': 'File / document uploaded',
+  'message-received': 'New message / transcript received',
+  'page-load': 'Page or view opened',
+  'meeting-end': 'Meeting / call ended',
+  'time-trigger': 'Scheduled / time-based event',
+  'user-action': 'Specific user action',
+  'threshold': 'Threshold crossed',
+  'other': 'Other',
+};
+
+const PLACEMENT_LABELS = {
+  'inline': 'Inline & Embedded',
+  'floating': 'Floating & Contextual',
+  'canvas': 'Full-Page Canvas',
+  'hybrid': 'Hybrid (multiple placements)',
+};
+
+const PRESETS = {
+  A: {
+    sigType: '',
+    sigDetail: '',
+    sigSurface: '',
+    logicSteps: '',
+    breadcrumbs: '',
+    router: '',
+    placement: '',
+    output: '',
+    maneuverWhy: '',
+    killSwitch: '',
+    trainingSignal: '',
+    failSafe: '',
+  },
+  B: {
+    sigType: 'message-received',
+    sigDetail: 'A new P0 customer transcript is uploaded to the "Raw Input" column in Juno (the dashboard built in M1).',
+    sigSurface: '"Juno is reading your transcript…" status pill appears under the input column. Empty Insights and PRD columns dim to ~40% to signal the agent is working.',
+    logicSteps: '1. RAG retrieval over the RocketShip Strategy One-Pager (M3 KB) — top-K = 6.\n2. Comparison logic — does the transcript pain point map to a strategic pillar?\n3. Risk + alignment scoring — emit P0–P3 with a strategic-rationale citation.\n4. Confidence check — score < 30 → notRecommended; score ≥ 70 → P0/P1.',
+    breadcrumbs: '"Scanning Strategy One-Pager…" → "Cross-referencing 1 transcript with 4 strategic pillars…" → "Synthesising priorities + drafting PRD section…"',
+    router: 'Path A (Strategy loaded) → grounded prioritization with citations.\nPath B (Strategy missing) → "Cautious mode" — generic priorities tagged "low confidence" + nudge to load the strategy doc.',
+    placement: 'inline',
+    output: 'Three Insight Cards in column 2 (Insights), each with: P0–P3 badge, evidence quote from the transcript, and a Strategic Traceability footer citing the strategic pillar. PRD draft in column 3 references the cards.',
+    maneuverWhy: 'Value prop = augmentation (M2). The PM is the validator — they edit and approve, not create from blank. Inline keeps them in flow with the raw transcript on the left.',
+    killSwitch: 'Every Insight Card has a "Manual Override" button → re-tag P0–P3, edit the rationale, or mark notRecommended. PRD blocks are individually editable + regenerable.',
+    trainingSignal: 'Manual demote → logged as "strategic-alignment correction." 3+ similar overrides → flag the strategic pillar as ambiguous + tighten retrieval.',
+    failSafe: 'If RAG returns no match for a transcript pain → Juno tags the card "Outside current strategy" + amber warning. Never invents an alignment. PM can promote manually or send back for clarification.',
+  },
+};
+
+let cur = JSON.parse(localStorage.getItem(STORE) || 'null') || JSON.parse(JSON.stringify(PRESETS.A));
+
+const FIELDS = ['sigType','sigDetail','sigSurface','logicSteps','breadcrumbs','router','placement','output','maneuverWhy','killSwitch','trainingSignal','failSafe'];
+
+function applyPreset(p) {
+  cur = JSON.parse(JSON.stringify(PRESETS[p]));
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = cur[f] || '';
   }
-  function md(){
-    let s=`# AI User Flow — Juno PM · ${state.pillar}\n\n**Value frame:** ${state.vf}\n**UX treatment:** ${state.ux}\n\n## Flow (7 nodes)\n\n| # | Node | Layer | Spec |\n|---|---|---|---|\n`;
-    NODES.forEach((n,i)=>{const x=state.nodes[n.id]||{};s+=`| ${i+1} | ${n.name.replace(/^\d+\.\s*/,'')} | ${(x.layer==='under'?'Underwater':'Tip')} | ${(x.text||'_(missing)_').replace(/\|/g,'\\|').replace(/\n/g,' ')} |\n`});
-    return s;
+  document.querySelectorAll('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === p));
+  render();
+}
+
+function reset() {
+  if (!confirm('Reset all sections?')) return;
+  applyPreset('A');
+  document.querySelectorAll('.preset').forEach(b => b.classList.toggle('active', b.dataset.preset === 'A'));
+}
+
+function save() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) cur[f] = el.value;
   }
-  function preview(){
-    document.getElementById('preview').textContent=md();
-    const get=id=>(state.nodes[id]||{}).text||'';
-    const tip=Object.values(state.nodes).every(x=>x&&x.layer);
-    const setCheck=(id,ok)=>{const el=document.getElementById(id);el.style.color=ok?'var(--ok)':'var(--fg)';el.style.opacity=ok?1:.7;el.firstChild.nodeValue=(ok?'✓ ':'• ')+el.firstChild.nodeValue.replace(/^[✓•]\s*/,'')};
-    setCheck('c1',get('trigger').length>15 && !/user (opens|clicks|types)/i.test(get('trigger')));
-    setCheck('c2',NODES.every(n=>get(n.id).length>5));
-    setCheck('c3',tip);
-    setCheck('c4',get('act').length>10 && /(slack|jira|notion|api|append|create|write|call|tool|log)/i.test(get('act')));
-    setCheck('c5',get('surface').length>10 && /(slack|channel|page|panel|block|jira|notion|email)/i.test(get('surface')));
+  localStorage.setItem(STORE, JSON.stringify(cur));
+}
+
+function badge(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val && val.trim()) {
+    el.textContent = 'specced';
+    el.classList.add('ok');
+  } else {
+    el.textContent = 'empty';
+    el.classList.remove('ok');
   }
-  document.getElementById('pillar').addEventListener('change',e=>{state.pillar=e.target.value;save(state);preview()});
-  document.getElementById('vf').addEventListener('change',e=>{state.vf=e.target.value;state.ux=UX_MAP[e.target.value]||state.ux;document.getElementById('ux').value=state.ux;save(state);preview()});
-  document.getElementById('ux').addEventListener('input',e=>{state.ux=e.target.value;save(state);preview()});
-  function copyMd(){navigator.clipboard.writeText(md()).then(()=>{const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)})}
-  function download(){const b=new Blob([md()],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='user-flow.md';a.click();URL.revokeObjectURL(u)}
-  function reset(){if(confirm('Reset?')){localStorage.removeItem(KEY);state=load();document.getElementById('pillar').value=state.pillar;document.getElementById('vf').value=state.vf;document.getElementById('ux').value=state.ux;renderNodes();preview()}}
-  renderNodes();preview();
+}
+
+function buildMarkdown() {
+  const sigLabel = SIGNAL_LABELS[cur.sigType] || '_(not yet specified)_';
+  const placementLabel = PLACEMENT_LABELS[cur.placement] || '_(not yet specified)_';
+
+  return `# Juno PM — AI User Flow
+
+_Module 4 final-project deliverable. Generated by \`Modules/M4 - AI User Flow Architect.html\`._
+
+---
+
+## 0. Carry-over from prior modules
+
+- **Bet** _(from \`02-strategy/strategy-one-pager.md\`)_:
+- **Autonomy level** (Assist / Copilot / Agent) _(from \`02-strategy/decision-matrix.md\`)_:
+- **Retrieval strategy** _(from \`03-rag-prd/prd.md\`)_:
+
+---
+
+## 1. Pillar 1 — The Trigger
+
+**Signal type:** ${sigLabel}
+
+**Specific signal in Juno**
+
+${cur.sigDetail || '_(describe the earliest moment data enters the system)_'}
+
+**Surface response — what the user sees instantly**
+
+${cur.sigSurface || '_(the breadcrumb / status badge / animation that fires before the model finishes)_'}
+
+---
+
+## 2. Pillar 2 — The Processing State
+
+**Hidden logic — major underwater steps**
+
+${cur.logicSteps || '_(2–4 steps. RAG retrieval → comparison → scoring → confidence check, etc.)_'}
+
+**Handshake breadcrumbs — surface status messages**
+
+${cur.breadcrumbs || '_(turn latency into transparency. e.g. “Scanning Strategy One-Pager…”)_'}
+
+**Router decision (if multi-path)**
+
+${cur.router || '_(skip if single-path. otherwise spell out path A vs path B and how the system picks)_'}
+
+---
+
+## 3. Pillar 3 — The Presentation
+
+**Placement maneuver:** ${placementLabel}
+
+**Generated output — what the user actually sees**
+
+${cur.output || '_(specifics, not adjectives. priority cards? full-page review? floating overlay?)_'}
+
+**Why this maneuver — the value it wraps**
+
+${cur.maneuverWhy || '_(link the placement back to your M2 value prop: automation / augmentation / insights / personalization)_'}
+
+---
+
+## 4. Pillar 4 — The Feedback Loop
+
+**Kill switch — how the user overrides Juno**
+
+${cur.killSwitch || '_(every automated decision has a one-click override or undo)_'}
+
+**Captured training signal — what gets logged back**
+
+${cur.trainingSignal || '_(every accept / edit / reject is a training signal for the model)_'}
+
+**Fail-safe — what happens when the underwater logic fails**
+
+${cur.failSafe || '_(RAG returns nothing, API errors, low confidence — the surface always offers a clean human path)_'}
+
+---
+
+## Self-review
+
+- [ ] Trigger fires on the earliest possible signal — no manual “Start AI” click.
+- [ ] At least one breadcrumb message turns latency into transparency.
+- [ ] Maneuver matches the M2 value prop (Automation / Augmentation / Insights / Personalization).
+- [ ] Every automated decision has a working kill switch.
+- [ ] Fail-safe path is explicit. No dead end with a bad AI result.
+- [ ] Hidden logic references M3 PRD specs (Top-K, latency target, knowledge base).
+
+## AI-review
+
+Paste this section + the meta-prompt from \`M4 - AI User Flow Architect.html\` into ChatGPT or Claude. Save the critique into a follow-up commit.
+`;
+}
+
+function render() {
+  save();
+  badge('bT', cur.sigDetail || cur.sigType);
+  badge('bP', cur.logicSteps || cur.breadcrumbs);
+  badge('bM', cur.output || cur.placement);
+  badge('bF', cur.killSwitch || cur.failSafe);
+  document.getElementById('preview').textContent = buildMarkdown();
+}
+
+function copyMd() {
+  navigator.clipboard.writeText(buildMarkdown()).then(() => toast('Markdown copied — paste into 04-ai-ux/user-flow.md'));
+}
+
+function download() {
+  const blob = new Blob([buildMarkdown()], {type: 'text/markdown'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'user-flow.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
+}
+
+(function init() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = cur[f] || '';
+  }
+  render();
+})();
 </script>
 </body>
 </html>

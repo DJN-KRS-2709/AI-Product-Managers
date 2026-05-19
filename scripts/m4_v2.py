@@ -1,0 +1,1242 @@
+"""Module 4 - Design AI-Native User Experiences.
+
+Mirrors m1_v2 / m2_v2 / m3_v2 structure:
+- Reuses shared helpers from gen_module_decks
+- Reuses class_expectations / cameras_on / section_divider from m1_v2
+- Defines M4-specific visual helpers
+- Exposes build_module_4() returning (sections_inst, sections_share)
+
+Voice: solo only. The original "Breakout Group Exercise: Architect Juno's
+User Flow" is converted to an Individual Exercise. The optional
+post-class Lovable lab (Reimagine Juno as AI-Native Copilot) keeps its
+optional / extra-credit framing. No thank-you slide.
+"""
+
+from gen_module_decks import (
+    hero,
+    applied_work,
+    takeaways,
+    extra_practice,
+    qa_section,
+    break_section,
+    notes_block,
+    _add_builder,
+)
+from m1_v2 import (
+    section_divider,
+    class_expectations,
+    cameras_on,
+)
+
+
+TEMPLATE_REPO_URL = "https://github.com/DJN-KRS-2709/ai-product-management-template"
+TEMPLATE_USE_URL = (
+    "https://github.com/new?template_name=ai-product-management-template"
+    "&template_owner=DJN-KRS-2709"
+)
+
+
+# ---------------------------------------------------------------------------
+# Recall + final-project bookkeeping
+# ---------------------------------------------------------------------------
+
+def m4_repo_recall() -> str:
+    """What's in the repo so far (M1-M3), and what M4 adds today."""
+    prior = [
+        ("01-prompting/system-prompt.md", "Juno&rsquo;s job description"),
+        ("01-prompting/lovable-prototype.md", "V1 dashboard URL"),
+        ("02-strategy/decision-matrix.md", "Three-Layer + autonomy"),
+        ("02-strategy/strategy-one-pager.md", "6-section strategy"),
+        ("03-rag-prd/prd.md", "AI PRD with RAG architecture"),
+    ]
+    today = [
+        ("04-ai-ux/user-flow.md", "Juno&rsquo;s AI-Native user flow"),
+        ("04-ai-ux/trust-gaps.md", "Trust-gap audit + mitigations <em style=\"color:#8899bb\">(optional post-class)</em>"),
+    ]
+    prior_html = "".join(
+        f'<li style="font-size:13px; color:#cdd5e3; padding:5px 0 5px 22px; position:relative; line-height:1.5;">'
+        f'<span style="position:absolute; left:0; top:7px; width:14px; height:14px; border-radius:50%; background:#34d399; color:#07162C; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:900;">&check;</span>'
+        f'<code style="font-size:0.92em; color:#79c0ff;">{p}</code> &mdash; {d}</li>'
+        for p, d in prior
+    )
+    today_html = "".join(
+        f'<li style="font-size:13px; color:#cdd5e3; padding:5px 0 5px 22px; position:relative; line-height:1.5;">'
+        f'<span style="position:absolute; left:0; top:7px; width:14px; height:14px; border-radius:50%; background:#d29922; color:#07162C; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:900;">&rarr;</span>'
+        f'<code style="font-size:0.92em; color:#fcd34d;">{p}</code> &mdash; {d}</li>'
+        for p, d in today
+    )
+    return f"""<section data-title="Recall &middot; Repo so far">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Recall</div>
+    <h2>What&rsquo;s in your <code>juno-pm</code> repo</h2>
+    <div class="subtitle">Five artefacts from M1&ndash;M3. M4 adds the surface design that makes the architecture trustworthy.</div>
+    <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:18px; max-width:920px; margin:24px auto 0;">
+      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.25); border-radius:14px; padding:18px 22px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px;">&check; M1&ndash;M3 &middot; Committed</div>
+        <ul style="margin:0; padding:0; list-style:none;">{prior_html}</ul>
+      </div>
+      <div style="background:rgba(217,142,34,0.06); border:1px solid rgba(217,142,34,0.3); border-radius:14px; padding:18px 22px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#fbbf24; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px;">&rarr; Module 4 &middot; Today</div>
+        <ul style="margin:0; padding:0; list-style:none;">{today_html}</ul>
+      </div>
+    </div>
+    <p style="font-size:13px; color:#8899bb; margin-top:18px; text-align:center;">M3 specced the engine. M4 designs the <em>surface</em> &mdash; the part the user actually trusts.</p>
+  </div>
+</section>
+"""
+
+
+def m4_final_project_progress() -> str:
+    """Final project progress card - 7 deliverables, M4 covers 1 (+1 optional)."""
+    deliv = [
+        ("M1", "system-prompt.md", "done", "#34d399"),
+        ("M1", "lovable-prototype.md", "done", "#34d399"),
+        ("M2", "decision-matrix.md", "done", "#34d399"),
+        ("M2", "strategy-one-pager.md", "done", "#34d399"),
+        ("M3", "prd.md", "done", "#34d399"),
+        ("M4", "user-flow.md", "today", "#fbbf24"),
+        ("M4", "trust-gaps.md (optional)", "today*", "#fbbf24"),
+        ("M5", "awspec.md + control-panel.md", "later", "#475569"),
+        ("M6", "eval-stack.md + human-rubric.md + final README", "later", "#475569"),
+    ]
+    rows = "".join(
+        f'<div style="display:flex; align-items:center; gap:12px; padding:6px 12px; background:rgba(255,255,255,0.025); border-left:2px solid {col}; border-radius:0 6px 6px 0;">'
+        f'<span style="font-family:\'Poppins\',sans-serif; font-size:10px; font-weight:900; color:{col}; letter-spacing:0.14em; min-width:24px;">{m}</span>'
+        f'<code style="font-size:11.5px; color:#cdd5e3; flex:1;">{p}</code>'
+        f'<span style="font-family:\'Poppins\',sans-serif; font-size:9.5px; font-weight:800; color:{col}; letter-spacing:0.14em; text-transform:uppercase; padding:2px 8px; background:{col}1a; border-radius:99px;">{s}</span></div>'
+        for m, p, s, col in deliv
+    )
+    return f"""<section data-title="Final-Project Progress">
+  <div class="inner">
+    <div class="demo-tag tag-build">Final Project &middot; Progress</div>
+    <h2>What you ship by the end of Module 4</h2>
+    <div class="subtitle">One required deliverable + one optional post-class build. Committed to <code>juno-pm/04-ai-ux/</code>.</div>
+    <div style="display:flex; flex-direction:column; gap:4px; max-width:680px; margin:18px auto 0;">
+      {rows}
+    </div>
+    <p style="font-size:12px; color:#8899bb; text-align:center; margin-top:14px;"><em>* Optional</em> trust-gap audit lifts the project from a spec into something you can defend at a design review.</p>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Syllabus visual + agenda
+# ---------------------------------------------------------------------------
+
+def syllabus_visual_m4() -> str:
+    """6-card syllabus, M4 highlighted, M1-M3 marked done."""
+    modules = [
+        (1, "Drive AI-First Execution with Prompting",
+         "Master systematic context, parameters, and prompt engineering to guide AI behavior with precision.",
+         "done"),
+        (2, "Validate AI Opportunities and Technical Feasibility",
+         "Evaluate feasibility and viability to prioritize features that ship and move business metrics.",
+         "done"),
+        (3, "Improve AI Product Requirements with RAG Architecture",
+         "Bridge product specs and RAG systems. Define embeddings, vector stores, and retrieval logic.",
+         "done"),
+        (4, "Design AI-Native User Experiences",
+         "Design seamless flows that unlock new ways for users to interact. Prototype to validate.",
+         "current"),
+        (5, "Deploy Agentic Systems and Workflows",
+         "Move from single prompts to autonomous agents and multi-step workflows.",
+         "future"),
+        (6, "Measure AI Quality with Evals and Guardrails",
+         "Replace vibe checks with eval harnesses, golden sets, and safety guardrails.",
+         "future"),
+    ]
+    cells = []
+    for n, title, desc, state in modules:
+        if state == "done":
+            tint, label_color, label = "rgba(52,211,153,0.05)", "#34d399", "&check; Done"
+            border = "rgba(52,211,153,0.25)"
+        elif state == "current":
+            tint, label_color, label = "rgba(217,142,34,0.10)", "#fbbf24", "&rarr; Today"
+            border = "rgba(217,142,34,0.5)"
+        else:
+            tint, label_color, label = "rgba(255,255,255,0.025)", "#8899bb", f"M{n}"
+            border = "rgba(255,255,255,0.08)"
+        cells.append(f"""<div style="background:{tint}; border:1px solid {border}; border-radius:12px; padding:14px 16px; text-align:left; min-height:130px; position:relative;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <span style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:{label_color}; letter-spacing:0.16em; text-transform:uppercase;">Module {n}</span>
+    <span style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:800; color:{label_color}; letter-spacing:0.12em; text-transform:uppercase; padding:2px 8px; background:rgba(0,0,0,0.25); border-radius:99px;">{label}</span>
+  </div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">{title}</div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>
+</div>""")
+    return f"""<section data-title="Syllabus">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Syllabus</div>
+    <h2>AI Product Management Certification</h2>
+    <div class="subtitle">Six modules. M1&ndash;M3 are committed. Today: the surface that wraps the engine.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1040px; margin:24px auto 0;">
+      {''.join(cells)}
+    </div>
+  </div>
+</section>
+"""
+
+
+def agenda_4_m4() -> str:
+    """M4 agenda - four numbered sections + optional post-class lab."""
+    items = [
+        ("01", "Intent-Driven AI Design Systems",
+         "Why AI-Native UX is a different game from layering AI on legacy interfaces.", "#3b82f6"),
+        ("02", "Designing Invisible UI for AI-Native Outcomes",
+         "Three patterns + three placement maneuvers. Match value to surface.", "#fbbf24"),
+        ("03", "How to Architect an AI User Flow",
+         "The Iceberg model. Map what the system thinks, not just what the user clicks.", "#79c0ff"),
+        ("04", "The PM&rsquo;s Playbook for Closing AI Trust Gaps",
+         "Black-box, hallucination, control. Three failures and how the UI closes them.", "#34d399"),
+    ]
+    cards = "".join(
+        f'<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-left:4px solid {col}; border-radius:12px; padding:16px 22px; text-align:left;">'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:32px; font-weight:900; color:{col}; line-height:1; margin-bottom:6px;">{n}</div>'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:14.5px; font-weight:700; color:#fff; margin-bottom:6px; line-height:1.3;">{title}</div>'
+        f'<p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>'
+        f'</div>'
+        for n, title, desc, col in items
+    )
+    return f"""<section data-title="Agenda">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Agenda</div>
+    <h2>Today&rsquo;s flow</h2>
+    <div class="subtitle">One in-class solo lab anchors the day. One optional post-class Lovable build.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:980px; margin:22px auto 0;">
+      {cards}
+    </div>
+    <p style="font-size:11.5px; color:#bcb1ff; max-width:780px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">Bonus &middot; Post-class:</strong> Reimagine Juno as an AI-Native Copilot in Lovable. Optional &mdash; not required for completion.
+    </p>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Section 01 - Intent-Driven AI Design Systems
+# ---------------------------------------------------------------------------
+
+def clunky_aiux_solo_reflection() -> str:
+    """Solo reflection on lived AI-UX experiences (was instructor Q&A)."""
+    return """<section data-title="Solo Reflection &middot; Clunky AI-UX">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Solo Reflection &middot; 5 min</div>
+    <h2>Your experience with &ldquo;clunky&rdquo; AI-UX</h2>
+    <div class="subtitle">The features you remember are usually broken or magical. Both teach you something.</div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:880px; margin:22px auto 0;">
+      <div style="background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.3); border-radius:12px; padding:18px 22px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#f87171; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x274C; Prompt 1 &middot; The wrong</div>
+        <p style="font-size:14px; color:#fff; font-weight:600; line-height:1.45; margin:0;">A product where AI <em>technically works</em>, but the experience feels wrong, annoying, or pointless &mdash; what was it, and why?</p>
+      </div>
+      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:18px 22px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&check; Prompt 2 &middot; The right</div>
+        <p style="font-size:14px; color:#fff; font-weight:600; line-height:1.45; margin:0;">A product where AI <em>changed how you interact</em> &mdash; not just what it can do. Did it remove steps? Shift control? Feel proactive?</p>
+      </div>
+    </div>
+
+    <div style="max-width:780px; margin:18px auto 0; padding:11px 18px; background:rgba(96,165,250,0.06); border-left:3px solid #60a5fa; border-radius:0 8px 8px 0; text-align:left;">
+      <span style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase;">&#x1F4AC; Share</span>
+      <span style="font-size:13px; color:#cdd5e3;"> Drop one example for each in <code style="font-size:0.9em; color:#79c0ff;">#ai-pm-cohort</code>. The <em>contrast</em> is the lesson.</span>
+    </div>
+  </div>
+</section>
+"""
+
+
+def ai_ux_implementations() -> str:
+    """Traditional AI-UX vs AI-Native UX - VS comparison with Bing/Perplexity."""
+    return """<section data-title="AI-UX Implementations">
+  <div class="inner">
+    <div class="demo-tag tag-build">Lecture &middot; Frame</div>
+    <h2>Two ways to ship AI in a product</h2>
+    <div class="subtitle">Both are valid. One bolts AI <em>onto</em> a workflow. The other <em>is</em> the workflow.</div>
+
+    <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:0; max-width:1080px; margin:18px auto 0; align-items:stretch;">
+
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.10); border-radius:14px; overflow:hidden; text-align:left;">
+        <div style="padding:14px 18px; background:rgba(255,255,255,0.04);">
+          <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase;">Traditional AI-UX</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; margin-top:4px;">AI as a feature on a static UI</div>
+        </div>
+        <div style="padding:11px 18px; border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Approach</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">AI features <em>retroactively layered</em> on a deterministic workflow.</p>
+        </div>
+        <div style="padding:11px 18px; border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Interaction</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">User-driven &mdash; the user must manually trigger AI actions.</p>
+        </div>
+        <div style="padding:11px 18px; border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Outcome</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Incremental efficiency without disrupting familiar habits.</p>
+        </div>
+        <div style="padding:11px 18px; background:rgba(255,255,255,0.04); border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">Microsoft Bing</strong> &mdash; AI answers added to a legacy keyword search engine.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:center; padding:0 14px; min-width:54px;">
+        <div style="font-family:'Poppins',sans-serif; font-size:32px; font-weight:900; color:#475569; letter-spacing:0.05em; transform:rotate(-2deg);">VS</div>
+      </div>
+
+      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.3); border-radius:14px; overflow:hidden; text-align:left;">
+        <div style="padding:14px 18px; background:rgba(96,165,250,0.10);">
+          <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase;">AI-Native UX</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:#fff; margin-top:4px;">The model <em>is</em> the workflow</div>
+        </div>
+        <div style="padding:11px 18px; border-top:1px solid rgba(96,165,250,0.18);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Approach</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Built from the ground up &mdash; the model is the engine, not a feature.</p>
+        </div>
+        <div style="padding:11px 18px; border-top:1px solid rgba(96,165,250,0.18);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Interaction</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Intent-driven &mdash; the interface evolves to surface only what&rsquo;s needed.</p>
+        </div>
+        <div style="padding:11px 18px; border-top:1px solid rgba(96,165,250,0.18);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Outcome</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Seamless, personalized experiences. Minimal manual navigation.</p>
+        </div>
+        <div style="padding:11px 18px; background:rgba(96,165,250,0.10); border-top:1px solid rgba(96,165,250,0.18);">
+          <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Example</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">Perplexity</strong> &mdash; AI generates the answer; the list of links is gone.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+def why_ai_native_matters_4() -> str:
+    """4 reasons why AI-Native UX matters."""
+    items = [
+        ("&#x1F4C9;", "Lowered Interaction Costs",
+         "Move users from manual <em>searching</em> to <em>reviewing and deciding</em>.",
+         "#3b82f6"),
+        ("&#x1F9E0;", "Shifted Cognitive Load",
+         "Replace repetitive instructional labor with synthesis &mdash; freeing high-level judgment.",
+         "#79c0ff"),
+        ("&#x1F501;", "Increased System Resilience",
+         "Interface adapts to real intents instead of relying on rigid menus.",
+         "#fbbf24"),
+        ("&#x1F3AF;", "Contextual Relevance",
+         "Surface only the most relevant information and actions exactly when needed.",
+         "#34d399"),
+    ]
+    cards = "".join(
+        f'<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:12px; padding:14px 16px; text-align:left; position:relative; overflow:hidden;">'
+        f'<div style="position:absolute; top:0; left:0; right:0; height:3px; background:{col};"></div>'
+        f'<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">'
+        f'<div style="font-size:18px;">{emoji}</div>'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:13px; font-weight:800; color:#fff;">{title}</div>'
+        f'</div>'
+        f'<p style="font-size:12px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>'
+        f'</div>'
+        for emoji, title, desc, col in items
+    )
+    return f"""<section data-title="Why AI-Native UX Matters">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework</div>
+    <h2>Why AI-Native UX matters</h2>
+    <div class="subtitle">It&rsquo;s not about better buttons. It&rsquo;s about uncapping user potential by automating the manual execution that limits their impact.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0;">
+      {cards}
+    </div>
+    <p style="font-size:12.5px; color:#cdd5e3; max-width:780px; margin:18px auto 0; padding:10px 18px; background:rgba(217,142,34,0.06); border-left:3px solid #fbbf24; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">The shift:</strong> users move from <em>builder</em> to <em>strategic reviewer</em>. The product scales their judgment, not their typing.
+    </p>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Section 02 - Designing Invisible UI for AI-Native Outcomes
+# ---------------------------------------------------------------------------
+
+def invisible_by_design_3() -> str:
+    """3 patterns for invisible UI."""
+    patterns = [
+        ("&#x1F50C;", "Use environmental signals to trigger actions",
+         "Wake up on file uploads, meeting endings, page loads. Stop waiting for a manual prompt.",
+         "Glean", "Indexes activity in the background &mdash; analysis is done before you open the app.",
+         "#3b82f6"),
+        ("&#x1F4A1;", "Leverage intent prediction to surface micro-UIs",
+         "Hide advanced controls until the system predicts the moment a user needs them.",
+         "Adobe Firefly", "&ldquo;Generative Fill&rdquo; bar appears only after you select an area in Photoshop.",
+         "#fbbf24"),
+        ("&#x1F500;", "Automate data flow between workflows",
+         "Push AI outputs directly into the next stage. Remove the friction of copy-paste.",
+         "Salesforce", "AI extracts a lead from a transcript and auto-maps to CRM fields + drafts the follow-up.",
+         "#34d399"),
+    ]
+    cards = "".join(
+        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:14px 16px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:center; gap:8px;">
+    <div style="font-size:20px;">{emoji}</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:8px 11px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{col}; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:3px;">&#x2728; {ex_label}</div>
+    <p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.45;">{ex_desc}</p>
+  </div>
+</div>"""
+        for emoji, title, desc, ex_label, ex_desc, col in patterns
+    )
+    return f"""<section data-title="Invisible by Design">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework</div>
+    <h2>Invisible by design &mdash; three patterns</h2>
+    <div class="subtitle">Invisible isn&rsquo;t about the AI disappearing. It&rsquo;s about the <em>labor</em> disappearing.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0; align-items:stretch;">
+      {cards}
+    </div>
+  </div>
+</section>
+"""
+
+
+def ai_placement_3() -> str:
+    """3 placement maneuvers: Inline, Floating, Full-Page."""
+    placements = [
+        ("01", "Inline &amp; Embedded",
+         "AI capabilities placed directly in the text, code, or data the user is touching. Keeps them in flow.",
+         "Google Docs", "&ldquo;Help me write&rdquo; button moves with the cursor.",
+         "#3b82f6"),
+        ("02", "Floating &amp; Contextual",
+         "Dynamic toolbars or hover menus that follow user selection. Tools appear only when contextually relevant.",
+         "Figma AI", "Floating pill appears at the bottom only when layers are selected.",
+         "#fbbf24"),
+        ("03", "Full-Page Canvas &amp; Hubs",
+         "Dedicated views for high-complexity AI outputs. Roadmaps, decks, dashboards. Space to review V1 drafts.",
+         "Gamma / Canva Magic", "Generated decks open into a full-screen canvas for validation.",
+         "#34d399"),
+    ]
+    cards = "".join(
+        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:14px 16px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:{col}; line-height:1;">{n}</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.5; margin:0;">{desc}</p>
+  <div style="background:rgba(0,0,0,0.28); border-radius:8px; padding:8px 11px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{col}; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:3px;">&#x2728; {ex_label}</div>
+    <p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.45;">{ex_desc}</p>
+  </div>
+</div>"""
+        for n, title, desc, ex_label, ex_desc, col in placements
+    )
+    return f"""<section data-title="AI Interaction Placement">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework</div>
+    <h2>Choosing the AI interaction placement</h2>
+    <div class="subtitle">Once you know the AI&rsquo;s job, pick the real estate it deserves on the screen.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0; align-items:stretch;">
+      {cards}
+    </div>
+  </div>
+</section>
+"""
+
+
+def spot_the_friction_solo() -> str:
+    """Solo reflection - recruiter sidecar chat (was instructor Q&A)."""
+    return """<section data-title="Solo Reflection &middot; Spot the Friction">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Solo Reflection &middot; 5 min</div>
+    <h2>Spot the friction</h2>
+    <div class="subtitle">Read the scenario. Find the failure mode. Pivot it to AI-Native.</div>
+
+    <div style="max-width:880px; margin:18px auto 0; background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.30); border-radius:14px; padding:16px 22px; text-align:left;">
+      <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#f87171; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F6A8; The scenario</div>
+      <p style="font-size:14px; color:#fff; line-height:1.55; margin:0;">A recruiter opens a candidate&rsquo;s profile. A &ldquo;sidecar&rdquo; chat box pops up: <em>&ldquo;I have analyzed this profile. Ask me anything or tell me to write an outreach email.&rdquo;</em></p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:880px; margin:14px auto 0;">
+      <div style="background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.10); border-radius:12px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#f87171; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x274C; Why this fails</div>
+        <ul style="font-size:12px; color:#cdd5e3; margin:0; padding-left:18px; line-height:1.55;">
+          <li><strong style="color:#fff;">Chatbot trap.</strong> A sidecar that makes the recruiter look-then-chat-then-paste.</li>
+          <li><strong style="color:#fff;">Reactive.</strong> Waits for a manual prompt instead of using &ldquo;profile open&rdquo; as the signal.</li>
+          <li><strong style="color:#fff;">Wrong role.</strong> Forces the user to be a creator, not a validator.</li>
+        </ul>
+      </div>
+      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&check; The AI-native pivot</div>
+        <ul style="font-size:12px; color:#cdd5e3; margin:0; padding-left:18px; line-height:1.55;">
+          <li><strong style="color:#fff;">Trigger:</strong> page load &rarr; AI starts work in the background.</li>
+          <li><strong style="color:#fff;">V1 draft:</strong> personalised outreach pre-written from candidate history + open role.</li>
+          <li><strong style="color:#fff;">Inline:</strong> draft lands directly in the messaging field. Recruiter edits, not writes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="font-size:12px; color:#8899bb; max-width:780px; margin:14px auto 0; text-align:center;">
+      <strong style="color:#bcb1ff;">Solo task:</strong> identify one product in <em>your</em> stack with the same anti-pattern. Drop it in <code style="font-size:0.92em; color:#79c0ff;">#ai-pm-cohort</code>.
+    </p>
+  </div>
+</section>
+"""
+
+
+def value_to_ux_4() -> str:
+    """Mapping AI value props to placement maneuvers."""
+    rows = [
+        ("Automation", "Full-Page Canvas",
+         "Skip the manual work. Show a finished draft in a dedicated space before the user asks.",
+         "#34d399"),
+        ("Augmentation", "Inline &amp; Embedded",
+         "Speed things up. Give a starting point right where the cursor is sitting.",
+         "#3b82f6"),
+        ("Insights", "Floating &amp; Contextual",
+         "Explain messy data. Pop up an &ldquo;aha!&rdquo; moment only when the user selects something.",
+         "#fbbf24"),
+        ("Personalization", "Floating &amp; Contextual",
+         "Keep the user focused. Change the interface to show only the tools the AI predicts they need.",
+         "#bcb1ff"),
+    ]
+    cells = "".join(
+        f"""<div style="display:grid; grid-template-columns:1.1fr 1.1fr 2fr; gap:14px; padding:11px 16px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:{col};">{value}</div>
+  <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#cdd5e3; padding:5px 10px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:6px;">{maneuver}</div>
+  <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.45;">{outcome}</p>
+</div>"""
+        for value, maneuver, outcome, col in rows
+    )
+    return f"""<section data-title="Mapping Value to UX Treatment">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework</div>
+    <h2>Mapping value to UX treatment</h2>
+    <div class="subtitle">Match the AI value prop you picked in M2 to the right placement maneuver.</div>
+    <div style="max-width:1040px; margin:22px auto 0; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.10); border-radius:14px; overflow:hidden;">
+      <div style="display:grid; grid-template-columns:1.1fr 1.1fr 2fr; gap:14px; padding:10px 16px; background:rgba(255,255,255,0.04); font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase;">
+        <div>If your value is</div>
+        <div>Use this UX maneuver</div>
+        <div>To achieve this outcome</div>
+      </div>
+      {cells}
+    </div>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Section 03 - How to Architect an AI User Flow
+# ---------------------------------------------------------------------------
+
+def architecting_iceberg() -> str:
+    """The AI Iceberg metaphor - simple UI on top, complex logic below."""
+    return """<section data-title="Architecting the AI Iceberg">
+  <div class="inner">
+    <div class="demo-tag tag-build">Lecture &middot; Mental Model</div>
+    <h2>Architecting the AI &ldquo;Iceberg&rdquo;</h2>
+    <div class="subtitle">The most magical products have the simplest UIs. Complexity didn&rsquo;t disappear &mdash; it moved underwater.</div>
+
+    <div style="max-width:1040px; margin:18px auto 0; position:relative;">
+      <!-- Iceberg illustration -->
+      <div style="background:linear-gradient(180deg, rgba(96,165,250,0.18) 0%, rgba(96,165,250,0.18) 30%, rgba(124,140,255,0.05) 30%, rgba(124,140,255,0.18) 100%); border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:0; overflow:hidden;">
+
+        <!-- Surface (Above water) -->
+        <div style="padding:18px 22px; border-bottom:2px solid rgba(255,255,255,0.18); position:relative;">
+          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F30A; Surface &middot; The user experience</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:6px;">What the user sees and clicks</div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Traditional mapping focuses here. <em>The few clicks, the visible UI, the confirmation toast.</em></p>
+        </div>
+
+        <!-- Waterline label -->
+        <div style="text-align:center; padding:6px 22px; background:rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.10);">
+          <span style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#a0aec0; font-weight:800; letter-spacing:0.18em; text-transform:uppercase;">~&nbsp;&nbsp;~&nbsp;&nbsp;Waterline &mdash; the visible / invisible boundary&nbsp;&nbsp;~&nbsp;&nbsp;~</span>
+        </div>
+
+        <!-- Underwater -->
+        <div style="padding:18px 22px; position:relative;">
+          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px;">&#x1F9CA; Underwater &middot; The system logic</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:16px; font-weight:800; color:#fff; margin-bottom:6px;">What the system <em>thinks</em></div>
+          <p style="font-size:12.5px; color:#cdd5e3; margin:0; line-height:1.5;">Background orchestration: signal interpretation, retrieval, reasoning, fail-safe routing. <strong style="color:#bcb1ff;">PM-owned.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:12.5px; color:#cdd5e3; max-width:880px; margin:18px auto 0; padding:11px 18px; background:rgba(217,142,34,0.06); border-left:3px solid #fbbf24; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM lever:</strong> decide what stays invisible (effortlessness) and what surfaces (verification). Show too much &rarr; cluttered. Show too little &rarr; lose trust.
+    </p>
+  </div>
+</section>
+"""
+
+
+def four_pillars() -> str:
+    """The 4 architecture pillars: Trigger, Processing, Presentation, Feedback Loop."""
+    pillars = [
+        ("01", "The Trigger",
+         "Identify the earliest possible <em>intent signal</em>.",
+         "&#x1F4E5; Meeting recording ends, PDF uploaded, page loads.",
+         "An &lsquo;AI summary in progress&rsquo; notification appears instantly &mdash; before the user clicks anything.",
+         "#3b82f6"),
+        ("02", "The Processing State",
+         "Use the wait to <em>build trust</em>, not show a spinner.",
+         "&#x1F501; Routes the request, fetches data, reasons, drafts an output.",
+         "Breadcrumbs: &ldquo;Scanning policy docs&hellip;&rdquo; &mdash; turns latency into transparency.",
+         "#79c0ff"),
+        ("03", "The Presentation",
+         "Pick the maneuver that fits the <em>value</em>.",
+         "&#x1F3AF; Inline draft, floating overlay, or full-page canvas.",
+         "&ldquo;V1 outreach email&rdquo; renders directly in the message field.",
+         "#fbbf24"),
+        ("04", "The Feedback Loop",
+         "Every edit, undo, or accept is a <em>training signal</em>.",
+         "&#x1F501; Logs corrections back into the model state.",
+         "&ldquo;Don&rsquo;t use this tone again&rdquo; updates the user&rsquo;s tone profile.",
+         "#34d399"),
+    ]
+    cards = "".join(
+        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:14px 16px; text-align:left; display:flex; flex-direction:column; gap:7px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:26px; font-weight:900; color:{col}; line-height:1;">{n}</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; line-height:1.45; margin:0;">{logic_summary}</p>
+  <div style="background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.25); border-radius:7px; padding:6px 10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Underwater</div>
+    <p style="font-size:10.5px; color:#cdd5e3; margin:0; line-height:1.5;">{logic_detail}</p>
+  </div>
+  <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:7px; padding:6px 10px; margin-top:auto;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:2px;">Surface</div>
+    <p style="font-size:10.5px; color:#cdd5e3; margin:0; line-height:1.5;">{surface}</p>
+  </div>
+</div>"""
+        for n, title, logic_summary, logic_detail, surface, col in pillars
+    )
+    return f"""<section data-title="Four Architecture Pillars">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework</div>
+    <h2>The four architecture pillars</h2>
+    <div class="subtitle">Each pillar has an <em>underwater</em> half (logic the PM specs) and a <em>surface</em> half (what the user feels).</div>
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; max-width:1080px; margin:22px auto 0; align-items:stretch;">
+      {cards}
+    </div>
+  </div>
+</section>
+"""
+
+
+def user_flow_legend() -> str:
+    """The legend + 4-step process for building an AI User Flow."""
+    legend = [
+        ("&#x25EF;", "Signal", "Entry point", "#3b82f6"),
+        ("&#x2B22;", "Hidden Logic", "Major step (underwater)", "#bcb1ff"),
+        ("&#x25A0;", "Interaction", "Sub-step (surface maneuver)", "#fbbf24"),
+        ("&#x25C6;", "Data Flow", "Routing decision", "#34d399"),
+        ("&#x25B0;", "Generated Output", "AI result", "#f87171"),
+    ]
+    legend_html = "".join(
+        f'<div style="display:flex; align-items:center; gap:10px; padding:6px 10px; background:rgba(255,255,255,0.025); border:1px solid {col}40; border-radius:8px;">'
+        f'<div style="font-size:24px; color:{col}; line-height:1; width:30px; text-align:center;">{glyph}</div>'
+        f'<div style="text-align:left;">'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:11.5px; font-weight:800; color:#fff;">{name}</div>'
+        f'<div style="font-size:10.5px; color:#8899bb;">{desc}</div>'
+        f'</div></div>'
+        for glyph, name, desc, col in legend
+    )
+
+    steps = [
+        ("Step 1", "Identify the signal", "Capture the specific event or entry point that initiates the flow.", "#3b82f6"),
+        ("Step 2", "Map the hidden logic", "Define the major steps the AI takes before the user sees a result.", "#bcb1ff"),
+        ("Step 3", "Design the maneuver", "Match each sub-step of the interaction to the correct UI placement.", "#fbbf24"),
+        ("Step 4", "Build the kill switch", "Map data flow + output so a recovery path always exists for the user.", "#34d399"),
+    ]
+    steps_html = "".join(
+        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-left:3px solid {col}; border-radius:10px; padding:10px 14px; text-align:left;">
+  <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{col}; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">{n}</div>
+  <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff; margin-bottom:4px;">{title}</div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">{desc}</p>
+</div>"""
+        for n, title, desc, col in steps
+    )
+
+    return f"""<section data-title="Building the AI User Flow">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework &middot; Builder&rsquo;s Legend</div>
+    <h2>How to build the AI user flow</h2>
+    <div class="subtitle">A small set of shapes + four steps. Used in the lab next.</div>
+
+    <div style="display:grid; grid-template-columns:1.1fr 1.5fr; gap:18px; max-width:1080px; margin:18px auto 0; align-items:start;">
+      <div style="background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#a0aec0; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px;">&#x1F9F1; Builder&rsquo;s legend</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          {legend_html}
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px; padding-left:4px;">&#x270D;&#xFE0F; Four steps to map a flow</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          {steps_html}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+def hr_agent_example() -> str:
+    """3-layer Iceberg case study: HR Agent."""
+    return """<section data-title="Example: HR Agent">
+  <div class="inner">
+    <div class="demo-tag tag-build">Case Study</div>
+    <h2>Example &mdash; HR Agent in three layers</h2>
+    <div class="subtitle">The same iceberg, spelled out for a real product. Read the rows top-down.</div>
+
+    <div style="max-width:1080px; margin:18px auto 0; border:1px solid rgba(255,255,255,0.10); border-radius:14px; overflow:hidden;">
+
+      <!-- Surface Layer -->
+      <div style="background:rgba(96,165,250,0.10); padding:13px 18px; border-bottom:1px solid rgba(255,255,255,0.10);">
+        <div style="display:grid; grid-template-columns:140px 1fr; gap:18px; align-items:start;">
+          <div>
+            <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Surface</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">User experience</div>
+            <p style="font-size:11px; color:#8899bb; margin:4px 0 0; line-height:1.5;">What the employee touches.</p>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+            <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(96,165,250,0.4); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">SIGNAL</div><div style="font-size:11px; color:#fff; margin-top:2px;">User enters HR Agent</div></div>
+            <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(96,165,250,0.4); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">A &middot; Question</div><div style="font-size:11px; color:#fff; margin-top:2px;">AI answer + link to policy</div></div>
+            <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(96,165,250,0.4); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">B &middot; Action</div><div style="font-size:11px; color:#fff; margin-top:2px;">Confirmation + ticket fallback</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Handshake Layer -->
+      <div style="background:rgba(124,140,255,0.10); padding:13px 18px; border-bottom:1px solid rgba(255,255,255,0.10);">
+        <div style="display:grid; grid-template-columns:140px 1fr; gap:18px; align-items:start;">
+          <div>
+            <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">Handshake</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">Connection layer</div>
+            <p style="font-size:11px; color:#8899bb; margin:4px 0 0; line-height:1.5;">PM magic happens here.</p>
+          </div>
+          <div style="background:rgba(0,0,0,0.25); border:1px dashed rgba(124,140,255,0.4); border-radius:6px; padding:10px 14px;">
+            <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:#bcb1ff; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:5px;">&#x1F500; Router Logic + Progress Breadcrumbs</div>
+            <p style="font-size:11.5px; color:#cdd5e3; margin:0 0 4px; line-height:1.5;"><strong style="color:#fff;">Path A &rarr; Question:</strong> route to <em>RAG over HR knowledge base</em>.</p>
+            <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;"><strong style="color:#fff;">Path B &rarr; Task:</strong> route to <em>Workday API tool call</em>. Show &ldquo;Submitting to Workday&hellip;&rdquo; status.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Underwater Workflow Layer -->
+      <div style="background:rgba(7,22,44,0.5); padding:13px 18px;">
+        <div style="display:grid; grid-template-columns:140px 1fr; gap:18px; align-items:start;">
+          <div>
+            <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x1F9CA; Underwater</div>
+            <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">AI workflow layer</div>
+            <p style="font-size:11px; color:#8899bb; margin:4px 0 0; line-height:1.5;">The heavy lifting.</p>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div style="background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.30); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.1em;">RAG PATH</div><div style="font-size:11px; color:#cdd5e3; margin-top:2px;">Vector search over HR policy KB &rarr; grounded answer + citation</div></div>
+            <div style="background:rgba(217,142,34,0.10); border:1px solid rgba(217,142,34,0.30); border-radius:6px; padding:8px 10px;"><div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.1em;">TASK PATH</div><div style="font-size:11px; color:#cdd5e3; margin-top:2px;">Workday API call to enter vacation &rarr; AI-driven update + confirmation</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:12px; color:#cdd5e3; max-width:880px; margin:14px auto 0; padding:9px 16px; background:rgba(248,113,113,0.06); border-left:3px solid #f87171; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">Fail-safe rule:</strong> if the underwater workflow fails (no policy match, API error), the surface must always offer a clean human path &mdash; the &ldquo;Create support ticket&rdquo; option here.
+    </p>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Lab 1 (in-class, solo) - Architect Juno's Core AI User Flow
+# ---------------------------------------------------------------------------
+
+def _flow_step_card(num: str, title: str, body_html: str, accent: str) -> str:
+    return f"""<div style="background:rgba(255,255,255,0.025); border:1px solid {accent}40; border-left:3px solid {accent}; border-radius:10px; padding:11px 14px; text-align:left;">
+  <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:5px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{accent}; letter-spacing:0.14em; text-transform:uppercase;">{num}</div>
+    <div style="font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:800; color:#fff;">{title}</div>
+  </div>
+  {body_html}
+</div>"""
+
+
+JUNO_USER_FLOW_LAB_BODY = """
+<div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:11px; padding:11px 14px; margin:0 auto 10px; max-width:1080px; text-align:left;">
+  <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;">
+    <div>
+      <div style="font-family:'Poppins',sans-serif; font-size:11.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase;">&#x1F3AF; The Brief</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:800; color:#fff; margin-top:1px;">Architect Juno&rsquo;s strategic-alignment flow</div>
+    </div>
+    <div style="font-size:11.5px; color:#cdd5e3; max-width:640px; line-height:1.5;">
+      Map exactly how Juno ingests a customer transcript, cross-references it against the RocketShip Strategy One-Pager <em>underwater</em>, and surfaces a defensible priority score on the dashboard.
+    </div>
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; max-width:1080px; margin:0 auto;">
+""" + _flow_step_card(
+    "Step 1",
+    "Identify the signal",
+    '<p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.5;">e.g. <em>&ldquo;A new P0 transcript is uploaded to the Raw Input column.&rdquo;</em> Find the earliest moment data hits the system.</p>',
+    "#3b82f6",
+) + _flow_step_card(
+    "Step 2",
+    "Map the hidden logic",
+    '<p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.5;">RAG retrieval of Strategy Doc &rarr; Comparison logic &rarr; Risk + alignment scoring. <strong style="color:#bcb1ff;">Steal from your M3 PRD.</strong></p>',
+    "#bcb1ff",
+) + _flow_step_card(
+    "Step 3",
+    "Design the maneuver",
+    '<p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.5;">e.g. <em>&ldquo;Scanning Strategy&hellip;&rdquo;</em> breadcrumb in the Handshake Layer + inline V1 priority cards on the surface.</p>',
+    "#fbbf24",
+) + _flow_step_card(
+    "Step 4",
+    "Build the kill switch",
+    '<p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.5;">A <em>Manual Override</em> on the priority score. Always a path back to a human-controlled state if logic fails.</p>',
+    "#34d399",
+) + """
+</div>
+
+<div style="display:grid; grid-template-columns:1.4fr 1fr; gap:10px; max-width:1080px; margin:10px auto 0;">
+  <a href="../Modules/M4 - AI User Flow Architect.html" style="text-decoration:none;">
+    <div style="background:linear-gradient(135deg, rgba(96,165,250,0.15), rgba(124,140,255,0.10)); border:1px solid rgba(96,165,250,0.5); border-radius:11px; padding:11px 14px; text-align:left;">
+      <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#79c0ff; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x270D;&#xFE0F; Tool &middot; Open the walkthrough</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:13px; font-weight:800; color:#fff;">M4 &mdash; AI User Flow Architect</div>
+      <p style="font-size:11px; color:#cdd5e3; margin:4px 0 0; line-height:1.45;">Pre-loaded scenario + the four pillars laid out as forms. Exports to <code style="font-size:0.92em; color:#79c0ff;">04-ai-ux/user-flow.md</code>.</p>
+    </div>
+  </a>
+  <div style="background:rgba(217,142,34,0.06); border:1px solid rgba(217,142,34,0.30); border-radius:11px; padding:10px 13px; text-align:left;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; color:#fbbf24; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x1F4A1; Top tip</div>
+    <p style="font-size:11px; color:#cdd5e3; margin:0; line-height:1.45;">Stuck on the underwater layer? Open <code style="font-size:0.92em; color:#fbbf24;">03-rag-prd/prd.md</code>. Your Knowledge Base, Top-K, and latency target are already there.</p>
+  </div>
+</div>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Section 04 - PM's Playbook for Closing AI Trust Gaps
+# ---------------------------------------------------------------------------
+
+def _trust_gap_card(num: str, name: str, problem: str, solutions: list, ex_label: str, ex_text: str, accent: str) -> str:
+    sol_html = "".join(
+        f'<li style="font-size:11.5px; color:#cdd5e3; padding:3px 0 3px 0; line-height:1.5;"><strong style="color:#fff;">{title}:</strong> {detail}</li>'
+        for title, detail in solutions
+    )
+    return f"""<section data-title="Trust Gap {num} &middot; {name}">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Trust Gap {num}</div>
+    <h2>The {name} Gap</h2>
+    <div class="subtitle" style="max-width:840px;">{problem}</div>
+
+    <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:14px; max-width:1080px; margin:18px auto 0; align-items:stretch;">
+
+      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:14px; padding:14px 18px; text-align:left;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="font-size:18px;">&#x1F4A1;</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase;">Solution &middot; Use explainable / controllable UI</div>
+        </div>
+        <ul style="margin:0; padding:0 0 0 18px;">
+          {sol_html}
+        </ul>
+      </div>
+
+      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:14px; padding:14px 18px; text-align:left; display:flex; flex-direction:column; gap:6px;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase;">&#x2728; Example &middot; {ex_label}</div>
+        <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{ex_text}</p>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+def trust_gap_blackbox() -> str:
+    return _trust_gap_card(
+        "1",
+        "Black Box",
+        "Users reject AI-generated insights when they can&rsquo;t see the logic or the data sources used to reach the conclusion.",
+        [
+            ("Source scaffolding", "Link AI summaries back to the original docs with inline citations or hover-states that show the source material."),
+            ("Chain-of-thought visibility", "Reveal reasoning steps for complex tasks &mdash; show files searched, rows extracted, decisions taken."),
+        ],
+        "Perplexity",
+        "Provides a dedicated sources row and numbered citations throughout the response, allowing users to verify outputs in a single click.",
+        "#fbbf24",
+    )
+
+
+def trust_gap_hallucination() -> str:
+    return _trust_gap_card(
+        "2",
+        "Hallucination",
+        "Users lose confidence in the entire product when the AI delivers factually incorrect or inconsistent answers without warning.",
+        [
+            ("Visual metadata", "Use light-grey text, dotted underlines, or &ldquo;Draft&rdquo; watermarks where the model&rsquo;s confidence score is below threshold."),
+            ("Proactive caveats", "Surface low-confidence warnings or alternative interpretations when the model is uncertain."),
+        ],
+        "Gemini for Google Workspace",
+        "Lets users rate suggestions, regenerate alternatives, or refine the prompt in-context &mdash; turning probabilistic mistakes into a conversation.",
+        "#fbbf24",
+    )
+
+
+def trust_gap_control() -> str:
+    return _trust_gap_card(
+        "3",
+        "Control",
+        "Invisible design backfires when users feel locked in to an AI&rsquo;s decision and can&rsquo;t easily override, edit, or undo a mistake.",
+        [
+            ("One-click reversion", "Provide instant <em>undo</em> or <em>restore original</em> for any AI-transformed content. Cost of a mistake = zero."),
+            ("Direct-edit access", "Never present AI output read-only. Every V1 draft must be instantly editable without a new prompt."),
+        ],
+        "Midjourney &middot; Vary Region",
+        "Lets users select a specific part of an AI image and re-generate just that section &mdash; surgical control instead of all-or-nothing.",
+        "#fbbf24",
+    )
+
+
+def aiux_readiness_checklist() -> str:
+    """3-level hierarchy of needs for AI-UX."""
+    levels = [
+        ("01", "Functional Baseline",
+         "Does the AI trigger reliably at the correct moment?",
+         "Define strict confidence thresholds. Only automate when the system is &ge; 90% certain of intent.",
+         "Trigger Accuracy",
+         "#3b82f6"),
+        ("02", "Reliability &amp; Verification",
+         "Can the user verify the output in under three seconds?",
+         "Design source scaffolding &mdash; inline citations or logic summaries that bridge the trust gap without cluttering the UI.",
+         "System Transparency",
+         "#fbbf24"),
+        ("03", "Magical Flow",
+         "Does the interaction remove more labor than it creates?",
+         "Measure correction rate. If users keep manually fixing the AI&rsquo;s work, revert from invisible UI to a validator UI.",
+         "Invisible Integration",
+         "#34d399"),
+    ]
+    cards = "".join(
+        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:14px 16px; text-align:left; display:flex; flex-direction:column; gap:8px;">
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:30px; font-weight:900; color:{col}; line-height:1;">{n}</div>
+    <div>
+      <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{col}; letter-spacing:0.14em; text-transform:uppercase;">{tag}</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
+    </div>
+  </div>
+  <div style="background:rgba(0,0,0,0.25); border-radius:7px; padding:7px 11px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{col}; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:3px;">Ship criterion</div>
+    <p style="font-size:11.5px; color:#fff; margin:0; line-height:1.5;">{question}</p>
+  </div>
+  <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">{detail}</p>
+</div>"""
+        for n, title, question, detail, tag, col in levels
+    )
+    return f"""<section data-title="AI-UX Readiness Checklist">
+  <div class="inner">
+    <div class="demo-tag tag-build">Framework</div>
+    <h2>The AI-UX Readiness Checklist</h2>
+    <div class="subtitle">Don&rsquo;t build &ldquo;magic&rdquo; on a broken foundation. Pass each level before climbing to the next.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; max-width:1080px; margin:22px auto 0; align-items:stretch;">
+      {cards}
+    </div>
+    <p style="font-size:12px; color:#cdd5e3; max-width:780px; margin:14px auto 0; padding:9px 16px; background:rgba(124,140,255,0.06); border-left:3px solid #bcb1ff; border-radius:0 8px 8px 0; text-align:left;">
+      <strong style="color:#fff;">PM rule of thumb:</strong> if you can&rsquo;t pass Level 2 yet, ship a Level-2 UI. A &ldquo;reliable validator&rdquo; product beats a &ldquo;magical liar&rdquo; product every time.
+    </p>
+  </div>
+</section>
+"""
+
+
+def intelligence_tax_2() -> str:
+    """Latency tax + Privacy tax."""
+    taxes = [
+        ("&#x23F1;&#xFE0F;", "01", "The Latency Tax",
+         "High-quality model inference takes time. The user thinks the app is broken.",
+         "Use <strong>streaming responses</strong> or <strong>status breadcrumbs</strong> (&ldquo;Scanning backlog&hellip;&rdquo;). Turn idle time into active progress.",
+         "#fbbf24"),
+        ("&#x1F510;", "02", "The Privacy Tax",
+         "Users hesitate to share proprietary or personal data with a model they don&rsquo;t own.",
+         "Build <strong>permission-first architecture</strong> with clear privacy badges. Implement <strong>opt-in memory</strong> for surgical control.",
+         "#34d399"),
+    ]
+    cards = "".join(
+        f"""<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:14px; padding:16px 20px; text-align:left;">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+    <div style="font-size:28px;">{emoji}</div>
+    <div>
+      <div style="font-family:'Poppins',sans-serif; font-size:10px; font-weight:900; color:{col}; letter-spacing:0.14em; text-transform:uppercase;">Tax {n}</div>
+      <div style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; color:#fff; line-height:1.3;">{title}</div>
+    </div>
+  </div>
+  <p style="font-size:12.5px; color:#cdd5e3; line-height:1.5; margin:0 0 8px;">{problem}</p>
+  <div style="background:rgba(0,0,0,0.25); border-left:3px solid {col}; border-radius:0 7px 7px 0; padding:8px 12px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:9.5px; font-weight:900; color:{col}; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:3px;">Manage with</div>
+    <p style="font-size:12px; color:#cdd5e3; margin:0; line-height:1.55;">{fix}</p>
+  </div>
+</div>"""
+        for emoji, n, title, problem, fix, col in taxes
+    )
+    return f"""<section data-title="Managing the Intelligence Tax">
+  <div class="inner">
+    <div class="demo-tag tag-build">Lecture &middot; Reality Check</div>
+    <h2>Managing the &ldquo;Intelligence Tax&rdquo;</h2>
+    <div class="subtitle">These aren&rsquo;t bugs. They&rsquo;re inherent properties of LLMs. Your UI hides the technical limits.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:1000px; margin:22px auto 0; align-items:stretch;">
+      {cards}
+    </div>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Optional Post-Class Lab + Resources
+# ---------------------------------------------------------------------------
+
+def optional_post_class_lab() -> str:
+    """Optional post-class lab section divider + CTA card."""
+    return """<section data-title="Optional Post-Class &middot; AI-Native Juno">
+  <div class="inner">
+    <div class="demo-tag tag-build">Optional &middot; Post-Class</div>
+    <h2>Reimagine Juno as an AI-Native Copilot</h2>
+    <div class="subtitle">Optional. Not required for course completion. Lifts Juno from a dashboard to a partner.</div>
+
+    <div style="max-width:1040px; margin:18px auto 0; background:rgba(124,140,255,0.06); border:1px solid rgba(124,140,255,0.3); border-radius:14px; padding:16px 22px; text-align:left;">
+      <p style="font-size:13px; color:#cdd5e3; line-height:1.55; margin:0;">You&rsquo;ll move up the AI-UX Ladder &mdash; first <strong style="color:#79c0ff;">Functional Baseline</strong> (transparency), then <strong style="color:#fbbf24;">Reliability + Verification</strong> (human-in-the-loop edits), then <strong style="color:#34d399;">Magical Flow</strong> (invisible triggers). By the end, Juno transitions from a tool you <em>use</em> to a partner that <em>anticipates</em>.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:1040px; margin:14px auto 0;">
+      <div style="background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#79c0ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path 1 &middot; Strategic Trust Ladder</div>
+        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">Force Juno to <em>prove its work</em>. Source citations on insight cards &rarr; modular editable PRD blocks &rarr; live-sync listening UI.</p>
+      </div>
+      <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.30); border-radius:12px; padding:14px 18px; text-align:left;">
+        <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#34d399; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">Path 2 &middot; Frictionless Architect</div>
+        <p style="font-size:11.5px; color:#cdd5e3; margin:0; line-height:1.5;">Make Juno an <em>action launcher</em>. Visual logic-map highlights &rarr; Slack/Jira command modals &rarr; invisible AI Risk Watchdog.</p>
+      </div>
+    </div>
+
+    <div style="max-width:1040px; margin:14px auto 0;">
+      <a href="../Modules/M4 - Juno AI-Native Lab.html" style="text-decoration:none;">
+        <div style="background:linear-gradient(135deg, rgba(124,140,255,0.18), rgba(96,165,250,0.10)); border:1px solid rgba(124,140,255,0.5); border-radius:12px; padding:14px 18px; text-align:left;">
+          <div style="font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:900; color:#bcb1ff; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:3px;">&#x270D;&#xFE0F; Tool &middot; Walkthrough</div>
+          <div style="font-family:'Poppins',sans-serif; font-size:14px; font-weight:800; color:#fff;">M4 &mdash; Juno AI-Native Lab</div>
+          <p style="font-size:11.5px; color:#cdd5e3; margin:4px 0 0; line-height:1.5;">Pick a path. All three Lovable prompts pre-loaded with copy buttons + the Sarah transcript ready to paste. Outputs commit to <code style="font-size:0.92em; color:#bcb1ff;">04-ai-ux/trust-gaps.md</code>.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+"""
+
+
+def m4_resources_templates() -> str:
+    flow_url = "../Modules/M4 - AI User Flow Architect.html"
+    native_url = "../Modules/M4 - Juno AI-Native Lab.html"
+    trust_url = "../Modules/M4 - AI-UX Trust Gap Checker.html"
+    cards = [
+        ("&#x270D;&#xFE0F; In-Class Lab Tool", "Architect Juno&rsquo;s AI User Flow",
+         "M4 &mdash; AI User Flow Architect", "The 4-pillar walkthrough. Auto-exports a markdown user flow.",
+         flow_url, "#3b82f6"),
+        ("&#x1F680; Optional Post-Class", "Reimagine Juno as AI-Native Copilot",
+         "M4 &mdash; Juno AI-Native Lab", "3-level Lovable walkthrough. Path 1 (Trust Ladder) or Path 2 (Frictionless Architect).",
+         native_url, "#bcb1ff"),
+        ("&#x1F50D; Bonus Audit Tool", "Audit any AI feature for trust gaps",
+         "M4 &mdash; AI-UX Trust Gap Checker", "Score Black-box, Hallucination, Control. Outputs to <code style=\"font-size:0.9em; color:#fbbf24;\">04-ai-ux/trust-gaps.md</code>.",
+         trust_url, "#fbbf24"),
+        ("&#x1F4DA; Project Repo Template", "One-click create your <code style=\"font-size:0.9em; color:#34d399;\">juno-pm</code> repo",
+         "ai-product-management-template", "Use the template if you haven&rsquo;t already.",
+         TEMPLATE_USE_URL, "#34d399"),
+    ]
+    cards_html = "".join(
+        f'<a href="{url}" target="_blank" style="text-decoration:none;">'
+        f'<div style="background:rgba(255,255,255,0.035); border:1px solid {col}40; border-radius:12px; padding:14px 16px; text-align:left; height:100%; display:flex; flex-direction:column;">'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:9.5px; color:{col}; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px;">{tag}</div>'
+        f'<div style="font-family:\'Poppins\',sans-serif; font-size:14px; font-weight:800; color:#fff; margin-bottom:4px; line-height:1.3;">{title}</div>'
+        f'<p style="font-size:11.5px; color:#cdd5e3; margin:0 0 8px; line-height:1.5;">{desc}</p>'
+        f'<div style="margin-top:auto; padding-top:6px; border-top:1px dashed {col}40; font-family:\'IBM Plex Mono\',monospace; font-size:10.5px; color:{col};">&rarr; {sub}</div>'
+        f'</div></a>'
+        for tag, title, sub, desc, url, col in cards
+    )
+    return f"""<section data-title="Resources &amp; Templates">
+  <div class="inner">
+    <div class="demo-tag tag-debrief">Resources</div>
+    <h2>Resources &amp; templates</h2>
+    <div class="subtitle">All M4 tools live in <code>/Modules/</code>. Deliverables commit to <code>04-ai-ux/</code>.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:1040px; margin:22px auto 0;">
+      {cards_html}
+    </div>
+  </div>
+</section>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Main builder
+# ---------------------------------------------------------------------------
+
+def build_module_4():
+    """Build (instructor_sections, share_sections) for Module 4."""
+    sections_inst, sections_share = [], []
+    add = _add_builder(sections_inst, sections_share)
+
+    # 1. Hero
+    add(hero(
+        title_lead="Design AI-Native",
+        title_accent="User Experiences",
+        subtitle="Module 4 &middot; AI Product Management Certification",
+        waypoints=[
+            ("Intent-Driven AI Design", "From layered features to clean-sheet AI-native flows."),
+            ("Designing Invisible UI", "Three patterns, three placements. Match value to maneuver."),
+            ("Architecting the AI Iceberg", "Map underwater logic + surface experience."),
+            ("Closing AI Trust Gaps", "Black-box, hallucination, control. Three execution patterns."),
+        ],
+        out_line="You finish Module 4 with one required artefact: <code>04-ai-ux/user-flow.md</code> &mdash; Juno&rsquo;s AI-native user flow with surface, handshake, and underwater layers mapped.",
+        module_n=4,
+    ))
+
+    # 2. Class Expectations
+    add(class_expectations(),
+        note="Set ground rules: cameras-on for live cohort sessions, async etiquette for solo learners. Solo course &mdash; all interactions go through #ai-pm-cohort.")
+
+    # 3. Recall (M1-M3) + Final-project progress
+    add(m4_repo_recall(),
+        note="Surface what&rsquo;s already in the repo so the M4 deliverable feels like a continuation, not a fresh start. Five committed artefacts. M3 specced the engine; M4 designs the surface.")
+
+    add(m4_final_project_progress(),
+        note="Required: user-flow.md. Optional: trust-gaps.md (lifts a spec into a defensible design review).")
+
+    # 4. Syllabus
+    add(syllabus_visual_m4(),
+        note="M5 = agents + workflows. M6 = evals + guardrails. Confirmed correct order.")
+
+    # 5. Agenda
+    add(agenda_4_m4(),
+        note="Four numbered sections + an optional post-class Lovable lab. One in-class solo lab anchors the day.")
+
+    # ----- Section 01 -----
+    add(section_divider("01", "Intent-Driven AI Design Systems"),
+        note="Section 1 &mdash; why &lsquo;clean sheet&rsquo; AI products feel different from AI-layered legacy products.")
+
+    add(clunky_aiux_solo_reflection(),
+        note="Solo, 5 min. Original was instructor-led Q&A. Drop two examples (one bad, one good) in #ai-pm-cohort. The contrast is the lesson.")
+
+    add(ai_ux_implementations(),
+        note="Bing = traditional. Perplexity = AI-native. Both ship; one scales differently. The model isn't a feature in AI-native &mdash; it's the engine.")
+
+    add(why_ai_native_matters_4(),
+        note="Four reasons AI-native matters: lowered interaction costs, shifted cognitive load, system resilience, contextual relevance. Users move from builder &rarr; strategic reviewer.")
+
+    # ----- Section 02 -----
+    add(section_divider("02", "Designing Invisible UI for AI-Native Outcomes"),
+        note="Section 2 &mdash; three patterns + three placement maneuvers. Match value to surface.")
+
+    add(invisible_by_design_3(),
+        note="Three patterns: environmental signals (Glean), intent prediction (Adobe Firefly), automated data flow (Salesforce). Invisible = labour disappears, not the AI.")
+
+    add(ai_placement_3(),
+        note="Three placements: Inline (Google Docs), Floating (Figma AI), Full-Page Canvas (Gamma/Canva). Choose by complexity of the AI output.")
+
+    add(spot_the_friction_solo(),
+        note="Solo reflection (was instructor Q&A). Recruiter sidecar = chatbot trap. The pivot: page-load triggers a V1 outreach inline in the messaging field.")
+
+    add(value_to_ux_4(),
+        note="Decision logic: Automation &rarr; Full-Page Canvas. Augmentation &rarr; Inline. Insights and Personalization &rarr; Floating &amp; Contextual.")
+
+    # ----- Section 03 -----
+    add(section_divider("03", "How to Architect an AI User Flow"),
+        note="Section 3 &mdash; the Iceberg model + four pillars. Map what the system thinks, not just what the user clicks.")
+
+    add(architecting_iceberg(),
+        note="Mental model: simple UI on top, complex logic below. The PM&rsquo;s strategic lever is deciding the balance between effortlessness (invisible) and verification (visible).")
+
+    add(four_pillars(),
+        note="Trigger / Processing / Presentation / Feedback Loop. Each pillar has an underwater half (PM specs the logic) and a surface half (what the user feels).")
+
+    add(user_flow_legend(),
+        note="Builder&rsquo;s legend (Signal &middot; Logic &middot; Maneuver &middot; Data Flow &middot; Output) + the 4-step process. This is what learners will use in the lab.")
+
+    add(hr_agent_example(),
+        note="HR Agent walkthrough: 3 layers (Surface / Handshake / Underwater). RAG path for questions, API path for tasks. Always a human fall-back if logic fails.")
+
+    # 5-min break
+    add(break_section(), note="5-minute break.")
+
+    # Cameras on reminder
+    add(cameras_on(), note="Cameras-on reminder for live cohort.")
+
+    # Lab 1 (in-class, solo)
+    add(applied_work(
+            title="Architect Juno&rsquo;s Core AI User Flow",
+            goal="Design the logic that lets Juno move beyond summarisation into strategic judgment &mdash; mapping how it ingests transcripts, cross-references the RocketShip Strategy One-Pager underwater, and surfaces a defensible priority score.",
+            body_html=JUNO_USER_FLOW_LAB_BODY,
+            repo_path="juno-pm/04-ai-ux/user-flow.md",
+            timer_min=30,
+            tool_url="../Modules/M4%20-%20AI%20User%20Flow%20Architect.html",
+            tool_desc="The 4-pillar walkthrough as forms (Signal, Logic, Maneuver, Feedback Loop). Pre-loaded with the Juno strategic-alignment scenario. Exports straight to <code>04-ai-ux/user-flow.md</code>.",
+        ),
+        note="Solo lab. Originally a group exercise &mdash; converted to individual work. Learners use the M4 - AI User Flow Architect tool. Output committed to 04-ai-ux/user-flow.md.")
+
+    # ----- Section 04 -----
+    add(section_divider("04", "The PM&rsquo;s Playbook for Closing AI Trust Gaps"),
+        note="Section 4 &mdash; three failure modes (Black-box, Hallucination, Control) and the execution patterns that close each.")
+
+    add(trust_gap_blackbox(),
+        note="Source scaffolding + chain-of-thought visibility. The PM goal: reduce the cost of verification under 3 seconds. Perplexity is the gold-standard example.")
+
+    add(trust_gap_hallucination(),
+        note="Visual metadata + proactive caveats. Manage expectations, don&rsquo;t pretend the model is certain. Gemini Workspace lets users rate, regenerate, and refine in-context.")
+
+    add(trust_gap_control(),
+        note="One-click revert + direct edit. Never read-only. Midjourney&rsquo;s Vary Region = surgical control instead of all-or-nothing regeneration.")
+
+    add(aiux_readiness_checklist(),
+        note="3-level hierarchy: Functional &rarr; Reliable &rarr; Magical. Don&rsquo;t skip floors. If you can&rsquo;t pass Level 2, ship a Level-2 UI &mdash; reliable validator &gt; magical liar.")
+
+    add(intelligence_tax_2(),
+        note="Two inherent LLM costs the UI must mask: Latency (streaming + status breadcrumbs turn waiting into transparency) and Privacy (permission-first + opt-in memory).")
+
+    # Optional post-class
+    add(optional_post_class_lab(),
+        note="Optional &mdash; not required for course completion. Lifts Juno from a static dashboard to an AI-Native partner. Two paths: Trust Ladder or Frictionless Architect.")
+
+    # Wrap up
+    add(takeaways(
+            "Design AI-Native User Experiences",
+            [
+                ("AI-Native beats AI-Layered.",
+                 "Move from layering AI on legacy systems to designing flows where the model is the engine. Surface tools only when the system predicts intent."),
+                ("Invisible UI uses environmental signals.",
+                 "Background tasks triggered by uploads, meetings, page loads. The user becomes a manager of outcomes, not an active operator."),
+                ("Architect the AI Iceberg.",
+                 "Map underwater logic + visible maneuvers. Confidence thresholds and kill switches let users recover without friction."),
+                ("Close trust gaps with explainable UI.",
+                 "Source scaffolding, chain-of-thought visibility, one-click undo. Verifiable in &lt; 3 seconds or it doesn&rsquo;t ship."),
+            ],
+        ),
+        note="Recap. The four big moves of M4. Each one maps to a section of the deliverable in 04-ai-ux/.")
+
+    add(extra_practice(
+            [
+                ("Audit for invisible-UI opportunities", "In your current product",
+                 "Pick a high-friction workflow that requires multiple menus or copy-paste. Re-map it as an Iceberg. Identify which steps could move underwater using environmental signals (file upload, meeting end, page load)."),
+                ("Close a real-world trust gap", "On an existing AI feature",
+                 "Select an AI feature with low adoption or hallucination problems. Use the AI-UX Readiness Checklist to spec a high-fidelity Explainable UI requirement &mdash; verifiable in &lt; 3 seconds."),
+            ],
+            "<strong>Next session: Module 5</strong> &mdash; <em>Deploy Agentic Systems and Workflows</em>. Configure reasoning paths and tool triggers to execute complex tasks with minimal human intervention.",
+        ),
+        note="Extra practice for self-directed learners. Both exercises are optional &mdash; they take what we built today out of the Juno project and apply it to the learner&rsquo;s real product context.")
+
+    add(m4_resources_templates(),
+        note="Three M4 tools (User Flow Architect for Lab 1, Juno AI-Native Lab for the optional post-class, AI-UX Trust Gap Checker as a bonus audit) + the project repo template.")
+
+    add(qa_section(),
+        note="Async-only Q&A. Park unresolved questions in #ai-pm-cohort. Instructor responds in-thread within ~5 days.")
+
+    return sections_inst, sections_share

@@ -2451,12 +2451,13 @@ def main():
     from m1_v2 import build_module_1 as build_module_1_v2
     from m2_v2 import build_module_2 as build_module_2_v2
     from m3_v2 import build_module_3 as build_module_3_v2
+    from m4_v2 import build_module_4 as build_module_4_v2
 
     builders = {
         1: build_module_1_v2,
         2: build_module_2_v2,
         3: build_module_3_v2,
-        4: build_module_4,
+        4: build_module_4_v2,
         5: build_module_5,
         6: build_module_6,
     }

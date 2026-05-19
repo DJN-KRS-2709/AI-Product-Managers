@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>M4 - Juno AI-Native Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{--bg:#07162C;--fg:#e8e8f0;--muted:#8899bb;--accent:#60a5fa;--accent2:#79c0ff;--card:#0c2244;--line:rgba(255,255,255,0.08);--ok:#6ee7b7;--warn:#e3b341;--brand:#1241B0;
+  --c1:#3b82f6;--c2:#fbbf24;--c3:#34d399;--danger:#f87171;--pp:#bcb1ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.005em}
+button{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(18,65,176,0.32);transition:transform 0.15s}
+button:hover{transform:translateY(-1px)}
+button.secondary{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+button.copy-btn{background:rgba(96,165,250,0.18);color:var(--accent2);border:1px solid rgba(96,165,250,0.4);padding:6px 14px;font-size:12px;font-weight:700;border-radius:99px;box-shadow:none}
+button.copy-btn:hover{background:rgba(96,165,250,0.28)}
+button.copy-btn.copied{background:rgba(52,211,153,0.18);color:var(--ok);border-color:rgba(52,211,153,0.4)}
+header{background:radial-gradient(ellipse at 20% 50%, rgba(124,140,255,0.14) 0%, transparent 60%); padding:24px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:22px}
+.crumb{color:var(--muted);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 76px)}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+.panel{padding:24px 32px;overflow:auto}
+.panel.left{border-right:1px solid var(--line)}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.55}
+.lead strong{color:var(--fg)}
+.path-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.path-btn{font-size:12.5px;padding:8px 16px;border-radius:99px;background:transparent;color:var(--muted);border:1px solid var(--line);cursor:pointer;font-weight:700}
+.path-btn.active.p1{background:rgba(96,165,250,0.14);color:var(--accent2);border-color:var(--accent)}
+.path-btn.active.p2{background:rgba(52,211,153,0.14);color:var(--ok);border-color:rgba(52,211,153,0.6)}
+.level{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;position:relative;border-left:4px solid var(--accent)}
+.level.l1{border-left-color:var(--c1)}
+.level.l2{border-left-color:var(--c2)}
+.level.l3{border-left-color:var(--c3)}
+.level-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.level-num{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-family:'Poppins',sans-serif;font-weight:900;font-size:14px;color:#07162C}
+.level.l1 .level-num{background:var(--c1)}
+.level.l2 .level-num{background:var(--c2)}
+.level.l3 .level-num{background:var(--c3)}
+.level-tag{font-family:'Poppins',sans-serif;font-weight:900;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.level.l1 .level-tag{color:var(--c1)}
+.level.l2 .level-tag{color:var(--c2)}
+.level.l3 .level-tag{color:var(--c3)}
+.level-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:#fff;flex:1}
+.level .desc{margin:6px 0 12px;color:var(--muted);font-size:12.5px;line-height:1.55}
+.level .desc strong{color:var(--fg)}
+.copy-block{background:rgba(0,0,0,0.32);border:1px solid var(--line);border-radius:10px;padding:0;margin:8px 0 0;position:relative;overflow:hidden}
+.copy-block-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--line)}
+.copy-block-label{font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:900;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.copy-block-body{padding:11px 14px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.55;color:#cdd5e3;max-height:340px;overflow-y:auto;white-space:pre-wrap}
+.warn-box{background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.3);border-radius:8px;padding:9px 13px;margin-top:10px;font-size:12px;color:#fca5a5}
+.warn-box strong{color:#fff}
+.tip-box{background:rgba(124,140,255,0.06);border:1px solid rgba(124,140,255,0.3);border-radius:8px;padding:9px 13px;margin-top:10px;font-size:12px;color:#cdd5e3}
+.tip-box strong{color:#fff}
+.validate{margin-top:12px;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.3);border-radius:8px;padding:9px 13px;font-size:12px;color:#cdd5e3}
+.validate strong{color:var(--ok)}
+.diff-area{margin-top:8px}
+.diff-area label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent2);margin-bottom:4px;font-weight:700}
+textarea,input{width:100%;background:rgba(18,65,176,0.08);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+textarea{min-height:64px;resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.preview{background:rgba(18,65,176,0.08);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;color:#d5dbea;max-height:560px;overflow-y:auto}
+.check{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px}
+.check h3{margin:0 0 8px;font-size:13px;color:var(--accent2);text-transform:uppercase;letter-spacing:.14em;font-weight:800}
+.check ul{margin:6px 0 0;padding-left:18px}
+.check li{margin:6px 0;font-size:13px;color:#cdd5e3}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--ok);font-size:13px;display:none}
+.toast.show{display:block}
+.section-h{font-family:'Poppins',sans-serif;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);font-weight:800}
+.path-info{padding:11px 14px;border-radius:8px;margin-bottom:14px;font-size:12.5px;line-height:1.55}
+.path-info.p1{background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.25);color:#cdd5e3}
+.path-info.p2{background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.25);color:#cdd5e3}
+.path-info strong{color:#fff}
+.path-pane{display:none}
+.path-pane.active{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="crumb">Module 4 &middot; Optional Post-Class Lab &middot; Walkthrough</div><h1>Reimagine Juno as an AI-Native Copilot</h1></div>
+  <div class="row">
+    <button onclick="copyMd()">Copy as markdown</button>
+    <button class="secondary" onclick="download()">Download .md</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+  </div>
+</header>
+<main>
+  <section class="panel left">
+    <p class="lead">Move Juno up the AI-UX Ladder &mdash; <strong>Functional Baseline</strong> (transparency) &rarr; <strong>Reliable</strong> (editable + verifiable) &rarr; <strong>Magical</strong> (invisible). Pick one path. Each level has a copy-ready Lovable prompt + a validation check. Optional. Not required for course completion.</p>
+
+    <div class="warn-box"><strong>Heads up &middot; Lovable credits.</strong> Each level burns build credits. Free accounts get 2&ndash;3 prompts/day. Toggle on <em>Chat</em> mode to ask questions without burning credits, and refine your prompt in ChatGPT/Claude before pasting if needed.</div>
+
+    <div class="path-row" style="margin-top:14px">
+      <button class="path-btn active p1" data-path="p1" onclick="switchPath('p1')">&#x1F50D; Path 1 &middot; Strategic Trust Ladder</button>
+      <button class="path-btn p2" data-path="p2" onclick="switchPath('p2')">&#x26A1; Path 2 &middot; Frictionless Architect</button>
+    </div>
+
+    <!-- ============= PATH 1 ============= -->
+    <div id="path-p1" class="path-pane active">
+      <div class="path-info p1">
+        <strong>Path 1 &middot; Strategic Trust Ladder.</strong> You can&rsquo;t scale judgment if you don&rsquo;t trust the AI&rsquo;s reasoning. Transform Juno from a system that &ldquo;gives answers&rdquo; into one that <em>proves its work</em>, cites its sources, and lets you surgically refine drafts.
+      </div>
+
+      <div class="level l1">
+        <div class="level-head"><div class="level-num">1</div><div><div class="level-tag">Functional Baseline &middot; Transparency</div><div class="level-title">Force Juno to show its work</div></div></div>
+        <p class="desc">Stop the &lsquo;Black Box&rsquo; effect. Add a <strong>Strategic Traceability</strong> footer to every Insight Card &mdash; rationale, source pillar badge, and a confidence meter.</p>
+        <div class="copy-block">
+          <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Level 1 Prompt</span><button class="copy-btn" onclick="copyText('p1l1', this)">Copy</button></div>
+          <div class="copy-block-body" id="p1l1">Refactor the InsightCard.tsx component to prioritize Transparency.
+
+1. Add a new section at the bottom of the card titled "Strategic Traceability."
+2. In this section, display the strategicRationale in a slightly smaller, italicized font.
+3. If a strategicPillar is identified, wrap it in a "Source" badge that looks like a citation.
+4. Add a visual "Confidence Meter" (a simple 5-bar sparkline) that maps to the strategicAlignment score (0-100).
+5. Ensure this layout remains clean and doesn't break the existing 3-column grid.</div>
+        </div>
+        <div class="validate"><strong>Validation:</strong> Paste Artifact 1 (Sarah transcript) below + the RocketShip Strategy One-Pager into Juno. Click Process. Does Juno now cite specific pillars as &ldquo;Proof&rdquo;?</div>
+      </div>
+
+      <div class="level l2">
+        <div class="level-head"><div class="level-num">2</div><div><div class="level-tag">Reliability &middot; Verification</div><div class="level-title">Make the PRD modular &amp; editable</div></div></div>
+        <p class="desc">The biggest complaint with AI PRDs is they&rsquo;re &ldquo;all or nothing.&rdquo; Wrap each section in an <strong>EditableBlock</strong> + <strong>Regenerate</strong> button so the PM can refine surgically without rewriting the whole draft.</p>
+        <div class="copy-block">
+          <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Level 2 Prompt</span><button class="copy-btn" onclick="copyText('p1l2', this)">Copy</button></div>
+          <div class="copy-block-body" id="p1l2">Refactor the "Draft PRD" column (Right Column) to move from static text to a modular, editable workspace.
+
+Wrap each major section of the PRD (e.g., Problem Statement, Requirements, Risks) in an "EditableBlock" component.
+
+Each block should have an "Edit" icon that, when clicked, turns the text into a textarea for manual refinement.
+
+Add a "Regenerate" button (sparkle icon) to the top right of each block. This button should re-trigger the AI to rewrite only that specific section based on the original transcript, but with a more "concise" tone.
+
+Ensure the styling remains consistent with the dark-mode dashboard and that changes are saved to local state so they don't disappear if I click away.</div>
+        </div>
+        <div class="validate"><strong>Validation:</strong> Edit one requirement. Click Regenerate on just the &ldquo;Risks&rdquo; section. Does the &ldquo;Problem Statement&rdquo; stay exactly as you left it?</div>
+      </div>
+
+      <div class="level l3">
+        <div class="level-head"><div class="level-num">3</div><div><div class="level-tag">Magical &middot; Invisible</div><div class="level-title">Live-sync &mdash; Juno listens, thinks, synthesises</div></div></div>
+        <p class="desc">Remove the manual Process button. Add a <strong>2500ms debounce</strong> on the transcript input. Show contextual status (&ldquo;Juno is listening&hellip;&rdquo; &rarr; &ldquo;thinking&hellip;&rdquo; &rarr; &ldquo;synthesising&hellip;&rdquo;) per column. Stream the PRD output character-by-character.</p>
+        <div class="copy-block">
+          <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Level 3 Prompt</span><button class="copy-btn" onclick="copyText('p1l3', this)">Copy</button></div>
+          <div class="copy-block-body" id="p1l3">Final Refactor: Transition Juno to a "Live-Sync" partner architecture with distributed, contextual feedback.
+
+1. The Logic: Remove the "Process" button. Implement a 2500ms debounce on the Transcript Input. Create a global workflow state in Dashboard.tsx to track the phase: listening (typing), thinking (API fetching), processing (data received/streaming), and complete.
+
+2. Column 1 (Transcript): At the bottom of the Transcript textarea, show "Juno is listening..." with a pulsing pulse icon only when the state is listening.
+
+3. Column 2 (Insights): When the state moves to thinking, display "Juno is thinking..." with a pulsing brain icon animation in the center of the column. This must appear before the Insight cards fade in.
+
+4. Column 3 (PRD): When the state is processing, display "Juno is synthesizing..." with a sparkles animation. Once the PRD text is ready, transition seamlessly into the character-by-character streaming effect.
+
+5. Global Sync: Keep a simple "Synced" green checkmark in the header only when the state is complete. Ensure all loading skeletons are replaced by these contextual messages for a more "AI-native" feel.</div>
+        </div>
+        <div class="validate"><strong>Validation:</strong> Clear your transcript and start typing. Does the &ldquo;Listening&rdquo; status appear? When you stop, do the other columns &ldquo;wake up&rdquo; automatically?</div>
+      </div>
+    </div>
+
+    <!-- ============= PATH 2 ============= -->
+    <div id="path-p2" class="path-pane">
+      <div class="path-info p2">
+        <strong>Path 2 &middot; Frictionless Architect.</strong> Your bottleneck is the admin tax of moving data between tools. Transform Juno from a dashboard that <em>describes problems</em> into a command center that <em>executes solutions</em> &mdash; logic-map highlighting, Slack/Jira launchers, and an invisible AI Risk Watchdog.
+      </div>
+
+      <div class="level l1">
+        <div class="level-head"><div class="level-num">1</div><div><div class="level-tag">Functional Baseline &middot; Transparency</div><div class="level-title">Visual logic map &mdash; spatial proof</div></div></div>
+        <p class="desc">Trust isn&rsquo;t just words; it&rsquo;s spatial evidence. Add a <strong>Map icon</strong> on each Insight Card. On hover, highlight the source sentences in the transcript and the matching Strategic Pillar.</p>
+        <div class="copy-block">
+          <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Level 1 Prompt</span><button class="copy-btn" onclick="copyText('p2l1', this)">Copy</button></div>
+          <div class="copy-block-body" id="p2l1">Refactor the InsightCard.tsx to include a "Logic Map" feature for better transparency.
+
+1. Add a small "Map" icon (lucide-react: map) in the top right of each card.
+
+2. When a user hovers over this icon, trigger a "Connection Highlight" effect:
+   - Temporarily highlight the specific sentences in the "Transcript Input" area that led to this insight in a subtle blue background.
+   - Simultaneously highlight the specific "Strategic Pillar" badge in the Strategy column that this insight aligns with.
+
+3. Add a tooltip to the Map icon that says: "Hover to see source connections."
+
+4. Ensure this "Highlight" state is managed via a shared hoveredInsightId state in the parent Dashboard.tsx so all three columns can react to the hover event.</div>
+        </div>
+        <div class="validate"><strong>Validation:</strong> Add the RocketShip Strategy One-Pager + Artifact 1 below. Hover the Map icon &mdash; does it show exactly which transcript sentence triggered the insight?</div>
+      </div>
+
+      <div class="level l2">
+        <div class="level-head"><div class="level-num">2</div><div><div class="level-tag">Reliability &middot; Verification</div><div class="level-title">Slack &amp; Jira command modals</div></div></div>
+        <p class="desc">Stop the copy-paste tax. Add a sticky <strong>Action Bar</strong> with <em>Share to Slack</em> + <em>Create Jira Ticket</em> modals. Each pre-fills with executive summary or PRD requirements, editable, then sends with a confirmation toast.</p>
+        <div class="copy-block">
+          <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Level 2 Prompt</span><button class="copy-btn" onclick="copyText('p2l2', this)">Copy</button></div>
+          <div class="copy-block-body" id="p2l2">Refactor the "Draft PRD" column to include a "Command Center" header for external actions.
+
+1. Add a sticky "Action Bar" that is pinned to the top of the PRD Preview column, just below the column header.
+
+2. Include two buttons with icons: "Share to Slack" (lucide-react: slack) and "Create Jira Ticket" (lucide-react: ticket). Give them a subtle border and hover effect to distinguish them from the PRD text.
+
+3. When "Share to Slack" is clicked, open a Modal Overlay titled "Review Slack Summary." The AI should pre-fill this with a 2-sentence "Executive Summary" of the PRD. Make this text editable.
+
+4. When "Create Jira Ticket" is clicked, open a Modal Overlay titled "Jira Ticket Draft." It should automatically extract the "Requirements" section from the PRD into the description field.
+
+5. Each modal must have a "Confirm & Send" button that triggers a success Toast notification: "Draft sent to [Tool]."
+
+6. Ensure the PRD content below this bar scrolls independently, so the Action Bar stays visible at all times.</div>
+        </div>
+        <div class="validate"><strong>Validation:</strong> Click <em>Create Jira Ticket</em>. Does the modal correctly extract the requirements from your draft?</div>
+      </div>
+
+      <div class="level l3">
+        <div class="level-head"><div class="level-num">3</div><div><div class="level-tag">Magical &middot; Invisible</div><div class="level-title">AI Risk Watchdog &mdash; the invisible flagger</div></div></div>
+        <p class="desc">Automate the critical-thinking step. Add a floating <strong>Risk Alert sidecar</strong> that slides in only when Juno detects high-risk assumptions (notRecommended insights or alignment &lt; 30) and pre-drafts a mitigation Slack message.</p>
+        <div class="copy-block">
+          <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Level 3 Prompt</span><button class="copy-btn" onclick="copyText('p2l3', this)">Copy</button></div>
+          <div class="copy-block-body" id="p2l3">Final Refactor: Implement an "AI Risk Watchdog" that operates invisibly in the background.
+
+1. Create a floating "Risk Alert" sidecar that slides out from the right side of the screen ONLY when the AI detects a high-risk assumption (e.g., technical debt or lack of evidence).
+
+2. This sidecar should be titled "Juno's Risk Assessment" and feature a pulsing amber warning icon.
+
+3. Add logic to the analyze-transcript function: if any insight is marked as notRecommended or has an alignment score below 30, automatically populate this sidecar with a "Mitigation Plan" (e.g., "Request Platform Team Review" or "Conduct User Interview").
+
+4. Include a "Quick Action" button inside the sidecar: "Draft Mitigation Slack Message." When clicked, it should use the "Share to Slack" modal logic to prepare a message to the relevant stakeholder.
+
+5. The sidecar should have a "Dismiss" button, but it should re-appear if the user adds a new high-risk transcript entry. Ensure the transition is a smooth "slide-in" animation from the right.</div>
+        </div>
+        <div class="validate"><strong>Validation:</strong> Add a transcript with a clearly out-of-strategy ask. Does the sidecar slide in? Click <em>Draft Mitigation Slack Message</em> &mdash; does it pre-fill in the modal?</div>
+      </div>
+    </div>
+
+    <!-- ============= Shared artifact ============= -->
+    <div class="copy-block">
+      <div class="copy-block-head"><span class="copy-block-label">&#x1F4DD; Artifact 1 &middot; Sarah Test Transcript</span><button class="copy-btn" onclick="copyText('artifact1', this)">Copy</button></div>
+      <div class="copy-block-body" id="artifact1">Interviewer: So, tell me about your workflow.
+
+User (Sarah, Data Analyst): honestly, it&rsquo;s been a week. My dog has been barking all morning, sorry if you hear him. Anyway, I log into RocketShip every Monday. The first thing I notice is that the new blue navigation bar is really bright, like hurts my eyes bright. Can we change that? But yeah, so I go to the &lsquo;Quarterly Reports&rsquo; tab. I select my date range&mdash;usually last 90 days&mdash;and hit &lsquo;Generate PDF.&rsquo; That works fine. But then&mdash;and this is the part that makes me want to scream&mdash;I try to click &lsquo;Export to CSV&rsquo; because I need to pivot this in Excel. It spins for like 5 minutes and then just crashes. No error message. Just blank. I&rsquo;ve lost hours because of this. I end up just taking screenshots of the table, which is stupid. Oh, and I&rsquo;d love a dark mode.</div>
+    </div>
+
+    <div class="tip-box" style="margin-top:14px"><strong>&#x1F4A1; Top tip:</strong> Run all three levels of one path before switching paths. The progression matters &mdash; Magic only feels magical when you&rsquo;ve earned the trust at Levels 1 and 2.</div>
+
+    <!-- ============= Diff capture ============= -->
+    <div class="diff-area" style="margin-top:22px">
+      <h3 style="font-size:14px;color:var(--accent2);margin:0 0 6px;text-transform:uppercase;letter-spacing:.14em;font-weight:800">Trust-gap audit &middot; capture for <code>04-ai-ux/trust-gaps.md</code></h3>
+      <p class="lead" style="font-size:12.5px;margin:0 0 12px">Note which trust gaps each level closed for Juno. Output goes into your repo.</p>
+
+      <label>Path you ran (Path 1 / Path 2 / both)</label>
+      <input id="pathRun" placeholder="e.g. Path 1 levels 1+2, Path 2 level 3" oninput="render()" />
+
+      <label style="margin-top:12px">Lovable prototype URL after upgrades</label>
+      <input id="protoUrl" placeholder="https://your-prototype.lovable.app" oninput="render()" />
+
+      <label style="margin-top:12px">Black-box gap &middot; what changed</label>
+      <textarea id="gapBlackbox" placeholder="What did you add to make Juno's reasoning verifiable in < 3s? (citations, confidence meter, logic map…)" oninput="render()"></textarea>
+
+      <label style="margin-top:12px">Hallucination gap &middot; what changed</label>
+      <textarea id="gapHall" placeholder="How does Juno now signal uncertainty / let users edit the wrong parts? (editable blocks, regenerate button, confidence score…)" oninput="render()"></textarea>
+
+      <label style="margin-top:12px">Control gap &middot; what changed</label>
+      <textarea id="gapControl" placeholder="What kill switch / override did you add? (manual override, dismiss, revert, fail-safe…)" oninput="render()"></textarea>
+
+      <label style="margin-top:12px">One thing you&rsquo;ll never forget</label>
+      <textarea id="lesson" placeholder="The single biggest insight from this exercise — your forever takeaway about AI-native UX." oninput="render()" style="min-height:54px"></textarea>
+    </div>
+
+    <div class="check">
+      <h3>Self-review</h3>
+      <ul>
+        <li>Levels were run <em>in order</em> — Magic last.</li>
+        <li>Each gap (Black-box / Hallucination / Control) has at least one closure noted.</li>
+        <li>Lovable prototype URL works in incognito.</li>
+        <li>The &ldquo;forever&rdquo; lesson is one sentence, not a list.</li>
+      </ul>
+    </div>
+
+  </section>
+
+  <section class="panel right">
+    <h3 class="section-h">Live preview &middot; <code>04-ai-ux/trust-gaps.md</code></h3>
+    <div class="preview" id="preview">Run a path, then capture the trust-gap closures&hellip;</div>
+  </section>
+</main>
+
+<div class="toast" id="toast">Copied to clipboard.</div>
+
+<script>
+const STORE = 'm4-native-v1';
+const FIELDS = ['pathRun','protoUrl','gapBlackbox','gapHall','gapControl','lesson'];
+let cur = JSON.parse(localStorage.getItem(STORE) || '{}');
+for (const f of FIELDS) cur[f] = cur[f] || '';
+
+function copyText(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    const original = btn.textContent;
+    btn.classList.add('copied');
+    btn.textContent = 'Copied';
+    toast('Copied to clipboard.');
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1600);
+  });
+}
+
+function switchPath(p) {
+  document.querySelectorAll('.path-btn').forEach(b => b.classList.toggle('active', b.dataset.path === p));
+  document.querySelectorAll('.path-pane').forEach(pane => pane.classList.toggle('active', pane.id === 'path-' + p));
+}
+
+function save() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) cur[f] = el.value;
+  }
+  localStorage.setItem(STORE, JSON.stringify(cur));
+}
+
+function buildMarkdown() {
+  return `# Juno PM — Trust-Gap Audit
+
+_Module 4 optional post-class deliverable. Generated by \`Modules/M4 - Juno AI-Native Lab.html\`._
+
+---
+
+## 0. What you ran
+
+- **Path:** ${cur.pathRun || '_(Path 1 / Path 2 / both)_'}
+- **Lovable prototype URL:** ${cur.protoUrl || '_(paste URL)_'}
+
+---
+
+## 1. Black-box gap — what changed
+
+${cur.gapBlackbox || '_(How does Juno now make its reasoning verifiable in under 3 seconds? Citations? Confidence meter? Logic map?)_'}
+
+---
+
+## 2. Hallucination gap — what changed
+
+${cur.gapHall || '_(How does Juno signal uncertainty? How does the user edit just the wrong parts without rewriting from scratch?)_'}
+
+---
+
+## 3. Control gap — what changed
+
+${cur.gapControl || '_(What kill switch / manual override / fail-safe did you add? The user is always the final authority.)_'}
+
+---
+
+## Forever takeaway
+
+> ${cur.lesson || '_(One sentence about AI-native UX you’ll never forget.)_'}
+
+---
+
+## Self-review
+
+- [ ] Levels were run in order — Magic last.
+- [ ] All three gaps (Black-box / Hallucination / Control) have at least one closure noted.
+- [ ] Lovable prototype URL works in incognito.
+- [ ] Forever takeaway is a single, sharp sentence.
+`;
+}
+
+function render() {
+  save();
+  document.getElementById('preview').textContent = buildMarkdown();
+}
+
+function copyMd() {
+  navigator.clipboard.writeText(buildMarkdown()).then(() => toast('Markdown copied — paste into 04-ai-ux/trust-gaps.md'));
+}
+
+function download() {
+  const blob = new Blob([buildMarkdown()], {type: 'text/markdown'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'trust-gaps.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function reset() {
+  if (!confirm('Reset all captured notes?')) return;
+  for (const f of FIELDS) cur[f] = '';
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = '';
+  }
+  render();
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+(function init() {
+  for (const f of FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = cur[f] || '';
+  }
+  render();
+})();
+</script>
+</body>
+</html>
