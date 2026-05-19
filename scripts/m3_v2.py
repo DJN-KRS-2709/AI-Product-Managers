@@ -136,11 +136,11 @@ def syllabus_visual_m3() -> str:
         (4, "Design AI-Native User Experiences",
          "Design seamless flows that unlock new ways for users to interact. Prototype to validate.",
          "future"),
-        (5, "Measure AI Quality with Evals and Guardrails",
-         "Replace vibe checks with eval harnesses, golden sets, and safety guardrails.",
-         "future"),
-        (6, "Deploy Agentic Systems and Workflows",
+        (5, "Deploy Agentic Systems and Workflows",
          "Move from single prompts to autonomous agents and multi-step workflows.",
+         "future"),
+        (6, "Measure AI Quality with Evals and Guardrails",
+         "Replace vibe checks with eval harnesses, golden sets, and safety guardrails.",
          "future"),
     ]
     cells = []
