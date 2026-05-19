@@ -653,11 +653,11 @@ def pm_execution_plan() -> str:
     """Source slide 18 - The PM Execution Plan.
 
     Roadmap-style layout: clean 2x2 grid (Step 1 top-left, Step 2 top-right,
-    Step 3 bottom-left, Step 4 bottom-right). Three smooth arrows route
-    AROUND the content blocks so they never cross any text:
+    Step 3 bottom-left, Step 4 bottom-right). One long flowing arrow snakes
+    through 1 -> 2 -> 3, and a short horizontal arrow finishes 3 -> 4:
 
-      1 -> 2  arc OVER the top row (above the rings)
-      2 -> 3  smooth S-curve through the empty middle gap
+      1 -> (over) -> end of 'Set Your Gatekeepers' title -> round DOWN ->
+      across the middle gap (between the rows) -> round DOWN into ring 3
       3 -> 4  straight horizontal between the bottom rings
 
     Geometry uses a 1000 x 540 viewBox with preserveAspectRatio="none";
@@ -667,6 +667,7 @@ def pm_execution_plan() -> str:
     Anchor points (px == viewBox units):
       ring 1 (90, 107)   ring 2 (550, 107)
       ring 3 (90, 407)   ring 4 (550, 407)
+      end of step 2 title pill ~ (792, 107)
     """
     steps = [
         # (n, col, title, desc, decision, left%, top%, width%)
@@ -708,26 +709,33 @@ def pm_execution_plan() -> str:
 </div>""")
     steps_html = "\n".join(step_blocks)
 
-    # Three clean arrows that route AROUND content (never cross text).
-    #   1 -> 2  arc OVER the top row (peak ~ y=30, well above the rings)
-    #   2 -> 3  vertical-tangent S-curve through the middle gap
-    #   3 -> 4  straight horizontal between the bottom rings
+    # Two arrows that route AROUND content (never cross any text):
+    #   1 -> 2 -> 3   single flowing path: arc OVER step 2, lands at the
+    #                  right end of the 'Set Your Gatekeepers' title pill,
+    #                  rounds DOWN on the right, runs horizontally through
+    #                  the middle gap, then rounds DOWN into ring 3.
+    #   3 -> 4        straight horizontal between the bottom rings.
     arrows_svg = """<svg viewBox="0 0 1000 540" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
   <defs>
     <marker id="exArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
     </marker>
   </defs>
-  <!-- 1 -> 2: arc OVER the top, head points DOWN into top of ring 2 -->
-  <path d="M 117 107 C 117 30, 550 30, 550 80"
+  <!-- 1 -> 2 -> 3: snake path. Arcs OVER step 2 to the right edge of the
+       'Set Your Gatekeepers' title pill (792, 107), then rounds DOWN on
+       the right, runs horizontally through the middle gap, and rounds DOWN
+       into the top of ring 3. Arrowhead lands on ring 3 pointing down. -->
+  <path d="M 117 107
+           C 117 30, 792 30, 792 107
+           C 920 107, 960 130, 960 175
+           L 960 245
+           C 960 285, 920 285, 860 285
+           L 200 285
+           C 130 285, 90 305, 90 345
+           L 90 380"
         stroke="#79c0ff" stroke-width="1.8" fill="none"
         marker-end="url(#exArrow)" opacity="0.95"
-        stroke-linecap="round"/>
-  <!-- 2 -> 3: S-curve down through the middle gap, head DOWN into top of ring 3 -->
-  <path d="M 550 134 C 550 350, 90 250, 90 380"
-        stroke="#79c0ff" stroke-width="1.8" fill="none"
-        marker-end="url(#exArrow)" opacity="0.95"
-        stroke-linecap="round"/>
+        stroke-linecap="round" stroke-linejoin="round"/>
   <!-- 3 -> 4: straight right between the bottom rings -->
   <path d="M 117 407 L 523 407"
         stroke="#79c0ff" stroke-width="1.8" fill="none"

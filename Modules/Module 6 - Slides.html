@@ -1265,16 +1265,21 @@ section.cameras-section .cameras-inner {
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/>
     </marker>
   </defs>
-  <!-- 1 -> 2: arc OVER the top, head points DOWN into top of ring 2 -->
-  <path d="M 117 107 C 117 30, 550 30, 550 80"
+  <!-- 1 -> 2 -> 3: snake path. Arcs OVER step 2 to the right edge of the
+       'Set Your Gatekeepers' title pill (792, 107), then rounds DOWN on
+       the right, runs horizontally through the middle gap, and rounds DOWN
+       into the top of ring 3. Arrowhead lands on ring 3 pointing down. -->
+  <path d="M 117 107
+           C 117 30, 792 30, 792 107
+           C 920 107, 960 130, 960 175
+           L 960 245
+           C 960 285, 920 285, 860 285
+           L 200 285
+           C 130 285, 90 305, 90 345
+           L 90 380"
         stroke="#79c0ff" stroke-width="1.8" fill="none"
         marker-end="url(#exArrow)" opacity="0.95"
-        stroke-linecap="round"/>
-  <!-- 2 -> 3: S-curve down through the middle gap, head DOWN into top of ring 3 -->
-  <path d="M 550 134 C 550 350, 90 250, 90 380"
-        stroke="#79c0ff" stroke-width="1.8" fill="none"
-        marker-end="url(#exArrow)" opacity="0.95"
-        stroke-linecap="round"/>
+        stroke-linecap="round" stroke-linejoin="round"/>
   <!-- 3 -> 4: straight right between the bottom rings -->
   <path d="M 117 407 L 523 407"
         stroke="#79c0ff" stroke-width="1.8" fill="none"
