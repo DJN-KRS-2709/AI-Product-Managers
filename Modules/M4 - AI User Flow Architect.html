@@ -74,6 +74,14 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-c
 .legend-pill.handshake{color:var(--c2);border-color:rgba(188,177,255,0.4);background:rgba(188,177,255,0.06)}
 .legend-pill.under{color:var(--c3);border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.06)}
 .legend-pill.fail{color:var(--c4);border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.06)}
+.flow-wrap{background:rgba(7,22,44,0.4);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:16px}
+.flow-svg{width:100%;height:auto;display:block}
+.rtab-row{display:flex;gap:6px;margin:6px 0 10px;border-bottom:1px solid var(--line)}
+.rtab{font-size:12px;padding:7px 14px;border-radius:8px 8px 0 0;background:transparent;color:var(--muted);border:1px solid var(--line);border-bottom:0;cursor:pointer;font-weight:700;font-family:'Poppins',sans-serif;letter-spacing:.04em}
+.rtab.active{background:var(--card);color:var(--fg);border-color:var(--accent);border-bottom:1px solid var(--card);position:relative;top:1px}
+.rtab-pane{display:none}
+.rtab-pane.active{display:block}
+.copy-prompt{margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -96,7 +104,7 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-c
 <div id="tab-builder" class="tab-pane active">
 <main>
   <section class="panel left">
-    <p class="lead">Architect Juno&rsquo;s strategic-alignment flow as an <strong>iceberg</strong>: the simple surface, the handshake layer, and the underwater logic. Walk the four pillars below. Each maps to a deliverable section in <code>04-ai-ux/user-flow.md</code>.</p>
+    <p class="lead">Architect Juno&rsquo;s strategic-alignment flow as an <strong>iceberg</strong>: simple surface, handshake layer, underwater logic. Walk the four pillars below &mdash; the diagram on the right <strong>builds itself live</strong>, mirroring the HR Agent example from slide 18. Final deliverables: the diagram + <code>04-ai-ux/user-flow.md</code>.</p>
 
     <div class="legend-row">
       <span class="legend-pill surface">&#x25EF; Signal &middot; entry point</span>
@@ -249,8 +257,31 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);border-c
   </section>
 
   <section class="panel right">
-    <h3 class="section-h">Live preview &middot; <code>04-ai-ux/user-flow.md</code></h3>
-    <div class="preview" id="preview">Pick a preset or start filling in Pillar 1&hellip;</div>
+    <h3 class="section-h">Live flow diagram &middot; mirrors slide 18</h3>
+    <div class="flow-wrap">
+      <div id="flow-svg"></div>
+      <div class="legend-row" style="margin-top:8px;justify-content:center">
+        <span class="legend-pill surface">&#x25EF; Signal</span>
+        <span class="legend-pill handshake">&#x2B22; Hidden logic</span>
+        <span class="legend-pill under">&#x25C6; Data flow</span>
+        <span class="legend-pill fail">&#x25B0; Output</span>
+      </div>
+    </div>
+
+    <div class="rtab-row">
+      <button class="rtab active" data-rtab="md" onclick="rswitch('md')">&#x1F4DD; Markdown for repo</button>
+      <button class="rtab" data-rtab="prompt" onclick="rswitch('prompt')">&#x1F3A8; Visualize prompt</button>
+    </div>
+
+    <div id="rtab-md" class="rtab-pane active">
+      <div class="preview" id="preview">Pick a preset or start filling in Pillar 1&hellip;</div>
+    </div>
+
+    <div id="rtab-prompt" class="rtab-pane">
+      <p class="lead" style="margin:0 0 10px">Paste this into ChatGPT, Claude (Artifact), Lovable, or Excalidraw-AI to render a polished version of your flow &mdash; or to ask the model to spot gaps and propose tighter wiring.</p>
+      <button class="copy-prompt" onclick="copyPrompt()">Copy visualize prompt</button>
+      <div class="preview" id="visPrompt">Fill in Pillar 1&hellip; the prompt will assemble itself.</div>
+    </div>
   </section>
 </main>
 </div>
@@ -517,6 +548,278 @@ Paste this section + the meta-prompt from \`M4 - AI User Flow Architect.html\` i
 `;
 }
 
+// ===== SVG flow diagram (mirrors slide 18 layout) ===========================
+function escXml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function wrap(text, maxChars, maxLines) {
+  if (!text) return ['—'];
+  const words = String(text).replace(/\s+/g, ' ').trim().split(' ');
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    if ((line + ' ' + w).trim().length <= maxChars) {
+      line = (line + ' ' + w).trim();
+    } else {
+      if (line) lines.push(line);
+      line = w;
+      if (lines.length >= maxLines) break;
+    }
+  }
+  if (line && lines.length < maxLines) lines.push(line);
+  if (lines.length >= maxLines && words.join(' ').length > lines.join(' ').length) {
+    lines[maxLines - 1] = lines[maxLines - 1].slice(0, maxChars - 1) + '…';
+  }
+  return lines;
+}
+
+function tspans(x, yStart, lines, opts) {
+  const o = Object.assign({fill:'#fff', size:9.5, gap:11, weight:700, family:"Poppins,sans-serif"}, opts || {});
+  return lines.map((l, i) =>
+    `<text x="${x}" y="${yStart + i * o.gap}" text-anchor="middle" fill="${o.fill}" font-family="${o.family}" font-size="${o.size}" font-weight="${o.weight}">${escXml(l)}</text>`
+  ).join('');
+}
+
+function parseLogicSteps(raw) {
+  if (!raw) return [];
+  return raw.split(/\n+/).map(s => s.replace(/^\s*[\d\.\-\*]+[\.\)]?\s*/, '').trim()).filter(Boolean).slice(0, 4);
+}
+
+function detectShape(stepText) {
+  const t = stepText.toLowerCase();
+  if (/(rag|retriev|vector|search|lookup|knowledge|kb|api|tool call|workday|database|fetch|call)/.test(t)) return 'diamond';
+  return 'rect';
+}
+
+function renderFlowSVG() {
+  const sigType = SIGNAL_LABELS[cur.sigType] || '';
+  const sigText = cur.sigDetail || (cur.sigType ? sigType : '(your signal)');
+  const surfaceText = cur.sigSurface || '(status badge)';
+  const routerText = cur.router || cur.breadcrumbs || '(router · breadcrumbs)';
+  const placement = PLACEMENT_LABELS[cur.placement] || '';
+  const outputSurfaceText = cur.output || '(generated output)';
+  const killText = cur.killSwitch || '(no kill switch)';
+  const failText = cur.failSafe || '(no fail-safe)';
+  const logic = parseLogicSteps(cur.logicSteps);
+
+  const empty = !cur.sigDetail && !cur.sigSurface && !cur.logicSteps && !cur.output;
+
+  // viewBox
+  const W = 1000, H = 580;
+
+  // Layer bands
+  const surfaceY = 0, surfaceH = 160;
+  const handshakeY = 160, handshakeH = 150;
+  const underwaterY = 310, underwaterH = 270;
+
+  // SVG header + defs + bands + layer labels
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" class="flow-svg">
+  <defs>
+    <marker id="aB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#79c0ff"/></marker>
+    <marker id="aA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/></marker>
+    <marker id="aM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/></marker>
+    <marker id="aR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f87171"/></marker>
+    <linearGradient id="sBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(96,165,250,0.18)"/><stop offset="100%" stop-color="rgba(96,165,250,0.06)"/></linearGradient>
+    <linearGradient id="hBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(124,140,255,0.12)"/><stop offset="100%" stop-color="rgba(124,140,255,0.04)"/></linearGradient>
+    <linearGradient id="uBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(7,22,44,0.55)"/><stop offset="100%" stop-color="rgba(7,22,44,0.85)"/></linearGradient>
+  </defs>
+  <rect x="0" y="${surfaceY}" width="${W}" height="${surfaceH}" fill="url(#sBg)"/>
+  <rect x="0" y="${handshakeY}" width="${W}" height="${handshakeH}" fill="url(#hBg)"/>
+  <rect x="0" y="${underwaterY}" width="${W}" height="${underwaterH}" fill="url(#uBg)"/>
+  <line x1="0" y1="${handshakeY}" x2="${W}" y2="${handshakeY}" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="5,4"/>
+  <line x1="0" y1="${underwaterY}" x2="${W}" y2="${underwaterY}" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="5,4"/>
+  <text x="14" y="22" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2.5">SURFACE · USER EXPERIENCE</text>
+  <text x="14" y="${handshakeY + 18}" fill="#bcb1ff" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2.5">HANDSHAKE · CONNECTION</text>
+  <text x="14" y="${underwaterY + 18}" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="9.5" font-weight="900" letter-spacing="2.5">UNDERWATER · AI WORKFLOW</text>`;
+
+  // ===== SURFACE =====
+  // Surface response (left rectangle - status badge)
+  const surfL = wrap(surfaceText, 24, 3);
+  svg += `<rect x="80" y="60" width="180" height="58" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3" opacity="${cur.sigSurface ? 1 : 0.45}"/>
+  <text x="170" y="76" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.5">SURFACE STATUS</text>
+  ${tspans(170, 90, surfL, {size:9.5, gap:11})}`;
+
+  // Signal circle (center)
+  const sigL = wrap(sigText, 24, 3);
+  svg += `<circle cx="500" cy="89" r="50" fill="rgba(207,229,255,0.95)" stroke="#79c0ff" stroke-width="2" opacity="${cur.sigDetail ? 1 : 0.55}"/>
+  <text x="500" y="64" text-anchor="middle" fill="#0a1f44" font-family="Poppins,sans-serif" font-size="8.5" font-weight="900" letter-spacing="1.3">SIGNAL</text>
+  ${tspans(500, 78, sigL, {fill:'#0a1f44', size:8.5, gap:10})}`;
+
+  // Output landing on surface (right rectangle)
+  const outL = wrap(outputSurfaceText, 26, 3);
+  svg += `<rect x="730" y="60" width="200" height="58" fill="#1e3a8a" stroke="#79c0ff" stroke-width="1.5" rx="3" opacity="${cur.output ? 1 : 0.45}"/>
+  <text x="830" y="76" text-anchor="middle" fill="#79c0ff" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.5">${escXml(placement || 'GENERATED OUTPUT')}</text>
+  ${tspans(830, 90, outL, {size:9.5, gap:11})}`;
+
+  // Kill switch (small badge top-right)
+  const killL = wrap(killText, 18, 2);
+  svg += `<rect x="945" y="60" width="48" height="58" fill="rgba(248,113,113,0.18)" stroke="#f87171" stroke-width="1.5" rx="3" opacity="${cur.killSwitch ? 1 : 0.45}"/>
+  <text x="969" y="78" text-anchor="middle" fill="#f87171" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.5">KILL</text>
+  <text x="969" y="92" text-anchor="middle" fill="#f87171" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.5">SWITCH</text>
+  <title>${escXml(killText)}</title>`;
+
+  // ===== HANDSHAKE =====
+  // Router / breadcrumbs rectangle
+  const routerL = wrap(routerText, 56, 4);
+  const routerH = Math.max(60, 18 + routerL.length * 12);
+  const routerCY = handshakeY + (handshakeH / 2);
+  const rectY = routerCY - routerH / 2;
+  svg += `<rect x="220" y="${rectY}" width="560" height="${routerH}" fill="#3b82f6" stroke="#79c0ff" stroke-width="2" rx="4" opacity="${cur.router || cur.breadcrumbs ? 1 : 0.45}"/>
+  <text x="500" y="${rectY + 16}" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="9" font-weight="900" letter-spacing="1.5">${cur.router ? 'ROUTER LOGIC' : 'BREADCRUMBS'}</text>
+  ${tspans(500, rectY + 32, routerL, {size:9.5, gap:12})}`;
+
+  // ===== UNDERWATER =====
+  // Hidden logic chain (horizontal nodes)
+  const stepCount = Math.max(logic.length, 1);
+  const stepW = Math.min(180, (W - 240) / stepCount - 18);
+  const startX = (W - (stepCount * stepW + (stepCount - 1) * 28)) / 2;
+  const stepY = underwaterY + 50;
+
+  for (let i = 0; i < stepCount; i++) {
+    const x = startX + i * (stepW + 28);
+    const txt = logic[i] || '(hidden logic step)';
+    const shape = logic[i] ? detectShape(txt) : 'rect';
+    const op = logic[i] ? 1 : 0.45;
+    const lines = wrap(txt, 22, 3);
+    if (shape === 'diamond') {
+      const cx = x + stepW / 2, cy = stepY + 35;
+      const halfW = stepW / 2 + 5, halfH = 38;
+      svg += `<polygon points="${cx},${cy - halfH} ${cx + halfW},${cy} ${cx},${cy + halfH} ${cx - halfW},${cy}" fill="#0a1838" stroke="#fbbf24" stroke-width="1.5" opacity="${op}"/>
+      <text x="${cx}" y="${cy - 18}" text-anchor="middle" fill="#fbbf24" font-family="Poppins,sans-serif" font-size="7.5" font-weight="900" letter-spacing="1.2">DATA FLOW · ${i + 1}</text>
+      ${tspans(cx, cy - 4, lines, {size:9, gap:11})}`;
+    } else {
+      svg += `<rect x="${x}" y="${stepY}" width="${stepW}" height="70" fill="#3b82f6" stroke="#79c0ff" stroke-width="1.5" rx="3" opacity="${op}"/>
+      <text x="${x + stepW / 2}" y="${stepY + 14}" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="7.5" font-weight="900" letter-spacing="1.2">HIDDEN LOGIC · ${i + 1}</text>
+      ${tspans(x + stepW / 2, stepY + 28, lines, {size:9, gap:11})}`;
+    }
+    // Connector arrow between consecutive steps
+    if (i > 0) {
+      const fromX = startX + (i - 1) * (stepW + 28) + stepW;
+      const toX = x;
+      svg += `<path d="M ${fromX + 2} ${stepY + 35} L ${toX - 2} ${stepY + 35}" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#aA)"/>`;
+    }
+  }
+
+  // Generated output parallelogram (bottom underwater, on RAG side / left)
+  const genOutL = wrap(outputSurfaceText, 36, 2);
+  svg += `<polygon points="320,${stepY + 130} 600,${stepY + 130} 580,${stepY + 168} 300,${stepY + 168}" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1" opacity="${cur.output ? 1 : 0.45}"/>
+  <text x="450" y="${stepY + 146}" text-anchor="middle" fill="#0a1838" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.2">GENERATED OUTPUT</text>
+  ${tspans(450, stepY + 160, genOutL, {fill:'#0a1838', size:9, gap:11})}`;
+
+  // Fail-safe parallelogram (right of generated output)
+  const failL = wrap(failText, 26, 2);
+  svg += `<polygon points="640,${stepY + 130} 880,${stepY + 130} 860,${stepY + 168} 620,${stepY + 168}" fill="rgba(248,113,113,0.25)" stroke="#f87171" stroke-width="1.5" opacity="${cur.failSafe ? 1 : 0.45}"/>
+  <text x="750" y="${stepY + 146}" text-anchor="middle" fill="#fff" font-family="Poppins,sans-serif" font-size="8" font-weight="900" letter-spacing="1.2">FAIL-SAFE</text>
+  ${tspans(750, stepY + 160, failL, {fill:'#fff', size:9, gap:11})}`;
+
+  // ===== ARROWS =====
+  // Signal → Router (down)
+  svg += `<path d="M 500 139 L 500 ${rectY}" stroke="#79c0ff" stroke-width="2" fill="none" marker-end="url(#aB)"/>`;
+  // Router → first logic step (down)
+  const firstStepCenterX = startX + stepW / 2;
+  svg += `<path d="M 500 ${rectY + routerH} C 500 ${stepY - 20}, ${firstStepCenterX} ${stepY - 20}, ${firstStepCenterX} ${stepY}" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#aA)"/>`;
+  // Last logic step → Generated output
+  const lastIdx = stepCount - 1;
+  const lastX = startX + lastIdx * (stepW + 28) + stepW / 2;
+  svg += `<path d="M ${lastX} ${stepY + 70} C ${lastX} ${stepY + 100}, 450 ${stepY + 110}, 450 ${stepY + 130}" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#aA)"/>`;
+  // Generated output → Output landing on surface (up curve, mint dashed)
+  svg += `<path d="M 590 ${stepY + 145} C ${W - 30} ${stepY + 145}, ${W - 30} 89, 930 89" stroke="#34d399" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#aM)"/>`;
+  // Surface response gets fed by signal (up-left short arrow)
+  svg += `<path d="M 460 89 L 260 89" stroke="#79c0ff" stroke-width="1.5" fill="none" stroke-dasharray="3,3" opacity="0.7" marker-end="url(#aB)"/>`;
+  // Fail-safe → Surface (up curve, red dashed) - lands near surface response (left fallback)
+  svg += `<path d="M 750 ${stepY + 130} C 750 200, 170 200, 170 118" stroke="#f87171" stroke-width="1.5" fill="none" stroke-dasharray="6,4" opacity="0.85" marker-end="url(#aR)"/>`;
+
+  // Empty-state hint
+  if (empty) {
+    svg += `<text x="${W / 2}" y="${H - 10}" text-anchor="middle" fill="#8899bb" font-family="Poppins,sans-serif" font-size="11" font-style="italic" font-weight="600">Pick a preset (or fill in Pillar 1) to populate the diagram.</text>`;
+  }
+
+  svg += `</svg>`;
+  document.getElementById('flow-svg').innerHTML = svg;
+}
+
+// ===== Visualize prompt (paste into ChatGPT / Claude / Lovable / Excalidraw-AI) =====
+function buildVisualizePrompt() {
+  const sigType = SIGNAL_LABELS[cur.sigType] || '_(not set)_';
+  const placement = PLACEMENT_LABELS[cur.placement] || '_(not set)_';
+  const fb = (s, fallback) => (s && s.trim()) ? s.trim() : fallback;
+
+  return `# Render this AI user flow as a layered iceberg diagram
+
+You are a senior product designer. Render the AI user flow below as a clean diagram, mirroring the **AI Iceberg** model used in Module 4 of the AI Product Manager course. Use a tool of your choice (SVG, Mermaid, Excalidraw, Lovable, Figma) — the structure matters more than the medium.
+
+## Layout — three horizontal layers (top to bottom)
+
+1. **Surface · The User Experience** — what the user sees on screen.
+2. **Handshake · The Connection Layer** — router + breadcrumbs that turn waiting into trust.
+3. **Underwater · The AI Workflow** — the heavy lifting (RAG, tool calls, scoring).
+
+## Shape vocabulary (use exactly these)
+
+- **Circle** = Signal · entry point (always on Surface).
+- **Light-blue rectangle** = Hidden logic · major step (lives Underwater or in Handshake).
+- **Dark-blue square** = Interaction · sub-step / surface maneuver (Surface).
+- **Diamond** = Data Flow · routing decision, RAG retrieval, API call (Underwater).
+- **Grey parallelogram** = Generated Output · AI result (Underwater → surfaces back up).
+- **Red rectangle/parallelogram** = Fail-safe / kill switch (visible on Surface).
+
+## Arrows
+
+- **Solid down arrows** — user signal flows from Surface → Handshake → Underwater.
+- **Solid horizontal arrows** — connect underwater logic steps in order.
+- **Dashed up arrows (mint/green)** — generated output surfaces back to the user.
+- **Dashed up arrows (red)** — fail-safe path returns control to the user.
+
+---
+
+## The flow to render
+
+### Pillar 1 · The Trigger (Surface)
+
+- **Signal type:** ${sigType}
+- **Specific signal:** ${fb(cur.sigDetail, '_(not set)_')}
+- **Surface response (instant):** ${fb(cur.sigSurface, '_(not set)_')}
+
+### Pillar 2 · The Processing State (Handshake + top of Underwater)
+
+- **Hidden logic — major underwater steps (in order):**
+${fb(cur.logicSteps, '_(not set)_').split('\n').map(l => '  - ' + l).join('\n')}
+- **Handshake breadcrumbs (Surface status during processing):** ${fb(cur.breadcrumbs, '_(not set)_')}
+- **Router decision:** ${fb(cur.router, '_(single-path — no router)_')}
+
+### Pillar 3 · The Presentation (back to Surface)
+
+- **Placement maneuver:** ${placement}
+- **Generated output on Surface:** ${fb(cur.output, '_(not set)_')}
+- **Why this maneuver (value framing):** ${fb(cur.maneuverWhy, '_(not set)_')}
+
+### Pillar 4 · The Feedback Loop (visible on Surface, wired into Underwater)
+
+- **Kill switch / override:** ${fb(cur.killSwitch, '_(not set)_')}
+- **Captured training signal:** ${fb(cur.trainingSignal, '_(not set)_')}
+- **Fail-safe path:** ${fb(cur.failSafe, '_(not set)_')}
+
+---
+
+## Output requirements
+
+1. Render the diagram exactly once. Use the layered iceberg layout above.
+2. Place every node in the correct layer using the correct shape.
+3. Show down arrows for the user→agent path and dashed up arrows for the result path.
+4. Add a short caption (≤ 2 sentences) summarising what the user gets in return for the wait.
+5. **Critique pass:** after the diagram, list the top 3 trust/UX risks in this flow (where is the trigger too late? where is the user blind? where is the kill switch missing?) and propose a tighter version of the riskiest pillar in 2–3 bullets.
+
+If any pillar is marked _(not set)_, render that node as a dotted/ghost shape and call it out in the critique.`;
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(buildVisualizePrompt()).then(() => toast('Visualize prompt copied — paste into ChatGPT, Claude, or Lovable.'));
+}
+
+function rswitch(t) {
+  document.querySelectorAll('.rtab').forEach(b => b.classList.toggle('active', b.dataset.rtab === t));
+  document.querySelectorAll('.rtab-pane').forEach(p => p.classList.toggle('active', p.id === 'rtab-' + t));
+}
+
 function render() {
   save();
   badge('bT', cur.sigDetail || cur.sigType);
@@ -524,6 +827,8 @@ function render() {
   badge('bM', cur.output || cur.placement);
   badge('bF', cur.killSwitch || cur.failSafe);
   document.getElementById('preview').textContent = buildMarkdown();
+  document.getElementById('visPrompt').textContent = buildVisualizePrompt();
+  renderFlowSVG();
 }
 
 function copyMd() {
